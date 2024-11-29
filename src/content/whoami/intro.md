@@ -23,5 +23,6 @@ My technical journey spans across various domains - from building robust media p
 Want to discuss Android development, streaming technologies, or community initiatives? Let's connect:
 - [LinkedIn](https://www.linkedin.com/in/msomu/)
 - [Twitter](https://x.com/msomuin)
+- [Email](mailto:msomasundaram93@gmail.com)
 
 I'm always open to interesting conversations about Android development and technology.
