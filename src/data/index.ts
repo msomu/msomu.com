@@ -1,5 +1,5 @@
-export const SITE_TITLE = "Sanju's Space";
-export const SITE_DESCRIPTION = "A internet space for Sanju.";
+export const SITE_TITLE = "Somu's Space";
+export const SITE_DESCRIPTION = "A internet space for Somu.";
 
 export interface MenuItem {
 	label: string;
