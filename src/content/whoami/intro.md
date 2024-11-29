@@ -1,30 +1,27 @@
 ---
-title: "meet sanju, designer founder"
-description: "I run ThisUX, a design-led product studio. I'm working on ideas like sticai.com, abogrow.com, uiino.com, supaprompts.com, ffmpeg.info, and more. Always tinkering."
-pubDate: 'Sept 1 2024'
+title: "meet somu, android craftsman"
+description: "Senior Android Developer at Disney+ Hotstar. Specializing in streaming and entertainment apps. Community leader at GDG Chennai. Always building."
+pubDate: 'Nov 29 2024'
 ---
 
-I run [ThisUX](https://thisux.com), a design-led product studio. We make things that work.
+I'm a Android Developer at [Disney+ Hotstar](https://www.hotstar.com), crafting experiences for millions of users across Android and Android TV platforms.
 
-For years, I wore many hats. Now I'm doing my own thing.
+With 10+ years of experience in the mobile ecosystem, I've specialized in:
+- Streaming and entertainment applications
+- Cross-platform development with KMM
+- Build automation and deployment
+- Media playback and optimization
+- E-commerce solutions
+- Ticketing systems
 
-I'm working on ideas like:
+Currently, I'm focusing on building scalable streaming solutions at Disney+ Hotstar, where I work on challenges that impact millions of users daily.
 
-- [Uiino](https://uiino.com)
-- [SticAi](https://sticai.com) 
-- [aboGrow](https://abogrow.com) 
-- [ffmpeg info](https://ffmpeg.info)
-- [Glance](https://glance.sticai.com)
-- [Spotlight](https://spotlight.thisux.com)
-- [Supaprompts](https://supaprompts.com)
+Beyond coding, I'm deeply involved in the Android community. As an active member of [GDG Chennai](https://gdg.community.dev/gdg-chennai/), I regularly speak at events and help organize community gatherings to share knowledge and experiences.
 
+My technical journey spans across various domains - from building robust media players to implementing complex e-commerce solutions using Kotlin Multiplatform Mobile (KMM). I'm passionate about creating efficient, user-centric applications that solve real-world problems.
 
-And more. Always tinkering.
+Want to discuss Android development, streaming technologies, or community initiatives? Let's connect:
+- [LinkedIn](https://www.linkedin.com/in/msomu/)
+- [Twitter](https://x.com/msomuin)
 
-I team up with founders and business owners. We build MVPs, full products, or fix broken experiences. Design to code, we do it all.
-
-Our secret? We create systems that work, no matter the tech or problem.
-
-I'm big on [open source](https://github.com/spikeysanju) too. I contribute code and speak at conferences.
-
-Want to chat? [Drop me a line](mailto:work@sanju.sh?subject=Let's%20Collaborate&body=Hi%20Sanju,%0D%0A%0D%0AI%20would%20like%20to%20discuss%20a%20potential%20collaboration%20with%20you.%0D%0A%0D%0ABest%20regards,%0D%0A%5BYour%20Name%5D).
+I'm always open to interesting conversations about Android development and technology.
