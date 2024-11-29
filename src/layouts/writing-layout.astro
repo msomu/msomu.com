@@ -8,7 +8,7 @@ import { clsx } from '@utils/index';
 
 type Props = CollectionEntry<'writing'>['data'];
 
-const { title, description, pubDate, heroImage } = Astro.props;
+const { title, description, pubDate, heroImage } : Props = Astro.props;
 ---
 
 <html lang='en'>
