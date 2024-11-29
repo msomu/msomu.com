@@ -1,33 +1,44 @@
-![ A website with the title "Sanju's internet space" and navigation links for "home", "writing", "thoughts", and "ships".](https://github.com/Spikeysanju/sanju.sh/assets/23400022/ff3120ee-281b-4607-995e-bc2e8f9edef6)
+![ A website with navigation links for "home", "writing", and "thoughts" built by Android Craftsman msomu](./public/images/ogimage.png)
 
-# 🌐 sanju's – internet space
-hey! this is my personal corner on the web where I share my thoughts, ideas, and projects. feel free to explore and contact me if you have any questions or just want to chat. 
+# 🚀 Android Craftsman
+Hey! I'm Somasundaram Mahesh (msomu), a Senior Android Developer at Disney+ Hotstar crafting streaming experiences for millions of users.
 
-## 📖 about project
-this is a simple personal website i built using [astro](https://astro.build/), a static site generator. i chose Astro for its speed, flexibility, and ease of use. i hope you like the site!
+## 🙏 Credits
+This website is based on the template created by [Sanju](https://github.com/Spikeysanju). Check out his:
+- Original Template: [sanju.sh repo](https://github.com/Spikeysanju/sanju.sh)
+- Personal Website: [sanju.sh](https://sanju.sh)
 
+## 💫 About Me
+With 10+ years in mobile development, I specialize in building scalable streaming solutions, focusing on:
+- Streaming and entertainment applications
+- Cross-platform development with KMM
+- Build automation and deployment
+- Media playback optimization
+- E-commerce solutions
+- Ticketing systems
 
-## ✨ features
-- **writings**: a collection of my blog posts and articles
-- **thoughts**: a place for me to share my random thoughts and ideas (more like tweets or quotes)
-- **ships**: a list of projects that i've worked on or contributed to (github style commit graph will be generated based on the things i've worked on)
+As a community leader at GDG Chennai, I regularly speak at events and organize gatherings to share knowledge and experiences.
 
-## 🛠️ tech stack
-- **astro**: static site generator
-- **tailwindcss**: utility-first css framework for rapid prototyping
-- **markdown**: for writing content in a simple and easy-to-read format
-- **typescript**: for type-checking and better code quality 
-- **biome**: Format, lint, and more in a fraction of a second.
-- **cloudflare pages**: for hosting the site and continuous deployment
+## 📖 About Project
+A personal website built with [Astro](https://astro.build/), featuring a dark theme that emphasizes readability and showcases my work in Android development, automation, and technical problem-solving.
 
-## 🎨 design
-- i wanted to keep the design simple and clean. i used a monochrome color scheme with a pop of color for the accent. 
-- i also used a lot of whitespace to make the content easy to read and navigate. 
-- i'm a big fan of minimalism and KISS (keep it simple, stupid) and i think it works well for a personal website like this. 
-- i hope you like the design as much as i do!
+## ✨ Features
+- **Writings**: Technical deep-dives into Android development, KMM, and streaming technologies
+- **Thoughts**: Insights from building at scale and community experiences
 
-## 🔧 environment variables
-To add analytics to your site, you can use Umami and Clarity. you will need to add the following environment variables to your `.env` file:
+## 🛠️ Tech Stack
+- **Astro**: Static site generator
+- **TailwindCSS**: Utility-first CSS framework
+- **Markdown**: Content formatting
+- **TypeScript**: Type-safe development
+- **Biome**: Code formatting and linting
+- **Cloudflare Pages**: Hosting and deployment
+
+## 🎨 Design
+Dark theme optimized for readability, emphasizing technical content and professional experience.
+
+## 🔧 Environment Variables
+For analytics setup, add to your `.env` file:
 
 ```plaintext
 # Umami Analytics
@@ -38,13 +49,11 @@ UMAMI_TRACKING_URL=your_umami_tracking_url
 CLARITY_TRACKING_ID=your_clarity_tracking_id
 ```
 
-if you don't want to use analytics, you can remove the analytics code from the [src/components/seo/base-head.astro](https://github.com/Spikeysanju/sanju.sh/blob/main/src/components/seo/base-head.astro) file and remove the umami and clarity scripts.
+## 📬 Connect
+- Email: msomasundaram93@gmail.com
+- GDG Chennai
+- LinkedIn
+- Twitter
 
-## 🤝 contributing
-if you have ideas or suggestions, feel free to open an issue or submit a pull request. i'm open to collaborations and contributions.
-
-## 📬 contact
-you can reach me at work@sanju.sh or on twitter. don't hesitate to get in touch!
-
-## 📜 license
-this project is open source under the Apache License 2.0. you're welcome to use the code for your own projects. if you do, a shoutout would be appreciated but it's not required.
+## 📜 License
+Open source under the Apache License 2.0.
