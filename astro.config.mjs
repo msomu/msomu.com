@@ -10,8 +10,8 @@ export default defineConfig({
 	integrations: [
 		mdx(),
 		sitemap({
-			changefreq: "daily",
-			priority: 1,
+			changefreq: "weekly",
+			priority: 0.7,
 			lastmod: new Date().toISOString().split("T")[0],
 		}),
 		tailwind(),
