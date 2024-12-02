@@ -1,4 +1,4 @@
-export const SITE_TITLE = "Somu's Sphere";
+export const SITE_TITLE = "Somu Nexus";
 export const SITE_DESCRIPTION = "Mobile Engineering solutions that solve real problems.";
 
 export interface MenuItem {
