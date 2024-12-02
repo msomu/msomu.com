@@ -13,13 +13,13 @@ export const menuItems: MenuItem[] = [
 		url: "/",
 	},
 	{
+		label: "writings",
+		url: "/writings",
+	},
+	{
 		label: "uses",
 		url: "/uses",
 	},
-	// {
-	// 	label: "writings",
-	// 	url: "/writings",
-	// },
 	// {
 	// 	label: "thoughts",
 	// 	url: "/thoughts",
