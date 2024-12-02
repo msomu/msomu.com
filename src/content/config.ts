@@ -53,7 +53,7 @@ const ship = defineCollection({
 	}),
 });
 
-const motivation = defineCollection({
+const uses = defineCollection({
 	type: "content",
 	// Type-check frontmatter using a schema
 	schema: z.object({
@@ -66,4 +66,4 @@ const motivation = defineCollection({
 	}),
 });
 
-export const collections = { writing, thought, ship, whoami, motivation };
+export const collections = { writing, thought, ship, whoami, uses };

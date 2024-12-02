@@ -1,12 +1,12 @@
 ---
-import { WritingItem } from '@components/cards';
+import { UseItem } from '@components/cards';
 import { Header } from '@components/misc';
 import { BaseHead } from '@components/seo';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@data/index';
 import { getCollection } from 'astro:content';
 import RootLayout from '@layouts/root-layout.astro';
 
-const writings = (await getCollection('motivation')).sort(
+const uses = (await getCollection('use')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
@@ -25,14 +25,14 @@ const writings = (await getCollection('motivation')).sort(
 			id='Header+title'
 			class='flex flex-col w-full gap-6 max-w-xl'>
 			<Header />
-			<h1 class='w-full text-7xl font-medium tracking-tight'>writings</h1>
+			<h1 class='w-full text-7xl font-medium tracking-tight'>uses</h1>
 
 			{
-				writings.map((writing) => (
-					<WritingItem
-						title={writing.data.title}
-						date={writing.data.pubDate}
-						slug={writing.slug}
+				uses.map((use) => (
+					<UseItem
+						title={use.data.title}
+						date={use.data.pubDate}
+						slug={use.slug}
 					/>
 				))
 			}
