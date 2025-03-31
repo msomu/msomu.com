@@ -32,7 +32,7 @@ const uses = (await getCollection('use')).sort(
 					<UseItem
 						title={use.data.title}
 						date={use.data.pubDate}
-						slug={use.id}
+						slug={use.slug}
 					/>
 				))
 			}

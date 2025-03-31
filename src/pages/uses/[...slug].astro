@@ -7,11 +7,11 @@ const posts = await getCollection('use');
 type Props = CollectionEntry<'use'>;
 
 const { slug } = Astro.params;
-const post = posts.find((page) => page.id === slug);
+const post = posts.find((page) => page.slug === slug);
 
 if (!post) return Astro.redirect('/404');
 
-const { Content } = await (post as any).render();
+const { Content } = await post.render();
 ---
 
 <UsesLayout {...post.data}>
