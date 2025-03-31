@@ -1,0 +1,183 @@
+---
+title: "Brute Force Sudoku Validation: Simple Yet Smart"
+description: "Sometimes, the best way to solve a problem is to do exactly what it asks."
+pubDate: "2023-07-15"
+---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+
+# **Brute Force Sudoku Validation: Simple Yet Smart**
+
+_Sometimes, the best way to solve a problem is to do exactly what it asks._
+
+Take Sudoku validation: you have a **9x9 grid**, and you need to check if it's valid. But what does "valid" mean?
+
+- **No row** can have duplicate numbers (1-9).
+- **No column** can have duplicate numbers.
+- **No 3×3 box** (subgrid) can have duplicate numbers.
+
+**How do we check that?** Well, the most direct way is just to check **each condition separately**—one by one. This is a classic **brute-force approach**, but in this case, brute force isn't dumb—it's methodical.
+
+---
+
+## **🚀 Thought Process: Breaking Down the Problem**
+
+Whenever you face a validation problem like this, always **break it down into independent parts**:
+
+1. **Check rows** → Each row should have unique numbers.
+2. **Check columns** → Each column should have unique numbers.
+3. **Check 3×3 boxes** → Each 3×3 grid should have unique numbers.
+
+Each of these steps is **independent**, meaning we can **solve them separately** and combine the results.
+
+---
+
+## **🛠️ Approach 1: Brute Force (Three-Pass Method)**  
+### **Step 1: Validating Rows**
+To check rows, we scan each row and use a **hash set** to track numbers. If a number appears twice, it's invalid.
+
+<KotlinPlayground code={`
+// check rows
+for (i in 0..8) {
+    val hashSet = HashSet<Char>()
+    for (j in 0..8) {
+        if (board[i][j] != '.' && !hashSet.add(board[i][j])) {
+            return false
+        }
+    }
+}
+`} />
+
+### **Step 2: Validating Columns**
+The only change is flipping **(i, j) → (j, i)** to scan columns instead of rows.
+
+<KotlinPlayground code={`
+// check columns
+for (i in 0..8) {
+    val hashSet = HashSet<Char>()
+    for (j in 0..8) {
+        if (board[j][i] != '.' && !hashSet.add(board[j][i])) {
+            return false
+        }
+    }
+}
+`} />
+
+### **Step 3: Validating 3×3 Boxes**
+This is trickier because **we're not iterating row-wise or column-wise**, but rather in **small 3×3 blocks**.
+
+<KotlinPlayground code={`
+// check boxes
+for (i in 0..2) {
+    for (j in 0..2) {
+        val hashSet = HashSet<Char>()
+        for (k in 0..2) {
+            for (l in 0..2) {
+                val num = board[i * 3 + k][j * 3 + l]
+                if (num != '.' && !hashSet.add(num)) {
+                    return false
+                }
+            }
+        }
+    }
+}
+`} />
+
+📌 **Why `i * 3 + k` and `j * 3 + l`?**
+This formula maps **each box's coordinates** to the overall grid.
+
+| **Box (i, j)** | **Mapped Grid Range** |
+|---------------|---------------------|
+| (0,0) | Rows 0-2, Cols 0-2 |
+| (0,1) | Rows 0-2, Cols 3-5 |
+| (1,0) | Rows 3-5, Cols 0-2 |
+| (2,2) | Rows 6-8, Cols 6-8 |
+
+💡 **So far, we have looped over the grid 3 times. Can we do better?**
+
+---
+
+## **⚡ Optimized Approach: One-Pass Validation**
+
+Instead of looping **three times**, what if we check all three conditions **simultaneously** in a **single pass**?
+
+We use **three sets of hash sets**:
+
+- `rowSets[i]` → For the i-th row
+- `colSets[j]` → For the j-th column
+- `boxSets[boxIndex]` → For the k-th 3×3 box
+
+<KotlinPlayground code={`
+val rowSets = Array(9) { HashSet<Char>() }
+val colSets = Array(9) { HashSet<Char>() }
+val boxSets = Array(9) { HashSet<Char>() }
+
+for (i in 0..8) {
+    for (j in 0..8) {
+        val num = board[i][j]
+        if (num == '.') continue
+
+        val boxIndex = (i / 3) * 3 + (j / 3)
+
+        if (num in rowSets[i] || num in colSets[j] || num in boxSets[boxIndex]) {
+            return false
+        }
+
+        rowSets[i].add(num)
+        colSets[j].add(num)
+        boxSets[boxIndex].add(num)
+    }
+}
+`} />
+
+**🚀 Why is this faster?**  
+✅ **Only one pass over the grid.**  
+✅ **No redundant iterations.**  
+✅ **Each lookup is O(1) in a set.**  
+
+⏳ **Time Complexity: O(1)** (since it's a fixed 9×9 grid).  
+📌 **Space Complexity: O(1)** (three sets of size 9 is negligible).  
+
+---
+
+## **🚀 Ultimate Optimization: Boolean Arrays**
+Since Sudoku numbers are **1-9**, we don't need hash sets. A **boolean array** is faster!
+
+<KotlinPlayground code={`
+val rows = Array(9) { BooleanArray(9) }
+val cols = Array(9) { BooleanArray(9) }
+val boxes = Array(9) { BooleanArray(9) }
+
+for (i in 0..8) {
+    for (j in 0..8) {
+        val num = board[i][j]
+        if (num != '.') {
+            val index = num - '1'
+            val boxIndex = (i / 3) * 3 + j / 3
+            if (rows[i][index] || cols[j][index] || boxes[boxIndex][index]) {
+                return false
+            }
+            rows[i][index] = true
+            cols[j][index] = true
+            boxes[boxIndex][index] = true
+        }
+    }
+}
+`} />
+
+🚀 **Boolean arrays are 2x faster** than sets because:  
+✔ **O(1) direct index access** (vs. O(1) hash lookup with extra memory overhead).  
+✔ **No hashing required** (direct memory access).  
+
+---
+
+## **📌 Final Thoughts: When to Use Each Approach?**
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Brute Force (3 loops)** | Easy to understand, straightforward | Loops over the board 3 times |
+| **One-Pass HashSets** | More efficient, single loop | Uses extra space for 3 sets |
+| **Boolean Arrays** | Fastest, minimal memory | Slightly harder to read |
+
+💡 **What's Next?**  
+📌 Can you modify this to **solve** the Sudoku instead of just validating it? Try it out! 🚀
