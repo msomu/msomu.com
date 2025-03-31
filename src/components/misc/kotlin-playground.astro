@@ -26,7 +26,7 @@ const toValue = hasMainFunction ? (lineCount - 3).toString() : (lineCount - 1).t
 ---
 
 <div class="kotlin-playground-wrapper">
-  <div class="kotlin-code" data-lines="true" data-auto-indent="true" data-theme="darcula" data-from="2" data-to={toValue}>
+  <div class="kotlin-code" {...{ lines: "true", "auto-indent": "true", theme: "darcula", from: "2", to: toValue }}>
     {processedCode}
   </div>
 </div>
