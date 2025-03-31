@@ -1,0 +1,41 @@
+---
+import { ThinkInCodeItem } from '@components/cards';
+import { Header } from '@components/misc';
+import { BaseHead } from '@components/seo';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@data/index';
+import { getCollection } from 'astro:content';
+import RootLayout from '@layouts/root-layout.astro';
+
+const thinkInCodeItems = (await getCollection('thinkInCode')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={SITE_TITLE}
+			description={SITE_DESCRIPTION}
+			image='/images/ogimage.png'
+		/>
+	</head>
+	<RootLayout>
+		<div
+			id='Header+title'
+			class='flex flex-col w-full gap-6 max-w-xl'>
+			<Header />
+			<h1 class='w-full text-7xl font-medium tracking-tight'>think in code</h1>
+
+			{
+				thinkInCodeItems.map((item) => (
+					<ThinkInCodeItem
+						title={item.data.title}
+						date={item.data.pubDate}
+						slug={item.slug}
+					/>
+				))
+			}
+		</div>
+	</RootLayout>
+</html>

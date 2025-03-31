@@ -20,6 +20,10 @@ export const GET: APIRoute = async () => {
     <loc>${new URL("/sitemap-ships.xml", import.meta.env.SITE).href}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
   </sitemap>
+  <sitemap>
+    <loc>${new URL("/sitemap-think-in-code.xml", import.meta.env.SITE).href}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+  </sitemap>
   </sitemapindex>`;
 
 	return new Response(sitemapIndex, {

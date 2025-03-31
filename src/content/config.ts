@@ -1,5 +1,18 @@
 import { defineCollection, z } from "astro:content";
 
+const thinkInCode = defineCollection({
+	type: "content",
+	// Type-check frontmatter using a schema
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		// Transform string to Date object
+		pubDate: z.coerce.date(),
+		updatedDate: z.coerce.date().optional(),
+		heroImage: z.string().optional(),
+	}),
+});
+
 const whoami = defineCollection({
 	type: "content",
 	// Type-check frontmatter using a schema
@@ -66,4 +79,4 @@ const uses = defineCollection({
 	}),
 });
 
-export const collections = { writing, thought, ship, whoami, uses };
+export const collections = { writing, thought, ship, whoami, uses, thinkInCode };
