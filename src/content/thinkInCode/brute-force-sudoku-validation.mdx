@@ -37,51 +37,60 @@ Each of these steps is **independent**, meaning we can **solve them separately**
 To check rows, we scan each row and use a **hash set** to track numbers. If a number appears twice, it's invalid.
 
 <KotlinPlayground code={`
-// check rows
-for (i in 0..8) {
-    val hashSet = HashSet<Char>()
-    for (j in 0..8) {
-        if (board[i][j] != '.' && !hashSet.add(board[i][j])) {
-            return false
+fun isValidSudoku(board: Array<CharArray>): Boolean {
+    // check rows
+    for (i in 0..8) {
+        val hashSet = HashSet<Char>()
+        for (j in 0..8) {
+            if (board[i][j] != '.' && !hashSet.add(board[i][j])) {
+                return false
+            }
         }
     }
+    return true
 }
-`} />
+`} from="3" to="12" />
 
 ### **Step 2: Validating Columns**
 The only change is flipping **(i, j) → (j, i)** to scan columns instead of rows.
 
 <KotlinPlayground code={`
-// check columns
-for (i in 0..8) {
-    val hashSet = HashSet<Char>()
-    for (j in 0..8) {
-        if (board[j][i] != '.' && !hashSet.add(board[j][i])) {
-            return false
+fun isValidSudoku(board: Array<CharArray>): Boolean {
+    // check columns
+    for (i in 0..8) {
+        val hashSet = HashSet<Char>()
+        for (j in 0..8) {
+            if (board[j][i] != '.' && !hashSet.add(board[j][i])) {
+                return false
+            }
         }
     }
+    return true
 }
-`} />
+`} from="3" to="12" />
 
 ### **Step 3: Validating 3×3 Boxes**
 This is trickier because **we're not iterating row-wise or column-wise**, but rather in **small 3×3 blocks**.
 
 <KotlinPlayground code={`
-// check boxes
-for (i in 0..2) {
-    for (j in 0..2) {
-        val hashSet = HashSet<Char>()
-        for (k in 0..2) {
-            for (l in 0..2) {
-                val num = board[i * 3 + k][j * 3 + l]
-                if (num != '.' && !hashSet.add(num)) {
-                    return false
+fun isValidSudoku(board: Array<CharArray>): Boolean {
+    // check boxes
+    for (i in 0..2) {
+        for (j in 0..2) {
+            val hashSet = HashSet<Char>()
+            for (k in 0..2) {
+                for (l in 0..2) {
+                    val num = board[i * 3 + k][j * 3 + l]
+                    if (num != '.' && !hashSet.add(num)) {
+                        return false
+                    }
                 }
             }
         }
     }
+    return true
 }
-`} />
+`} from="3" to="16" />
 
 📌 **Why `i * 3 + k` and `j * 3 + l`?**
 This formula maps **each box's coordinates** to the overall grid.
@@ -108,27 +117,30 @@ We use **three sets of hash sets**:
 - `boxSets[boxIndex]` → For the k-th 3×3 box
 
 <KotlinPlayground code={`
-val rowSets = Array(9) { HashSet<Char>() }
-val colSets = Array(9) { HashSet<Char>() }
-val boxSets = Array(9) { HashSet<Char>() }
+fun isValidSudoku(board: Array<CharArray>): Boolean {
+    val rowSets = Array(9) { HashSet<Char>() }
+    val colSets = Array(9) { HashSet<Char>() }
+    val boxSets = Array(9) { HashSet<Char>() }
 
-for (i in 0..8) {
-    for (j in 0..8) {
-        val num = board[i][j]
-        if (num == '.') continue
+    for (i in 0..8) {
+        for (j in 0..8) {
+            val num = board[i][j]
+            if (num == '.') continue
 
-        val boxIndex = (i / 3) * 3 + (j / 3)
+            val boxIndex = (i / 3) * 3 + (j / 3)
 
-        if (num in rowSets[i] || num in colSets[j] || num in boxSets[boxIndex]) {
-            return false
+            if (num in rowSets[i] || num in colSets[j] || num in boxSets[boxIndex]) {
+                return false
+            }
+
+            rowSets[i].add(num)
+            colSets[j].add(num)
+            boxSets[boxIndex].add(num)
         }
-
-        rowSets[i].add(num)
-        colSets[j].add(num)
-        boxSets[boxIndex].add(num)
     }
+    return true
 }
-`} />
+`} from="2" to="20" />
 
 **🚀 Why is this faster?**  
 ✅ **Only one pass over the grid.**  
@@ -144,26 +156,29 @@ for (i in 0..8) {
 Since Sudoku numbers are **1-9**, we don't need hash sets. A **boolean array** is faster!
 
 <KotlinPlayground code={`
-val rows = Array(9) { BooleanArray(9) }
-val cols = Array(9) { BooleanArray(9) }
-val boxes = Array(9) { BooleanArray(9) }
+fun isValidSudoku(board: Array<CharArray>): Boolean {
+    val rows = Array(9) { BooleanArray(9) }
+    val cols = Array(9) { BooleanArray(9) }
+    val boxes = Array(9) { BooleanArray(9) }
 
-for (i in 0..8) {
-    for (j in 0..8) {
-        val num = board[i][j]
-        if (num != '.') {
-            val index = num - '1'
-            val boxIndex = (i / 3) * 3 + j / 3
-            if (rows[i][index] || cols[j][index] || boxes[boxIndex][index]) {
-                return false
+    for (i in 0..8) {
+        for (j in 0..8) {
+            val num = board[i][j]
+            if (num != '.') {
+                val index = num - '1'
+                val boxIndex = (i / 3) * 3 + j / 3
+                if (rows[i][index] || cols[j][index] || boxes[boxIndex][index]) {
+                    return false
+                }
+                rows[i][index] = true
+                cols[j][index] = true
+                boxes[boxIndex][index] = true
             }
-            rows[i][index] = true
-            cols[j][index] = true
-            boxes[boxIndex][index] = true
         }
     }
+    return true
 }
-`} />
+`} from="2" to="20" />
 
 🚀 **Boolean arrays are 2x faster** than sets because:  
 ✔ **O(1) direct index access** (vs. O(1) hash lookup with extra memory overhead).  
