@@ -1,9 +1,12 @@
 ---
 title: "Introduction to Kotlin Programming"
 description: "Following my journey of learning Kotlin"
-pubDate: "2025-03-31"
+pubDate: "2025-03-30"
 heroImage: "/images/dsa-intro.png"
 ---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+import KotlinPlaygroundScript from '@components/misc/kotlin-playground-script.astro';
 
 # Welcome to Think in Code
 
@@ -19,13 +22,13 @@ Kotlin is a modern programming language that offers many advantages:
 
 I'll be sharing my learning journey with no specific structure or promises - just daily explorations to become better at coding. All code examples in this series will be exclusively in Kotlin or Java.
 
-```kotlin
+<KotlinPlayground code={`
 // A simple example of using a list in Kotlin
-fun main() {
-    val numbers = listOf(1, 2, 3, 4, 5)
-    val sum = numbers.sum()
-    println("The sum is $sum") // Output: The sum is 15
-}
-```
+val numbers = listOf(1, 2, 3, 4, 5)
+val sum = numbers.sum()
+println("The sum is $sum") // Output: The sum is 15
+`} />
 
 Let's embark on this Kotlin learning journey together!
+
+<KotlinPlaygroundScript />
