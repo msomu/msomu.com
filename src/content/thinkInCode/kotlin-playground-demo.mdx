@@ -1,0 +1,46 @@
+---
+title: "Kotlin Playground Demo"
+description: "Demonstrating the Kotlin Playground component"
+pubDate: "2025-03-30"
+heroImage: "/images/kotlin-playground.png"
+---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+
+# Kotlin Playground Demo
+
+This post demonstrates the use of the Kotlin Playground component, which allows for interactive Kotlin code examples.
+
+## Basic Example
+
+Here's a simple example of using the Kotlin Playground:
+
+<KotlinPlayground code={`
+fun main() {
+    println("Hello, Kotlin Playground!")
+}
+`} />
+
+## More Complex Example
+
+Here's a more complex example that demonstrates some Kotlin features:
+
+<KotlinPlayground code={`
+fun main() {
+    // Define a list of numbers
+    val numbers = listOf(1, 2, 3, 4, 5)
+    
+    // Use higher-order functions
+    val doubled = numbers.map { it * 2 }
+    val filtered = numbers.filter { it % 2 == 0 }
+    
+    // Print the results
+    println("Original: $numbers")
+    println("Doubled: $doubled")
+    println("Filtered (even): $filtered")
+}
+`} />
+
+## Try It Yourself
+
+Feel free to modify the code and run it to see the results!

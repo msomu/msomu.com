@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+// No need for TypeScript type declarations for the Kotlin playground attributes
+// We'll use JSX expressions with string literals for the attributes
+
+export interface Props {
+  code: string;
+}
+
+const { code } = Astro.props;
+
+// Check if the code already has a main function
+const hasMainFunction = code.includes("fun main(");
+
+// If not, wrap the code in a main function
+const processedCode = hasMainFunction ? code : `fun main() {
+${code}
+}`;
+
+// Get the line count to set the "to" attribute
+const lineCount = processedCode.split('\n').length;
+
+// Adjust the "to" attribute based on whether the code already has a main function
+const toValue = hasMainFunction ? (lineCount - 3).toString() : (lineCount - 1).toString();
+---
+
+<div class="kotlin-playground-wrapper">
+  <div class="kotlin-code" {...{ lines: "true", "auto-indent": "true", theme: "darcula", from: "2", to: toValue }}>
+    {processedCode}
+  </div>
+</div>
+
+<style>
+  .kotlin-playground-wrapper {
+    margin: 1.5rem 0;
+  }
+</style>
