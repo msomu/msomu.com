@@ -1,5 +1,6 @@
 ---
 import 'src/styles/global.css';
+import KotlinPlaygroundScript from '@components/misc/kotlin-playground-script.astro';
 
 // all pages through the use of the <BaseHead /> component.
 interface Props {
@@ -204,3 +205,6 @@ const { title, description, image = '/images/ogimage.png' } = Astro.props;
 	property='twitter:image'
 	content={new URL(image, Astro.url)}
 />
+
+<!-- Kotlin Playground Script -->
+<KotlinPlaygroundScript />

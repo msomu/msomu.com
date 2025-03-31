@@ -1,0 +1,19 @@
+---
+export interface Props {
+  code: string;
+}
+
+const { code } = Astro.props;
+---
+
+<div class="kotlin-playground-wrapper">
+  <div class="kotlin-code">
+    {code}
+  </div>
+</div>
+
+<style>
+  .kotlin-playground-wrapper {
+    margin: 1.5rem 0;
+  }
+</style>
