@@ -3,13 +3,15 @@ import type { HTMLAttributes } from 'astro/types';
 
 // Extend HTMLAttributes to include Kotlin playground attributes
 declare global {
-  namespace astroHTML.JSX {
-    interface HTMLAttributes {
-      lines?: string | boolean;
-      'auto-indent'?: string | boolean;
-      theme?: string;
-      from?: string | number;
-      to?: string | number;
+  namespace astroHTML {
+    namespace JSX {
+      interface HTMLAttributes {
+        lines?: string | boolean;
+        'auto-indent'?: string | boolean;
+        theme?: string;
+        from?: string | number;
+        to?: string | number;
+      }
     }
   }
 }
