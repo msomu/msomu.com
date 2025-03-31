@@ -59,7 +59,7 @@ msomu.com/
 
 ### Prerequisites
 - Node.js (v18 or later recommended)
-- npm or yarn
+- bun
 
 ### Installation
 ```bash
@@ -68,48 +68,34 @@ git clone https://github.com/yourusername/msomu.com.git
 cd msomu.com
 
 # Install dependencies
-npm install
-# or
-yarn install
+bun install
 ```
 
 ### Development
 ```bash
 # Start development server
-npm run dev
-# or
-yarn dev
+bun dev
 ```
 
 ### Building for Production
 ```bash
 # Build the project
-npm run build
-# or
-yarn build
+bun run build
 
 # Preview the built project
-npm run preview
-# or
-yarn preview
+bun run preview
 ```
 
 ### Code Quality
 ```bash
 # Check code
-npm run check
-# or
-yarn check
+bun run check
 
 # Lint code
-npm run lint
-# or
-yarn lint
+bun run lint
 
 # Format code
-npm run format
-# or
-yarn format
+bun run format
 ```
 
 ## ✨ Features
