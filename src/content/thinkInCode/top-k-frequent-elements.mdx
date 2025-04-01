@@ -1,0 +1,103 @@
+---
+title: "🚀 Solving 'Top K Frequent Elements' Using Bucket Sort"
+description: "An efficient approach to finding the k most frequent elements in an array"
+pubDate: "2025-04-01"
+heroImage: "/images/top-k-freq.png"
+---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+import KotlinPlaygroundScript from '@components/misc/kotlin-playground-script.astro';
+import { EndCTA } from "@components/cta";
+
+# 🚀 Solving "Top K Frequent Elements" Using Bucket Sort  
+
+## 📝 Problem Statement  
+The problem [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/) requires us to return the `k` most frequent elements from an array of integers.  
+
+---
+
+## 💡 My Initial Thought Process  
+At first, I thought of using a **HashMap** to count the frequency of each element, and then iterating through all keys to find the top `k` elements.  
+But then I hit a roadblock:  
+
+- **How do I efficiently find the top `k` frequent elements?**  
+- If I just iterate through the map `k` times, I end up with an **O(N²)** solution in the worst case.  
+- Sorting all elements by frequency would take **O(N log N)**, which feels unnecessary when I only need the top `k`.  
+
+This forced me to **rethink the problem**.  
+
+---
+
+## 🤯 My Intuition & "Aha!" Moment  
+
+Instead of focusing on **sorting elements**, I started thinking:  
+- "What if I group numbers by how frequently they appear?"  
+- "Since the maximum frequency an element can have is `N`, can I somehow use that?"  
+
+Then it clicked:  
+- I could create **buckets** where **index = frequency**.  
+- The most frequent numbers would naturally end up in the highest index buckets, and I could just **iterate from the back** to grab the top `k`.  
+- This way, I avoid sorting entirely, keeping it **O(N) time**! 🎯  
+
+---
+
+## 🏆 My Optimized Approach: **Bucket Sort**  
+### 🔹 **Steps to Solve Using Bucket Sort**  
+1. **Count frequencies** of each number using a `HashMap<Int, Int>`.  
+2. **Group numbers by frequency** in an array (`countArray`), where `index = frequency`.  
+3. **Collect the top `k` elements** by iterating from the highest frequency bucket.  
+
+---
+
+## 💻 Code Implementation (Kotlin)  
+
+<KotlinPlayground code={`
+class Solution {
+    fun topKFrequent(nums: IntArray, k: Int): IntArray {
+        val freqMap = HashMap<Int, Int>()
+        for (n in nums) {
+            freqMap[n] = freqMap.getOrDefault(n, 0) + 1
+        }
+
+        val countArray = Array<MutableList<Int>>(nums.size + 1) { mutableListOf() }
+        for ((num, freq) in freqMap) {
+            countArray[freq].add(num)
+        }
+
+        val result = mutableListOf<Int>()
+        for (i in countArray.size - 1 downTo 0) {  // Iterate from highest frequency
+            for (n in countArray[i]) {
+                result.add(n)
+                if (result.size == k) return result.toIntArray()
+            }
+        }
+
+        return result.toIntArray()
+    }
+}
+`} />
+
+## ⏳ Time Complexity Analysis
+- Building freqMap → O(N)
+- Filling countArray → O(N)
+- Collecting top k elements → O(N) (worst case, when k ≈ N)
+- Overall Complexity: O(N) 🚀 (Fast & Efficient!)
+
+## 🔥 What I Learned from This Struggle
+- ✅ Sometimes sorting isn't necessary—grouping data in a structured way can be more efficient.
+- ✅ Thinking in terms of frequency instead of raw values led me to an intuitive solution.
+- ✅ Iterating from the highest frequency made it easy to grab the most frequent elements.
+
+This problem really forced me to rethink how I approach optimization, and I loved that moment when the bucket idea clicked! 🎯
+
+---
+
+Let's embark on this coding journey together! If you have any questions or want to discuss other approaches to this problem, feel free to reach out.
+
+<EndCTA
+title={`Want to learn more about DSA and efficient algorithms? Let's connect and solve problems together!`}
+cta_label='Get in touch'
+bg_colour='yellow'
+/>
+
+<KotlinPlaygroundScript />
