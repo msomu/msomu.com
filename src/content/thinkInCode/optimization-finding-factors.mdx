@@ -1,0 +1,338 @@
+---
+title: "🚀 The Power of Optimization: Finding Factors Efficiently"
+description: "How a simple mathematical insight can turn years of computation into seconds"
+pubDate: "2023-11-15"
+heroImage: "/images/dsa-intro.png" # TODO: Replace with a more specific image for optimization
+---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+import KotlinPlaygroundScript from '@components/misc/kotlin-playground-script.astro';
+import { EndCTA } from "@components/cta";
+
+Today I decided to talk about time complexity and have chosen a very small, easy, direct problem - probably something you might have encountered in school. It's a perfect example to demonstrate how a simple mathematical insight can dramatically improve performance, turning what would be years of computation into mere seconds.
+
+## 📝 Problem Statement  
+Finding all factors of a number is a common computational task. For a number N, we need to find all integers that divide N without a remainder.
+
+For example:
+- Factors of 12: 1, 2, 3, 4, 6, 12 (total: 6 factors)
+- Factors of 24: 1, 2, 3, 4, 6, 8, 12, 24 (total: 8 factors)
+
+---
+
+## 💡 Our Initial Thought Process  
+When first approaching this problem, the brute force solution seems obvious:
+
+1. Iterate through all numbers from 1 to N
+2. Check if each number divides N without a remainder
+3. Count the total number of factors
+
+This approach works, but what happens when N becomes extremely large?
+
+```kotlin
+fun countFactorsBruteForce(n: Int): Int {
+    var count = 0
+    for (i in 1..n) {
+        if (n % i == 0) {
+            count++
+        }
+    }
+    return count
+}
+```
+
+For a number like 10^18, this would take approximately 10^10 seconds, which is over **316 years**! Clearly, we need a better approach.
+
+---
+
+## 🤯 Our Intuition & "Aha!" Moment  
+
+We initially thought we could optimize by only checking up to N/2, but through a dry run, we realized this wasn't correct.
+
+Let's see why with an example using N = 12:
+
+| Number (i) | Is Factor? | Corresponding Pair (N/i) | Action with N/2 Approach | Action with √N Approach |
+|------------|------------|--------------------------|--------------------------|-------------------------|
+| 1          | Yes        | 12                       | Count 1                  | Count 1 and 12          |
+| 2          | Yes        | 6                        | Count 2                  | Count 2 and 6           |
+| 3          | Yes        | 4                        | Count 3                  | Count 3 and 4           |
+| 4          | Yes        | 3                        | Count 4                  | Already counted with 3  |
+| 5          | No         | -                        | Skip                     | Skip (beyond √12)       |
+| 6          | Yes        | 2                        | Count 6                  | Already counted with 2  |
+| 7-11       | No         | -                        | Skip                     | Skip (beyond √12)       |
+| 12         | Yes        | 1                        | Skip (beyond N/2)        | Already counted with 1  |
+
+With the N/2 approach, we would only check numbers 1 through 6 and count each factor once. This gives us 4 factors (1, 2, 3, 6), missing 4 and 12.
+
+With the √N approach, we only check numbers 1 through 3 (since √12 ≈ 3.46), but for each factor i, we also count N/i as a factor. This correctly gives us all 6 factors (1, 2, 3, 4, 6, 12).
+
+Then came the mathematical insight: **If i is a factor of N, then N/i is also a factor of N**.
+
+This means:
+- For every factor i < √N, there's a corresponding factor N/i > √N
+- We only need to check numbers up to √N!
+
+For example, with N = 12:
+- 1 × 12 = 12
+- 2 × 6 = 12
+- 3 × 4 = 12
+
+By checking only up to √12 ≈ 3.46, we can find all factors!
+
+---
+
+## 🏆 Our Optimized Approach
+
+### 🔹 **Steps to Solve Efficiently**  
+1. Iterate from 1 to √N
+2. For each number i that divides N, count both i and N/i as factors
+3. Handle the special case where i = √N (we should only count it once)
+
+---
+
+## 💻 Code Implementation (Kotlin)  
+
+<KotlinPlayground code={`
+class Solution {
+    fun countFactors(n: Int): Int {
+        var count = 0
+        var i = 1
+
+        while (i * i <= n) {
+            if (n % i == 0) {
+                // If i is a perfect square root of n, count it only once
+                if (n / i == i) {
+                    count += 1
+                } else {
+                    // Otherwise, count both i and n/i
+                    count += 2
+                }
+            }
+            i++
+        }
+
+        return count
+    }
+}
+`} />
+
+## 📊 Measuring Execution Time
+
+Let's measure the execution time for each approach individually to see the difference in performance.
+
+### 🔸 Brute Force Approach
+
+First, let's measure the execution time of the brute force approach:
+
+<KotlinPlayground code={`
+fun countFactorsBruteForce(n: Long): Int {
+    var count = 0
+    for (i in 1..n) {
+        if (n % i == 0L) {
+            count++
+        }
+    }
+    return count
+}
+
+fun main() {
+    val testCases = listOf(12L, 24L, 1000000L)
+
+    println("| Number    | Brute Force Time (s) | Factors |")
+    println("|-----------|----------------------|---------|")
+
+    for (n in testCases) {
+        val startTime = System.nanoTime()
+        val factorCount = countFactorsBruteForce(n)
+        val endTime = System.nanoTime()
+
+        val executionTime = String.format("%.6f", (endTime - startTime) / 1_000_000_000.0)
+        println("| %-9s | %-20s | %-7s |".format(n, executionTime, factorCount))
+    }
+
+    println("Note: For larger numbers like 10^9 or 10^18, this approach would take too long to complete.")
+}
+`} />
+
+As we can see, even for a relatively small number like 1,000,000, the brute force approach takes a noticeable amount of time. For truly large numbers, it becomes impractical.
+
+### 🔸 Optimized Approach
+
+Now, let's measure the execution time of our optimized approach:
+
+<KotlinPlayground code={`
+fun countFactorsOptimized(n: Long): Int {
+    var count = 0
+    var i = 1L
+    while (i * i <= n) {
+        if (n % i == 0L) {
+            if (n / i == i) {
+                count += 1
+            } else {
+                count += 2
+            }
+        }
+        i++
+    }
+    return count
+}
+
+fun main() {
+    val testCases = listOf(12L, 24L, 1000000L, 1000000000L)
+
+    println("| Number      | Optimized Time (s) | Factors |")
+    println("|-------------|-------------------|---------|")
+
+    for (n in testCases) {
+        val startTime = System.nanoTime()
+        val factorCount = countFactorsOptimized(n)
+        val endTime = System.nanoTime()
+
+        val executionTime = String.format("%.6f", (endTime - startTime) / 1_000_000_000.0)
+        println("| %-11s | %-17s | %-7s |".format(n, executionTime, factorCount))
+    }
+}
+`} />
+
+The optimized approach is significantly faster, allowing us to handle much larger numbers efficiently.
+
+### 🔸 Side-by-Side Comparison
+
+Let's compare both approaches directly:
+
+<KotlinPlayground code={`
+import java.math.BigInteger
+
+fun countFactorsBruteForce(n: Long): Int {
+    var count = 0
+    for (i in 1..n) {
+        if (n % i == 0L) {
+            count++
+        }
+    }
+    return count
+}
+
+fun countFactorsOptimized(n: Long): Int {
+    var count = 0
+    var i = 1L
+    while (i * i <= n) {
+        if (n % i == 0L) {
+            if (n / i == i) {
+                count += 1
+            } else {
+                count += 2
+            }
+        }
+        i++
+    }
+    return count
+}
+
+fun main() {
+    val testCases = listOf(12L, 24L, 1000000L)
+
+    println("| Number      | Brute Force Time (s) | Optimized Time (s) | Factors |")
+    println("|-------------|----------------------|-------------------|---------|")
+
+    for (n in testCases) {
+        // Measure brute force time
+        val startBrute = System.nanoTime()
+        val factorCount = countFactorsBruteForce(n)
+        val endBrute = System.nanoTime()
+        val bruteForceTime = String.format("%.6f", (endBrute - startBrute) / 1_000_000_000.0)
+
+        // Measure optimized time
+        val startOptimized = System.nanoTime()
+        val optimizedCount = countFactorsOptimized(n)
+        val endOptimized = System.nanoTime()
+        val optimizedTime = String.format("%.6f", (endOptimized - startOptimized) / 1_000_000_000.0)
+
+        println("| %-11s | %-20s | %-17s | %-7s |".format(n, bruteForceTime, optimizedTime, factorCount))
+    }
+
+    // For larger numbers, only show optimized approach
+    val largeNumber = 1000000000L
+    val startOptimized = System.nanoTime()
+    val optimizedCount = countFactorsOptimized(largeNumber)
+    val endOptimized = System.nanoTime()
+    val optimizedTime = String.format("%.6f", (endOptimized - startOptimized) / 1_000_000_000.0)
+
+    println("| %-11s | %-20s | %-17s | %-7s |".format(largeNumber, "Too slow", optimizedTime, optimizedCount))
+
+    // Actual measurement for 10^15 (more practical for demonstration)
+    println("| %-11s | %-20s | %-17s | %-7s |".format("10^15", "~100 years", "Calculating...", "-"))
+
+    // Using BigInteger for 10^15 (as 10^18 would take too long even with optimization)
+
+    val veryLargeNumber = BigInteger.TEN.pow(15) // 10^15
+    val startVeryLarge = System.nanoTime()
+
+    // Optimized algorithm for BigInteger with efficient implementation
+    var count = 0
+    var i = BigInteger.ONE
+    val zero = BigInteger.ZERO
+
+    // Manual calculation of square root for BigInteger
+    // We'll use the fact that sqrt(10^15) = 10^7.5 ≈ 31,622,776
+    val sqrt = BigInteger.valueOf(31622776)
+
+    while (i.compareTo(sqrt) <= 0) {
+        if (veryLargeNumber.remainder(i).equals(zero)) {
+            val divResult = veryLargeNumber.divide(i)
+            if (divResult.equals(i)) {
+                count += 1
+            } else {
+                count += 2
+            }
+        }
+        i = i.add(BigInteger.ONE)
+    }
+
+    val endVeryLarge = System.nanoTime()
+    val veryLargeTime = String.format("%.6f", (endVeryLarge - startVeryLarge) / 1_000_000_000.0)
+
+    println("| %-11s | %-20s | %-17s | %-7s |".format("10^15", "~100 years", veryLargeTime, count))
+
+    // Note about 10^18
+    println("| %-11s | %-20s | %-17s | %-7s |".format("10^18", "~316 years", "~10 seconds*", "-"))
+    println("*Estimated based on the O(√N) complexity")
+}
+`} />
+
+As you can see from the results, the brute force approach quickly becomes impractical as the number grows, while the optimized approach remains efficient even for very large numbers.
+
+## ⏳ Time Complexity Analysis
+- Brute Force Approach: O(N)
+- Optimized Approach: O(√N)
+
+For N = 10^15:
+- Brute Force: ~100 years (theoretical calculation)
+- Optimized: Actual measurement shown in the code above
+
+For N = 10^18:
+- Brute Force: ~316 years (theoretical calculation)
+- Optimized: ~10 seconds (estimated based on O(√N) complexity)
+
+As you can see from our actual measurements, the optimized approach makes calculations practical that would otherwise take years with the brute force approach. That's the power of optimization! 🚀
+
+## 🔥 What We Learned from This Optimization
+
+- ✅ Mathematical insights can dramatically reduce computational complexity
+- ✅ Always question your initial assumptions and verify with dry runs
+- ✅ Small optimizations can make the difference between impossible and practical solutions
+- ✅ Understanding the problem deeply often reveals elegant solutions
+
+This optimization technique isn't just theoretical—it's the difference between a solution that would take centuries and one that completes in seconds.
+
+---
+
+Let's continue exploring the fascinating world of algorithm optimization together!
+
+<EndCTA
+title={`Want to learn more about algorithm optimization and efficient problem-solving? Let's connect!`}
+cta_label='Get in touch'
+bg_colour='yellow'
+/>
+
+<KotlinPlaygroundScript />
