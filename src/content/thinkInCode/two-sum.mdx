@@ -33,7 +33,7 @@ This approach ensures we only need to go through the array once, giving us an **
 
 ## 🏆 My Initial Solution
 
-<KotlinPlayground to={12} code={`
+<KotlinPlayground hideMain={true} code={`
 class Solution {
     fun twoSum(nums: IntArray, target: Int): IntArray {
         val hm = HashMap<Int, Int>()
@@ -77,7 +77,7 @@ This solution works correctly and efficiently, but I felt there was room for imp
 
 ## 🚀 Improved Solution with Kotlin Idioms
 
-<KotlinPlayground to={9} code={`
+<KotlinPlayground hideMain={true} code={`
 class Solution {
     fun twoSum(nums: IntArray, target: Int): IntArray {
         val seen = HashMap<Int, Int>()

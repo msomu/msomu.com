@@ -7,9 +7,10 @@ import type { HTMLAttributes } from 'astro/types';
 export interface Props {
   code: string;
   to?: string;
+  hideMain?: boolean;
 }
 
-const { code, to } = Astro.props;
+const { code, to, hideMain = false } = Astro.props;
 
 // Check if the code already has a main function
 const hasMainFunction = code.includes("fun main(");
@@ -22,8 +23,25 @@ ${code}
 // Get the line count to set the "to" attribute if not provided
 const lineCount = processedCode.split('\n').length;
 
+// Find the main function line if hideMain is true
+let mainFunctionLineNumber = -1;
+if (hideMain && hasMainFunction) {
+  const lines = processedCode.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes("fun main()") || lines[i].includes("fun main(")) {
+      mainFunctionLineNumber = i - 3; // +1 because line numbers start at 1
+      break;
+    }
+  }
+}
+
 // Use the provided "to" value if it exists, otherwise calculate it
-const calculatedToValue = hasMainFunction ? (lineCount - 3).toString() : (lineCount - 1).toString();
+let calculatedToValue;
+if (hideMain && mainFunctionLineNumber > 0) {
+  calculatedToValue = mainFunctionLineNumber.toString();
+} else {
+  calculatedToValue = hasMainFunction ? (lineCount - 3).toString() : (lineCount - 1).toString();
+}
 const toValue = to || calculatedToValue;
 ---
 
