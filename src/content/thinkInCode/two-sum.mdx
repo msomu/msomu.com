@@ -1,0 +1,110 @@
+---
+title: "🔍 Solving 'Two Sum' with HashMap in Kotlin"
+description: "An elegant approach to finding two numbers that add up to a target value"
+pubDate: "2025-04-16"
+heroImage: "/images/two-sum.png"
+---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+import KotlinPlaygroundScript from '@components/misc/kotlin-playground-script.astro';
+import { EndCTA } from "@components/cta";
+
+## 📝 Problem Statement  
+Given an array of integers `nums` and an integer `target`, return _indices of the two numbers such that they add up to `target`_.
+
+You may assume that each input would have **_exactly_ one solution**, and you may not use the _same_ element twice.
+
+You can return the answer in any order.
+
+---
+
+## 💡 My Initial Thought Process  
+When I first approached this problem, I thought about using a **HashMap** to efficiently find the solution:
+
+1. Iterate through each number in the array
+2. For each number, calculate the difference between the target and the current number
+3. Check if this difference exists in our HashMap
+4. If it does, we've found our pair! Return the indices
+5. If not, add the current number and its index to the HashMap and continue
+
+This approach ensures we only need to go through the array once, giving us an **O(N)** time complexity.
+
+---
+
+## 🏆 My Initial Solution
+
+<KotlinPlayground code={`
+class Solution {
+    fun twoSum(nums: IntArray, target: Int): IntArray {
+        val hm = HashMap<Int, Int>()
+        nums.forEachIndexed {index, v -> 
+            val rem = target - v
+            if(hm.contains(rem)){
+                return intArrayOf(hm[rem]!!,index)
+            }
+            hm.put(v,index)
+        }
+        return intArrayOf()
+    }
+}
+`} />
+
+This solution works correctly and efficiently, but I felt there was room for improvement in terms of readability and Kotlin idioms.
+
+---
+
+## 🚀 Improved Solution with Kotlin Idioms
+
+<KotlinPlayground code={`
+class Solution {
+    fun twoSum(nums: IntArray, target: Int): IntArray {
+        val seen = HashMap<Int, Int>()
+        nums.forEachIndexed {i, num ->
+            seen[target - num]?.let { return intArrayOf(i, it) }
+            seen[num] = i
+        }
+        return intArrayOf()
+    }
+}
+`} />
+
+## 🔥 What I Learned
+
+Through this process, I picked up some valuable Kotlin idioms and best practices:
+
+1. **Meaningful Variable Names**: Using `seen` instead of `hm` makes the code more readable and self-documenting.
+
+2. **Safe Call with Let**: The `?.let` operator is a concise way to handle nullable values. Instead of:
+   ```kotlin
+   if(hm.contains(rem)){
+       return intArrayOf(hm[rem]!!,index)
+   }
+   ```
+   We can use:
+   ```kotlin
+   seen[target - num]?.let { return intArrayOf(i, it) }
+   ```
+   This eliminates the need for the null assertion operator (`!!`) and makes the code more elegant.
+
+3. **Direct Map Access**: Instead of using `contains()` followed by a lookup, we can directly access the map with the safe call operator.
+
+## ⏳ Time Complexity Analysis
+- Building and searching the HashMap → O(N)
+- Overall Complexity: O(N) 🚀 (Fast & Efficient!)
+
+## 🧠 Key Insights
+- The HashMap approach allows us to find the complement in O(1) time
+- By storing each number as we go, we're essentially "remembering" what we've seen before
+- This problem demonstrates how data structures can dramatically improve algorithm efficiency
+
+---
+
+Let's continue exploring elegant solutions to classic problems! If you have any questions or want to discuss other approaches to this problem, feel free to reach out.
+
+<EndCTA
+title={`Want to learn more about DSA and efficient algorithms? Let's connect and solve problems together!`}
+cta_label='Get in touch'
+bg_colour='yellow'
+/>
+
+<KotlinPlaygroundScript />
