@@ -73,6 +73,28 @@ class Solution {
         return result.toIntArray()
     }
 }
+
+fun main() {
+    val solution = Solution()
+
+    // Example 1
+    val nums1 = intArrayOf(1, 1, 1, 2, 2, 3)
+    val k1 = 2
+    val result1 = solution.topKFrequent(nums1, k1)
+    println("Example 1:")
+    println("Input: nums = [1, 1, 1, 2, 2, 3], k = 2")
+    println("Output: [\${result1.joinToString(", ")}]")
+    println("Explanation: The elements 1 and 2 appear most frequently. 1 has a frequency of 3 and 2 has a frequency of 2.")
+
+    // Example 2
+    val nums2 = intArrayOf(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+    val k2 = 2
+    val result2 = solution.topKFrequent(nums2, k2)
+    println("\nExample 2:")
+    println("Input: nums = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4], k = 2")
+    println("Output: [\${result2.joinToString(", ")}]")
+    println("Explanation: The elements 4 and 3 appear most frequently. 4 has a frequency of 4 and 3 has a frequency of 3.")
+}
 `} />
 
 ## ⏳ Time Complexity Analysis
