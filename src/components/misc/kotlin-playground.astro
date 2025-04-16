@@ -6,9 +6,10 @@ import type { HTMLAttributes } from 'astro/types';
 
 export interface Props {
   code: string;
+  to?: string;
 }
 
-const { code } = Astro.props;
+const { code, to } = Astro.props;
 
 // Check if the code already has a main function
 const hasMainFunction = code.includes("fun main(");
@@ -18,11 +19,12 @@ const processedCode = hasMainFunction ? code : `fun main() {
 ${code}
 }`;
 
-// Get the line count to set the "to" attribute
+// Get the line count to set the "to" attribute if not provided
 const lineCount = processedCode.split('\n').length;
 
-// Adjust the "to" attribute based on whether the code already has a main function
-const toValue = hasMainFunction ? (lineCount - 3).toString() : (lineCount - 1).toString();
+// Use the provided "to" value if it exists, otherwise calculate it
+const calculatedToValue = hasMainFunction ? (lineCount - 3).toString() : (lineCount - 1).toString();
+const toValue = to || calculatedToValue;
 ---
 
 <div class="kotlin-playground-wrapper">
