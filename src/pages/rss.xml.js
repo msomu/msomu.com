@@ -3,10 +3,9 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "@data/index";
 import { getCollection } from "astro:content";
 
 export async function GET(context) {
-	const [posts, thoughts, ships, thinkInCodeItems] = await Promise.all([
+	const [posts, uses, thinkInCodeItems] = await Promise.all([
 		getCollection("writing"),
-		getCollection("thought"),
-		getCollection("ship"),
+		getCollection("use"),
 		getCollection("thinkInCode"),
 	]);
 
@@ -19,13 +18,9 @@ export async function GET(context) {
 				...post.data,
 				link: `/writings/${post.slug}/`,
 			})),
-			...thoughts.map((thought) => ({
-				...thought.data,
-				link: `/thoughts/${thought.slug}/`,
-			})),
-			...ships.map((ship) => ({
-				...ship.data,
-				link: `/ships/${ship.slug}/`,
+			...uses.map((use) => ({
+				...use.data,
+				link: `/uses/${use.slug}/`,
 			})),
 			...thinkInCodeItems.map((item) => ({
 				...item.data,
