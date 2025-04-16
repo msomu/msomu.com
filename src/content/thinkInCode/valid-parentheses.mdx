@@ -1,0 +1,140 @@
+---
+title: "🧠 Cracking LeetCode's 'Valid Parentheses' with Kotlin"
+description: "A journey toward clean code that not only works — but feels right"
+pubDate: "2025-04-16"
+heroImage: "/images/valid-parentheses.png"
+---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+import KotlinPlaygroundScript from '@components/misc/kotlin-playground-script.astro';
+import { EndCTA } from "@components/cta";
+
+## 🧩 The Problem: Valid Parentheses
+
+One of the most common and deceptively simple problems on LeetCode is [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/). The task is to check whether a given string of brackets — like `()[]{}` — is valid, meaning every opening bracket has a corresponding closing bracket in the correct order.
+
+It's easy to understand, but solving it in a concise, readable, and safe way requires a bit of finesse. Especially when you're doing it in Kotlin — a language that rewards elegant expression.
+
+---
+
+## 🤔 My First Attempt: Functional but Flawed
+
+My first Kotlin version got the job done logically, but there were small mistakes that showed up quickly:
+
+```kotlin
+val stack = ArrayDeque(listOf<String>())
+```
+
+Oops — I used `String` instead of `Char`, which was inefficient.
+
+Then came a deeper issue: I only checked for closing brackets, but forgot to push opening brackets onto the stack. It worked for clean inputs but failed on edge cases — and even crashed on others.
+
+These tiny issues reminded me that even for "easy" problems, attention to robustness matters just as much as logic.
+
+---
+
+## 🔍 Debugging: Stack Safety and Map Logic
+
+Through some trial and error (and a helpful reminder about `stack.last()` throwing exceptions when empty), I refined the logic:
+
+1. Properly push opening brackets
+2. Safely pop from the stack using `removeLastOrNull()`
+3. Use a `Map<Char, Char>` instead of `Map<String, String>` for memory and clarity
+
+This version was getting close to idiomatic Kotlin — but it still wasn't satisfying.
+
+---
+
+## ✨ The Cleanest Version: Kotlin That Feels Right
+
+After a few tweaks, I landed on a version that struck the perfect balance of safety, readability, and elegance:
+
+<KotlinPlayground hideMain={true} code={`
+class Solution {
+    fun isValid(s: String): Boolean {
+        val pairs = mapOf(')' to '(', '}' to '{', ']' to '[')
+        val stack = ArrayDeque<Char>()
+        for (c in s) {
+            if (c in pairs) {
+                if (stack.removeLastOrNull() != pairs[c]) return false
+            } else {
+                stack.addLast(c)
+            }
+        }
+        return stack.isEmpty()
+    }
+}
+
+fun main() {
+    val solution = Solution()
+
+    // Example 1
+    val s1 = "()[]{}"
+    val result1 = solution.isValid(s1)
+    println("Example 1:")
+    println("Input: s = \\"\$s1\\"")
+    println("Output: \$result1")
+    println("Explanation: The brackets are properly matched and in the correct order.")
+
+    // Example 2
+    val s2 = "([)]"
+    val result2 = solution.isValid(s2)
+    println("\\nExample 2:")
+    println("Input: s = \\"\$s2\\"")
+    println("Output: \$result2")
+    println("Explanation: The brackets are not properly matched - closing brackets must match their most recent opening bracket.")
+
+    // Example 3
+    val s3 = "{[]}"
+    val result3 = solution.isValid(s3)
+    println("\\nExample 3:")
+    println("Input: s = \\"\$s3\\"")
+    println("Output: \$result3")
+    println("Explanation: The brackets are properly nested and matched.")
+}
+`} />
+
+What I loved about this version:
+
+✅ Uses `Char` instead of `String`  
+✅ Avoids crashes with `removeLastOrNull()`  
+✅ Expressive map usage for bracket pairing  
+✅ Clean for-in loop over `.forEach` lambda  
+✅ Zero clutter — just logic that reads like prose  
+
+## 💡 What I Learned
+
+Through this process, I picked up some valuable Kotlin idioms and best practices:
+
+1. **Use the Right Types**: Using `Char` instead of `String` for single characters is more memory-efficient and semantically correct.
+
+2. **Safe Operations**: Kotlin provides safe alternatives like `removeLastOrNull()` that prevent runtime exceptions, making your code more robust.
+
+3. **Expressive Collections**: The `in` operator with maps makes code more readable than explicit `contains()` checks.
+
+4. **Simplicity Wins**: Sometimes a straightforward `for` loop is clearer than functional approaches like `.forEach`.
+
+5. **Early Returns**: Using early returns with boolean expressions keeps the code flat and easy to follow.
+
+## ⏳ Time Complexity Analysis
+- Iterating through the string → O(N)
+- Stack operations (push/pop) → O(1)
+- Overall Complexity: O(N) 🚀 (Linear time!)
+
+## 🧠 Key Insights
+- A stack is the perfect data structure for this problem because of its LIFO (Last In, First Out) nature
+- Mapping closing brackets to their opening counterparts simplifies the logic
+- The solution is elegant because it handles all edge cases in a concise way
+- Even "easy" problems deserve careful attention to code quality and safety
+
+---
+
+Let's continue exploring elegant solutions to classic problems! If you have any questions or want to discuss other approaches to this problem, feel free to reach out.
+
+<EndCTA
+title={`Want to learn more about DSA and efficient algorithms? Let's connect and solve problems together!`}
+cta_label='Get in touch'
+bg_colour='yellow'
+/>
+
+<KotlinPlaygroundScript />
