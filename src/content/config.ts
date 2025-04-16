@@ -39,33 +39,6 @@ const writing = defineCollection({
 	}),
 });
 
-const thought = defineCollection({
-	type: "content",
-	// Type-check frontmatter using a schema
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		category: z.string(),
-		// Transform string to Date object
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-	}),
-});
-
-const ship = defineCollection({
-	type: "content",
-	// Type-check frontmatter using a schema
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		ship_count: z.number(),
-		category: z.string(),
-		// Transform string to Date object
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-	}),
-});
-
 const uses = defineCollection({
 	type: "content",
 	// Type-check frontmatter using a schema
@@ -79,4 +52,4 @@ const uses = defineCollection({
 	}),
 });
 
-export const collections = { writing, thought, ship, whoami, uses, thinkInCode };
+export const collections = { writing, whoami, uses, thinkInCode };
