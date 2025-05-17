@@ -1,7 +1,7 @@
 ---
 import { Header } from '@components/misc';
 import { BaseHead } from '@components/seo';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@data/index';
+import { SITE_TITLE } from '@data/index';
 import RootLayout from '@layouts/root-layout.astro';
 ---
 
@@ -14,10 +14,10 @@ import RootLayout from '@layouts/root-layout.astro';
 			description="ToonGen - Transform your photos into cartoon avatars"
 			image='/images/ogimage.png'
 		/>
-		<script>
+		<script is:inline>
 			// Device detection and redirection
 			document.addEventListener('DOMContentLoaded', () => {
-				const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+				const userAgent = navigator.userAgent || navigator.userAgent;
 				const redirectMessage = document.getElementById('redirect-message');
 
 				// Check if mobile device
@@ -30,7 +30,7 @@ import RootLayout from '@layouts/root-layout.astro';
 					setTimeout(() => {
 						window.location.href = "https://play.google.com/store/apps/details?id=com.msomu.toongen";
 					}, 1000);
-				} else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+				} else if (/iPad|iPhone|iPod/.test(userAgent)) {
 					// iOS device - show message and redirect to App Store
 					if (redirectMessage) {
 						redirectMessage.textContent = 'Redirecting to App Store...';
