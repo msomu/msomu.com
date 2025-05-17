@@ -1,0 +1,119 @@
+---
+import { Header } from '@components/misc';
+import { BaseHead } from '@components/seo';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@data/index';
+import RootLayout from '@layouts/root-layout.astro';
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<BaseHead
+			title={`${SITE_TITLE} - ToonGen App`}
+			description="ToonGen - Transform your photos into cartoon avatars"
+			image='/images/ogimage.png'
+		/>
+		<script>
+			// Device detection and redirection
+			document.addEventListener('DOMContentLoaded', () => {
+				const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+				const redirectMessage = document.getElementById('redirect-message');
+
+				// Check if mobile device
+				if (/android/i.test(userAgent)) {
+					// Android device - show message and redirect to Play Store
+					if (redirectMessage) {
+						redirectMessage.textContent = 'Redirecting to Google Play Store...';
+						redirectMessage.style.display = 'block';
+					}
+					setTimeout(() => {
+						window.location.href = "https://play.google.com/store/apps/details?id=com.msomu.toongen";
+					}, 1000);
+				} else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+					// iOS device - show message and redirect to App Store
+					if (redirectMessage) {
+						redirectMessage.textContent = 'Redirecting to App Store...';
+						redirectMessage.style.display = 'block';
+					}
+					setTimeout(() => {
+						window.location.href = "https://apps.apple.com/in/app/toongen/id6745421916";
+					}, 1000);
+				} else if (redirectMessage) {
+					// Desktop users will see the page content
+					redirectMessage.style.display = 'none';
+				}
+			});
+		</script>
+		<title></title>
+	</head>
+	<RootLayout>
+		<div id="redirect-message" class="fixed top-0 left-0 w-full bg-blue-500 text-white text-center py-4 z-50" style="display: none;"></div>
+		<div
+			id='Header+title'
+			class='flex flex-col w-full gap-6 max-w-xl'>
+			<Header />
+			<h1 class='w-full text-4xl font-medium tracking-tight'>ToonGen App</h1>
+
+			<div class="prose prose-lg dark:prose-invert">
+				<p class="text-xl">Transform your photos into cartoon avatars with ToonGen!</p>
+
+				<div class="my-8 flex flex-col md:flex-row justify-center gap-6">
+					<div class="bg-gray-200 dark:bg-gray-800 rounded-xl p-4 shadow-lg max-w-sm">
+						<div class="text-center mb-2 text-sm text-gray-600 dark:text-gray-400">App Preview</div>
+						<img src="/images/toongen-sc.png" alt="ToonGen App Screenshot" class="rounded-lg w-full h-auto object-cover" />
+					</div>
+					<div class="bg-gray-200 dark:bg-gray-800 rounded-xl p-4 shadow-lg max-w-sm">
+						<div class="text-center mb-2 text-sm text-gray-600 dark:text-gray-400">App Preview</div>
+						<img src="/images/toongen-sc-2.png" alt="ToonGen App Screenshot" class="rounded-lg w-full h-auto object-cover" />
+					</div>
+				</div>
+
+				<div class="my-8">
+					<p class="mb-4 text-center">Download ToonGen on your preferred platform:</p>
+
+					<div class="flex flex-col md:flex-row gap-8 justify-center items-center my-6">
+						<div class="p-4 rounded-xl shadow-lg transform transition-transform hover:scale-105">
+							<!-- Google Play Store Badge -->
+							<a href="https://play.google.com/store/apps/details?id=com.msomu.toongen" class="inline-block">
+								<img src="/images/google-play.png" 
+								     alt="Get it on Google Play" 
+								     class="h-16 w-auto object-contain"
+								     style="width: 200px;" />
+							</a>
+						</div>
+
+						<div class="p-4 rounded-xl shadow-lg transform transition-transform hover:scale-105">
+							<!-- App Store Badge -->
+							<a href="https://apps.apple.com/in/app/toongen/id6745421916" class="inline-block">
+								<img src="/images/app-store.png" 
+								     alt="Download on the App Store" 
+								     class="h-16 w-auto object-contain"
+								     style="width: 200px;" />
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<h2>About ToonGen</h2>
+				<p>ToonGen is a fun and creative app that transforms your photos into cartoon avatars. With advanced AI technology, ToonGen creates unique cartoon versions of your photos with just a few taps.</p>
+
+				<h2>Features</h2>
+				<ul>
+					<li>Transform photos into cartoon avatars</li>
+					<li>Multiple cartoon styles to choose from</li>
+					<li>Easy to use interface</li>
+					<li>Share your creations with friends</li>
+				</ul>
+
+				<div class="mt-8">
+					<h2>Legal Information</h2>
+					<ul>
+						<li><a href="/apps/toongen/privacy-policy">Privacy Policy</a></li>
+						<li><a href="/apps/toongen/terms-of-service">Terms of Service</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</RootLayout>
+</html>
