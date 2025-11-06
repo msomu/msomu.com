@@ -2,8 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Header } from '@components/misc';
 import { BaseHead } from '@components/seo';
-import { SITE_TITLE } from '@data/index';
-import { SITE_DESCRIPTION } from '@data/index';
+import { SITE_TITLE, SITE_DESCRIPTION, socialLinks } from '@data/index';
 import RootLayout from '@layouts/root-layout.astro';
 import { clsx } from '@utils/index';
 
@@ -35,14 +34,25 @@ const { Content } = await whoami[0].render();
 			<span class='sr-only'> {description} </span>
 			<div
 				class={clsx(
-					'w-full prose prose-lg my-3 prose-p:font-medium dark:prose-invert prose-a:underline prose-a:bg-amber-50 prose-a:decoration-amber-500 items-center justify-center',
-					'dark:prose-a:bg-amber-950 dark:prose-a:decoration-amber-400 dark:prose-a:underline',
+					'w-full prose prose-lg my-3 prose-p:font-medium dark:prose-invert prose-a:underline prose-a:underline-offset-2 items-center justify-center',
+					'prose-a:text-gray-700 dark:prose-a:text-gray-400 hover:prose-a:text-gray-900 dark:hover:prose-a:text-gray-100',
 					'prose-h1:font-medium prose-h2:font-medium prose-h3:font-medium prose-h4:font-medium prose-h5:font-medium prose-h6:font-medium',
 					'prose-h1:tracking-tight prose-h2:tracking-tight prose-h3:tracking-tight prose-h4:tracking-tight prose-h5:tracking-tight prose-h6:tracking-tight',
 					'prose-ul:font-medium prose-ol:font-medium prose-li:font-medium',
 					'prose-ul:space-y-2 prose-ol:space-y-3 prose-li:space-y-3'
 				)}>
 				<Content />
+			</div>
+			<div id='social-links' class='flex flex-row gap-4 mt-6'>
+				{
+					socialLinks.map((link) => (
+						<a
+							href={link.url}
+							class='text-lg font-medium text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:underline underline-offset-2'>
+							{link.label}
+						</a>
+					))
+				}
 			</div>
 		</div>
 	</RootLayout>

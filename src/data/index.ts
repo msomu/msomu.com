@@ -1,7 +1,12 @@
-export const SITE_TITLE = "Somu Nexus";
-export const SITE_DESCRIPTION = "Mobile Engineering solutions that solve real problems.";
+export const SITE_TITLE = "somu nexus";
+export const SITE_DESCRIPTION = "mobile engineering solutions that solve real problems.";
 
 export interface MenuItem {
+	label: string;
+	url: string;
+}
+
+export interface SocialLink {
 	label: string;
 	url: string;
 }
@@ -17,8 +22,8 @@ export const menuItems: MenuItem[] = [
 		url: "/writings",
 	},
 	{
-		label: "uses",
-		url: "/uses",
+		label: "apps",
+		url: "/apps",
 	},
 	{
 		label: "think in code",
@@ -32,4 +37,24 @@ export const menuItems: MenuItem[] = [
 	// 	label: "ships",
 	// 	url: "/ships",
 	// },
+];
+
+// Social links
+export const socialLinks: SocialLink[] = [
+	{
+		label: "@x",
+		url: "https://x.com/msomuin",
+	},
+	{
+		label: "email",
+		url: "mailto:msomasundaram93@gmail.com",
+	},
+	{
+		label: "github",
+		url: "https://github.com/msomu",
+	},
+	{
+		label: "linkedin",
+		url: "https://www.linkedin.com/in/msomu/",
+	},
 ];
