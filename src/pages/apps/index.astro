@@ -1,0 +1,42 @@
+---
+import { Header } from '@components/misc';
+import { BaseHead } from '@components/seo';
+import { SITE_TITLE } from '@data/index';
+import RootLayout from '@layouts/root-layout.astro';
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={`${SITE_TITLE} - apps`}
+			description="mobile apps i've built"
+			image='/images/ogimage.png'
+		/>
+	</head>
+	<RootLayout>
+		<div
+			id='navbar+title'
+			class='flex flex-col w-full gap-6 max-w-xl'>
+			<Header />
+			<h1 class='w-full text-4xl md:text-5xl lg:text-7xl font-medium tracking-tight'>
+				apps
+			</h1>
+			<p class='text-lg font-medium text-gray-700 dark:text-gray-300'>
+				mobile apps i've built and shipped
+			</p>
+
+			<div class='flex flex-col gap-6 mt-6'>
+				<!-- ToonGen App Card -->
+				<a href='/apps/toongen' class='group block p-6 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors'>
+					<h2 class='text-2xl font-medium mb-2 group-hover:text-gray-900 dark:group-hover:text-white transition-colors'>
+						toongen
+					</h2>
+					<p class='text-gray-600 dark:text-gray-400'>
+						transform your photos into cartoon avatars with ai. available on ios and android.
+					</p>
+				</a>
+			</div>
+		</div>
+	</RootLayout>
+</html>
