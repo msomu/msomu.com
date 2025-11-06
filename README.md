@@ -1,7 +1,7 @@
 ![ A website with navigation links for "home", "writing", and "thoughts" built by Android Craftsman msomu](./public/images/ogimage.png)
 
 # 🚀 Android Craftsman
-Hey! I'm Somasundaram Mahesh (msomu), a Senior Android Developer at Disney+ Hotstar crafting streaming experiences for millions of users.
+Hey! I'm Somasundaram Mahesh (msomu), a Senior Android Developer at JioHotstar crafting streaming experiences for millions of users.
 
 ## 🙏 Credits
 This website is based on the template created by [Sanju](https://github.com/Spikeysanju). Check out his:
@@ -71,7 +71,7 @@ cd msomu.com
 bun install
 ```
 
-### Development
+### Developmento
 ```bash
 # Start development server
 bun dev
