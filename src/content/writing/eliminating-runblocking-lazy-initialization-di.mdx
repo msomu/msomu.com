@@ -1,11 +1,9 @@
 ---
-title: "Eliminating runBlocking: Lazy Initialization Patterns for Dependency Injection"
+title: "Eliminating runblocking for dependency injection"
 description: "How to fix runBlocking usage in Dagger providers and implement proper lazy initialization for suspension-based dependencies"
 tags: ["kotlin", "coroutines", "android", "dependency-injection", "dagger", "architecture"]
-date: 2025-11-20
+pubDate: 2025-11-20
 ---
-
-# Eliminating runBlocking: Lazy Initialization Patterns for Dependency Injection
 
 When migrating Android apps to Kotlin coroutines, one common anti-pattern persists in dependency injection layers: **using `runBlocking` to call suspend functions during DI initialization**. This practice, while seemingly pragmatic, can cause main thread blocking, re-entrancy issues, and defeats the entire purpose of coroutines.
 
