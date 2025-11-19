@@ -1,0 +1,369 @@
+---
+title: "Eliminating runBlocking: Lazy Initialization Patterns for Dependency Injection"
+description: "How to fix runBlocking usage in Dagger providers and implement proper lazy initialization for suspension-based dependencies"
+tags: ["kotlin", "coroutines", "android", "dependency-injection", "dagger", "architecture"]
+date: 2025-11-20
+---
+
+# Eliminating runBlocking: Lazy Initialization Patterns for Dependency Injection
+
+When migrating Android apps to Kotlin coroutines, one common anti-pattern persists in dependency injection layers: **using `runBlocking` to call suspend functions during DI initialization**. This practice, while seemingly pragmatic, can cause main thread blocking, re-entrancy issues, and defeats the entire purpose of coroutines.
+
+In this post, we'll explore this problem, why it happens, and the clean architectural pattern to replace it.
+
+## The Problem: When DI Met Suspend Functions
+
+Imagine you have a configuration provider that needs to fetch data asynchronously:
+
+```kotlin
+class ConfigProvider @Inject constructor(
+    private val remoteConfigRepo: RemoteConfigRepository,
+) {
+    private lateinit var appConfig: AppConfig
+
+    init {
+        runBlocking {  // ⚠️ ANTI-PATTERN: Blocks thread during initialization
+            appConfig = remoteConfigRepo.fetchConfig()  // suspend call
+            // ... more suspend calls ...
+        }
+    }
+
+    fun getConfig(): AppConfig = appConfig
+}
+```
+
+And a Dagger provider that uses this configuration to make runtime decisions:
+
+```kotlin
+@Provides
+@Singleton
+fun providesCoreService(
+    context: Context,
+    configProvider: ConfigProvider,
+    featureFlags: FeatureFlags,
+): CoreService {
+    val config = configProvider.getConfig()
+
+    val service = runBlocking(Dispatchers.Unconfined) {  // ⚠️ Also using runBlocking!
+        if (featureFlags.isNewImplementationEnabled()) {
+            createNewImplementation(config)
+        } else {
+            createLegacyImplementation(config)
+        }
+    }
+    return service
+}
+```
+
+This pattern appears in two places:
+1. **Class initialization** - Config providers use `runBlocking` in `init` blocks
+2. **DI providers** - Dagger `@Provides` functions use `runBlocking` to handle suspend creation logic
+
+## Why This Is Problematic
+
+### 1. **Main Thread Blocking During Startup**
+When Dagger builds the dependency injection graph on the main thread (common during app initialization), `runBlocking` will:
+- Block the main thread
+- Prevent the system from rendering or processing user input
+- Potentially trigger ANR (Application Not Responding) if initialization takes >5 seconds
+
+### 2. **Defeats Coroutines Purpose**
+Coroutines are designed to suspend without blocking threads. Using `runBlocking` in a coroutines-based codebase is a fundamental architectural contradiction:
+
+```kotlin
+// ❌ What you're saying with runBlocking:
+// "This is async, but I'm going to force it to be sync anyway"
+val result = runBlocking { suspendFunction() }
+
+// This blocks the current thread until suspendFunction completes
+// Other coroutines on the same dispatcher cannot run
+```
+
+### 3. **Re-entrancy and Deadlock Risks**
+When suspend functions call into each other through `runBlocking`, you can create deadlock scenarios:
+
+```kotlin
+// Thread A
+runBlocking {
+    callSuspendFunctionA()  // Waits here
+}
+
+// Inside suspendFunctionA (still Thread A)
+val result = callSuspendFunctionB()  // Also tries to run on Thread A
+// If it needs resources from a different dispatcher, potential deadlock
+```
+
+### 4. **Unconfined Dispatcher Pitfalls**
+Many implementations use `Dispatchers.Unconfined`:
+
+```kotlin
+runBlocking(Dispatchers.Unconfined) { ... }
+```
+
+This runs the coroutine on the current thread without any confinement guarantees, creating unpredictable threading behavior.
+
+### 5. **Scaling Issues**
+As your configuration needs grow and you have more suspend functions to call during initialization, the blocking time increases, compounding the startup performance problem.
+
+## The Root Cause: Mixing Worlds
+
+The issue stems from a fundamental mismatch:
+- **Suspend functions** are designed for async/await patterns
+- **DI providers** are designed for synchronous object construction
+- **Configuration decisions** in DI need to inspect runtime state (often async)
+
+The naive solution is to bridge them with `runBlocking`, but that's a leaky abstraction that breaks the coroutines model.
+
+## The Solution: Factory + Lazy Provider Pattern
+
+Instead of blocking during initialization, we move the creation logic into a proper async factory and implement lazy initialization with thread-safe guarantees:
+
+### Step 1: Create a Factory Interface
+
+```kotlin
+interface ServiceFactory {
+    /**
+     * Suspending function to create the service.
+     * This delays creation logic until we're in a proper coroutine context.
+     */
+    suspend fun create(): CoreService
+
+    /**
+     * Optional: Provide dependencies needed after creation.
+     */
+    fun getAnalyticsHelper(): AnalyticsHelper
+}
+```
+
+### Step 2: Implement the Factory in DI
+
+```kotlin
+@Provides
+@Singleton
+fun providesServiceFactory(
+    context: Context,
+    httpClient: HttpClient,
+    configProvider: ConfigProvider,
+    featureFlags: FeatureFlags,
+    analyticsHelper: AnalyticsHelper,
+): ServiceFactory {
+    return object : ServiceFactory {
+        override suspend fun create(): CoreService {
+            val config = configProvider.getConfig()
+
+            // Now we can make async decisions inside a suspend context
+            return if (featureFlags.isNewImplementationEnabled()) {
+                NewCoreServiceImplementation(
+                    context = context,
+                    httpClient = httpClient,
+                    config = config,
+                )
+            } else {
+                LegacyCoreServiceImplementation(
+                    context = context,
+                    httpClient = httpClient,
+                    config = config,
+                )
+            }
+        }
+
+        override fun getAnalyticsHelper(): AnalyticsHelper = analyticsHelper
+    }
+}
+```
+
+### Step 3: Create a Thread-Safe Lazy Provider
+
+```kotlin
+/**
+ * Thread-safe lazy provider for CoreService singleton.
+ *
+ * Uses mutex-based synchronization to ensure only one instance is created
+ * even when multiple components request it concurrently from different coroutines.
+ *
+ * This replaces the problematic runBlocking approach with proper suspension.
+ */
+@Singleton
+class ServiceProvider @Inject constructor(
+    private val serviceFactory: ServiceFactory,
+) {
+    private val mutex = Mutex()
+
+    @Volatile
+    private var _instance: CoreService? = null
+
+    /**
+     * Gets or creates the CoreService singleton.
+     *
+     * Uses double-checked locking pattern:
+     * - Fast path: Returns existing instance without acquiring mutex
+     * - Slow path: Acquires mutex, double-checks, then initializes
+     */
+    suspend fun get(): CoreService {
+        // Fast path: instance already exists
+        _instance?.let { return it }
+
+        // Slow path: acquire lock and initialize
+        return mutex.withLock {
+            // Double-check inside the lock
+            _instance ?: serviceFactory.create().also { instance ->
+                _instance = instance
+                instance.addListener(serviceFactory.getAnalyticsHelper())
+            }
+        }
+    }
+
+    /**
+     * Get instance if already initialized, null otherwise.
+     * Safe to call from any context without suspension.
+     */
+    fun getOrNull(): CoreService? = _instance
+}
+```
+
+### Step 4: Update Consumers
+
+**Before:**
+```kotlin
+class FeatureComponent(
+    private val service: CoreService,  // Direct dependency
+) {
+    fun doWork() {
+        service.performTask(...)
+    }
+}
+```
+
+**After:**
+```kotlin
+class FeatureComponent(
+    private val serviceProvider: ServiceProvider,  // Lazy provider
+) {
+    suspend fun doWork() {
+        serviceProvider.get().performTask(...)  // Suspends until available
+    }
+
+    fun cleanup() {
+        serviceProvider.getOrNull()?.cleanup(...)  // Nullable path
+    }
+}
+```
+
+## Key Architectural Insights
+
+### 1. **Double-Checked Locking with Mutex**
+
+The pattern uses a `@Volatile` field + `Mutex`:
+
+```kotlin
+@Volatile
+private var _instance: CoreService? = null
+
+suspend fun get(): CoreService {
+    _instance?.let { return it }  // Fast path: no lock needed
+
+    return mutex.withLock {
+        _instance ?: create()  // Slow path: thread-safe creation
+    }
+}
+```
+
+Why this works:
+- **First check** (outside lock) avoids unnecessary suspension on fast path
+- **Mutex** ensures only one coroutine creates the instance
+- **Volatile** makes the field changes visible across threads
+- **Second check** (inside lock) handles race conditions
+
+### 2. **Proper Suspension vs Blocking**
+
+```kotlin
+// ❌ Blocking: Current thread cannot run other work
+runBlocking { suspendFunction() }
+
+// ✅ Suspension: Current thread can handle other coroutines
+mutex.withLock { suspendFunction() }
+```
+
+When a coroutine suspends, the underlying thread is freed to execute other coroutines. When a thread blocks with `runBlocking`, it's stuck.
+
+### 3. **Deferring Configuration Decisions**
+
+The original problem: We need to decide *which* implementation to create based on runtime configuration, but DI providers are synchronous.
+
+Solution: Move the decision into the factory's suspend function:
+
+```kotlin
+override suspend fun create(): CoreService {
+    // Decision made in suspend context - no blocking!
+    return if (featureFlags.isNewImplementationEnabled()) {
+        NewImplementation(...)
+    } else {
+        LegacyImplementation(...)
+    }
+}
+```
+
+Now the DI container doesn't need to block. The decision happens the first time someone calls `serviceProvider.get()`.
+
+### 4. **Nullable Access for Non-Async Contexts**
+
+Sometimes you need to access the instance from a non-coroutine context:
+
+```kotlin
+// In a regular function (not suspend)
+fun onDestroy() {
+    serviceProvider.getOrNull()?.cleanup()
+}
+```
+
+The `getOrNull()` returns the cached instance if it exists, or null if it hasn't been initialized yet. This avoids forcing everything to be suspend.
+
+## Applying This Pattern Broadly
+
+This pattern extends to any scenario where:
+- Your DI provider needs to call suspend functions
+- You have feature flags or runtime config that determines which implementation to use
+- You want to defer expensive initialization
+
+**Common Scenarios:**
+- Database initialization
+- Network connection setup
+- Configuration fetching from remote sources
+- Feature implementation selection
+- Analytics or logging system setup
+
+## Best Practices
+
+1. **Always prefer suspend over `runBlocking`** - If you're in a Kotlin coroutines codebase, blocking is a code smell
+2. **Use `Mutex` for thread-safe lazy initialization** - Not `runBlocking`, not synchronized blocks
+3. **Defer expensive initialization** - Move creation from DI providers to first-use
+4. **Provide nullable access** - Use `getOrNull()` for non-coroutine contexts
+5. **Double-check inside locks** - Prevents race conditions in concurrent scenarios
+6. **Make the factory's `create()` suspend** - This is where your async logic belongs
+7. **Document the suspension** - Callers need to know when a function will suspend
+
+## Migration Checklist
+
+If you're fixing `runBlocking` in your codebase:
+
+- [ ] Identify all `runBlocking` calls in DI providers and initialization code
+- [ ] Create a factory interface with a `suspend fun create()` method
+- [ ] Move all creation logic to the factory
+- [ ] Implement a lazy provider with `Mutex` and double-checked locking
+- [ ] Update consumers to inject the provider instead of the direct service
+- [ ] Update suspend callers to use `provider.get()`
+- [ ] Add nullable paths for non-coroutine contexts with `getOrNull()`
+- [ ] Remove `runBlocking` and any `Dispatchers.Unconfined` usage
+
+## Conclusion
+
+The `runBlocking` anti-pattern often appears when developers try to bridge synchronous DI with asynchronous code. Instead of forcing synchronicity, embrace the async model:
+
+- Use **factories** to defer creation logic
+- Use **lazy providers** with `Mutex` for thread-safe initialization
+- Use **suspension** instead of blocking
+- Use **nullable paths** for non-async contexts
+
+This pattern removes thread-blocking from DI initialization, yields cleaner architecture, improves startup performance, and code that properly embraces Kotlin's coroutine model.
+
+By understanding when and how to apply this pattern, you'll build more responsive Android apps and avoid the subtle threading bugs that `runBlocking` can introduce.
