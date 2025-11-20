@@ -1,5 +1,6 @@
 export const SITE_TITLE = "somu nexus";
-export const SITE_DESCRIPTION = "mobile engineering solutions that solve real problems.";
+export const SITE_DESCRIPTION =
+	"mobile engineering solutions that solve real problems.";
 
 export interface MenuItem {
 	label: string;
@@ -25,10 +26,10 @@ export const menuItems: MenuItem[] = [
 		label: "projects",
 		url: "/projects",
 	},
-    {
-        label: "uses",
-        url: "/uses",
-    },
+	{
+		label: "uses",
+		url: "/uses",
+	},
 	// {
 	// 	label: "thoughts",
 	// 	url: "/thoughts",

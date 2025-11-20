@@ -1,13 +1,13 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
 // No need for TypeScript type declarations for the Kotlin playground attributes
 // We'll use JSX expressions with string literals for the attributes
 
 export interface Props {
-  code: string;
-  to?: string;
-  hideMain?: boolean;
+	code: string;
+	to?: string;
+	hideMain?: boolean;
 }
 
 const { code, to, hideMain = false } = Astro.props;
@@ -16,31 +16,35 @@ const { code, to, hideMain = false } = Astro.props;
 const hasMainFunction = code.includes("fun main(");
 
 // If not, wrap the code in a main function
-const processedCode = hasMainFunction ? code : `fun main() {
+const processedCode = hasMainFunction
+	? code
+	: `fun main() {
 ${code}
 }`;
 
 // Get the line count to set the "to" attribute if not provided
-const lineCount = processedCode.split('\n').length;
+const lineCount = processedCode.split("\n").length;
 
 // Find the main function line if hideMain is true
 let mainFunctionLineNumber = -1;
 if (hideMain && hasMainFunction) {
-  const lines = processedCode.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].includes("fun main()") || lines[i].includes("fun main(")) {
-      mainFunctionLineNumber = i - 3; // +1 because line numbers start at 1
-      break;
-    }
-  }
+	const lines = processedCode.split("\n");
+	for (let i = 0; i < lines.length; i++) {
+		if (lines[i].includes("fun main()") || lines[i].includes("fun main(")) {
+			mainFunctionLineNumber = i - 3; // +1 because line numbers start at 1
+			break;
+		}
+	}
 }
 
 // Use the provided "to" value if it exists, otherwise calculate it
-let calculatedToValue;
+let calculatedToValue: string;
 if (hideMain && mainFunctionLineNumber > 0) {
-  calculatedToValue = mainFunctionLineNumber.toString();
+	calculatedToValue = mainFunctionLineNumber.toString();
 } else {
-  calculatedToValue = hasMainFunction ? (lineCount - 3).toString() : (lineCount - 1).toString();
+	calculatedToValue = hasMainFunction
+		? (lineCount - 3).toString()
+		: (lineCount - 1).toString();
 }
 const toValue = to || calculatedToValue;
 ---

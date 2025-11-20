@@ -1,19 +1,19 @@
 ---
-import { getCollection } from 'astro:content';
-import { Header } from '@components/misc';
-import { BaseHead } from '@components/seo';
-import { WritingItem } from '@components/cards';
-import { SITE_TITLE, SITE_DESCRIPTION, socialLinks } from '@data/index';
-import RootLayout from '@layouts/root-layout.astro';
-import { clsx } from '@utils/index';
+import { getCollection } from "astro:content";
+import { WritingItem } from "@components/cards";
+import { Header } from "@components/misc";
+import { BaseHead } from "@components/seo";
+import { SITE_DESCRIPTION, SITE_TITLE, socialLinks } from "@data/index";
+import RootLayout from "@layouts/root-layout.astro";
+import { clsx } from "@utils/index";
 
-const whoami = await getCollection('whoami');
+const whoami = await getCollection("whoami");
 const whoamiData = whoami[0].data; // Get the first item from the collection
 const { title, description } = whoamiData;
 const { Content } = await whoami[0].render();
 
 // Get the 3 most recent writings
-const recentWritings = (await getCollection('writing'))
+const recentWritings = (await getCollection("writing"))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
 ---

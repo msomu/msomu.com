@@ -1,14 +1,14 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { Header } from '@components/misc';
-import FormattedDate from '@components/misc/formatted-date.astro';
-import { BaseHead } from '@components/seo';
-import RootLayout from '@layouts/root-layout.astro';
-import { clsx } from '@utils/index';
+import type { CollectionEntry } from "astro:content";
+import { Header } from "@components/misc";
+import FormattedDate from "@components/misc/formatted-date.astro";
+import { BaseHead } from "@components/seo";
+import RootLayout from "@layouts/root-layout.astro";
+import { clsx } from "@utils/index";
 
-type Props = CollectionEntry<'use'>['data'];
+type Props = CollectionEntry<"use">["data"];
 
-const { title, description, pubDate, heroImage } : Props = Astro.props;
+const { title, description, pubDate, heroImage }: Props = Astro.props;
 ---
 
 <html lang='en'>
