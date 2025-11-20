@@ -6,7 +6,20 @@ export default {
 		fontFamily: {
 			uncut: ["UncutSans", "sans-serif"],
 		},
-		extend: {},
+		extend: {
+			typography: {
+				DEFAULT: {
+					css: {
+						maxWidth: 'none',
+					},
+				},
+				lg: {
+					css: {
+						maxWidth: 'none',
+					},
+				},
+			},
+		},
 	},
 	plugins: [require("@tailwindcss/typography")],
 };
