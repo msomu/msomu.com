@@ -3,7 +3,6 @@ import { Header } from "@components/misc";
 import { BaseHead } from "@components/seo";
 import { socialLinks } from "@data/index";
 import RootLayout from "@layouts/root-layout.astro";
-import { clsx } from "@utils/index";
 
 const pageTitle = "Resources - Somasundaram Mahesh";
 const pageDescription =
@@ -198,6 +197,8 @@ const pageDescription =
 				button.addEventListener('click', async () => {
 					const url = button.getAttribute('data-url');
 					const originalText = button.textContent;
+
+					if (!url) return;
 
 					try {
 						await navigator.clipboard.writeText(url);
