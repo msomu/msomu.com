@@ -9,27 +9,57 @@ const pageDescription = 'A list of tools I use to get things done.';
 // Hardware items extracted from the blog post
 const devicesAndInstruments = [
 	{
-		icon: '💻',
-		name: 'Apple Macbook Air M1, 8GB',
-		personalName: 'Hooper',
-		description: 'My goto tool for development, design, and everything in between.',
-	},
-	{
 		icon: '📱',
-		name: 'Google Pixel 6',
-		personalName: 'Carte',
+		name: 'Google Pixel 10 XL',
+		personalName: 'Kay',
 		description: 'The device I rely on for communication, entertainment, and everything in between.',
 	},
 	{
-		icon: '📚',
-		name: 'Kindle (2016)',
-		personalName: 'Murphy',
-		description: 'Read Read Read. I love reading books and Kindle is my goto device for that.',
+		icon: '💍',
+		name: 'Ultrahuman Ring AIR',
+		personalName: 'Inspire',
+		description: 'Advanced fitness companion for health tracking',
+	},
+	{
+		icon: '⌚',
+		name: 'Samsung Galaxy Watch 4',
+		personalName: 'Ned',
+		description: 'Time keeper and fitness tracker',
+	},
+	{
+		icon: '📱',
+		name: 'iPad 8th Generation',
+		personalName: 'Falcon',
+		description: 'Creative companion for sketching, reading, and learning',
+	},
+	{
+		icon: '💻',
+		name: 'MacBook M3 Air',
+		personalName: 'Silver Circuit',
+		description: 'Work companion for office tasks',
+	},
+	{
+		icon: '🖥️',
+		name: 'DELL P2721Q 27 Inch 4K FHD',
+		personalName: 'Pixel Perfect',
+		description: 'Crystal clear display for work and creativity',
+	},
+	{
+		icon: '🪑',
+		name: 'Green Soul Monster Ultimate Series T',
+		personalName: 'Bumblebee',
+		description: 'Office chair designed for long sitting sessions',
+	},
+	{
+		icon: '🖥️',
+		name: 'Green Soul Height Adjustable Desk',
+		personalName: 'Optimus Prime',
+		description: 'Standing desk that transforms its shape every 30 mins for better ergonomics',
 	},
 	{
 		icon: '🎧',
-		name: 'Sony WH-1000XM2',
-		personalName: 'Ethi',
+		name: 'Sony WH-1000XM5',
+		personalName: 'Korkai',
 		description: 'Music, Podcasts, Business calls, and everything else',
 	},
 	{
@@ -45,50 +75,165 @@ const devicesAndInstruments = [
 		description: 'Movie nights master for entertainment',
 	},
 	{
+		icon: '📚',
+		name: 'Kindle (2016)',
+		personalName: 'Murphy',
+		description: 'Read Read Read. I love reading books and Kindle is my goto device for that.',
+	},
+	{
+		icon: '💻',
+		name: 'Apple Macbook Air M1, 8GB',
+		personalName: 'Hooper',
+		description: 'My goto tool for development, design, and everything in between.',
+	},
+	{
 		icon: '🎙️',
 		name: 'Blue Yeti',
 		personalName: 'Yalan',
 		description: 'Professional microphone for recording Droidcon courses and YouTube content',
 	},
-	{
-		icon: '⌚',
-		name: 'Samsung Galaxy Watch 4',
-		personalName: 'Ned',
-		description: 'Time keeper and fitness tracker',
-	},
-	{
-		icon: '💍',
-		name: 'Ultrahuman Ring AIR',
-		personalName: 'Inspire',
-		description: 'Advanced fitness companion for health tracking',
-	},
-	{
-		icon: '🪑',
-		name: 'Green Soul Monster Ultimate Series T',
-		personalName: 'Bumblebee',
-		description: 'Office chair designed for long sitting sessions',
-	},
-	{
-		icon: '🖥️',
-		name: 'Green Soul Surface Electric Height Adjustable Desk',
-		personalName: 'Optimus Prime',
-		description: 'Standing desk that transforms its shape every 30 mins for better ergonomics',
-	},
 ];
 
-// Placeholder for development tools (to be filled)
+// Development tools
 const development = [
-	// User will provide these
+	{
+		icon: '💻',
+		name: 'iTerm2',
+		personalName: '',
+		description: 'Terminal emulator for macOS development',
+	},
+	{
+		icon: '🤖',
+		name: 'Android Studio',
+		personalName: '',
+		description: 'Official IDE for Android app development',
+	},
+	{
+		icon: '💡',
+		name: 'IntelliJ IDEA',
+		personalName: '',
+		description: 'Powerful IDE for JVM development',
+	},
+	{
+		icon: '📝',
+		name: 'Sublime Text',
+		personalName: '',
+		description: 'Fast and lightweight code editor',
+	},
+	{
+		icon: '🤖',
+		name: 'Claude Code',
+		personalName: '',
+		description: 'AI-powered coding assistant for development',
+	},
+	{
+		icon: '✨',
+		name: 'Gemini',
+		personalName: '',
+		description: 'Google AI assistant for problem-solving and research',
+	},
+	{
+		icon: '🎬',
+		name: 'Screen Studio',
+		personalName: '',
+		description: 'Professional screen recording for content creation',
+	},
+	{
+		icon: '🌐',
+		name: 'Chrome',
+		personalName: '',
+		description: 'Primary browser for development and browsing',
+	},
 ];
 
-// Placeholder for productivity tools (to be filled)
+// Productivity tools
 const productivity = [
-	// User will provide these
+	{
+		icon: '🚀',
+		name: 'Raycast',
+		personalName: '',
+		description: 'Blazingly fast launcher and productivity tool',
+	},
+	{
+		icon: '✅',
+		name: 'TickTick',
+		personalName: '',
+		description: 'Task management and todo list organizer',
+	},
+	{
+		icon: '📝',
+		name: 'Notability',
+		personalName: '',
+		description: 'Digital note-taking and annotation for iPad',
+	},
+	{
+		icon: '🧠',
+		name: 'Obsidian',
+		personalName: '',
+		description: 'Knowledge base and note-taking with markdown',
+	},
+	{
+		icon: '🔐',
+		name: '1Password',
+		personalName: '',
+		description: 'Password manager and secure vault',
+	},
+	{
+		icon: '⏸️',
+		name: 'Intermission',
+		personalName: '',
+		description: 'Break reminder to maintain healthy work habits',
+	},
+	{
+		icon: '📸',
+		name: 'shottr',
+		personalName: '',
+		description: 'Lightning fast screenshot tool with annotations',
+	},
+	{
+		icon: '🎯',
+		name: 'Regain',
+		personalName: '',
+		description: 'Focus and productivity enhancer',
+	},
 ];
 
-// Placeholder for communication tools (to be filled)
+// Communication tools
 const communication = [
-	// User will provide these
+	{
+		icon: '📹',
+		name: 'Zoom',
+		personalName: '',
+		description: 'Video conferencing for meetings and calls',
+	},
+	{
+		icon: '💬',
+		name: 'Slack',
+		personalName: '',
+		description: 'Team collaboration and workplace messaging',
+	},
+	{
+		icon: '💚',
+		name: 'WhatsApp',
+		personalName: '',
+		description: 'Personal messaging and group chats',
+	},
+];
+
+// Vehicles
+const vehicles = [
+	{
+		icon: '⚡',
+		name: 'Ather 450x',
+		personalName: 'Luck',
+		description: 'Electric scooter for daily commute',
+	},
+	{
+		icon: '🚗',
+		name: 'Honda City 2020 Gen 5',
+		personalName: 'Victoria',
+		description: 'Four-wheel companion for long drives',
+	},
 ];
 ---
 
@@ -119,13 +264,17 @@ const communication = [
 				<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
 					Devices
 				</h2>
-				<div class='flex flex-col gap-6'>
+				<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
 					{devicesAndInstruments.map((item) => (
 						<div class='flex flex-col gap-2'>
 							<h3 class='text-lg font-medium flex items-center gap-2'>
 								<span>{item.icon}</span>
-								<span class='text-orange-500'>{item.personalName}</span>
-								<span class='text-gray-400 dark:text-gray-600'>—</span>
+								{item.personalName ? (
+									<>
+										<span class='text-orange-500'>{item.personalName}</span>
+										<span class='text-gray-400 dark:text-gray-600'>—</span>
+									</>
+								) : null}
 								<span>{item.name}</span>
 							</h3>
 							<p class='text-gray-600 dark:text-gray-400 font-medium'>
@@ -142,11 +291,17 @@ const communication = [
 					<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
 						Development
 					</h2>
-					<div class='flex flex-col gap-6'>
+					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
 						{development.map((item) => (
 							<div class='flex flex-col gap-2'>
 								<h3 class='text-lg font-medium flex items-center gap-2'>
 									<span>{item.icon}</span>
+									{item.personalName ? (
+										<>
+											<span class='text-orange-500'>{item.personalName}</span>
+											<span class='text-gray-400 dark:text-gray-600'>—</span>
+										</>
+									) : null}
 									<span>{item.name}</span>
 								</h3>
 								<p class='text-gray-600 dark:text-gray-400 font-medium'>
@@ -164,11 +319,17 @@ const communication = [
 					<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
 						Productivity
 					</h2>
-					<div class='flex flex-col gap-6'>
+					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
 						{productivity.map((item) => (
 							<div class='flex flex-col gap-2'>
 								<h3 class='text-lg font-medium flex items-center gap-2'>
 									<span>{item.icon}</span>
+									{item.personalName ? (
+										<>
+											<span class='text-orange-500'>{item.personalName}</span>
+											<span class='text-gray-400 dark:text-gray-600'>—</span>
+										</>
+									) : null}
 									<span>{item.name}</span>
 								</h3>
 								<p class='text-gray-600 dark:text-gray-400 font-medium'>
@@ -186,11 +347,45 @@ const communication = [
 					<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
 						Communication
 					</h2>
-					<div class='flex flex-col gap-6'>
+					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
 						{communication.map((item) => (
 							<div class='flex flex-col gap-2'>
 								<h3 class='text-lg font-medium flex items-center gap-2'>
 									<span>{item.icon}</span>
+									{item.personalName ? (
+										<>
+											<span class='text-orange-500'>{item.personalName}</span>
+											<span class='text-gray-400 dark:text-gray-600'>—</span>
+										</>
+									) : null}
+									<span>{item.name}</span>
+								</h3>
+								<p class='text-gray-600 dark:text-gray-400 font-medium'>
+									{item.description}
+								</p>
+							</div>
+						))}
+					</div>
+				</section>
+			)}
+
+			<!-- Vehicles -->
+			{vehicles.length > 0 && (
+				<section class='flex flex-col gap-4 mt-8'>
+					<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
+						Vehicles
+					</h2>
+					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+						{vehicles.map((item) => (
+							<div class='flex flex-col gap-2'>
+								<h3 class='text-lg font-medium flex items-center gap-2'>
+									<span>{item.icon}</span>
+									{item.personalName ? (
+										<>
+											<span class='text-orange-500'>{item.personalName}</span>
+											<span class='text-gray-400 dark:text-gray-600'>—</span>
+										</>
+									) : null}
 									<span>{item.name}</span>
 								</h3>
 								<p class='text-gray-600 dark:text-gray-400 font-medium'>
