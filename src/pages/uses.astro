@@ -11,56 +11,67 @@ const devicesAndInstruments = [
 	{
 		icon: '💻',
 		name: 'Apple Macbook Air M1, 8GB',
+		personalName: 'Hooper',
 		description: 'My goto tool for development, design, and everything in between.',
 	},
 	{
 		icon: '📱',
 		name: 'Google Pixel 6',
+		personalName: 'Carte',
 		description: 'The device I rely on for communication, entertainment, and everything in between.',
 	},
 	{
 		icon: '📚',
 		name: 'Kindle (2016)',
+		personalName: 'Murphy',
 		description: 'Read Read Read. I love reading books and Kindle is my goto device for that.',
 	},
 	{
 		icon: '🎧',
 		name: 'Sony WH-1000XM2',
+		personalName: 'Ethi',
 		description: 'Music, Podcasts, Business calls, and everything else',
 	},
 	{
 		icon: '🎧',
 		name: 'Google Pixel Buds Pro',
+		personalName: 'Veera',
 		description: 'Latest audio upgrade for on-the-go listening',
 	},
 	{
 		icon: '🖥️',
 		name: 'Sony Bravia 4K 43X80G',
+		personalName: 'Dustin',
 		description: 'Movie nights master for entertainment',
 	},
 	{
 		icon: '🎙️',
 		name: 'Blue Yeti',
+		personalName: 'Yalan',
 		description: 'Professional microphone for recording Droidcon courses and YouTube content',
 	},
 	{
 		icon: '⌚',
 		name: 'Samsung Galaxy Watch 4',
+		personalName: 'Ned',
 		description: 'Time keeper and fitness tracker',
 	},
 	{
 		icon: '💍',
 		name: 'Ultrahuman Ring AIR',
+		personalName: 'Inspire',
 		description: 'Advanced fitness companion for health tracking',
 	},
 	{
 		icon: '🪑',
 		name: 'Green Soul Monster Ultimate Series T',
+		personalName: 'Bumblebee',
 		description: 'Office chair designed for long sitting sessions',
 	},
 	{
 		icon: '🖥️',
 		name: 'Green Soul Surface Electric Height Adjustable Desk',
+		personalName: 'Optimus Prime',
 		description: 'Standing desk that transforms its shape every 30 mins for better ergonomics',
 	},
 ];
@@ -113,6 +124,8 @@ const communication = [
 						<div class='flex flex-col gap-2'>
 							<h3 class='text-lg font-medium flex items-center gap-2'>
 								<span>{item.icon}</span>
+								<span class='text-orange-500'>{item.personalName}</span>
+								<span class='text-gray-400 dark:text-gray-600'>—</span>
 								<span>{item.name}</span>
 							</h3>
 							<p class='text-gray-600 dark:text-gray-400 font-medium'>

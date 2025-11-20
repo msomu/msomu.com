@@ -49,7 +49,8 @@ All collections share the same schema with `title`, `description`, `pubDate`, `u
 - `/writings` - Blog posts listing and detail pages (`/writings/[slug]`)
 - `/think-in-code` - DSA content listing and detail pages (`/think-in-code/[slug]`)
 - `/uses` - Tools/hardware listing and detail pages (`/uses/[slug]`)
-- `/apps/toongen/*` - Standalone app landing pages (privacy policy, terms of service)
+- `/projects` - Projects listing and detail pages
+- `/projects/toongen/*` - Standalone project landing pages (privacy policy, terms of service)
 
 ### TypeScript Path Aliases
 The project uses path aliases defined in `tsconfig.json`:

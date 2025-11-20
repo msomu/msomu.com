@@ -22,8 +22,8 @@ export const menuItems: MenuItem[] = [
 		url: "/writings",
 	},
 	{
-		label: "apps",
-		url: "/apps",
+		label: "projects",
+		url: "/projects",
 	},
     {
         label: "uses",
