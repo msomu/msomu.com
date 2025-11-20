@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Header } from '@components/misc';
 import { BaseHead } from '@components/seo';
+import { WritingItem } from '@components/cards';
 import { SITE_TITLE, SITE_DESCRIPTION, socialLinks } from '@data/index';
 import RootLayout from '@layouts/root-layout.astro';
 import { clsx } from '@utils/index';
@@ -10,6 +11,11 @@ const whoami = await getCollection('whoami');
 const whoamiData = whoami[0].data; // Get the first item from the collection
 const { title, description } = whoamiData;
 const { Content } = await whoami[0].render();
+
+// Get the 3 most recent writings
+const recentWritings = (await getCollection('writing'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 ---
 
 <!doctype html>
@@ -46,6 +52,31 @@ const { Content } = await whoami[0].render();
 				)}>
 				<Content />
 			</div>
+
+			<!-- Recent Writings Section -->
+			<div id='recent-writings' class='flex flex-col gap-6 mt-12 w-full'>
+				<h2 class='text-sm font-medium tracking-wider uppercase text-gray-500 dark:text-gray-400'>
+					WRITINGS
+				</h2>
+				<div class='flex flex-col gap-6'>
+					{
+						recentWritings.map((writing) => (
+							<WritingItem
+								title={writing.data.title}
+								date={writing.data.pubDate}
+								slug={writing.slug}
+							/>
+						))
+					}
+				</div>
+				<a
+					href='/writings'
+					class='text-base font-medium text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 inline-flex items-center gap-1'>
+					View all posts
+					<span class='inline-block'>→</span>
+				</a>
+			</div>
+
 			<div id='social-links' class='flex flex-row gap-4 mt-6'>
 				{
 					socialLinks.map((link) => (
