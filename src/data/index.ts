@@ -46,8 +46,8 @@ export const socialLinks: SocialLink[] = [
 		url: "https://x.com/msomuin",
 	},
 	{
-		label: "email",
-		url: "mailto:msomasundaram93@gmail.com",
+		label: "instagram",
+		url: "https://www.instagram.com/msomu",
 	},
 	{
 		label: "github",

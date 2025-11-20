@@ -1,0 +1,223 @@
+---
+import { BaseHead } from '@components/seo';
+import RootLayout from '@layouts/root-layout.astro';
+import { Header } from '@components/misc';
+import { clsx } from '@utils/index';
+import { socialLinks } from '@data/index';
+
+const pageTitle = 'Resources - Somasundaram Mahesh';
+const pageDescription = 'Media assets, bio, and social links for Somasundaram Mahesh (msomu)';
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={pageTitle}
+			description={pageDescription}
+			image='/images/ogimage.png'
+		/>
+	</head>
+
+	<RootLayout>
+		<div class='flex flex-col w-full gap-12 max-w-4xl'>
+			<Header />
+
+			<div class='flex flex-col gap-4'>
+				<h1 class='text-5xl sm:text-6xl font-medium tracking-tight'>
+					Resources
+				</h1>
+				<p class='text-lg text-gray-600 dark:text-gray-400'>
+					media assets, bio, and links for publications and collaborations.
+				</p>
+			</div>
+
+			<!-- Media Assets Section -->
+			<section id='media' class='flex flex-col gap-6'>
+				<div class='flex items-center gap-3'>
+					<span class='text-3xl'>🖼️</span>
+					<h2 class='text-3xl font-medium tracking-tight'>
+						Media Assets
+					</h2>
+				</div>
+
+				<p class='text-base text-gray-600 dark:text-gray-400'>
+					high-resolution photos for publications and media use. feel free to use any of these.
+				</p>
+
+				<div class='grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4'>
+					<!-- Portrait Image 1 -->
+					<div class='relative aspect-square rounded-lg bg-gray-200 dark:bg-gray-800 overflow-hidden group'>
+						<img
+							src='/images/portrait-1.jpg'
+							alt='Portrait 1'
+							class='w-full h-full object-cover'
+							onerror="this.style.display='none';this.parentElement.classList.add('flex','items-center','justify-center');this.parentElement.innerHTML='<span class=\'text-gray-400\'>Image 1</span>'"
+						/>
+						<a
+							href='/images/portrait-1.jpg'
+							download='somu-portrait-1.jpg'
+							class='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
+							<span class='px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md font-medium text-sm'>
+								Download
+							</span>
+						</a>
+					</div>
+					<!-- Portrait Image 2 -->
+					<div class='relative aspect-square rounded-lg bg-gray-200 dark:bg-gray-800 overflow-hidden group'>
+						<img
+							src='/images/portrait-2.jpg'
+							alt='Portrait 2'
+							class='w-full h-full object-cover'
+							onerror="this.style.display='none';this.parentElement.classList.add('flex','items-center','justify-center');this.parentElement.innerHTML='<span class=\'text-gray-400\'>Image 2</span>'"
+						/>
+						<a
+							href='/images/portrait-2.jpg'
+							download='somu-portrait-2.jpg'
+							class='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
+							<span class='px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md font-medium text-sm'>
+								Download
+							</span>
+						</a>
+					</div>
+					<!-- Portrait Image 3 -->
+					<div class='relative aspect-square rounded-lg bg-gray-200 dark:bg-gray-800 overflow-hidden group'>
+						<img
+							src='/images/portrait-3.jpg'
+							alt='Portrait 3'
+							class='w-full h-full object-cover'
+							onerror="this.style.display='none';this.parentElement.classList.add('flex','items-center','justify-center');this.parentElement.innerHTML='<span class=\'text-gray-400\'>Image 3</span>'"
+						/>
+						<a
+							href='/images/portrait-3.jpg'
+							download='somu-portrait-3.jpg'
+							class='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
+							<span class='px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md font-medium text-sm'>
+								Download
+							</span>
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<!-- About Section -->
+			<section id='about' class='flex flex-col gap-6'>
+				<div class='flex items-center gap-3'>
+					<span class='text-3xl'>👨‍💻</span>
+					<h2 class='text-3xl font-medium tracking-tight'>
+						About
+					</h2>
+				</div>
+
+				<p class='text-base text-gray-600 dark:text-gray-400'>
+					pick the version that fits your format.
+				</p>
+
+				<!-- Bio Content -->
+				<div class='mt-4 flex flex-col gap-10'>
+					<div class='flex flex-col gap-4'>
+						<h3 class='text-lg font-mono text-orange-500 dark:text-orange-400'>
+							Quick Intro
+						</h3>
+						<div class='p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border-l-4 border-orange-500 dark:border-orange-400'>
+							<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
+								senior android developer at JioHotstar, specializing in streaming and entertainment apps. community leader at GDG Chennai. 10+ years shipping mobile solutions at scale.
+							</p>
+						</div>
+					</div>
+
+					<div class='flex flex-col gap-4'>
+						<h3 class='text-lg font-mono text-orange-500 dark:text-orange-400'>
+							Extended Bio
+						</h3>
+						<div class='p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border-l-4 border-orange-500 dark:border-orange-400'>
+							<div class='prose prose-lg dark:prose-invert max-w-none'>
+								<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
+									somasundaram mahesh builds android apps at JioHotstar, crafting streaming experiences for millions of users. with over a decade of experience in mobile development, he specializes in solving complex problems at scale while maintaining high performance and reliability.
+								</p>
+								<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300 mt-4'>
+									as a senior android developer focused on streaming and entertainment platforms, he creates seamless user experiences that work flawlessly for massive audiences. beyond his day job, he leads the developer community at GDG Chennai, mentoring the next generation of android engineers.
+								</p>
+								<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300 mt-4'>
+									his expertise spans mobile architecture, performance optimization, and building resilient systems. he shares his knowledge through technical writing and speaking at developer conferences.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Connect Section -->
+			<section id='connect' class='flex flex-col gap-6'>
+				<div class='flex items-center gap-3'>
+					<span class='text-3xl'>🌐</span>
+					<h2 class='text-3xl font-medium tracking-tight'>
+						Connect
+					</h2>
+				</div>
+
+				<p class='text-base text-gray-600 dark:text-gray-400'>
+					find me on these platforms. click to copy the link.
+				</p>
+
+				<div class='flex flex-col gap-4 mt-4'>
+					{
+						socialLinks.map((link) => (
+							<div class='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors'>
+								<div class='flex flex-col gap-1'>
+									<span class='text-base font-medium text-gray-900 dark:text-gray-100'>
+										{link.label}
+									</span>
+									<a
+										href={link.url}
+										target='_blank'
+										rel='noopener noreferrer'
+										class='text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 break-all'>
+										{link.url}
+									</a>
+								</div>
+								<button
+									class='copy-btn shrink-0 ml-4 px-4 py-2 text-sm font-medium bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-md transition-colors'
+									data-url={link.url}
+									aria-label={`Copy ${link.label} URL`}>
+									Copy
+								</button>
+							</div>
+						))
+					}
+				</div>
+			</section>
+		</div>
+
+		<script>
+			// Copy to clipboard functionality
+			const copyButtons = document.querySelectorAll('.copy-btn');
+
+			copyButtons.forEach(button => {
+				button.addEventListener('click', async () => {
+					const url = button.getAttribute('data-url');
+					const originalText = button.textContent;
+
+					try {
+						await navigator.clipboard.writeText(url);
+						button.textContent = 'Copied!';
+						button.classList.add('bg-green-200', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-200');
+						button.classList.remove('bg-gray-200', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
+
+						setTimeout(() => {
+							button.textContent = originalText;
+							button.classList.remove('bg-green-200', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-200');
+							button.classList.add('bg-gray-200', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
+						}, 2000);
+					} catch (err) {
+						console.error('Failed to copy:', err);
+						button.textContent = 'Failed';
+						setTimeout(() => {
+							button.textContent = originalText;
+						}, 2000);
+					}
+				});
+			});
+		</script>
+	</RootLayout>
+</html>
