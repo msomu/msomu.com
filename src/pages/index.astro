@@ -55,9 +55,17 @@ const recentWritings = (await getCollection("writing"))
 
 			<!-- Recent Writings Section -->
 			<div id='recent-writings' class='flex flex-col gap-6 mt-12 w-full'>
-				<h2 class='text-sm font-medium tracking-wider uppercase text-gray-500 dark:text-gray-400'>
-					WRITINGS
-				</h2>
+				<div class='flex items-center justify-between'>
+					<h2 class='text-sm font-medium tracking-wider uppercase text-gray-500 dark:text-gray-400'>
+						WRITINGS
+					</h2>
+					<a
+						href='/rss.xml'
+						class='text-sm font-medium text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 px-3 py-1.5 rounded inline-flex items-center gap-2'>
+						RSS feed
+						<span class='inline-block'>↗</span>
+					</a>
+				</div>
 				<div class='flex flex-col gap-6'>
 					{
 						recentWritings.map((writing) => (

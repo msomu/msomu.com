@@ -25,8 +25,16 @@ const writings = (await getCollection("writing")).sort(
 			id='Header+title'
 			class='flex flex-col w-full gap-6 max-w-4xl'>
 			<Header />
-			<div class='flex flex-col gap-2'>
-				<h1 class='w-full text-5xl md:text-7xl font-medium tracking-tight'>writings</h1>
+			<div class='flex flex-col gap-2 mb-8'>
+				<div class='flex items-center justify-between'>
+					<h1 class='text-5xl md:text-7xl font-medium tracking-tight'>writings</h1>
+					<a
+						href='/rss.xml'
+						class='text-sm font-medium text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 px-3 py-1.5 rounded inline-flex items-center gap-2'>
+						RSS feed
+						<span class='inline-block'>↗</span>
+					</a>
+				</div>
 				<p class='text-lg text-gray-600 dark:text-gray-400 font-medium'>
 					thoughts on mobile engineering, android development, and building better software
 				</p>
