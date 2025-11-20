@@ -25,6 +25,10 @@ export const menuItems: MenuItem[] = [
 		label: "apps",
 		url: "/apps",
 	},
+    {
+        label: "uses",
+        url: "/uses",
+    },
 	{
 		label: "think in code",
 		url: "/think-in-code",
