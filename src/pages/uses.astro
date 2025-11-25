@@ -126,18 +126,6 @@ const development = [
 		description: "Fast and lightweight code editor",
 	},
 	{
-		icon: "🤖",
-		name: "Claude Code",
-		personalName: "",
-		description: "AI-powered coding assistant for development",
-	},
-	{
-		icon: "✨",
-		name: "Gemini",
-		personalName: "",
-		description: "Google AI assistant for problem-solving and research",
-	},
-	{
 		icon: "🎬",
 		name: "Screen Studio",
 		personalName: "",
@@ -148,6 +136,40 @@ const development = [
 		name: "Chrome",
 		personalName: "",
 		description: "Primary browser for development and browsing",
+	},
+];
+
+// AI tools & workflow
+const aiTools = [
+	{
+		icon: "🤖",
+		name: "Claude Code",
+		personalName: "",
+		description: "AI coding assistant for code generation and refactors",
+	},
+	{
+		icon: "✨",
+		name: "Gemini",
+		personalName: "",
+		description: "Google AI assistant for research and problem‑solving",
+	},
+	{
+		icon: "🧠",
+		name: "JetBrains Juni",
+		personalName: "",
+		description: "AI assistant integrated with JetBrains IDEs to boost workflows",
+	},
+	{
+		icon: "🌀",
+		name: "Wispr Flow",
+		personalName: "",
+		description: "Voice‑first productivity tool for quick capture and automation",
+	},
+	{
+		icon: "🍌",
+		name: "Gemini Nano Banana",
+		personalName: "",
+		description: "On-device AI model for local efficient processing",
 	},
 ];
 
@@ -196,15 +218,21 @@ const productivity = [
 		description: "Lightning fast screenshot tool with annotations",
 	},
 	{
-		icon: "🎯",
-		name: "Regain",
+		icon: "📅",
+		name: "Google Calendar",
 		personalName: "",
-		description: "Focus and productivity enhancer",
+		description: "Daily scheduling and time management",
 	},
 ];
 
 // Communication tools
 const communication = [
+	{
+		icon: "🎥",
+		name: "Google Meet",
+		personalName: "",
+		description: "Video meetings and collaboration",
+	},
 	{
 		icon: "📹",
 		name: "Zoom",
@@ -225,6 +253,28 @@ const communication = [
 	},
 ];
 
+// Finance & Investing
+const finance = [
+	{
+		icon: "📈",
+		name: "Kite",
+		personalName: "",
+		description: "Trading platform for stocks and investments",
+	},
+	{
+		icon: "💰",
+		name: "Coin",
+		personalName: "",
+		description: "Platform for direct mutual fund investments",
+	},
+	{
+		icon: "📊",
+		name: "Aspire Budget v3.3",
+		personalName: "",
+		description: "Spreadsheet-based tool for budget tracking",
+	},
+];
+
 // Vehicles
 const vehicles = [
 	{
@@ -238,6 +288,16 @@ const vehicles = [
 		name: "Honda City 2020 Gen 5",
 		personalName: "Victoria",
 		description: "Four-wheel companion for long drives",
+	},
+];
+
+// Frameworks
+const frameworks = [
+	{
+		icon: "🧩",
+		name: "Kotlin Koog",
+		personalName: "",
+		description: "Framework for creating custom AI agents",
 	},
 ];
 ---
@@ -318,6 +378,62 @@ const vehicles = [
 				</section>
 			)}
 
+			<!-- AI Tools & Workflow -->
+			{aiTools.length > 0 && (
+				<section class='flex flex-col gap-4 mt-8'>
+					<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
+						AI Tools & Workflow
+					</h2>
+					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+						{aiTools.map((item) => (
+							<div class='flex flex-col gap-2'>
+								<h3 class='text-lg font-medium flex items-center gap-2'>
+									<span>{item.icon}</span>
+									{item.personalName ? (
+										<>
+											<span class='text-orange-500'>{item.personalName}</span>
+											<span class='text-gray-400 dark:text-gray-600'>—</span>
+										</>
+									) : null}
+									<span>{item.name}</span>
+								</h3>
+								<p class='text-gray-600 dark:text-gray-400 font-medium'>
+									{item.description}
+								</p>
+							</div>
+						))}
+					</div>
+				</section>
+			)}
+
+			<!-- Frameworks -->
+			{frameworks.length > 0 && (
+				<section class='flex flex-col gap-4 mt-8'>
+					<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
+						Frameworks
+					</h2>
+					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+						{frameworks.map((item) => (
+							<div class='flex flex-col gap-2'>
+								<h3 class='text-lg font-medium flex items-center gap-2'>
+									<span>{item.icon}</span>
+									{item.personalName ? (
+										<>
+											<span class='text-orange-500'>{item.personalName}</span>
+											<span class='text-gray-400 dark:text-gray-600'>—</span>
+										</>
+									) : null}
+									<span>{item.name}</span>
+								</h3>
+								<p class='text-gray-600 dark:text-gray-400 font-medium'>
+									{item.description}
+								</p>
+							</div>
+						))}
+					</div>
+				</section>
+			)}
+
 			<!-- Productivity Tools -->
 			{productivity.length > 0 && (
 				<section class='flex flex-col gap-4 mt-8'>
@@ -354,6 +470,34 @@ const vehicles = [
 					</h2>
 					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
 						{communication.map((item) => (
+							<div class='flex flex-col gap-2'>
+								<h3 class='text-lg font-medium flex items-center gap-2'>
+									<span>{item.icon}</span>
+									{item.personalName ? (
+										<>
+											<span class='text-orange-500'>{item.personalName}</span>
+											<span class='text-gray-400 dark:text-gray-600'>—</span>
+										</>
+									) : null}
+									<span>{item.name}</span>
+								</h3>
+								<p class='text-gray-600 dark:text-gray-400 font-medium'>
+									{item.description}
+								</p>
+							</div>
+						))}
+					</div>
+				</section>
+			)}
+
+			<!-- Finance & Investing -->
+			{finance.length > 0 && (
+				<section class='flex flex-col gap-4 mt-8'>
+					<h2 class='text-2xl font-medium tracking-tight text-orange-500'>
+						Finance & Investing
+					</h2>
+					<div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+						{finance.map((item) => (
 							<div class='flex flex-col gap-2'>
 								<h3 class='text-lg font-medium flex items-center gap-2'>
 									<span>{item.icon}</span>
