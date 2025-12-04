@@ -1,0 +1,177 @@
+---
+title: "Kotlin's trimStart and trimEnd: A clever solution to count collisions"
+description: "discovering how Kotlin's string trimming functions can turn a complex simulation into a one-liner"
+pubDate: "2025-12-04"
+heroImage: "/images/count-collisions.png"
+---
+
+import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+import KotlinPlaygroundScript from '@components/misc/kotlin-playground-script.astro';
+import { EndCTA } from "@components/cta";
+
+## 🧩 The Problem: Count Collisions on a Road
+
+Today's LeetCode daily challenge is [2211. Count Collisions on a Road](https://leetcode.com/problems/count-collisions-on-a-road/). At first glance, it seems like we need to simulate cars moving and colliding on a road — tracking positions, handling chain reactions, and managing state changes. But with a bit of insight and Kotlin's elegant string functions, we can solve this in just two lines.
+
+The problem gives us a string where each character represents a car:
+- `'L'` — moving left
+- `'R'` — moving right
+- `'S'` — stationary
+
+When cars collide (opposite directions or moving into stationary), they stop and add to the collision count.
+
+---
+
+## 🤔 The Naive Approach: Simulation
+
+My first instinct was to simulate the entire process:
+1. Track each car's position and direction
+2. Move cars step by step
+3. Detect collisions and update states
+4. Count collisions as they happen
+
+This would work, but the time complexity could be O(n²) or worse with all the state management. For strings up to 10⁵ characters, we need something smarter.
+
+---
+
+## 💡 The Key Insight: Who Actually Collides?
+
+Here's the breakthrough moment: **not all cars will collide**.
+
+Think about it:
+- Cars moving **left at the leftmost positions** will simply drive off the road — they'll never hit anything
+- Cars moving **right at the rightmost positions** will also escape — nothing to collide with
+
+Everything else? They're trapped. Any car that's:
+- Moving right with something to its right (stationary or left-moving)
+- Moving left with something to its left (stationary or right-moving)
+- Stationary (can be hit by others)
+
+These cars will eventually collide and become stationary.
+
+So the answer is simply: **count all 'L' and 'R' characters, minus the ones that escape**.
+
+---
+
+## ✨ Enter trimStart and trimEnd
+
+Kotlin's `String` class has two beautiful functions that solve exactly this:
+
+- `trimStart { predicate }` — removes characters from the **beginning** while the predicate is true
+- `trimEnd { predicate }` — removes characters from the **end** while the predicate is true
+
+We can use these to "remove" the escaping cars:
+
+<KotlinPlayground hideMain={true} code={`
+class Solution {
+    fun countCollisions(directions: String): Int {
+        val trimmedDirections = directions
+            .trimStart { char -> char == 'L' }  // Remove escaping left-moving cars
+            .trimEnd { char -> char == 'R' }    // Remove escaping right-moving cars
+        return trimmedDirections.count { char -> char == 'L' || char == 'R' }
+    }
+}
+
+fun main() {
+    val solution = Solution()
+
+    // Example 1
+    val d1 = "RLRSLL"
+    val result1 = solution.countCollisions(d1)
+    println("Example 1:")
+    println("Input: directions = \\"\$d1\\"")
+    println("Output: \$result1")
+    println("Explanation: After trimming, we have 'RLRSLL' (no leading L or trailing R)")
+    println("Count of L and R = 5 collisions")
+
+    // Example 2
+    val d2 = "LLRR"
+    val result2 = solution.countCollisions(d2)
+    println("\\nExample 2:")
+    println("Input: directions = \\"\$d2\\"")
+    println("Output: \$result2")
+    println("Explanation: After trimming leading L's: 'RR', then trailing R's: ''")
+    println("No characters left = 0 collisions")
+
+    // Example 3: Edge case with stationary cars
+    val d3 = "SSRSSRLLRSLLRSRSSRLRRSSRLL"
+    val result3 = solution.countCollisions(d3)
+    println("\\nExample 3:")
+    println("Input: directions = \\"\$d3\\"")
+    println("Output: \$result3")
+}
+`} />
+
+Let's trace through Example 1 (`"RLRSLL"`):
+1. `trimStart { it == 'L' }` — no leading L's, string unchanged: `"RLRSLL"`
+2. `trimEnd { it == 'R' }` — no trailing R's, string unchanged: `"RLRSLL"`
+3. Count 'L' or 'R': R, L, R, L, L = **5 collisions** ✅
+
+And Example 2 (`"LLRR"`):
+1. `trimStart { it == 'L' }` — removes "LL": `"RR"`
+2. `trimEnd { it == 'R' }` — removes "RR": `""`
+3. Count 'L' or 'R': **0 collisions** ✅
+
+---
+
+## 🔍 Why This Works
+
+The elegance lies in understanding the physics:
+
+1. **Leading L's escape**: Cars at the front moving left have nothing to hit — they're gone
+2. **Trailing R's escape**: Cars at the back moving right have nothing to hit — they're gone
+3. **Everyone else collides**: Once we remove the escapees, every remaining 'L' or 'R' represents exactly one collision
+
+Each collision adds 1 to our count because:
+- When two cars collide head-on (R meets L), that's 2 collisions — and we count both the R and the L
+- When a moving car hits a stationary one, that's 1 collision — and we count just the moving car
+
+The 'S' characters don't contribute to the collision count directly — they're already stationary. They act as "blockers" that cause other cars to collide.
+
+---
+
+## 💡 What I Learned
+
+Today I discovered two Kotlin functions I hadn't used before:
+
+1. **`trimStart { predicate }`** — Like `trim()` but only at the start, and with a custom condition
+2. **`trimEnd { predicate }`** — Same idea, but at the end
+
+These are incredibly useful for problems where you need to strip elements from the edges of a string based on some condition. They're O(n) and don't create intermediate strings until the final result.
+
+Other similar Kotlin functions worth knowing:
+- `trim { predicate }` — trims from both ends
+- `dropWhile { predicate }` — similar to trimStart but works on any Iterable
+- `dropLastWhile { predicate }` — similar to trimEnd
+
+---
+
+## ⏳ Time Complexity Analysis
+
+- `trimStart` → O(n) — single pass from start
+- `trimEnd` → O(n) — single pass from end
+- `count` → O(n) — single pass through trimmed string
+- **Overall: O(n)** with O(n) space for the trimmed string
+
+This is optimal — we can't do better than linear time since we need to look at each character at least once.
+
+---
+
+## 🧠 Key Takeaways
+
+1. **Think before you simulate**: Many simulation problems have mathematical shortcuts
+2. **Edge behavior matters**: Understanding what happens at boundaries often reveals the solution
+3. **Kotlin's stdlib is rich**: Functions like `trimStart` and `trimEnd` can replace entire algorithms
+4. **Elegance is efficiency**: This two-liner is both readable AND optimal
+
+Sometimes the best code isn't about complex algorithms — it's about finding the right abstraction that makes the problem trivial.
+
+---
+
+<EndCTA
+title={`Want to explore more elegant Kotlin solutions? Let's connect and tackle LeetCode together!`}
+cta_label='Get in touch'
+bg_colour='yellow'
+/>
+
+<KotlinPlaygroundScript />
