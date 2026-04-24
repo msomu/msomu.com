@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stop Building AI Demos, Start Building AI Products · msomu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <style>
+      :root {
+        --orange: #f97316;
+        --orange-dim: #c2540a;
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --border: #262626;
+        --text: #e5e5e5;
+        --muted: #737373;
+      }
+
+      .reveal-viewport {
+        background: var(--bg);
+      }
+
+      .reveal {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        text-transform: none;
+        color: #fff;
+        text-shadow: none;
+      }
+
+      .reveal h1 { font-size: 2em; line-height: 1.1; }
+      .reveal h2 { font-size: 1.4em; line-height: 1.2; }
+      .reveal h3 { font-size: 0.95em; color: var(--orange); margin-bottom: 0.3em; }
+
+      .reveal p { color: var(--text); line-height: 1.6; }
+
+      .reveal ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .reveal ul li {
+        position: relative;
+        padding-left: 1.4em;
+        margin-bottom: 0.2em;
+        color: var(--text);
+        font-size: 0.72em;
+        line-height: 1.35;
+      }
+
+      .reveal ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--orange);
+      }
+
+      .reveal section {
+        text-align: left;
+      }
+
+      /* Title slide */
+      .slide-title {
+        text-align: center;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100% !important;
+        box-sizing: border-box;
+      }
+
+      .slide-title h1 {
+        font-size: 1.8em;
+        max-width: 22ch;
+        margin: 0 auto 0.4em;
+      }
+
+      .slide-title .orange { color: var(--orange); }
+
+      .slide-title .meta {
+        font-size: 0.6em;
+        color: var(--muted);
+        margin-top: 1em;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .slide-title .meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      /* Columns */
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1em;
+        align-items: start;
+      }
+
+      .cols-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.8em;
+        align-items: start;
+      }
+
+      /* Cards */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.8em 1em;
+      }
+
+      .card h3 { margin-bottom: 0.3em; font-size: 0.78em; }
+
+      /* Big stat */
+      .stat {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: var(--orange);
+        line-height: 1;
+        margin-bottom: 0.1em;
+      }
+
+      .stat-label {
+        font-size: 0.65em;
+        color: var(--muted);
+      }
+
+      /* Tag / badge */
+      .tag {
+        display: inline-block;
+        font-size: 0.55em;
+        font-weight: 600;
+        padding: 0.2em 0.7em;
+        border-radius: 99px;
+        background: var(--orange);
+        color: #000;
+        vertical-align: middle;
+        margin-left: 0.4em;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .tag.bad {
+        background: #ef4444;
+        color: #fff;
+      }
+
+      .tag.good {
+        background: #22c55e;
+        color: #000;
+      }
+
+      /* Divider */
+      hr.dim {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 0.5em 0;
+      }
+
+      /* Big quote */
+      blockquote.big {
+        border: none;
+        background: none;
+        padding: 0;
+        font-size: 1.1em;
+        font-style: italic;
+        color: #fff;
+        text-align: center;
+        line-height: 1.4;
+        box-shadow: none;
+      }
+
+      blockquote.big cite {
+        display: block;
+        font-size: 0.5em;
+        color: var(--muted);
+        margin-top: 0.8em;
+        font-style: normal;
+      }
+
+      /* Steps */
+      .steps {
+        counter-reset: step;
+      }
+      .steps li {
+        counter-increment: step;
+        padding-left: 2em;
+        font-size: 0.68em;
+        margin-bottom: 0.3em;
+        line-height: 1.3;
+      }
+      .steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        width: 1.4em;
+        height: 1.4em;
+        background: var(--orange);
+        color: #000;
+        border-radius: 50%;
+        font-size: 0.9em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0.05em;
+      }
+
+      /* Footer on every slide */
+      .reveal footer {
+        position: fixed;
+        bottom: 1.2em;
+        right: 1.4em;
+        font-size: 0.45em;
+        color: var(--muted);
+        font-weight: 500;
+        z-index: 100;
+      }
+
+      .reveal .slides section { padding: 0.8em 1.5em; }
+
+      /* Section header slides */
+      .section-header {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+      }
+
+      .section-header .number {
+        font-size: 3.5em;
+        font-weight: 700;
+        color: var(--border);
+        line-height: 1;
+        margin-bottom: 0.1em;
+      }
+
+      .section-header h2 {
+        color: var(--orange);
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <footer>msomu · GDG Chennai · Apr 2026</footer>
+      <div class="slides">
+
+        <!-- 01 · Title -->
+        <section class="slide-title">
+          <h1>Stop Building <span class="orange">AI Demos</span>, Start Building AI <span class="orange">Products</span></h1>
+          <p class="meta">
+            <strong>Somasundaram Mahesh</strong><br />
+            GDG Chennai · April 25, 2026
+          </p>
+        </section>
+
+        <!-- 02 · Who am I -->
+        <section>
+          <h3>who's talking?</h3>
+          <h2>Somasundaram Mahesh</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Android Engineer · building mobile products for 8+ years</li>
+            <li>Currently building mobile experiences at JioHotstar</li>
+            <li>Shipped products used by millions — learned most of this the hard way</li>
+            <li><strong style="color:var(--orange)">@msomuin</strong> on X · msomu.com</li>
+          </ul>
+        </section>
+
+        <!-- 03 · The uncomfortable truth -->
+        <section>
+          <h3>let's be honest</h3>
+          <h2>We are all demo builders right now</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:1em">
+            <div class="card">
+              <div class="stat">~90%</div>
+              <div class="stat-label">of AI POCs never reach production</div>
+            </div>
+            <div class="card">
+              <div class="stat">2 wks</div>
+              <div class="stat-label">average lifespan of a hackathon AI project</div>
+            </div>
+          </div>
+          <p style="margin-top:1.2em; font-size:0.8em; color:var(--muted)">
+            Building a demo that impresses your manager is easy.<br />
+            Building something users come back to tomorrow is not.
+          </p>
+        </section>
+
+        <!-- 04 · Section break -->
+        <section class="section-header">
+          <div class="number">01</div>
+          <h2>What even is an AI Demo?</h2>
+        </section>
+
+        <!-- 05 · Demo anatomy -->
+        <section>
+          <h3>anatomy of an AI demo</h3>
+          <h2>Impressive in a meeting. Brittle everywhere else.</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Happy-path input only — no edge cases accounted for</li>
+            <li>No error handling — LLM fails silently or crashes loud</li>
+            <li>Hand-crafted prompts that break with real user phrasing</li>
+            <li>No latency consideration — "it works on my machine"</li>
+            <li>Cost modelled for 10 users, not 10,000</li>
+            <li>Zero observability — you can't tell what's failing in prod</li>
+          </ul>
+        </section>
+
+        <!-- 06 · The demo trap -->
+        <section>
+          <h3>the trap</h3>
+          <h2>Demos reward the wrong things</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:1em">
+            <div class="card">
+              <h3 style="color:#ef4444">Demo mindset</h3>
+              <ul>
+                <li>Optimise for the wow moment</li>
+                <li>Hide the failure modes</li>
+                <li>Works for one use case</li>
+                <li>Feedback loop: applause</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Product mindset</h3>
+              <ul>
+                <li>Optimise for the 1000th user</li>
+                <li>Design for failure</li>
+                <li>Works across the full distribution</li>
+                <li>Feedback loop: retention</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 07 · Section break -->
+        <section class="section-header">
+          <div class="number">02</div>
+          <h2>Why AI Products are different</h2>
+        </section>
+
+        <!-- 08 · Non-determinism -->
+        <section>
+          <h3>the hard problem</h3>
+          <h2>AI output is non-deterministic by design</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Same input → different output every time</li>
+            <li>You cannot unit-test correctness the traditional way</li>
+            <li>Users don't forgive inconsistency — they call it "broken"</li>
+            <li>Model updates silently change your product's behaviour</li>
+            <li>Hallucinations aren't bugs you fix — they're risk you manage</li>
+          </ul>
+          <p style="margin-top:1em; font-size:0.8em; color:var(--muted)">
+            This is why most demo patterns don't survive contact with prod.
+          </p>
+        </section>
+
+        <!-- 09 · The four gaps -->
+        <section>
+          <h3>the four gaps between demo and product</h3>
+          <div class="cols-3" style="margin-top:0.5em">
+            <div class="card">
+              <h3>Reliability</h3>
+              <p style="font-size:0.65em">Demos work. Products work <em>consistently</em>.</p>
+            </div>
+            <div class="card">
+              <h3>Trust</h3>
+              <p style="font-size:0.65em">Users need to know when to trust the AI — and when not to.</p>
+            </div>
+            <div class="card">
+              <h3>Cost</h3>
+              <p style="font-size:0.65em">Token costs that seem fine at 100 users destroy margins at 100K.</p>
+            </div>
+          </div>
+          <div class="card" style="margin-top:0.5em">
+            <h3>User Experience</h3>
+            <p style="font-size:0.65em">Latency, streaming, graceful degradation — the UX layer is 80% of the work.</p>
+          </div>
+        </section>
+
+        <!-- 10 · Section break -->
+        <section class="section-header">
+          <div class="number">03</div>
+          <h2>The Product Mindset Shift</h2>
+        </section>
+
+        <!-- 11 · Design for failure -->
+        <section>
+          <h3>principle #1</h3>
+          <h2>Design for failure first</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Every LLM call will fail — timeout, rate-limit, refusal, or garbled output</li>
+            <li>Build graceful fallbacks before building the happy path</li>
+            <li>Use structured output (JSON mode, function calling) to constrain variance</li>
+            <li>Validate every AI response before showing it to the user</li>
+            <li>Give users a recovery path — not just an error message</li>
+          </ul>
+        </section>
+
+        <!-- 12 · Evals not vibes -->
+        <section>
+          <h3>principle #2</h3>
+          <h2>Replace vibes with evals</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:0.5em">
+            <div class="card">
+              <h3 style="color:#ef4444">Vibe-based</h3>
+              <ul>
+                <li>"It looks good to me"</li>
+                <li>Manual spot-checking</li>
+                <li>Breaking changes discovered in prod</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Eval-based</h3>
+              <ul>
+                <li>Golden dataset of inputs & expected outputs</li>
+                <li>Automated scoring (LLM-as-judge or rule-based)</li>
+                <li>Regression suite runs on every prompt change</li>
+              </ul>
+            </div>
+          </div>
+          <p style="margin-top:0.5em;font-size:0.65em;color:var(--muted)">
+            You don't need 100% accuracy. You need to know when you've regressed.
+          </p>
+        </section>
+
+        <!-- 13 · Observability -->
+        <section>
+          <h3>principle #3</h3>
+          <h2>If you can't see it, you can't fix it</h2>
+          <hr class="dim" />
+          <ul style="font-size:1.35em; margin-top:0.6em">
+            <li>Log every LLM input + output in production</li>
+            <li>Track latency, cost, failure rate, and user corrections</li>
+            <li>User corrections = your most valuable signal</li>
+            <li>Alert on <strong>quality drift</strong> — not just uptime</li>
+          </ul>
+          <p style="margin-top:1.2em; font-size:0.65em; color:var(--muted)">Tools: LangSmith · Langfuse · Helicone · or roll your own</p>
+        </section>
+
+        <!-- 14 · UX is the product -->
+        <section>
+          <h3>principle #4</h3>
+          <h2>The UX layer is the product</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Stream responses — don't make users stare at a spinner</li>
+            <li>Show confidence — let users know when the AI is uncertain</li>
+            <li>Make it easy to correct — editable output builds trust</li>
+            <li>Progressive disclosure — show the reasoning, not just the answer</li>
+            <li>Keyboard-first, accessible, offline-resilient</li>
+          </ul>
+        </section>
+
+        <!-- 15 · Cost at scale -->
+        <section>
+          <h3>principle #5</h3>
+          <h2>Model your costs before you scale</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:0.5em">
+            <div class="card">
+              <div class="stat">$0.02</div>
+              <div class="stat-label">per call feels fine at 500 users/day</div>
+            </div>
+            <div class="card">
+              <div class="stat">$600</div>
+              <div class="stat-label">per month at 1K users, 30 calls/day</div>
+            </div>
+          </div>
+          <ul style="margin-top:0.6em">
+            <li>Cache aggressively — prompt caching cuts repeat costs 80%+</li>
+            <li>Right-size your model — GPT-4o is not always the answer</li>
+            <li>Batch non-realtime work — embeddings, summaries, tagging</li>
+          </ul>
+        </section>
+
+        <!-- 16 · Section break -->
+        <section class="section-header">
+          <div class="number">04</div>
+          <h2>What to do on Monday</h2>
+        </section>
+
+        <!-- 17 · Checklist -->
+        <section>
+          <h3>the AI product checklist</h3>
+          <h2>Before calling it a product</h2>
+          <hr class="dim" />
+          <ul class="steps" style="font-size:1.15em; margin-top:0.6em">
+            <li>Test 20 real inputs — including the weird ones</li>
+            <li>Define "wrong" — then build an eval for it</li>
+            <li>Validate every LLM response before it hits your UI</li>
+            <li>Log latency + cost on every LLM call</li>
+            <li>Build a fallback for every AI feature</li>
+            <li>Stress-test at 10× expected load</li>
+          </ul>
+        </section>
+
+        <!-- 18 · The honest take -->
+        <section style="text-align:center; display:flex !important; flex-direction:column; align-items:center; justify-content:center; height:100% !important;">
+          <blockquote class="big">
+            "AI makes the first 80% of a product trivially easy.<br />
+            The last 20% — the part that earns trust — is still hard work."
+            <cite>— the lesson nobody posts about</cite>
+          </blockquote>
+        </section>
+
+        <!-- 20 · Section break -->
+        <section class="section-header">
+          <div class="number">05</div>
+          <h2>Where Do You Stand?</h2>
+        </section>
+
+        <!-- 22 · Tier 1 -->
+        <section>
+          <h3>tier 1 · ~15% of devs globally</h3>
+          <h2>Traditional Coder</h2>
+          <hr class="dim" />
+          <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:1em; margin-top:0.5em; align-items:start">
+            <img src="/talks/stop-building-ai-demos/tier-1.jpg" alt="Traditional coder at IDE" style="width:100%; border-radius:10px; object-fit:cover; aspect-ratio:4/3; background:var(--surface); display:block" />
+            <ul style="font-size:1.1em">
+              <li>Opens IDE, writes every line manually</li>
+              <li>Stack Overflow, docs, and Google are the "AI"</li>
+              <li>Git workflow, manual code review</li>
+              <li>Deep craft knowledge — but moving slower every year</li>
+              <li style="color:var(--muted); font-size:0.85em">Shrinking fast — <strong style="color:var(--text)">84% of devs</strong> plan to adopt AI tools</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 23 · Tier 2 -->
+        <section>
+          <h3>tier 2 · ~50%+ of devs today</h3>
+          <h2>Copy-Paste Prompter</h2>
+          <hr class="dim" />
+          <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:1em; margin-top:0.5em; align-items:start">
+            <img src="/talks/stop-building-ai-demos/tier-2.jpg" alt="Developer copy-pasting from ChatGPT" style="width:100%; border-radius:10px; object-fit:cover; aspect-ratio:4/3; background:var(--surface); display:block" />
+            <ul style="font-size:1.1em">
+              <li>ChatGPT or Claude.ai open in a browser tab</li>
+              <li>Paste question → copy code → tweak → ship</li>
+              <li>No project context, no memory, one-shot answers</li>
+              <li>AI as a smarter Stack Overflow — not a collaborator</li>
+              <li style="color:var(--muted); font-size:0.85em">Most people here. Only <strong style="color:var(--text)">14.7%</strong> go beyond this</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 24 · Tier 3 -->
+        <section>
+          <h3>tier 3 · ~68% at work use inline AI</h3>
+          <h2>AI Collaborator</h2>
+          <hr class="dim" />
+          <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:1em; margin-top:0.5em; align-items:start">
+            <img src="/talks/stop-building-ai-demos/tier-3.jpg" alt="Developer using Cursor with AI suggestions" style="width:100%; border-radius:10px; object-fit:cover; aspect-ratio:4/3; background:var(--surface); display:block" />
+            <ul style="font-size:1.1em">
+              <li>GitHub Copilot, Cursor, JetBrains AI built into the editor</li>
+              <li>Feed files as context — agent writes the impl</li>
+              <li>Multi-turn conversations within the codebase</li>
+              <li>Human reviews every diff and steers direction</li>
+              <li style="color:var(--muted); font-size:0.85em">JetBrains 2025: <strong style="color:var(--orange)">68%</strong> of devs at work use inline AI</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 25 · Tier 4 -->
+        <section>
+          <h3>tier 4 · the emerging edge</h3>
+          <h2>Agentic Engineer</h2>
+          <hr class="dim" />
+          <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:1em; margin-top:0.5em; align-items:start">
+            <img src="/talks/stop-building-ai-demos/tier-4.jpg" alt="Developer reviewing AI-written PR" style="width:100%; border-radius:10px; object-fit:cover; aspect-ratio:4/3; background:var(--surface); display:block" />
+            <ul style="font-size:1.1em">
+              <li>Claude Code, Cursor Agent, GitHub Copilot Coding Agent</li>
+              <li>Give a goal — agent reads files, writes, tests, opens PR</li>
+              <li>Slack message → issue → autonomous PR</li>
+              <li>Human is the reviewer, not the writer</li>
+              <li style="color:var(--muted); font-size:0.85em">25% of YC W25 startups: <strong style="color:var(--orange)">95%+ AI-generated code</strong></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 26 · The Coder Spectrum — summary -->
+        <section>
+          <h3>the coder spectrum — 2026</h3>
+          <h2>Four tiers. One direction.</h2>
+          <hr class="dim" />
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5em; margin-top:0.6em">
+            <div class="card" style="border-color:#374151; padding:0.7em 1em; display:flex; align-items:center; gap:0.8em">
+              <div style="font-size:2em;font-weight:700;color:#2d2d2d;line-height:1;flex-shrink:0">1</div>
+              <div>
+                <div style="font-size:0.72em;color:#9ca3af;font-weight:600">Traditional Coder</div>
+                <div style="font-size:0.58em;color:var(--muted);margin-top:0.2em">IDE · Git · Google · no AI</div>
+              </div>
+            </div>
+            <div class="card" style="border-color:#4b5563; padding:0.7em 1em; display:flex; align-items:center; gap:0.8em">
+              <div style="font-size:2em;font-weight:700;color:#374151;line-height:1;flex-shrink:0">2</div>
+              <div>
+                <div style="font-size:0.72em;color:#d1d5db;font-weight:600">Copy-Paste Prompter</div>
+                <div style="font-size:0.58em;color:var(--muted);margin-top:0.2em">ChatGPT tab · paste · tweak · ship</div>
+              </div>
+            </div>
+            <div class="card" style="border-color:var(--orange-dim); padding:0.7em 1em; display:flex; align-items:center; gap:0.8em">
+              <div style="font-size:2em;font-weight:700;color:var(--orange-dim);line-height:1;flex-shrink:0">3</div>
+              <div>
+                <div style="font-size:0.72em;color:var(--text);font-weight:600">AI Collaborator</div>
+                <div style="font-size:0.58em;color:var(--muted);margin-top:0.2em">Copilot · Cursor · files as context</div>
+              </div>
+            </div>
+            <div class="card" style="border-color:var(--orange); background:#1a0f00; padding:0.7em 1em; display:flex; align-items:center; gap:0.8em">
+              <div style="font-size:2em;font-weight:700;color:var(--orange);line-height:1;flex-shrink:0">4</div>
+              <div>
+                <div style="font-size:0.72em;color:var(--orange);font-weight:600">Agentic Engineer</div>
+                <div style="font-size:0.58em;color:var(--muted);margin-top:0.2em">Claude Code · Slack → PR · fully autonomous</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 27 · Level up guide -->
+        <section>
+          <h3>your path forward</h3>
+          <h2>One tier at a time</h2>
+          <hr class="dim" />
+          <ul class="steps">
+            <li><strong>Tier 1 → 2:</strong> Next time you Google an error, ask Claude instead. Keep a browser tab open. No setup needed.</li>
+            <li><strong>Tier 2 → 3:</strong> Install Cursor or GitHub Copilot. Start attaching relevant files as context — stop one-shotting, start iterating.</li>
+            <li><strong>Tier 3 → 4:</strong> Install Claude Code (<code style="font-size:0.9em;color:var(--orange);word-break:break-all">npm i -g @anthropic-ai/claude-code</code>). Give it a task, not a line. Review the diff.</li>
+            <li><strong>Tier 4 → Top:</strong> Wire Claude Code or a Copilot Coding Agent to your GitHub Actions. Slack message → issue → PR, no human in the loop until review.</li>
+          </ul>
+          <p style="margin-top:0.8em;font-size:0.72em;color:var(--muted)">
+            The goal isn't to reach Tier 4 today. The goal is to not be at Tier 1 in six months.
+          </p>
+        </section>
+
+        <!-- 26 · Closing -->
+        <section class="slide-title">
+          <h1>Build things<br /><span class="orange">worth coming back to</span></h1>
+          <hr class="dim" style="margin:1.5em auto; max-width:12em;" />
+          <p class="meta" style="margin-top:1em">
+            <strong>Somasundaram Mahesh</strong><br />
+            msomu.com · @msomuin<br /><br />
+            Slides: msomu.com/talks
+          </p>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        controls: true,
+        progress: true,
+        center: false,
+        width: 1100,
+        height: 700,
+        margin: 0.06,
+      });
+    </script>
+  </body>
+</html>

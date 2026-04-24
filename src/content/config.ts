@@ -52,4 +52,16 @@ const use = defineCollection({
 	}),
 });
 
-export const collections = { writing, whoami, use, thinkInCode };
+const talks = defineCollection({
+	type: "data",
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		pubDate: z.coerce.date(),
+		venue: z.string(),
+		slideUrl: z.string().optional(),
+		videoUrl: z.string().optional(),
+	}),
+});
+
+export const collections = { writing, whoami, use, thinkInCode, talks };

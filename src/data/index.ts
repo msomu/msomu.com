@@ -30,6 +30,10 @@ export const menuItems: MenuItem[] = [
 		label: "uses",
 		url: "/uses",
 	},
+	{
+		label: "talks",
+		url: "/talks",
+	},
 	// {
 	// 	label: "thoughts",
 	// 	url: "/thoughts",

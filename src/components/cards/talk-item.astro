@@ -1,0 +1,50 @@
+---
+import FormattedDate from "@components/misc/formatted-date.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	date: Date;
+	venue: string;
+	slideUrl?: string;
+	videoUrl?: string;
+}
+
+const { title, description, date, venue, slideUrl, videoUrl } = Astro.props;
+const primaryUrl = slideUrl ?? videoUrl;
+---
+
+<div class='flex flex-col gap-3 py-6 border-b border-gray-200 dark:border-gray-800 last:border-0'>
+	<div class='flex items-start justify-between gap-4'>
+		<div class='flex flex-col gap-1 flex-1'>
+			<h3 class='text-base font-medium leading-snug'>{title}</h3>
+			<p class='text-sm text-gray-500 dark:text-gray-400 font-medium'>
+				{venue} &middot; <FormattedDate date={date.toISOString()} />
+			</p>
+		</div>
+		{
+			primaryUrl && (
+				<a
+					href={primaryUrl}
+					target='_blank'
+					rel='noopener noreferrer'
+					class='flex-shrink-0 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors'
+					aria-label={`Open slides for ${title}`}>
+					↗
+				</a>
+			)
+		}
+	</div>
+	<p class='text-sm text-gray-600 dark:text-gray-400 leading-relaxed'>{description}</p>
+	{
+		videoUrl && (
+			<a
+				href={videoUrl}
+				target='_blank'
+				rel='noopener noreferrer'
+				class='text-sm font-medium text-orange-500 dark:text-orange-400 hover:underline underline-offset-2 inline-flex items-center gap-1'>
+				Watch recording ↗
+			</a>
+		)
+	}
+</div>

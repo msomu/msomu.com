@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import { TalkItem } from "@components/cards";
+import { Header } from "@components/misc";
+import { BaseHead } from "@components/seo";
+import { SITE_TITLE } from "@data/index";
+import RootLayout from "@layouts/root-layout.astro";
+
+const talks = (await getCollection("talks")).sort(
+	(a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
+);
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={`talks · ${SITE_TITLE}`}
+			description='Presentations and talks by Somasundaram Mahesh on Android, mobile engineering, and software development.'
+			image='/images/ogimage.png'
+		/>
+	</head>
+	<RootLayout>
+		<div class='flex flex-col w-full gap-6 max-w-4xl'>
+			<Header />
+			<div class='flex flex-col gap-2 mb-4'>
+				<h1 class='text-5xl md:text-7xl font-medium tracking-tight'>talks</h1>
+				<p class='text-lg text-gray-600 dark:text-gray-400 font-medium'>
+					presentations on android, mobile engineering, and software craft
+				</p>
+			</div>
+
+			<div class='flex flex-col'>
+				{
+					talks.map((talk) => (
+						<TalkItem
+							title={talk.data.title}
+							description={talk.data.description}
+							date={talk.data.pubDate}
+							venue={talk.data.venue}
+							slideUrl={talk.data.slideUrl}
+							videoUrl={talk.data.videoUrl}
+						/>
+					))
+				}
+			</div>
+		</div>
+	</RootLayout>
+</html>
