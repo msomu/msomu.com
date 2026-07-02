@@ -1,9 +1,9 @@
 ---
 title: "meet somu, android craftsman"
-description: "Senior Android Developer at JioHotstar. Specializing in streaming and entertainment apps. Community leader at GDG Chennai. Always building."
+description: "Founding AI Engineer at AGI Inc. Founder of United by AI. Organiser at GDG Chennai. Previously crafted streaming experiences for millions at Disney+Hotstar."
 pubDate: 'Nov 29 2024'
 ---
 
-i build android apps at [jiohotstar](https://www.hotstar.com), crafting streaming experiences for millions. 10+ years shipping mobile solutions. i solve hard problems at scale.
+i'm a founding ai engineer at [agi inc](https://x.com/agi_inc), building at the frontier of ai. outside of work, i founded [united by ai](https://x.com/unitedbyai) to bring ai builders together, and i organise [gdg chennai](https://x.com/gdgchennai). before all this, i was at disney+hotstar, crafting streaming experiences for millions.
 
-want to chat? [schedule a call](https://calendar.app.google/JCPcdpQJsz6WDMid9)
+want to chat? [book a call on topmate](https://topmate.io/msomu/2148374?utm_source=public_profile&utm_campaign=msomu)
