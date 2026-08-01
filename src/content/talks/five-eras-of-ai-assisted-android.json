@@ -1,0 +1,7 @@
+{
+  "title": "The Five Eras of AI-Assisted Android Development",
+  "description": "How the unit of work grew from a keystroke to a pull request: autocomplete, function generation, tool-using agents, goal-seeking loops, and sandboxed task agents that hand you a PR. A story arc through Google's Android tooling with the honest productivity data at the end.",
+  "pubDate": "2026-08-01",
+  "venue": "GDG Chennai · I/O Connect",
+  "slideUrl": "/talks/five-eras-of-ai-assisted-android/index.html"
+}
