@@ -342,6 +342,71 @@
       .term .ok { color: var(--green); }
       .term .err { color: var(--red); }
       .term .dim { color: var(--muted); }
+
+      /* App-window mocks · swap for authentic screenshots when available */
+      .mock {
+        background: #0d0d0d;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        font-size: 0.5em;
+      }
+
+      .mock .bar {
+        display: flex;
+        align-items: center;
+        gap: 0.45em;
+        padding: 0.5em 0.9em;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .mock .dot { width: 0.6em; height: 0.6em; border-radius: 50%; background: var(--border); }
+
+      .mock .body { padding: 0.7em 1em; line-height: 1.7; color: var(--text); }
+
+      .mock .chip {
+        display: inline-block;
+        font-size: 0.85em;
+        padding: 0.1em 0.6em;
+        border-radius: 99px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        margin-right: 0.3em;
+      }
+
+      .mock .chip.on { border-color: var(--orange); color: var(--orange); }
+
+      .mock .sig {
+        font-size: 0.8em;
+        color: var(--green);
+        font-family: "SF Mono", ui-monospace, Menlo, monospace;
+      }
+
+      /* Layered stack diagram */
+      .stack-row {
+        display: grid;
+        grid-template-columns: 6.5em 1fr;
+        gap: 0.8em;
+        align-items: center;
+        padding: 0.4em 0.8em;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        margin-bottom: 0.35em;
+      }
+
+      .stack-row .layer {
+        font-size: 0.6em;
+        font-weight: 700;
+        color: var(--orange);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .stack-row .players { font-size: 0.6em; color: var(--text); }
     </style>
   </head>
   <body>
@@ -925,6 +990,241 @@
             Forward-looking bets, clearly labeled as speculation: agents watching
             Crashlytics and opening fix PRs, Journeys-style testing as default, the
             developer role consolidating around architecture, specification, review.
+          </aside>
+        </section>
+
+        <!-- 34a · Ecosystem section header -->
+        <section class="section-header">
+          <div class="number">+</div>
+          <h2>The Ecosystem, Right Now</h2>
+          <p class="sub">August 2026: Junie, Air, Buzz, rentable sandboxes, and the protocols underneath</p>
+          <aside class="notes">
+            The Google spine carried the arc. This section shows the same five eras
+            replaying across the whole industry, faster, and what glues it together.
+            The UI shots in this section are CSS mocks; swap in authentic screenshots
+            before stage day if licensing and time allow.
+          </aside>
+        </section>
+
+        <!-- 34b · Junie enters -->
+        <section>
+          <h3>meanwhile · jetbrains</h3>
+          <h2>Junie enters the chat</h2>
+          <hr class="dim" />
+          <ul>
+            <li>JetBrains' coding agent · EAP January 2025, GA as an IDE plugin April 2025 · IntelliJ, Android Studio, and 11 more IDEs</li>
+            <li>The era-3 shape: plans multi-step tasks, edits across files, runs tests, rolls back if needed · runs Claude Sonnet or GPT-5 under the hood</li>
+            <li>Android support (EAP): a Mobile MCP server and strict Kotlin/Compose/MVVM rules for new code</li>
+            <li>The party trick: renders <code style="color:var(--orange)">@Preview</code> composables headlessly and reads the result, iterating on Compose UI visually without launching an emulator</li>
+          </ul>
+          <div class="mock" style="margin-top:0.6em">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;Android Studio · Junie</div>
+            <div class="body">
+              <div><span style="color:var(--orange)">Task:</span> add pull-to-refresh to the home feed</div>
+              <div><span style="color:var(--green)">✓</span> Read HomeFeedScreen.kt · HomeFeedViewModel.kt</div>
+              <div><span style="color:var(--green)">✓</span> Plan approved · 3 steps · 2 files</div>
+              <div><span style="color:var(--orange)">▸</span> Rendering @Preview headlessly · verifying the spinner sits above the list</div>
+              <div><span style="color:var(--green)">✓</span> testDebugUnitTest · 12 passed</div>
+            </div>
+          </div>
+          <aside class="notes">Mock only, replace with an authentic Junie panel screenshot.</aside>
+        </section>
+
+        <!-- 34c · Junie evolution -->
+        <section>
+          <h3>how junie evolved</h3>
+          <h2>Plugin → CLI → debugger, in 18 months</h2>
+          <hr class="dim" />
+          <div style="margin-top:0.6em">
+            <div class="arc-row">
+              <span class="unit-name">Jan 2025</span>
+              <span class="era-name">Early access · the agent lands inside the IDE</span>
+              <span class="era-when">EAP</span>
+            </div>
+            <div class="arc-row">
+              <span class="unit-name">Apr 2025</span>
+              <span class="era-name">General availability as an IDE plugin, free tier included</span>
+              <span class="era-when">GA · plugin</span>
+            </div>
+            <div class="arc-row">
+              <span class="unit-name">Mar 2026</span>
+              <span class="era-name">Junie CLI · the same agent unbundled into any terminal</span>
+              <span class="era-when">public beta</span>
+            </div>
+            <div class="arc-row">
+              <span class="unit-name">Jun 2026</span>
+              <span class="era-name">Full GA on June 17 · the agent learns to debug, not just test</span>
+              <span class="era-when">GA · everywhere</span>
+            </div>
+          </div>
+          <p style="margin-top:0.6em; font-size:0.68em; color:var(--muted)">
+            The same keystroke-to-ticket climb this talk traces over two decades, compressed into a year and a half.
+          </p>
+        </section>
+
+        <!-- 34d · Air -->
+        <section>
+          <h3>meanwhile · jetbrains, again</h3>
+          <h2>Air · the IDE rebuilt around the agent</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Public preview March 2026, built on Fleet's bones · IDEs add tools around the editor, Air builds the tool around the agent</li>
+            <li>Delegates to multiple agents running concurrently: Junie, Codex, Claude Code, Gemini CLI, Copilot, OpenCode, Cline · any ACP agent</li>
+            <li>How it's doing right now: macOS and Linux live, Windows pending · the July 2026 drop added local models and Java/Kotlin code intelligence</li>
+            <li>The bet mirrors Google Antigravity: the agent is the primary user of the IDE, you supervise</li>
+          </ul>
+          <div class="mock" style="margin-top:0.5em">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;JetBrains Air · three lanes, one supervisor</div>
+            <div class="body">
+              <div><span class="chip on">Junie</span> fixing the flaky test in :feature:auth · running tests</div>
+              <div><span class="chip on">Claude Code</span> migrating XML layouts → Compose · editing 7 files</div>
+              <div><span class="chip">Gemini CLI</span> drafting release notes · <span style="color:var(--green)">done ✓</span></div>
+            </div>
+          </div>
+          <aside class="notes">Mock only, replace with an authentic Air screenshot from air.dev.</aside>
+        </section>
+
+        <!-- 34e · Buzz intro -->
+        <section>
+          <h3>the talk of the town · july 2026</h3>
+          <h2>Buzz · humans and agents as peers</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Block's free, open-source workspace (yes, Jack Dorsey) · launched July 2026, hosted beta at buzz.xyz</li>
+            <li>Not an IDE. A workspace: chat, workflows, and git events in one place, where agents are teammates rather than bots</li>
+            <li>Ships harnesses for Goose (Block's own), OpenAI Codex, and Claude Code · all speaking ACP</li>
+            <li>Each session gets its own isolated, sandboxed MCP tool instances</li>
+          </ul>
+        </section>
+
+        <!-- 34f · Buzz how it works -->
+        <section>
+          <h3>how buzz works</h3>
+          <h2>Everything is a signed event</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Every participant, human or agent, holds a secp256k1 keypair · an agent's key is countersigned by its human owner</li>
+            <li>Every message, workflow step, and git push lands in one append-only, cryptographically signed log (a Rust Nostr relay underneath)</li>
+            <li>Accountability lives in the substrate: you always know which agent did what, and for whom</li>
+          </ul>
+          <div class="mock" style="margin-top:0.5em">
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;buzz.xyz · #android-crew</div>
+            <div class="body">
+              <div><strong style="color:var(--orange)">somu</strong> <span style="color:var(--muted)">09:12</span> · @goose take PR #214, tests are red</div>
+              <div><strong>goose</strong> <span class="chip">agent</span> <span style="color:var(--muted)">09:13</span> · on it, cloning into sandbox <span class="sig">sig a91f…e2 ✓ owner: somu</span></div>
+              <div><strong>goose</strong> <span class="chip">agent</span> <span style="color:var(--muted)">09:41</span> · pushed the fix, 3 files, tests green <span class="sig">sig 77c3…9b ✓</span></div>
+              <div style="color:var(--muted)">git · push · signed event #4,182 appended to the log</div>
+            </div>
+          </div>
+          <aside class="notes">
+            Mock only, replace with an authentic Buzz screenshot. The takeaway to say out
+            loud: when agents do real work, "who did this and on whose authority" becomes
+            an infrastructure question. Buzz answers it with cryptography, not policy docs.
+          </aside>
+        </section>
+
+        <!-- 34g · Sandboxes as infrastructure -->
+        <section>
+          <h3>era 5's box becomes rentable</h3>
+          <h2>Sandboxes are now infrastructure</h2>
+          <hr class="dim" />
+          <ul>
+            <li>The isolated VM under Jules and Codex is no longer their secret sauce. It's a primitive you rent</li>
+            <li><strong>E2B.dev:</strong> LLM-agnostic sandbox cloud · Python and TypeScript SDKs · bring Claude, GPT, Gemini, or Llama</li>
+            <li><strong>Cloudflare Sandbox SDK:</strong> containers on Workers, Durable Objects for state, R2 for persistence, running at the edge</li>
+            <li><strong>Gemini API managed agents:</strong> Google's take, next slide</li>
+            <li>Your Android agent's clone-build-test loop can run in any of them</li>
+          </ul>
+        </section>
+
+        <!-- 34h · Gemini managed agents -->
+        <section>
+          <h3>the google spine, one last time</h3>
+          <h2>The sandbox is now an API call</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Managed agents on the Gemini API (public preview): a single API call provisions a Linux sandbox where the agent reasons, runs code, manages files, and browses the web</li>
+            <li>Two on the menu: the <strong>Antigravity agent</strong> (general-purpose, configurable model, extend with your instructions, skills, and data) and <strong>Deep Research</strong></li>
+            <li>Ubuntu with Python 3.12 and Node 22 · environments spin down when idle, deleted after 7 days · up to 1,000 agents per account</li>
+            <li>Network allowlists per sandbox · credentials injected via an egress proxy, never exposed inside the box</li>
+            <li>A single interaction typically burns 100k to 3M tokens. Budget accordingly</li>
+          </ul>
+          <p style="margin-top:0.6em; font-size:0.65em; color:var(--muted)">
+            Framework on top of it, your pick: LangChain/LangGraph, LlamaIndex, CrewAI, Vercel AI SDK, Google ADK, or the Antigravity SDK.
+          </p>
+          <aside class="notes">
+            The arc closer: Era 5 was "the agent has a sandbox". 2026 is "the sandbox is a
+            billable primitive with an SDK". Same infrastructure Jules stood on, now rentable
+            by anyone in this room.
+          </aside>
+        </section>
+
+        <!-- 34i · ACP -->
+        <section>
+          <h3>the thread through all of it</h3>
+          <h2>ACP · any agent, any surface</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>Agent Client Protocol:</strong> an open standard started by Zed · JSON-RPC 2.0, the agent runs as a subprocess of the editor, talking over stdio</li>
+            <li>MCP connects your agent to <em>tools</em>. ACP connects your agent to <em>surfaces</em></li>
+            <li>Already speaking it: Zed, JetBrains IDEs and Air, GitHub Copilot's ACP server, Buzz's agent harnesses</li>
+          </ul>
+          <div class="card" style="margin-top:0.7em">
+            <h3>the analogy that lands</h3>
+            <p style="font-size:0.62em">
+              LSP made every language work in every editor. ACP is doing the same for agents.
+            </p>
+          </div>
+        </section>
+
+        <!-- 34j · Why ACP matters -->
+        <section>
+          <h3>why acp is the one to watch</h3>
+          <h2>The agent becomes portable</h2>
+          <hr class="dim" />
+          <ul>
+            <li>The agent stops being a feature of one IDE and becomes a worker you point at any surface</li>
+            <li>Your team standardises on one agent, and everyone keeps the editor they love</li>
+            <li>For Android: Android Studio speaks MCP, Junie and friends speak ACP. The studio, the terminal, and the workspace are all driving the same worker</li>
+            <li>Two protocols to remember from this talk: <strong style="color:var(--orange)">MCP for tools, ACP for surfaces</strong>. Everything you saw today plugs into one or both</li>
+          </ul>
+        </section>
+
+        <!-- 34k · How things are changing -->
+        <section>
+          <h3>how things are changing</h3>
+          <h2>The stack came apart, on purpose</h2>
+          <hr class="dim" />
+          <div style="margin-top:0.5em">
+            <div class="stack-row">
+              <span class="layer">Model</span>
+              <span class="players">Gemini · GPT · Claude · local Gemma</span>
+            </div>
+            <div class="stack-row">
+              <span class="layer">Agent</span>
+              <span class="players">Junie · Claude Code · Codex · Goose · Gemini CLI</span>
+            </div>
+            <div class="stack-row">
+              <span class="layer">Surface</span>
+              <span class="players">Android Studio · Air · Zed · Buzz · your terminal</span>
+            </div>
+            <div class="stack-row">
+              <span class="layer">Sandbox</span>
+              <span class="players">E2B · Cloudflare Sandbox SDK · Gemini managed agents · Gradle Managed Devices</span>
+            </div>
+            <div class="stack-row">
+              <span class="layer">Protocols</span>
+              <span class="players">MCP connects the tools · ACP connects the surfaces</span>
+            </div>
+          </div>
+          <p style="margin-top:0.6em; font-size:0.68em; color:var(--muted)">
+            In 2023 this was one monolithic product. In 2026 every layer swaps independently,
+            and the protocols are where the real competition moved.
+          </p>
+          <aside class="notes">
+            This slide is the section's landing. Point at each layer, name one product,
+            then the punch: pick any row, swap any cell, everything still works. That's
+            new this year, and it's why no single vendor owns the future of this stack.
           </aside>
         </section>
 
