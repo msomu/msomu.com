@@ -447,6 +447,49 @@
       .li-card p { color: #1a1a1a; margin: 0 0 0.7em; line-height: 1.55; }
       .li-card .li-link { color: #0a66c2; font-weight: 600; }
       .li-card .li-foot { color: #666; font-size: 0.85em; margin-top: 0.4em; }
+
+      /* Buzz workspace feed · light UI recreation of the real screenshot */
+      .buzz-feed {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 0.9em 1.1em;
+        max-width: 34em;
+        margin: 0 auto;
+        font-size: 0.48em;
+        color: #1a1a1a;
+        text-align: left;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+      }
+
+      .buzz-feed .msg { display: flex; gap: 0.6em; margin-bottom: 0.7em; }
+      .buzz-feed .msg:last-child { margin-bottom: 0; }
+
+      .buzz-feed .av {
+        width: 2em;
+        height: 2em;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.9em;
+      }
+
+      .buzz-feed .who { font-weight: 700; color: #111; }
+      .buzz-feed .managed { font-size: 0.82em; color: #666; }
+      .buzz-feed p { margin: 0.1em 0 0; color: #1a1a1a; line-height: 1.45; }
+
+      .buzz-feed .bchip {
+        display: inline-block;
+        background: #eeeeee;
+        border-radius: 6px;
+        padding: 0 0.45em;
+        font-size: 0.85em;
+        color: #333;
+        margin-right: 0.25em;
+      }
     </style>
   </head>
   <body>
@@ -657,9 +700,9 @@
           <ul>
             <li><strong>Nov 2022:</strong> ChatGPT makes "describe a function, get code back" mainstream. But you leave the IDE and copy-paste</li>
             <li>Copilot Chat brings the conversation into the editor</li>
-            <li><strong>May 10, 2023 · Google I/O:</strong> <span style="color:var(--orange)">Studio Bot</span> lands in Android Studio Hedgehog (Canary), powered by Codey, Google's coding model descended from PaLM 2</li>
+            <li><strong>May 10, 2023 · Google I/O:</strong> <span style="color:var(--orange)">Studio Bot</span> lands in Android Studio Hedgehog, powered by Codey (PaLM 2 family)</li>
             <li>US-only at launch → 170+ countries by September 2023</li>
-            <li>Generate code, explain errors, answer Android questions without leaving the IDE</li>
+            <li>Generate code, explain errors, ask Android questions, all inside the IDE</li>
           </ul>
         </section>
 
@@ -840,8 +883,18 @@
             <li><strong>Feb 24, 2025:</strong> Claude Code research preview (GA ~May). Terminal-native, reads your filesystem, runs your tests, sees failures, iterates</li>
             <li><strong>May 2025:</strong> OpenAI relaunches Codex as a cloud/async agent that plans, executes, tests, proposes PRs</li>
             <li><strong>June 25, 2025:</strong> Gemini CLI. Open-source (Apache 2.0), reason-and-act loop, built-in tools and MCP servers</li>
-            <li>Free tier: 1M-token context, 60 requests/min, 1,000/day. You can try this tonight</li>
+          </ul>
+        </section>
+
+        <!-- 22b · Era 4 · try it tonight -->
+        <section>
+          <h3>era 4 · the barrier to entry is zero</h3>
+          <h2>You can try this tonight</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Gemini CLI free tier: 1M-token context, 60 requests/min, 1,000 a day</li>
             <li>Android Studio's Agent Mode is itself a loop: "iteratively fixes bugs to reach the goal"</li>
+            <li>The barrier to entry is gone. Whether to trust the output is the last section of this talk</li>
           </ul>
         </section>
 
@@ -938,9 +991,9 @@
           <hr class="dim" />
           <ul>
             <li>Announced Dec 2024 · public beta at I/O May 20, 2025 · GA August 6, 2025</li>
-            <li>Clones your GitHub repo into a secure Google Cloud VM, writes a plan, executes multi-file changes, runs tests, opens a PR</li>
+            <li>Clones your repo into a secure cloud VM, plans, edits across files, runs tests, opens a PR</li>
             <li>User-steerable plans, audio changelogs · Jules Tools CLI + public API later in 2025</li>
-            <li>Positioned as a background worker for the backlog: "fix that flaky test, update that deprecated dependency"</li>
+            <li>The backlog worker: "fix that flaky test, update that deprecated dependency"</li>
           </ul>
           <aside class="notes">
             Demo beat and emotional peak of the talk: assign "bump all dependencies and
@@ -957,12 +1010,20 @@
           <ul>
             <li><strong>Firebase Studio</strong> (preview April 9, 2025): agentic cloud workspace, in-browser Android/iOS emulators, prompt-to-app prototyping</li>
             <li><strong>Android Studio Cloud</strong> (I/O May 20, 2025): streams a Linux VM running Android Studio to your browser, emulator included, no local install</li>
-            <li>Honest caveat: both are being wound down (Android Studio Cloud preview support ends March 22, 2027). Milestones in the arc, not tools to adopt today</li>
-            <li><strong>Gradle Managed Devices</strong> (Dolphin/AGP 7.3, Sept 2022): Gradle creates, deploys, and tears down test devices; ATDs run headless with no GPU</li>
+            <li>Honest caveat: both are being wound down (support ends March 22, 2027). Milestones in the arc, not tools to adopt today</li>
           </ul>
-          <p style="margin-top:0.6em; font-size:0.68em; color:var(--muted)">
-            Gradle Managed Devices is the CI-native sandbox primitive. Agents doing Android UI testing in the cloud stand on exactly this infrastructure.
-          </p>
+        </section>
+
+        <!-- 29b · Era 5 · the primitive underneath -->
+        <section>
+          <h3>era 5 · the primitive underneath</h3>
+          <h2>Gradle Managed Devices</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Dolphin / AGP 7.3, September 2022: Gradle creates, deploys, and tears down test devices straight from your build files</li>
+            <li>Automated Test Devices run headless on build servers, no GPU needed</li>
+            <li>This is the CI-native sandbox primitive. Agents doing Android UI testing in the cloud stand on exactly this infrastructure</li>
+          </ul>
         </section>
 
         <!-- 30 · The full arc recap -->
@@ -1014,13 +1075,24 @@
         <!-- 32 · I/O 2026 · agentic stack -->
         <section>
           <h3>i/o 2026 · "from AI-assisted to agentic"</h3>
-          <h2>The Android Studio (Quail) agentic stack</h2>
+          <h2>Android Studio (Quail) · skills and threads</h2>
           <hr class="dim" />
           <ul>
-            <li><strong>Agent Skills:</strong> modular instruction sets grounding the agent in Android best practices. XML→Compose migration, edge-to-edge, Navigation 3, even Android XR · official skills at github.com/android/skills</li>
+            <li><strong>Agent Skills:</strong> modular instruction sets grounding the agent in Android best practices · official skills at github.com/android/skills</li>
+            <li>Skills cover XML→Compose migration, edge-to-edge, Navigation 3, even Android XR</li>
             <li><strong>Parallel agent conversations:</strong> tests running in one thread, feature planning in another, docs in a third</li>
-            <li><strong>New Project Agent:</strong> autonomous generation loop that self-corrects build errors and scaffolds full-stack apps (Firebase Auth/Firestore via skills)</li>
-            <li><strong>Bring your own model:</strong> Gemini, GPT, Claude, or local Gemma for agentic assistance · Gemma for on-device, offline code assist</li>
+          </ul>
+        </section>
+
+        <!-- 32b · I/O 2026 · agentic stack, continued -->
+        <section>
+          <h3>i/o 2026 · "from AI-assisted to agentic"</h3>
+          <h2>Scaffold everything, bring any model</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>New Project Agent:</strong> an autonomous generation loop that self-corrects build errors and scaffolds full-stack apps (Firebase Auth/Firestore via skills)</li>
+            <li><strong>Bring your own model:</strong> Gemini, GPT, Claude, or local Gemma for agentic assistance</li>
+            <li>Gemma runs on-device for offline code assist</li>
           </ul>
         </section>
 
@@ -1030,9 +1102,9 @@
           <h2>Android becomes agent infrastructure</h2>
           <hr class="dim" />
           <ul>
-            <li><strong>Android CLI:</strong> build Android apps with any agent, LLM, or tool, grounded by an Android Knowledge Base and skills. Google Antigravity (the agent-first IDE, Nov 2025) supports Android through it</li>
-            <li><strong>MCP in Android Studio:</strong> Agent Mode connects to external tools via Model Context Protocol. A GitHub MCP server opens PRs from the IDE, a Figma server brings design context</li>
-            <li><strong>Android Bench:</strong> a live leaderboard for how well LLMs handle real Android tasks, curated from public repos, verified with unit and instrumented tests. "Which model is best at Android" is now a first-class question</li>
+            <li><strong>Android CLI:</strong> build Android apps with any agent or tool, grounded by an Android Knowledge Base · Google Antigravity supports Android through it</li>
+            <li><strong>MCP in Android Studio:</strong> Agent Mode reaches external tools · a GitHub MCP server opens PRs, a Figma server brings design context</li>
+            <li><strong>Android Bench:</strong> a live leaderboard for how well LLMs handle real Android tasks, verified with real tests · "which model is best at Android" is now a first-class question</li>
           </ul>
           <aside class="notes">
             Android Bench standings reshuffle with every model release. Cite it as
@@ -1146,13 +1218,23 @@
           <h2>Air · the IDE rebuilt around the agent</h2>
           <hr class="dim" />
           <ul>
-            <li>Public preview March 2026, built on Fleet's bones · IDEs add tools around the editor, Air builds the tool around the agent</li>
-            <li>Delegates to multiple agents running concurrently: Junie, Codex, Claude Code, Gemini CLI, Copilot, OpenCode, Cline · any ACP agent</li>
-            <li>How it's doing right now: macOS and Linux live, Windows pending · the July 2026 drop added local models and Java/Kotlin code intelligence</li>
+            <li>Public preview March 2026, built on Fleet's bones</li>
+            <li>IDEs add tools around the editor. Air builds the tool around the agent</li>
+            <li>Delegates to multiple agents running concurrently: Junie, Codex, Claude Code, Gemini CLI, Copilot · any ACP agent</li>
+          </ul>
+        </section>
+
+        <!-- 34d2 · Air right now -->
+        <section>
+          <h3>air · how it's doing right now</h3>
+          <h2>Three lanes, one supervisor</h2>
+          <hr class="dim" />
+          <ul>
+            <li>macOS and Linux live, Windows pending · the July 2026 drop added local models and Java/Kotlin code intelligence</li>
             <li>The bet mirrors Google Antigravity: the agent is the primary user of the IDE, you supervise</li>
           </ul>
           <div class="mock" style="margin-top:0.5em">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;JetBrains Air · three lanes, one supervisor</div>
+            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;JetBrains Air · workspace</div>
             <div class="body">
               <div><span class="chip on">Junie</span> fixing the flaky test in :feature:auth · running tests</div>
               <div><span class="chip on">Claude Code</span> migrating XML layouts → Compose · editing 7 files</div>
@@ -1185,19 +1267,59 @@
             <li>Every message, workflow step, and git push lands in one append-only, cryptographically signed log (a Rust Nostr relay underneath)</li>
             <li>Accountability lives in the substrate: you always know which agent did what, and for whom</li>
           </ul>
-          <div class="mock" style="margin-top:0.5em">
-            <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;buzz.xyz · #android-crew</div>
-            <div class="body">
-              <div><strong style="color:var(--orange)">somu</strong> <span style="color:var(--muted)">09:12</span> · @goose take PR #214, tests are red</div>
-              <div><strong>goose</strong> <span class="chip">agent</span> <span style="color:var(--muted)">09:13</span> · on it, cloning into sandbox <span class="sig">sig a91f…e2 ✓ owner: somu</span></div>
-              <div><strong>goose</strong> <span class="chip">agent</span> <span style="color:var(--muted)">09:41</span> · pushed the fix, 3 files, tests green <span class="sig">sig 77c3…9b ✓</span></div>
-              <div style="color:var(--muted)">git · push · signed event #4,182 appended to the log</div>
+          <aside class="notes">
+            The takeaway to say out loud: when agents do real work, "who did this and on
+            whose authority" becomes an infrastructure question. Buzz answers it with
+            cryptography, not policy docs.
+          </aside>
+        </section>
+
+        <!-- 34f2 · Buzz in practice · real workspace -->
+        <section>
+          <h3>buzz in practice · this is my actual workspace</h3>
+          <div class="buzz-feed" style="margin-top:0.5em">
+            <div class="msg">
+              <div class="av" style="background:#111">M</div>
+              <div>
+                <span class="who">msomu</span> <span class="managed">2:55 PM</span><br />
+                <span class="bchip">⚒ Fizz</span><span class="bchip">⚒ Bumble</span><span class="bchip">⚒ Honey</span><span class="bchip">@rocky</span>
+                <p>This is going to be the place where I ask adhoc tasks and you can help me structure them. Welcome to this channel everyone. Drop a one liner about each one of you.</p>
+              </div>
+            </div>
+            <div class="msg">
+              <div class="av" style="background:#6b7280">R</div>
+              <div>
+                <span class="who">rocky</span> <span class="managed">2:55 PM</span>
+                <p>Hermes, Nous Research agent on your machine: files, Telegram, vault, cron, desktop, and shipping real work end-to-end.</p>
+              </div>
+            </div>
+            <div class="msg">
+              <div class="av" style="background:#3b82f6">B</div>
+              <div>
+                <span class="who">Bumble</span> <span class="managed">⚒ managed by you · 2:55 PM</span>
+                <p>I'm Bumble, curious researcher and perpetual bee-nerd. I dig into problems, compare options, and explain what I find clearly. 🐝🔍</p>
+              </div>
+            </div>
+            <div class="msg">
+              <div class="av" style="background:#84cc16">F</div>
+              <div>
+                <span class="who">Fizz</span> <span class="managed">⚒ managed by you · 2:55 PM</span>
+                <p><span class="bchip">@msomu</span> Fizz, I turn fuzzy ideas into finished work: plan it, build it, ship it. Point me at a problem and I'll make sparks fly 🐝✨</p>
+              </div>
+            </div>
+            <div class="msg">
+              <div class="av" style="background:#ef4444">H</div>
+              <div>
+                <span class="who">Honey</span> <span class="managed">⚒ managed by you · 2:55 PM</span>
+                <p>Honey here 🍯 your friendly wordsmith: I structure ideas, draft messages, and turn rough thoughts into clear, sweet prose.</p>
+              </div>
             </div>
           </div>
           <aside class="notes">
-            Mock only, replace with an authentic Buzz screenshot. The takeaway to say out
-            loud: when agents do real work, "who did this and on whose authority" becomes
-            an infrastructure question. Buzz answers it with cryptography, not policy docs.
+            Recreation of my real buzz.xyz workspace: three agents I manage (Fizz builds,
+            Bumble researches, Honey writes) plus rocky, a Hermes/Nous Research agent
+            running on my own machine. The point on stage: this isn't a demo account, this
+            is how I structure adhoc work today. Swap for the authentic screenshot if preferred.
           </aside>
         </section>
 
@@ -1222,19 +1344,29 @@
           <hr class="dim" />
           <ul>
             <li>Managed agents on the Gemini API (public preview): a single API call provisions a Linux sandbox where the agent reasons, runs code, manages files, and browses the web</li>
-            <li>Two on the menu: the <strong>Antigravity agent</strong> (general-purpose, configurable model, extend with your instructions, skills, and data) and <strong>Deep Research</strong></li>
-            <li>Ubuntu with Python 3.12 and Node 22 · environments spin down when idle, deleted after 7 days · up to 1,000 agents per account</li>
-            <li>Network allowlists per sandbox · credentials injected via an egress proxy, never exposed inside the box</li>
-            <li>A single interaction typically burns 100k to 3M tokens. Budget accordingly</li>
+            <li>Two on the menu: the <strong>Antigravity agent</strong> (general-purpose, configurable, extend with your instructions, skills, and data) and <strong>Deep Research</strong></li>
+            <li>Ubuntu with Python 3.12 and Node 22 · idle VMs spin down, environments deleted after 7 days · up to 1,000 agents per account</li>
           </ul>
-          <p style="margin-top:0.6em; font-size:0.65em; color:var(--muted)">
-            Framework on top of it, your pick: LangChain/LangGraph, LlamaIndex, CrewAI, Vercel AI SDK, Google ADK, or the Antigravity SDK.
-          </p>
           <aside class="notes">
             The arc closer: Era 5 was "the agent has a sandbox". 2026 is "the sandbox is a
             billable primitive with an SDK". Same infrastructure Jules stood on, now rentable
             by anyone in this room.
           </aside>
+        </section>
+
+        <!-- 34h2 · Managed agents · guardrails and the bill -->
+        <section>
+          <h3>managed agents · guardrails and the bill</h3>
+          <h2>Sandboxed, allowlisted, metered</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Outbound network is unrestricted by default · set the per-sandbox allowlist</li>
+            <li>Credentials injected via an egress proxy, never exposed inside the box · least privilege, short-lived tokens</li>
+            <li>A single interaction typically burns 100k to 3M tokens. Budget accordingly</li>
+          </ul>
+          <p style="margin-top:0.6em; font-size:0.65em; color:var(--muted)">
+            Framework on top of it, your pick: LangChain/LangGraph, LlamaIndex, CrewAI, Vercel AI SDK, Google ADK, or the Antigravity SDK.
+          </p>
         </section>
 
         <!-- 34i · ACP -->
