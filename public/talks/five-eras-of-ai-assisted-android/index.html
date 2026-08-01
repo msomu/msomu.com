@@ -1,0 +1,1015 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Five Eras of AI-Assisted Android Development · msomu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <style>
+      :root {
+        --orange: #f97316;
+        --orange-dim: #c2540a;
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --border: #262626;
+        --text: #e5e5e5;
+        --muted: #737373;
+        --green: #22c55e;
+        --red: #ef4444;
+      }
+
+      .reveal-viewport {
+        background: var(--bg);
+      }
+
+      .reveal {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        text-transform: none;
+        color: #fff;
+        text-shadow: none;
+      }
+
+      .reveal h1 { font-size: 2em; line-height: 1.1; }
+      .reveal h2 { font-size: 1.4em; line-height: 1.2; }
+      .reveal h3 { font-size: 0.95em; color: var(--orange); margin-bottom: 0.3em; }
+
+      .reveal p { color: var(--text); line-height: 1.6; }
+
+      .reveal ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .reveal ul li {
+        position: relative;
+        padding-left: 1.4em;
+        margin-bottom: 0.2em;
+        color: var(--text);
+        font-size: 0.72em;
+        line-height: 1.35;
+      }
+
+      .reveal ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--orange);
+      }
+
+      .reveal section {
+        text-align: left;
+      }
+
+      /* Title slide */
+      .slide-title {
+        text-align: center;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100% !important;
+        box-sizing: border-box;
+      }
+
+      .slide-title h1 {
+        font-size: 1.8em;
+        max-width: 24ch;
+        margin: 0 auto 0.4em;
+      }
+
+      .slide-title .orange { color: var(--orange); }
+
+      .slide-title .meta {
+        font-size: 0.6em;
+        color: var(--muted);
+        margin-top: 1em;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .slide-title .meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      /* Columns */
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1em;
+        align-items: start;
+      }
+
+      .cols-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.8em;
+        align-items: start;
+      }
+
+      /* Cards */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.8em 1em;
+      }
+
+      .card h3 { margin-bottom: 0.3em; font-size: 0.78em; }
+
+      /* Big stat */
+      .stat {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: var(--orange);
+        line-height: 1;
+        margin-bottom: 0.1em;
+      }
+
+      .stat-label {
+        font-size: 0.65em;
+        color: var(--muted);
+      }
+
+      /* Tag / badge */
+      .tag {
+        display: inline-block;
+        font-size: 0.55em;
+        font-weight: 600;
+        padding: 0.2em 0.7em;
+        border-radius: 99px;
+        background: var(--orange);
+        color: #000;
+        vertical-align: middle;
+        margin-left: 0.4em;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .tag.bad { background: var(--red); color: #fff; }
+      .tag.good { background: var(--green); color: #000; }
+
+      /* Divider */
+      hr.dim {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 0.5em 0;
+      }
+
+      /* Big quote */
+      blockquote.big {
+        border: none;
+        background: none;
+        padding: 0;
+        font-size: 1.05em;
+        font-style: italic;
+        color: #fff;
+        text-align: center;
+        line-height: 1.4;
+        box-shadow: none;
+      }
+
+      blockquote.big cite {
+        display: block;
+        font-size: 0.5em;
+        color: var(--muted);
+        margin-top: 0.8em;
+        font-style: normal;
+      }
+
+      /* Steps */
+      .steps {
+        counter-reset: step;
+      }
+      .steps li {
+        counter-increment: step;
+        padding-left: 2em;
+        font-size: 0.68em;
+        margin-bottom: 0.3em;
+        line-height: 1.3;
+      }
+      .steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        width: 1.4em;
+        height: 1.4em;
+        background: var(--orange);
+        color: #000;
+        border-radius: 50%;
+        font-size: 0.9em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0.05em;
+      }
+
+      /* Footer on every slide */
+      .reveal footer {
+        position: fixed;
+        bottom: 1.2em;
+        right: 1.4em;
+        font-size: 0.45em;
+        color: var(--muted);
+        font-weight: 500;
+        z-index: 100;
+      }
+
+      .reveal .slides section { padding: 0.8em 1.5em; }
+
+      /* Section header slides */
+      .section-header {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+      }
+
+      .section-header .number {
+        font-size: 3.5em;
+        font-weight: 700;
+        color: var(--border);
+        line-height: 1;
+        margin-bottom: 0.1em;
+      }
+
+      .section-header h2 {
+        color: var(--orange);
+        font-size: 1.2em;
+      }
+
+      .section-header .sub {
+        font-size: 0.6em;
+        color: var(--muted);
+        margin-top: 0.6em;
+        font-style: italic;
+      }
+
+      /* ===== The unit-of-work tracker · the recurring device ===== */
+      .unit-track {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35em;
+        margin: 1.2em auto 0;
+        flex-wrap: wrap;
+      }
+
+      .unit-track .unit {
+        font-size: 0.5em;
+        font-weight: 600;
+        padding: 0.35em 0.9em;
+        border-radius: 99px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        background: var(--surface);
+        letter-spacing: 0.02em;
+      }
+
+      .unit-track .unit.done {
+        border-color: var(--orange-dim);
+        color: var(--orange-dim);
+      }
+
+      .unit-track .unit.now {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: #000;
+        transform: scale(1.12);
+      }
+
+      .unit-track .arrow {
+        color: var(--border);
+        font-size: 0.5em;
+      }
+
+      /* Timeline rows for the recap */
+      .arc-row {
+        display: grid;
+        grid-template-columns: 5.5em 1fr 8.5em;
+        gap: 0.8em;
+        align-items: center;
+        padding: 0.45em 0.8em;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+        margin-bottom: 0.4em;
+      }
+
+      .arc-row .unit-name {
+        font-size: 0.6em;
+        font-weight: 700;
+        color: var(--orange);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .arc-row .era-name { font-size: 0.62em; color: var(--text); }
+      .arc-row .era-when { font-size: 0.55em; color: var(--muted); text-align: right; }
+
+      /* Terminal mock for the loop demo */
+      .term {
+        background: #000;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0.8em 1em;
+        font-family: "SF Mono", ui-monospace, Menlo, monospace;
+        font-size: 0.5em;
+        line-height: 1.7;
+        color: var(--text);
+      }
+
+      .term .p { color: var(--orange); }
+      .term .ok { color: var(--green); }
+      .term .err { color: var(--red); }
+      .term .dim { color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <footer>msomu · GDG Chennai · I/O Connect · Aug 2026</footer>
+      <div class="slides">
+
+        <!-- 01 · Title -->
+        <section class="slide-title">
+          <h1>The <span class="orange">Five Eras</span> of AI-Assisted Android Development</h1>
+          <div class="unit-track">
+            <span class="unit">keystroke</span><span class="arrow">→</span>
+            <span class="unit">function</span><span class="arrow">→</span>
+            <span class="unit">task</span><span class="arrow">→</span>
+            <span class="unit">goal</span><span class="arrow">→</span>
+            <span class="unit">ticket</span>
+          </div>
+          <p class="meta">
+            <strong>Somasundaram Mahesh</strong><br />
+            GDG Chennai · I/O Connect · August 1, 2026
+          </p>
+        </section>
+
+        <!-- 02 · Who am I -->
+        <section>
+          <h3>who's talking?</h3>
+          <h2>Somasundaram Mahesh</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Android Engineer · building mobile products for 8+ years</li>
+            <li>Currently building mobile experiences at JioHotstar</li>
+            <li>Shipped products used by millions, learned most of this the hard way</li>
+            <li><strong style="color:var(--orange)">@msomuin</strong> on X · msomu.com</li>
+          </ul>
+        </section>
+
+        <!-- 03 · Cold open -->
+        <section style="text-align:center; display:flex !important; flex-direction:column; align-items:center; justify-content:center; height:100% !important;">
+          <blockquote class="big">
+            "Ten years ago my most-used feature in the IDE was <span style="color:var(--orange)">Ctrl+Space</span>.<br /><br />
+            Last night I closed my laptop, and a machine finished my ticket and opened a pull request while I had dinner."
+            <cite>How did we get from one to the other? Five acts.</cite>
+          </blockquote>
+          <aside class="notes">
+            Cold open. Pause after Ctrl+Space, let the room nod. Then the dinner line.
+            Set context: this is I/O Connect, Google just spent I/O 2026 declaring the
+            "agentic era". This talk ends exactly where the audience is standing today.
+          </aside>
+        </section>
+
+        <!-- 04 · The one number to watch -->
+        <section>
+          <h3>watch one number the whole talk</h3>
+          <h2>The unit of work the AI handles</h2>
+          <hr class="dim" />
+          <div class="unit-track" style="margin-top:1.6em">
+            <span class="unit now">keystroke</span><span class="arrow">→</span>
+            <span class="unit">function</span><span class="arrow">→</span>
+            <span class="unit">task</span><span class="arrow">→</span>
+            <span class="unit">goal</span><span class="arrow">→</span>
+            <span class="unit">ticket</span>
+          </div>
+          <p style="margin-top:1.4em; font-size:0.72em; color:var(--muted); text-align:center">
+            It only ever gets bigger. Every era transition in this talk is this bar moving one step right.<br />
+            One honesty note up front: the eras overlap in reality. Autocomplete still lives inside agents.<br />
+            They're a narrative device, not sharp boundaries.
+          </p>
+          <aside class="notes">
+            This is the spine for the 75% of the room that doesn't write Android.
+            Call back to this bar at every single transition. The overlap disclaimer
+            buys trust with the pedants, say it once and move on.
+          </aside>
+        </section>
+
+        <!-- 05 · Era 1 header -->
+        <section class="section-header">
+          <div class="number">01</div>
+          <h2>The Autocomplete Era</h2>
+          <p class="sub">"help me type" · ~2001 to 2021</p>
+          <div class="unit-track">
+            <span class="unit now">keystroke</span><span class="arrow">→</span>
+            <span class="unit">function</span><span class="arrow">→</span>
+            <span class="unit">task</span><span class="arrow">→</span>
+            <span class="unit">goal</span><span class="arrow">→</span>
+            <span class="unit">ticket</span>
+          </div>
+        </section>
+
+        <!-- 06 · Era 1 · the baseline -->
+        <section>
+          <h3>era 1 · the baseline everyone knows</h3>
+          <h2>Deterministic IntelliSense</h2>
+          <hr class="dim" />
+          <ul>
+            <li>IntelliJ IDEA under Android Studio: prefix matching, symbol resolution, auto-imports</li>
+            <li>Getter/setter generation, override stubs, live templates</li>
+            <li>Not intelligence. A lookup table with good manners</li>
+          </ul>
+          <p style="font-size:0.72em; color:var(--orange); margin-top:0.8em">The Android pain it eased:</p>
+          <ul>
+            <li>The sheer ceremony of Java/Kotlin Android: <code style="color:var(--orange)">findViewById</code>, lifecycle overrides, verbose anonymous listeners, import management</li>
+          </ul>
+          <aside class="notes">
+            Demo/screenshot beat: old-school getter/setter generation or a
+            System.out.println completion. Everyone in the room has muscle memory for this.
+          </aside>
+        </section>
+
+        <!-- 07 · Era 1 · the ML inflection -->
+        <section>
+          <h3>era 1.5 · the inflection</h3>
+          <h2>From ranking tokens to writing thoughts</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>~2018-2020:</strong> ML-ranked completions. JetBrains and Google both shipped experiments (the Dart/Flutter "ML completion" flag in Android Studio, circa 2020)</li>
+            <li><strong>2021:</strong> GitHub Copilot technical preview, powered by OpenAI Codex</li>
+            <li>Ghost text that completes whole lines and function bodies from a comment</li>
+            <li>The mass-market moment autocomplete became <em>generative</em></li>
+          </ul>
+          <p style="margin-top:0.8em; font-size:0.72em; color:var(--muted)">
+            The visual jump from "completing a word" to "completing a thought" is the whole Era 1 → 2 story.
+          </p>
+          <aside class="notes">
+            Demo beat: flip from the getter/setter screenshot to a 2021-era Copilot
+            ghost-text completing an entire function from a comment. Side by side sells it instantly.
+          </aside>
+        </section>
+
+        <!-- 08 · Era 1 stat -->
+        <section>
+          <h3>did it actually help?</h3>
+          <h2>The controlled study says yes</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:0.8em">
+            <div class="card">
+              <div class="stat">55.8%</div>
+              <div class="stat-label">faster task completion with Copilot (GitHub Next / Microsoft Research, Kalliamvakou et al.)</div>
+            </div>
+            <div class="card">
+              <div class="stat">1h 11m</div>
+              <div class="stat-label">vs 2h 41m without · P=.0017, 95% CI [21%, 89%]</div>
+            </div>
+          </div>
+          <p style="margin-top:1em; font-size:0.65em; color:var(--muted)">
+            Honest caveat: one well-defined JavaScript task, ~95 developers, study by the tool's maker.
+            Directionally true, corroborated broadly. Not a universal constant.
+          </p>
+          <aside class="notes">
+            Pair every hype stat with its caveat, this is the credibility pattern for the
+            whole talk. A senior audience rewards it.
+          </aside>
+        </section>
+
+        <!-- 09 · Transition 1→2 -->
+        <section class="section-header">
+          <blockquote class="big" style="font-size:0.95em">
+            "Autocomplete finished your line.<br />But you still had to know what line to write.<br /><br />
+            Next: the machine writes the whole function.<br />You just describe it."
+          </blockquote>
+          <div class="unit-track">
+            <span class="unit done">keystroke</span><span class="arrow">→</span>
+            <span class="unit now">function</span><span class="arrow">→</span>
+            <span class="unit">task</span><span class="arrow">→</span>
+            <span class="unit">goal</span><span class="arrow">→</span>
+            <span class="unit">ticket</span>
+          </div>
+        </section>
+
+        <!-- 10 · Era 2 header -->
+        <section class="section-header">
+          <div class="number">02</div>
+          <h2>Describe It, I'll Write It</h2>
+          <p class="sub">LLMs writing functions & blocks · 2021 to 2024</p>
+        </section>
+
+        <!-- 11 · Era 2 · conversation arrives -->
+        <section>
+          <h3>era 2 · the conversation arrives</h3>
+          <h2>English in, code out</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>Nov 2022:</strong> ChatGPT makes "describe a function, get code back" mainstream. But you leave the IDE and copy-paste</li>
+            <li>Copilot Chat brings the conversation into the editor</li>
+            <li><strong>May 10, 2023 · Google I/O:</strong> <span style="color:var(--orange)">Studio Bot</span> lands in Android Studio Hedgehog (Canary), powered by Codey, Google's coding model descended from PaLM 2</li>
+            <li>US-only at launch → 170+ countries by September 2023</li>
+            <li>Generate code, explain errors, answer Android questions without leaving the IDE</li>
+          </ul>
+        </section>
+
+        <!-- 12 · Era 2 · Gemini era -->
+        <section>
+          <h3>era 2 · the upgrade cycle</h3>
+          <h2>Studio Bot grows up</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>April 2024:</strong> renamed "Gemini in Android Studio" (Jellyfish), upgraded to Gemini 1.0 Pro, 180+ countries, multimodal starter template</li>
+            <li>Stable in Jellyfish across 200+ countries in 2024</li>
+            <li><strong>May 2024:</strong> improved AI code completion with Gemini 1.5 models</li>
+          </ul>
+          <div class="cols" style="margin-top:0.7em">
+            <div class="card">
+              <div class="stat">2×</div>
+              <div class="stat-label">jump in Google's internal developer-productivity metric</div>
+            </div>
+            <div class="card">
+              <div class="stat">+40%</div>
+              <div class="stat-label">relative increase in suggestion acceptance rate since launch</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 13 · Era 2 · boilerplate killer -->
+        <section>
+          <h3>era 2 · what it solved for android</h3>
+          <h2>The boilerplate killer</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Generate a <code style="color:var(--orange)">ViewModel</code>, a <code style="color:var(--orange)">@Composable</code> from a description, Room DAOs, data classes</li>
+            <li>RecyclerView adapters and repetitive unit tests on demand</li>
+            <li>Convert XML layouts to Compose. Every Android dev in this room feels that one</li>
+          </ul>
+          <div class="card" style="margin-top:0.8em">
+            <h3>for the non-android folks</h3>
+            <p style="font-size:0.62em">
+              A Composable ≈ a React component. A ViewModel ≈ your state holder/controller.
+              Gradle ≈ npm/webpack, but slower and angrier. That's all the translation you need.
+            </p>
+          </div>
+          <aside class="notes">
+            Demo beat: prompt "write a Composable that shows a list of users with an avatar
+            and name", show the working LazyColumn. Or the XML → Compose conversion.
+            Say each analogy exactly once, it buys the whole room.
+          </aside>
+        </section>
+
+        <!-- 14 · Transition 2→3 -->
+        <section class="section-header">
+          <blockquote class="big" style="font-size:0.95em">
+            "Now the AI could write a function.<br />
+            But it couldn't press <span style="color:var(--orange)">Run</span>.<br /><br />
+            It couldn't see the red squiggle, run the build, read the stack trace.<br />
+            It wrote code blind. The next era gave it hands."
+          </blockquote>
+          <div class="unit-track">
+            <span class="unit done">keystroke</span><span class="arrow">→</span>
+            <span class="unit done">function</span><span class="arrow">→</span>
+            <span class="unit now">task</span><span class="arrow">→</span>
+            <span class="unit">goal</span><span class="arrow">→</span>
+            <span class="unit">ticket</span>
+          </div>
+        </section>
+
+        <!-- 15 · Era 3 header -->
+        <section class="section-header">
+          <div class="number">03</div>
+          <h2>Agents That Press Buttons</h2>
+          <p class="sub">tool-using agents · 2024 to 2025</p>
+        </section>
+
+        <!-- 16 · Era 3 · Devin reframes -->
+        <section>
+          <h3>era 3 · the framing shift</h3>
+          <h2>"Do the task", not "help me type"</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>March 12, 2024:</strong> Cognition launches Devin, "the first AI software engineer". Shell + editor + browser, plans and executes multi-step tasks</li>
+            <li>Launch claim: resolves <strong style="color:var(--orange)">13.86%</strong> of SWE-bench issues end-to-end vs the prior unassisted 1.96%</li>
+            <li>Honest note: the demos were later criticised as cherry-picked. But the framing stuck and reoriented the whole industry</li>
+            <li>GitHub's Copilot Workspace pushed the same idea into the GitHub-native flow</li>
+          </ul>
+        </section>
+
+        <!-- 17 · Era 3 · Agent Mode + Journeys -->
+        <section>
+          <h3>era 3 · the android milestone</h3>
+          <h2>Agent Mode + Journeys <span class="tag">I/O · May 20, 2025</span></h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:0.5em">
+            <div class="card">
+              <h3>Journeys</h3>
+              <ul>
+                <li>Describe a user journey and assertions in natural language</li>
+                <li>The model executes the test on real or virtual devices, results in the IDE</li>
+                <li>Directly attacks flaky, expensive UI testing. No hand-written Espresso boilerplate</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Agent Mode</h3>
+              <ul>
+                <li>"Extract all hardcoded strings to strings.xml". "Implement this screen from a screenshot"</li>
+                <li>Multi-file plan, reads/modifies code, builds, iteratively fixes, under your review</li>
+                <li>Stable in Narwhal Feature Drop, July 2025 · paid tiers get 1M-token context</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 18 · Era 3 · Version Upgrade Agent -->
+        <section>
+          <h3>era 3 · the most relatable agent alive</h3>
+          <h2>The Version Upgrade Agent</h2>
+          <hr class="dim" />
+          <ul class="steps" style="margin-top:0.5em">
+            <li>Analyzes your project, parses release notes</li>
+            <li>Updates <code style="color:var(--orange)">libs.versions.toml</code> dependencies</li>
+            <li>Builds. Hits errors. Fixes them</li>
+            <li>Repeats until green, then writes you a report</li>
+          </ul>
+          <p style="margin-top:1em; font-size:0.72em; color:var(--muted)">
+            Dependency-upgrade hell is the chore every Android team defers for months.
+            Watching a machine grind through it is the biggest empathy moment in this talk.
+          </p>
+          <aside class="notes">
+            Demo beat: pre-recorded capture of the upgrade loop, or Agent Mode migrating
+            hardcoded strings across files. Unglamorous chores get the loudest reactions.
+          </aside>
+        </section>
+
+        <!-- 19 · Transition 3→4 -->
+        <section class="section-header">
+          <blockquote class="big" style="font-size:0.95em">
+            "An agent that can build and fix once is useful.<br /><br />
+            But real work isn't one step. It's try, fail, read the error, try again,
+            until it's <span style="color:var(--orange)">actually done</span>.<br /><br />
+            The next era let the agent loop."
+          </blockquote>
+          <div class="unit-track">
+            <span class="unit done">keystroke</span><span class="arrow">→</span>
+            <span class="unit done">function</span><span class="arrow">→</span>
+            <span class="unit done">task</span><span class="arrow">→</span>
+            <span class="unit now">goal</span><span class="arrow">→</span>
+            <span class="unit">ticket</span>
+          </div>
+        </section>
+
+        <!-- 20 · Era 4 header -->
+        <section class="section-header">
+          <div class="number">04</div>
+          <h2>Loops Until Green</h2>
+          <p class="sub">goal-seeking agents · 2025</p>
+        </section>
+
+        <!-- 21 · Era 4 · why loops matter on Android -->
+        <section>
+          <h3>era 4 · why loops matter here more than anywhere</h3>
+          <h2>The Android inner loop is slow</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Gradle sync → compile → lint → unit tests → instrumented/UI tests on an emulator</li>
+            <li>Every stage can fail, and every retry costs minutes</li>
+            <li>An agent that runs <code style="color:var(--orange)">./gradlew build</code>, reads the failure, patches, and re-runs is doing exactly the cycle that eats our days</li>
+          </ul>
+          <p style="margin-top:0.8em; font-size:0.72em; color:var(--muted)">
+            For the web folks: instrumented tests ≈ Selenium for phones. Now imagine the browser takes 90 seconds to start.
+          </p>
+        </section>
+
+        <!-- 22 · Era 4 · the loop tools -->
+        <section>
+          <h3>era 4 · 2025, the year of the loop</h3>
+          <h2>Terminal-native, ReAct-style agents</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>Feb 24, 2025:</strong> Claude Code research preview (GA ~May). Terminal-native, reads your filesystem, runs your tests, sees failures, iterates</li>
+            <li><strong>May 2025:</strong> OpenAI relaunches Codex as a cloud/async agent that plans, executes, tests, proposes PRs</li>
+            <li><strong>June 25, 2025:</strong> Gemini CLI. Open-source (Apache 2.0), reason-and-act loop, built-in tools and MCP servers</li>
+            <li>Free tier: 1M-token context, 60 requests/min, 1,000/day. You can try this tonight</li>
+            <li>Android Studio's Agent Mode is itself a loop: "iteratively fixes bugs to reach the goal"</li>
+          </ul>
+        </section>
+
+        <!-- 23 · Era 4 · the loop is the demo -->
+        <section>
+          <h3>era 4 · the demo is the scrolling itself</h3>
+          <h2>"The app crashes on launch. Find it and fix it."</h2>
+          <hr class="dim" />
+          <div class="term" style="margin-top:0.6em">
+            <div><span class="p">▶</span> ./gradlew installDebug && adb shell am start .MainActivity</div>
+            <div><span class="err">✗ FATAL EXCEPTION: java.lang.NullPointerException at ProfileRepository.kt:42</span></div>
+            <div><span class="dim">reading stack trace · opening ProfileRepository.kt · found unsafe cast on cached user</span></div>
+            <div><span class="p">▶</span> editing ProfileRepository.kt · adding null guard + fallback fetch</div>
+            <div><span class="p">▶</span> ./gradlew testDebugUnitTest</div>
+            <div><span class="err">✗ 1 test failed: ProfileRepositoryTest.returnsCachedUser</span></div>
+            <div><span class="dim">test asserted old behaviour · updating expectation to match fix</span></div>
+            <div><span class="p">▶</span> ./gradlew testDebugUnitTest && ./gradlew installDebug</div>
+            <div><span class="ok">✓ 47 tests passed · app launches clean</span></div>
+          </div>
+          <aside class="notes">
+            Run this live in Gemini CLI or Claude Code if the network gods allow,
+            otherwise play the recording. The audience watches run → read → edit →
+            rebuild → pass. Do not narrate every line, let it scroll.
+          </aside>
+        </section>
+
+        <!-- 24 · Era 4 · reality check -->
+        <section>
+          <h3>era 4 · reality check</h3>
+          <h2>Loops make diffs bigger</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:0.8em">
+            <div class="card">
+              <div class="stat" style="color:var(--red)">−1.5%</div>
+              <div class="stat-label">delivery throughput per 25% increase in AI adoption · DORA 2024</div>
+            </div>
+            <div class="card">
+              <div class="stat" style="color:var(--red)">−7.2%</div>
+              <div class="stat-label">delivery stability per 25% increase in AI adoption · DORA 2024</div>
+            </div>
+          </div>
+          <p style="margin-top:1em; font-size:0.72em; color:var(--muted)">
+            Individually faster, collectively wobblier: bigger AI-generated changelists are harder to review and ship safely.
+            Which is exactly why the next era's "sandbox + PR for review" model matters.
+          </p>
+        </section>
+
+        <!-- 25 · Transition 4→5 -->
+        <section class="section-header">
+          <blockquote class="big" style="font-size:0.9em">
+            "So the agent can loop until it's done.<br /><br />
+            But do you want it looping <em>on your machine</em>, editing your files,
+            hogging your build, while you're trying to work?<br /><br />
+            What if you could hand it a ticket, send it away to its own sandbox,
+            and just review the pull request it brings back?"
+          </blockquote>
+          <div class="unit-track">
+            <span class="unit done">keystroke</span><span class="arrow">→</span>
+            <span class="unit done">function</span><span class="arrow">→</span>
+            <span class="unit done">task</span><span class="arrow">→</span>
+            <span class="unit done">goal</span><span class="arrow">→</span>
+            <span class="unit now">ticket</span>
+          </div>
+        </section>
+
+        <!-- 26 · Era 5 header -->
+        <section class="section-header">
+          <div class="number">05</div>
+          <h2>Here's Your PR</h2>
+          <p class="sub">sandboxed task agents · 2025 to 2026</p>
+        </section>
+
+        <!-- 27 · Era 5 · the model -->
+        <section>
+          <h3>era 5 · the shape of it</h3>
+          <h2>Task-scoped. Ephemeral. Isolated.</h2>
+          <hr class="dim" />
+          <ul class="steps" style="margin-top:0.5em">
+            <li>You describe a task and assign it</li>
+            <li>The agent clones your repo into an isolated cloud VM</li>
+            <li>It plans, edits across files, runs tests</li>
+            <li>It returns a pull request for human review</li>
+          </ul>
+          <p style="margin-top:0.8em; font-size:0.72em; color:var(--muted)">
+            Asynchronous by design. Assign it, close the laptop, review later.
+            OpenAI's Codex cloud and Devin run the same play: isolated container, preloaded repo, diff back.
+          </p>
+        </section>
+
+        <!-- 28 · Era 5 · Jules -->
+        <section>
+          <h3>era 5 · google's sandbox worker</h3>
+          <h2>Jules <span class="tag good">GA · Aug 6, 2025</span></h2>
+          <hr class="dim" />
+          <ul>
+            <li>Announced Dec 2024 · public beta at I/O May 20, 2025 · GA August 6, 2025</li>
+            <li>Clones your GitHub repo into a secure Google Cloud VM, writes a plan, executes multi-file changes, runs tests, opens a PR</li>
+            <li>User-steerable plans, audio changelogs · Jules Tools CLI + public API later in 2025</li>
+            <li>Positioned as a background worker for the backlog: "fix that flaky test, update that deprecated dependency"</li>
+          </ul>
+          <aside class="notes">
+            Demo beat and emotional peak of the talk: assign "bump all dependencies and
+            fix breakages" in the Jules web UI, then cut to the returned PR diff and plan.
+            The reveal line: "I did nothing, and got a reviewable PR."
+          </aside>
+        </section>
+
+        <!-- 29 · Era 5 · the Android sandbox story -->
+        <section>
+          <h3>era 5 · the android sandbox story</h3>
+          <h2>The whole IDE moves into the box</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>Firebase Studio</strong> (preview April 9, 2025): agentic cloud workspace, in-browser Android/iOS emulators, prompt-to-app prototyping</li>
+            <li><strong>Android Studio Cloud</strong> (I/O May 20, 2025): streams a Linux VM running Android Studio to your browser, emulator included, no local install</li>
+            <li>Honest caveat: both are being wound down (Android Studio Cloud preview support ends March 22, 2027). Milestones in the arc, not tools to adopt today</li>
+            <li><strong>Gradle Managed Devices</strong> (Dolphin/AGP 7.3, Sept 2022): Gradle creates, deploys, and tears down test devices; ATDs run headless with no GPU</li>
+          </ul>
+          <p style="margin-top:0.6em; font-size:0.68em; color:var(--muted)">
+            Gradle Managed Devices is the CI-native sandbox primitive. Agents doing Android UI testing in the cloud stand on exactly this infrastructure.
+          </p>
+        </section>
+
+        <!-- 30 · The full arc recap -->
+        <section>
+          <h3>four years, five eras</h3>
+          <h2>The arc in one slide</h2>
+          <hr class="dim" />
+          <div style="margin-top:0.6em">
+            <div class="arc-row">
+              <span class="unit-name">keystroke</span>
+              <span class="era-name">IntelliSense → ML completion → Copilot ghost text</span>
+              <span class="era-when">~2001 → 2021</span>
+            </div>
+            <div class="arc-row">
+              <span class="unit-name">function</span>
+              <span class="era-name">ChatGPT → Studio Bot → Gemini in Android Studio</span>
+              <span class="era-when">2021 → 2024</span>
+            </div>
+            <div class="arc-row">
+              <span class="unit-name">task</span>
+              <span class="era-name">Devin → Agent Mode · Journeys · Version Upgrade Agent</span>
+              <span class="era-when">2024 → 2025</span>
+            </div>
+            <div class="arc-row">
+              <span class="unit-name">goal</span>
+              <span class="era-name">Claude Code · Codex · Gemini CLI, looping until green</span>
+              <span class="era-when">2025</span>
+            </div>
+            <div class="arc-row">
+              <span class="unit-name">ticket</span>
+              <span class="era-name">Jules · Codex cloud · sandboxes that return PRs</span>
+              <span class="era-when">2025 → 2026</span>
+            </div>
+          </div>
+          <aside class="notes">
+            Say it out loud: "Keystroke. Function. Task. Goal. Ticket. In four years the
+            unit of work went from a word I typed to a pull request I review."
+            Then pivot: so where does I/O 2026 say this goes next?
+          </aside>
+        </section>
+
+        <!-- 31 · Where it's heading header -->
+        <section class="section-header">
+          <div class="number">↗</div>
+          <h2>Where It's Heading</h2>
+          <p class="sub">grounded in I/O 2026, not hand-waving</p>
+        </section>
+
+        <!-- 32 · I/O 2026 · agentic stack -->
+        <section>
+          <h3>i/o 2026 · "from AI-assisted to agentic"</h3>
+          <h2>The Android Studio (Quail) agentic stack</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>Agent Skills:</strong> modular instruction sets grounding the agent in Android best practices. XML→Compose migration, edge-to-edge, Navigation 3, even Android XR · official skills at github.com/android/skills</li>
+            <li><strong>Parallel agent conversations:</strong> tests running in one thread, feature planning in another, docs in a third</li>
+            <li><strong>New Project Agent:</strong> autonomous generation loop that self-corrects build errors and scaffolds full-stack apps (Firebase Auth/Firestore via skills)</li>
+            <li><strong>Bring your own model:</strong> Gemini, GPT, Claude, or local Gemma for agentic assistance · Gemma for on-device, offline code assist</li>
+          </ul>
+        </section>
+
+        <!-- 33 · I/O 2026 · beyond the IDE -->
+        <section>
+          <h3>i/o 2026 · beyond the IDE</h3>
+          <h2>Android becomes agent infrastructure</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>Android CLI:</strong> build Android apps with any agent, LLM, or tool, grounded by an Android Knowledge Base and skills. Google Antigravity (the agent-first IDE, Nov 2025) supports Android through it</li>
+            <li><strong>MCP in Android Studio:</strong> Agent Mode connects to external tools via Model Context Protocol. A GitHub MCP server opens PRs from the IDE, a Figma server brings design context</li>
+            <li><strong>Android Bench:</strong> a live leaderboard for how well LLMs handle real Android tasks, curated from public repos, verified with unit and instrumented tests. "Which model is best at Android" is now a first-class question</li>
+            <li><strong>Google AI Studio:</strong> prompt → production-quality Kotlin + Compose, in-browser emulator preview, install via ADB, publish to Play internal testing</li>
+            <li><strong>Fix with AI:</strong> App Quality Insights reads a production crash plus your source and proposes the fix. Autonomous maintenance in miniature</li>
+          </ul>
+          <aside class="notes">
+            Android Bench standings reshuffle with every model release. Cite it as
+            "a live leaderboard", never quote a specific score unless re-verified this week.
+            Forward-looking bets, clearly labeled as speculation: agents watching
+            Crashlytics and opening fix PRs, Journeys-style testing as default, the
+            developer role consolidating around architecture, specification, review.
+          </aside>
+        </section>
+
+        <!-- 34 · Closing · optimistic truth -->
+        <section>
+          <h3>the closing argument · part 1</h3>
+          <h2>The optimistic truth</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:0.6em">
+            <div class="card">
+              <div class="stat">>30%</div>
+              <div class="stat-label">of new code at Google is AI-generated, then reviewed and accepted by engineers (Pichai: >25% on the Q3 2024 call, >30% by early 2025)</div>
+            </div>
+            <div class="card">
+              <div class="stat">90%</div>
+              <div class="stat-label">AI adoption among developers, up 14% year over year · median two hours daily · DORA 2025</div>
+            </div>
+          </div>
+          <p style="margin-top:0.8em; font-size:0.68em; color:var(--muted)">
+            Over 80% of DORA respondents believe AI has increased their productivity.
+            Fine print: "code" on an earnings call is a fuzzy unit. Directionally true, not precise.
+          </p>
+        </section>
+
+        <!-- 35 · Closing · honest caveat -->
+        <section>
+          <h3>the closing argument · part 2</h3>
+          <h2>The honest caveat</h2>
+          <hr class="dim" />
+          <blockquote class="big" style="font-size:0.8em; text-align:left; font-style:italic; margin:0.6em 0">
+            "It magnifies the strengths of high-performing organisations and the dysfunctions of struggling ones."
+            <cite style="text-align:left">DORA 2025 · AI is an amplifier, not a fixer</cite>
+          </blockquote>
+          <div class="cols" style="margin-top:0.6em">
+            <div class="card">
+              <div class="stat" style="color:var(--red)">30%</div>
+              <div class="stat-label">of developers report little or no trust in AI-generated code · DORA 2025</div>
+            </div>
+            <div class="card">
+              <div class="stat" style="color:var(--red)">~3%</div>
+              <div class="stat-label">report "high trust" in AI output · Stack Overflow 2025 survey</div>
+            </div>
+          </div>
+          <p style="margin-top:0.7em; font-size:0.68em; color:var(--muted)">
+            Near-universal use, minimal trust. Bigger AI diffs hurt delivery stability
+            when review and CI discipline don't keep up. The tooling grew, our job is making the discipline grow with it.
+          </p>
+        </section>
+
+        <!-- 36 · The synthesis -->
+        <section style="text-align:center; display:flex !important; flex-direction:column; align-items:center; justify-content:center; height:100% !important;">
+          <blockquote class="big">
+            "The autocomplete finished your line.<br />
+            The agent finishes your ticket.<br />
+            <span style="color:var(--orange)">You finish the thinking.</span>"
+          </blockquote>
+          <div class="unit-track" style="margin-top:1.5em">
+            <span class="unit done">keystroke</span><span class="arrow">→</span>
+            <span class="unit done">function</span><span class="arrow">→</span>
+            <span class="unit done">task</span><span class="arrow">→</span>
+            <span class="unit done">goal</span><span class="arrow">→</span>
+            <span class="unit done">ticket</span>
+          </div>
+          <aside class="notes">
+            Full landing: the unit of work grew from a keystroke to a pull request.
+            That doesn't make us obsolete, it changes the job. We move from the person
+            who writes every line to the person who decides what gets built, sets the
+            guardrails, and is accountable for what ships.
+          </aside>
+        </section>
+
+        <!-- 37 · Closing -->
+        <section class="slide-title">
+          <h1>Set the goal.<br /><span class="orange">Review what ships.</span></h1>
+          <hr class="dim" style="margin:1.5em auto; max-width:12em;" />
+          <p class="meta" style="margin-top:1em">
+            <strong>Somasundaram Mahesh</strong><br />
+            msomu.com · @msomuin<br /><br />
+            Slides: msomu.com/talks
+          </p>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        controls: true,
+        progress: true,
+        center: false,
+        width: 1100,
+        height: 700,
+        margin: 0.06,
+        plugins: [RevealNotes],
+      });
+    </script>
+  </body>
+</html>
