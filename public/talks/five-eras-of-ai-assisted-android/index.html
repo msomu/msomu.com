@@ -407,6 +407,46 @@
       }
 
       .stack-row .players { font-size: 0.6em; color: var(--text); }
+
+      /* LinkedIn-style post card · swap for the authentic screenshot if preferred */
+      .li-card {
+        background: #ffffff;
+        color: #1a1a1a;
+        border-radius: 12px;
+        padding: 1em 1.2em;
+        max-width: 30em;
+        margin: 0 auto;
+        font-size: 0.52em;
+        line-height: 1.55;
+        text-align: left;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+      }
+
+      .li-card .li-head {
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+        margin-bottom: 0.8em;
+      }
+
+      .li-card .li-avatar {
+        width: 2.6em;
+        height: 2.6em;
+        border-radius: 50%;
+        background: var(--orange);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .li-card .li-name { font-weight: 700; color: #111; }
+      .li-card .li-sub { color: #666; font-size: 0.85em; }
+      .li-card p { color: #1a1a1a; margin: 0 0 0.7em; line-height: 1.55; }
+      .li-card .li-link { color: #0a66c2; font-weight: 600; }
+      .li-card .li-foot { color: #666; font-size: 0.85em; margin-top: 0.4em; }
     </style>
   </head>
   <body>
@@ -454,6 +494,33 @@
             Cold open. Pause after Ctrl+Space, let the room nod. Then the dinner line.
             Set context: this is I/O Connect, Google just spent I/O 2026 declaring the
             "agentic era". This talk ends exactly where the audience is standing today.
+          </aside>
+        </section>
+
+        <!-- 03b · Receipts · the dinner story is real -->
+        <section>
+          <h3>receipts · this actually happened</h3>
+          <div class="li-card" style="margin-top:0.5em">
+            <div class="li-head">
+              <div class="li-avatar">SM</div>
+              <div>
+                <div class="li-name">Somasundaram Mahesh</div>
+                <div class="li-sub">Founding AI Engineer | Co-founder at UnitedBy.AI | Organiser at GDG · 1w</div>
+              </div>
+            </div>
+            <p>Bought a domain in the morning. Explained the idea to Claude Code, hit go, and went out for a 5k run.</p>
+            <p>An hour later, back home and sweaty, opened the laptop expecting to debug something.</p>
+            <p>The site was live. On the actual domain. Working pages, a list of games, booking that worked. The only thing left for me was the boring stuff. Payment keys, a few small fixes.</p>
+            <p>The gap used to be between having an idea and having something a person can open in a browser. That gap used to take weekends. This one took a run.</p>
+            <p class="li-link">theroamingking.com</p>
+            <div class="li-foot">👍 30 · comments · reposts</div>
+          </div>
+          <aside class="notes">
+            The proof for the cold open, my own post from last week. Board-game library
+            for our apartment community: described it to an agent, went for a 5k run,
+            came back to a live site on the real domain. The talk's whole arc, lived.
+            This card is an HTML recreation, swap in the authentic LinkedIn screenshot
+            (drop it in this folder and replace the card with an img tag) if preferred.
           </aside>
         </section>
 
