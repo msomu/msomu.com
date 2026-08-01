@@ -1212,6 +1212,32 @@
           </p>
         </section>
 
+        <!-- 34c2 · KotlinLLM research -->
+        <section>
+          <h3>research corner · jetbrains research</h3>
+          <h2>KotlinLLM · the model inside the language</h2>
+          <hr class="dim" />
+          <ul>
+            <li>"Smart macros" in ordinary Kotlin: <code style="color:var(--orange)">asLlm&lt;F, T&gt;()</code> converts between types, <code style="color:var(--orange)">mockLlm&lt;T&gt;()</code> implements an interface</li>
+            <li>The model writes the implementation once, persisted as plain Kotlin source you can read, review, and ship</li>
+            <li>Hits an unsupported case at runtime? It captures the values, regenerates, and hot-reloads without a restart</li>
+          </ul>
+          <div class="term" style="margin-top:0.6em">
+            <div><span class="dim">// github.com/JetBrains-Research/kotlinllm-plugin</span></div>
+            <div>val dto: UserDto = api.fetch()</div>
+            <div>val entity = dto.<span class="p">asLlm</span>&lt;UserDto, UserEntity&gt;()  <span class="dim">// generated mapper, checked into source</span></div>
+            <div>val repo = <span class="p">mockLlm</span>&lt;UserRepository&gt;()        <span class="dim">// interface implemented by the model</span></div>
+          </div>
+          <p style="margin-top:0.6em; font-size:0.65em; color:var(--muted)">
+            Experimental research prototype, not a product. But note the direction: every era so far put the model beside your code. This puts it inside the language.
+          </p>
+          <aside class="notes">
+            One-breath framing: the eras moved the model from the keyboard to the terminal
+            to the cloud. JetBrains Research is asking whether it belongs in the call site
+            itself. Say "watch this space", don't oversell a prototype.
+          </aside>
+        </section>
+
         <!-- 34d · Air -->
         <section>
           <h3>meanwhile · jetbrains, again</h3>
