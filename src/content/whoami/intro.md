@@ -1,5 +1,5 @@
 ---
-title: "meet somu, ai craftsman"
+title: "meet somu, building ai agents"
 description: "Founding AI Engineer at AGI Inc. Founder of United by AI. Organiser at GDG Chennai. Previously crafted streaming experiences for millions at Disney+Hotstar."
 pubDate: 'Nov 29 2024'
 ---
