@@ -1,0 +1,51 @@
+---
+title: "I Built ToonGen for My Son, Not for Users"
+description: "six months ago toongen was an image filter. then i printed my son into a storybook."
+pubDate: 'Aug 25 2026'
+---
+
+Six months ago, ToonGen was an image filter. Upload a selfie, get an anime version back. It looked slick, it was shareable, and it felt like a real product. It wasn't solving anything for anyone.
+
+I built it to learn Kotlin Multiplatform, to ship Android and iOS from one codebase, to maintain my own developer account. The motivation was learning, not user need. I used the Gemini API, swapped to a few other models along the way, and it worked okay. But there was no momentum, because there was no real reason for anyone to care.
+
+## The Pivot
+
+Then one day I thought: what if instead of just turning my son's face into an anime filter, I printed him into a real storybook? A book he could hold, read, see himself as the hero of.
+
+That single thought broke everything open. The problem stopped being "how do I make a cool filter" and became "how do I turn a kid's photo into a character that stays consistent across a printed story and a video." That's a different technical challenge. That's a real product.
+
+Timing mattered too. When I first built ToonGen, the models available didn't have the image understanding needed to hold a character's identity together across outputs. I was describing images in text and hoping the result matched. Now, with models like Gemini Omni and others getting sharper at multimodal reasoning, you can feed the image in directly and get outputs that actually look like the person. The technology finally caught up to the idea, and that's when I knew it was worth betting on.
+
+## From Describing to Orchestrating
+
+The old approach was lossy: image to text to image. Upload a photo, generate a description, feed that to a model, hope the reconstruction resembled the original. Every step lost detail.
+
+Now the image itself is the input. There's no text bottleneck in between. The model works directly with the photo, and the output holds the face and features with real consistency. From there, that image feeds into video generation, and frames get stitched together sequentially so the story flows and the kid's identity stays intact across the whole piece, print and video both.
+
+That's the actual jump. Not a filter with better prompts. A pipeline where each stage feeds the next with intention.
+
+## Where It Stands Now
+
+Right now, ToonGen lets parents upload two or three photos of their kid and generates a personalized storybook, printed and shipped to their door. There's a video layer too, where the kid is the protagonist of a short animated sequence, same face, same consistency, across formats.
+
+The business model is straightforward: print margins plus video generation as a premium add-on. This isn't a vanity feature anymore. Parents want their kids to see themselves as the hero of a story they can hold. That's a problem worth solving.
+
+It's live at [toongen.app](https://toongen.app).
+
+## What This Taught Me
+
+Your first idea is probably wrong, and that's fine. The filter was a learning vehicle, not the destination.
+
+Stay close to a real problem. I didn't pivot because of a market research deck. I pivoted because I wanted something for my own son.
+
+Timing matters as much as the idea. I couldn't have built this two years ago. The models weren't ready. Now they are, so I'm building.
+
+The skill isn't landing on the right idea on the first try. It's noticing when the idea has changed, and being willing to chase the new one instead of defending the old one.
+
+import { EndCTA } from "@components/cta";
+
+<EndCTA
+    title={`Building something, or thinking about a pivot? I'd love to hear it.`}
+    cta_label='Tell me about it'
+    bg_colour='orange'
+/>
