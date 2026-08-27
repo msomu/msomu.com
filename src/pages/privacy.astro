@@ -1,0 +1,20 @@
+---
+import PageLayout from "@layouts/page-layout.astro";
+import { privacyPage } from "@utils/trust-pages";
+---
+
+<PageLayout
+	title={privacyPage.title}
+	description={privacyPage.description}
+	heading={privacyPage.heading}>
+	{
+		privacyPage.sections.map((section) => (
+			<section>
+				<h2>{section.heading}</h2>
+				{section.paragraphs.map((paragraph) => (
+					<p>{paragraph}</p>
+				))}
+			</section>
+		))
+	}
+</PageLayout>

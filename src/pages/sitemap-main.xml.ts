@@ -31,6 +31,55 @@ export const GET: APIRoute = async () => {
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
       </url>
+
+      <url>
+        <loc>${new URL("/about", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+
+      <url>
+        <loc>${new URL("/contact", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+
+      <url>
+        <loc>${new URL("/privacy", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+      </url>
+
+      <url>
+        <loc>${new URL("/talks", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+      </url>
+
+      <url>
+        <loc>${new URL("/projects", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+      </url>
+
+      <url>
+        <loc>${new URL("/resources", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+      </url>
+
+      <url>
+        <loc>${new URL("/llms.txt", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+      </url>
     </urlset>
   `;
 

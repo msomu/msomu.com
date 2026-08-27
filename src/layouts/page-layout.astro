@@ -1,0 +1,43 @@
+---
+import { Header } from "@components/misc";
+import { BaseHead } from "@components/seo";
+import RootLayout from "@layouts/root-layout.astro";
+import { clsx } from "@utils/index";
+
+interface Props {
+	title: string;
+	description: string;
+	heading: string;
+}
+
+const { title, description, heading } = Astro.props;
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={title}
+			description={description}
+			image='/images/ogimage.png'
+		/>
+	</head>
+	<RootLayout>
+		<div class='flex flex-col w-full gap-6 max-w-4xl'>
+			<Header />
+			<h1 class='w-full text-4xl md:text-5xl lg:text-7xl font-medium tracking-tight'>
+				{heading}
+			</h1>
+			<div
+				class={clsx(
+					'w-full prose prose-lg my-3 prose-p:font-medium dark:prose-invert prose-a:underline prose-a:underline-offset-2',
+					'prose-a:text-gray-700 dark:prose-a:text-gray-400 hover:prose-a:text-gray-900 dark:hover:prose-a:text-gray-100',
+					'prose-h1:font-medium prose-h2:font-medium prose-h3:font-medium',
+					'prose-h2:text-orange-500 dark:prose-h2:text-orange-400',
+					'prose-ul:font-medium prose-ol:font-medium prose-li:font-medium'
+				)}>
+				<slot />
+			</div>
+		</div>
+	</RootLayout>
+</html>

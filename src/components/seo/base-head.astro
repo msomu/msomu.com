@@ -1,6 +1,8 @@
 ---
 import "src/styles/global.css";
 import KotlinPlaygroundScript from "@components/misc/kotlin-playground-script.astro";
+import { markdownAlternatePath } from "../../utils/paths.ts";
+import JsonLd from "./json-ld.astro";
 
 // all pages through the use of the <BaseHead /> component.
 interface Props {
@@ -10,6 +12,11 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const markdownURL = new URL(
+	markdownAlternatePath(Astro.url.pathname),
+	Astro.site,
+);
+const llmsURL = new URL("/llms.txt", Astro.site);
 
 const { title, description, image = "/images/ogimage.png" } = Astro.props;
 ---
@@ -66,6 +73,16 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 	rel='sitemap'
 	href='/sitemap-index.xml'
 />
+<link
+	rel='alternate'
+	type='text/markdown'
+	href={markdownURL}
+/>
+<link
+	rel='describedby'
+	href={llmsURL}
+/>
+<JsonLd />
 
 <!-- Global Metadata -->
 <meta charset='utf-8' />

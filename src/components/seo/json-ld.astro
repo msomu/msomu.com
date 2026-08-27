@@ -1,0 +1,11 @@
+---
+import { buildIdentityJsonLd } from "../../utils/jsonld.ts";
+
+const jsonLd = JSON.stringify(buildIdentityJsonLd());
+---
+
+<script
+	is:inline
+	type='application/ld+json'
+	set:html={jsonLd}
+/>

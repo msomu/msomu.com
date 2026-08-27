@@ -1,0 +1,56 @@
+---
+import { Header } from "@components/misc";
+import { BaseHead } from "@components/seo";
+import { SITE_TITLE } from "@data/index";
+import RootLayout from "@layouts/root-layout.astro";
+import { NOT_FOUND_LINKS, notFoundMarkdown } from "@utils/not-found";
+
+Astro.response.status = 404;
+
+const requestedPath = Astro.url.pathname;
+const agentMarkdown = notFoundMarkdown(requestedPath);
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={`Not found · ${SITE_TITLE}`}
+			description='This path does not exist. Use the sitemap or llms.txt to find a published page.'
+			image='/images/ogimage.png'
+		/>
+	</head>
+	<RootLayout>
+		<div class='flex flex-col w-full gap-6 max-w-4xl'>
+			<Header />
+			<h1 class='w-full text-4xl md:text-5xl lg:text-7xl font-medium tracking-tight'>
+				not found
+			</h1>
+			<p class='text-lg font-medium text-gray-700 dark:text-gray-300'>
+				<code class='text-orange-500 dark:text-orange-400'>{requestedPath}</code> is not a published page.
+				This response is HTTP 404.
+			</p>
+			<div class='flex flex-col gap-3'>
+				<h2 class='text-sm font-medium tracking-wider uppercase text-gray-500 dark:text-gray-400'>
+					Where to look next
+				</h2>
+				<ul class='flex flex-col gap-2'>
+					{
+						NOT_FOUND_LINKS.map((link) => (
+							<li>
+								<a
+									href={link.href}
+									class='text-base font-medium text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:underline underline-offset-2'>
+									{link.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+			<pre
+				id='agent-recovery'
+				class='whitespace-pre-wrap text-sm font-mono text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 overflow-x-auto'>{agentMarkdown}</pre>
+		</div>
+	</RootLayout>
+</html>

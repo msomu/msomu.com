@@ -9,7 +9,7 @@ type Props = CollectionEntry<"writing">;
 const { slug } = Astro.params;
 const post = posts.find((page) => page.slug === slug);
 
-if (!post) return Astro.redirect("/404");
+if (!post) return Astro.rewrite("/404");
 
 const { Content } = await post.render();
 ---
