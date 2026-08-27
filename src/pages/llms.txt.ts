@@ -2,13 +2,18 @@ import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
 import { buildLlmsTxt } from "../utils/llms-txt.ts";
 
-export const GET: APIRoute = async () => {
+const headers = {
+	"Content-Type": "text/markdown; charset=utf-8",
+	"Cache-Control": "public, max-age=300",
+};
+
+async function llmsBody(): Promise<string> {
 	const [writings, talks] = await Promise.all([
 		getCollection("writing"),
 		getCollection("talks"),
 	]);
 
-	const body = buildLlmsTxt({
+	return buildLlmsTxt({
 		writings: writings
 			.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 			.map((writing) => ({
@@ -23,11 +28,12 @@ export const GET: APIRoute = async () => {
 				description: talk.data.description,
 			})),
 	});
+}
 
-	return new Response(body, {
-		headers: {
-			"Content-Type": "text/markdown; charset=utf-8",
-			"Cache-Control": "public, max-age=300",
-		},
-	});
+export const GET: APIRoute = async () => {
+	return new Response(await llmsBody(), { headers });
+};
+
+export const HEAD: APIRoute = async () => {
+	return new Response(null, { headers });
 };

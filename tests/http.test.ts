@@ -98,6 +98,15 @@ describe("public agent endpoints", () => {
 		assert.match(file.body, /^# somu nexus/m);
 		assert.match(file.body, /When to use this site/);
 		assert.match(file.body, /## When to use this/);
+
+		const head = await fetch(new URL("/llms.txt", BASE_URL), {
+			method: "HEAD",
+		});
+		assert.equal(head.status, 200);
+		assert.match(
+			head.headers.get("content-type") ?? "",
+			/text\/(markdown|plain)/,
+		);
 	});
 
 	it("publishes about, contact, and privacy with enough copy", async (t) => {
