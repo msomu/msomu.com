@@ -70,18 +70,23 @@ function sameOriginPathname(path: string, site: string): string | null {
 	}
 }
 
+function checkedRequestedPath(raw: string, site: string): string | null {
+	const { path } = normalizeContentPath(raw.trim());
+	const first = sameOriginPathname(path, site);
+	if (first == null) return null;
+	return sameOriginPathname(first, site);
+}
+
 export function safeRequestedPath(
 	from: string | null | undefined,
 	fallback = "/404",
 	site = SITE_URL,
 ): string {
-	if (from == null || from === "") return fallback;
-	const { path } = normalizeContentPath(from.trim());
-	const first = sameOriginPathname(path, site);
-	if (first == null) return fallback;
-	const second = sameOriginPathname(first, site);
-	if (second == null) return fallback;
-	return second;
+	if (from != null && from !== "") {
+		const kept = checkedRequestedPath(from, site);
+		if (kept != null) return kept;
+	}
+	return checkedRequestedPath(fallback, site) ?? "/404";
 }
 
 export function markdownAlternatePath(pathname: string): string {

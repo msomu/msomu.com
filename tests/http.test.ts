@@ -152,6 +152,14 @@ describe("public agent endpoints", () => {
 		);
 		assert.equal(sameHost.status, 404);
 		assert.doesNotMatch(sameHost.body, /evil\.example/);
+
+		if (!BASE_URL) return;
+		const protoPath = await fetch(
+			`${BASE_URL.replace(/\/$/, "")}//evil.example`,
+		);
+		const protoBody = await protoPath.text();
+		assert.equal(protoPath.status, 404);
+		assert.doesNotMatch(protoBody, /evil\.example/);
 	});
 
 	it("returns HTTP 404 for /404 markdown", async (t) => {

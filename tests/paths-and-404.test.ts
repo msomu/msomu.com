@@ -59,6 +59,9 @@ describe("path normalization", () => {
 			"/writings/x",
 		);
 		assert.equal(safeRequestedPath(null, "/writings/x"), "/writings/x");
+		assert.equal(safeRequestedPath(null, "//evil.example"), "/404");
+		assert.equal(safeRequestedPath("", "//evil.example"), "/404");
+		assert.equal(safeRequestedPath("//evil.example", "//evil.example"), "/404");
 	});
 
 	it("does not throw on invalid percent-encoding", () => {
