@@ -60,6 +60,16 @@ export function normalizeContentPath(pathname: string): NormalizedPath {
 	return { path, forceMarkdown };
 }
 
+function sameOriginPathname(path: string, site: string): string | null {
+	try {
+		const resolved = new URL(path, site);
+		if (resolved.origin !== new URL(site).origin) return null;
+		return resolved.pathname.replace(/\/+$/, "") || "/";
+	} catch {
+		return null;
+	}
+}
+
 export function safeRequestedPath(
 	from: string | null | undefined,
 	fallback = "/404",
@@ -67,13 +77,11 @@ export function safeRequestedPath(
 ): string {
 	if (from == null || from === "") return fallback;
 	const { path } = normalizeContentPath(from.trim());
-	try {
-		const resolved = new URL(path, site);
-		if (resolved.origin !== new URL(site).origin) return fallback;
-		return resolved.pathname.replace(/\/+$/, "") || "/";
-	} catch {
-		return fallback;
-	}
+	const first = sameOriginPathname(path, site);
+	if (first == null) return fallback;
+	const second = sameOriginPathname(first, site);
+	if (second == null) return fallback;
+	return second;
 }
 
 export function markdownAlternatePath(pathname: string): string {

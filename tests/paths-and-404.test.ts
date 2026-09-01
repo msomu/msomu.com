@@ -46,6 +46,15 @@ describe("path normalization", () => {
 		assert.equal(safeRequestedPath("/\t//evil.example"), "/404");
 		assert.equal(safeRequestedPath("/\n//evil.example"), "/404");
 		assert.equal(
+			safeRequestedPath("https://www.msomu.com//evil.example"),
+			"/404",
+		);
+		assert.equal(safeRequestedPath("//www.msomu.com//evil.example"), "/404");
+		assert.equal(
+			safeRequestedPath("https://www.msomu.com/%5Cevil.example"),
+			"/404",
+		);
+		assert.equal(
 			safeRequestedPath("https://evil.example", "/writings/x"),
 			"/writings/x",
 		);
