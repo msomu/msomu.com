@@ -33,8 +33,16 @@ export interface NormalizedPath {
 	forceMarkdown: boolean;
 }
 
+function decodePathname(pathname: string): string {
+	try {
+		return decodeURIComponent(pathname);
+	} catch {
+		return pathname;
+	}
+}
+
 export function normalizeContentPath(pathname: string): NormalizedPath {
-	let path = decodeURIComponent(pathname);
+	let path = decodePathname(pathname);
 	const queryIndex = path.indexOf("?");
 	if (queryIndex >= 0) path = path.slice(0, queryIndex);
 	path = path.replace(/\/+$/, "") || "/";

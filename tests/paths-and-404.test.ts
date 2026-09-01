@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { notFoundMarkdown } from "../src/utils/not-found.ts";
+import { stripMdxNoise } from "../src/utils/mdx-body.ts";
+import { notFoundMarkdown, notFoundPage } from "../src/utils/not-found.ts";
 import {
 	markdownAlternatePath,
 	normalizeContentPath,
@@ -32,6 +33,18 @@ describe("path normalization", () => {
 		assert.equal(markdownAlternatePath("/about"), "/about.md");
 	});
 
+	it("does not throw on invalid percent-encoding", () => {
+		assert.deepEqual(normalizeContentPath("/%"), {
+			path: "/%",
+			forceMarkdown: false,
+		});
+		assert.deepEqual(normalizeContentPath("/%E0%A4%A.md"), {
+			path: "/%E0%A4%A",
+			forceMarkdown: true,
+		});
+		assert.equal(shouldNegotiate("/%"), true);
+	});
+
 	it("skips assets, feeds, and robots from negotiation", () => {
 		assert.equal(shouldNegotiate("/images/ogimage.png"), false);
 		assert.equal(shouldNegotiate("/rss.xml"), false);
@@ -39,6 +52,36 @@ describe("path normalization", () => {
 		assert.equal(shouldNegotiate("/llms.txt"), false);
 		assert.equal(shouldNegotiate("/about"), true);
 		assert.equal(shouldNegotiate("/missing-page"), true);
+	});
+});
+
+describe("not-found markdown status", () => {
+	it("marks /404 as missing so markdown does not report success", () => {
+		const page = notFoundPage("/404");
+		assert.equal(page.exists, false);
+		assert.match(page.body, /`\/404`/);
+		assert.match(page.body, /real HTTP 404/);
+	});
+});
+
+describe("think-in-code markdown", () => {
+	it("keeps KotlinPlayground samples as kotlin fences", () => {
+		const body = stripMdxNoise(`import KotlinPlayground from '@components/misc/kotlin-playground.astro';
+
+# Two sum
+
+<KotlinPlayground hideMain={true} code={\`
+fun twoSum(nums: IntArray, target: Int): IntArray {
+    return intArrayOf()
+}
+\`} />
+
+<KotlinPlaygroundScript />
+`);
+		assert.match(body, /```kotlin/);
+		assert.match(body, /fun twoSum/);
+		assert.doesNotMatch(body, /KotlinPlayground/);
+		assert.doesNotMatch(body, /^import /m);
 	});
 });
 

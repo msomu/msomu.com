@@ -6,7 +6,8 @@ import {
 	SITE_TITLE,
 	SITE_URL,
 } from "../data/index.ts";
-import { notFoundMarkdown } from "./not-found.ts";
+import { stripMdxNoise } from "./mdx-body.ts";
+import { notFoundPage } from "./not-found.ts";
 import {
 	aboutPage,
 	contactPage,
@@ -17,16 +18,6 @@ import {
 export interface MarkdownPage {
 	body: string;
 	exists: boolean;
-}
-
-function stripMdxNoise(body: string): string {
-	return body
-		.split("\n")
-		.filter((line) => !/^import\s+.+from\s+.+;?\s*$/.test(line.trim()))
-		.join("\n")
-		.replace(/^\s*<[A-Z][\s\S]*?\/>\s*$/gm, "")
-		.replace(/\n{3,}/g, "\n\n")
-		.trim();
 }
 
 function articleMarkdown(
@@ -215,10 +206,10 @@ async function talksMarkdown(): Promise<string> {
 }
 
 export async function resolvePageMarkdown(path: string): Promise<MarkdownPage> {
-	if (path === "/" || path === "/404") {
-		if (path === "/404") {
-			return { exists: true, body: notFoundMarkdown("/404") };
-		}
+	if (path === "/404") {
+		return notFoundPage("/404");
+	}
+	if (path === "/") {
 		return { exists: true, body: await homeMarkdown() };
 	}
 
@@ -241,7 +232,7 @@ export async function resolvePageMarkdown(path: string): Promise<MarkdownPage> {
 	if (writingMatch) {
 		const posts = await getCollection("writing");
 		const post = posts.find((entry) => entry.slug === writingMatch[1]);
-		if (!post) return { exists: false, body: notFoundMarkdown(path) };
+		if (!post) return notFoundPage(path);
 		return {
 			exists: true,
 			body: articleMarkdown(
@@ -257,7 +248,7 @@ export async function resolvePageMarkdown(path: string): Promise<MarkdownPage> {
 	if (thinkMatch) {
 		const posts = await getCollection("thinkInCode");
 		const post = posts.find((entry) => entry.slug === thinkMatch[1]);
-		if (!post) return { exists: false, body: notFoundMarkdown(path) };
+		if (!post) return notFoundPage(path);
 		return {
 			exists: true,
 			body: articleMarkdown(
@@ -269,5 +260,5 @@ export async function resolvePageMarkdown(path: string): Promise<MarkdownPage> {
 		};
 	}
 
-	return { exists: false, body: notFoundMarkdown(path) };
+	return notFoundPage(path);
 }

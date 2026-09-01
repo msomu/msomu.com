@@ -19,6 +19,13 @@ function describedByLink(pathname: string): string {
 
 export const onRequest = defineMiddleware(async (context, next) => {
 	const pathname = context.url.pathname;
+	const rewrittenFrom =
+		pathname === "/404" ? context.url.searchParams.get("from") : null;
+	if (rewrittenFrom) {
+		context.locals.requestedPath = normalizeContentPath(rewrittenFrom).path;
+	} else if (!context.locals.requestedPath) {
+		context.locals.requestedPath = normalizeContentPath(pathname).path;
+	}
 	if (!shouldNegotiate(pathname)) {
 		return next();
 	}

@@ -109,6 +109,33 @@ describe("public agent endpoints", () => {
 		);
 	});
 
+	it("keeps the requested slug on rewritten 404s", async (t) => {
+		if (!requireBase(t)) return;
+		const missing = "/writings/this-slug-does-not-exist";
+		const html = await request(missing);
+		assert.equal(html.status, 404);
+		assert.match(html.body, /this-slug-does-not-exist/);
+		assert.doesNotMatch(html.body, /rel="canonical" href="[^"]*\/404"/);
+		assert.match(html.body, /this-slug-does-not-exist\.md/);
+	});
+
+	it("returns HTTP 404 for /404 markdown", async (t) => {
+		if (!requireBase(t)) return;
+		const markdown = await request("/404.md");
+		assert.equal(markdown.status, 404);
+		assert.match(markdown.body, /^# Not found/m);
+		assert.match(markdown.body, /`\/404`/);
+	});
+
+	it("keeps Kotlin playground samples in think-in-code markdown", async (t) => {
+		if (!requireBase(t)) return;
+		const markdown = await request("/think-in-code/introduction-to-dsa.md");
+		assert.equal(markdown.status, 200);
+		assert.match(markdown.body, /```kotlin/);
+		assert.match(markdown.body, /listOf\(1, 2, 3, 4, 5\)/);
+		assert.doesNotMatch(markdown.body, /<KotlinPlayground/);
+	});
+
 	it("publishes about, contact, and privacy with enough copy", async (t) => {
 		if (!requireBase(t)) return;
 		for (const path of ["/about", "/contact", "/privacy"]) {

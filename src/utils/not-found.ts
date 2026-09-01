@@ -1,5 +1,14 @@
 import { SITE_TITLE, SITE_URL } from "../data/index.ts";
 
+export interface NotFoundPage {
+	body: string;
+	exists: false;
+}
+
+export function notFoundPage(path: string): NotFoundPage {
+	return { exists: false, body: notFoundMarkdown(path) };
+}
+
 export function notFoundMarkdown(pathname: string): string {
 	const requested = pathname || "/";
 	return [

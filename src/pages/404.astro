@@ -7,7 +7,10 @@ import { NOT_FOUND_LINKS, notFoundMarkdown } from "@utils/not-found";
 
 Astro.response.status = 404;
 
-const requestedPath = Astro.url.pathname;
+const requestedPath =
+	Astro.url.searchParams.get("from") ??
+	Astro.locals.requestedPath ??
+	Astro.url.pathname;
 const agentMarkdown = notFoundMarkdown(requestedPath);
 ---
 

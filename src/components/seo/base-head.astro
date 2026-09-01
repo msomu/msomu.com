@@ -11,11 +11,10 @@ interface Props {
 	image?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const markdownURL = new URL(
-	markdownAlternatePath(Astro.url.pathname),
-	Astro.site,
-);
+const pagePath = Astro.locals.requestedPath ?? Astro.url.pathname;
+const canonicalURL = new URL(pagePath, Astro.site);
+const markdownURL = new URL(markdownAlternatePath(pagePath), Astro.site);
+const pageURL = new URL(pagePath, Astro.site);
 const llmsURL = new URL("/llms.txt", Astro.site);
 
 const { title, description, image = "/images/ogimage.png" } = Astro.props;
@@ -207,7 +206,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='og:url'
-	content={Astro.url}
+	content={pageURL}
 />
 <meta
 	property='og:title'
@@ -219,7 +218,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='og:image'
-	content={new URL(image, Astro.url)}
+	content={new URL(image, pageURL)}
 />
 
 <!-- Twitter -->
@@ -229,7 +228,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='twitter:url'
-	content={Astro.url}
+	content={pageURL}
 />
 <meta
 	property='twitter:title'
@@ -241,7 +240,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='twitter:image'
-	content={new URL(image, Astro.url)}
+	content={new URL(image, pageURL)}
 />
 
 <!-- Kotlin Playground Script -->
