@@ -58,6 +58,16 @@ export function normalizeContentPath(pathname: string): NormalizedPath {
 	return { path, forceMarkdown };
 }
 
+export function safeRequestedPath(
+	from: string | null | undefined,
+	fallback = "/404",
+): string {
+	if (from == null || from === "") return fallback;
+	const { path } = normalizeContentPath(from.trim());
+	if (path.startsWith("/") && !path.startsWith("//")) return path;
+	return fallback;
+}
+
 export function markdownAlternatePath(pathname: string): string {
 	const { path } = normalizeContentPath(pathname);
 	if (path === "/") return "/index.md";

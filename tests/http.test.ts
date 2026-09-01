@@ -119,6 +119,25 @@ describe("public agent endpoints", () => {
 		assert.match(html.body, /this-slug-does-not-exist\.md/);
 	});
 
+	it("keeps 404 canonical on this origin when from= is off-site", async (t) => {
+		if (!requireBase(t)) return;
+		const html = await request("/404?from=https://evil.example");
+		assert.equal(html.status, 404);
+		assert.doesNotMatch(html.body, /evil\.example/);
+		assert.match(html.body, /rel=['"]canonical['"][^>]*href=['"][^'"]+/);
+		assert.match(
+			html.body,
+			/rel="canonical" href="https?:\/\/(www\.)?msomu\.com\/404"|rel="canonical" href="http:\/\/127\.0\.0\.1:\d+\/404"/,
+		);
+
+		const proto = await request("/404?from=//evil.example");
+		assert.equal(proto.status, 404);
+		assert.doesNotMatch(proto.body, /evil\.example/);
+
+		const broken = await request("/404?from=http://[");
+		assert.equal(broken.status, 404);
+	});
+
 	it("returns HTTP 404 for /404 markdown", async (t) => {
 		if (!requireBase(t)) return;
 		const markdown = await request("/404.md");

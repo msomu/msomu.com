@@ -4,13 +4,14 @@ import { BaseHead } from "@components/seo";
 import { SITE_TITLE } from "@data/index";
 import RootLayout from "@layouts/root-layout.astro";
 import { NOT_FOUND_LINKS, notFoundMarkdown } from "@utils/not-found";
+import { safeRequestedPath } from "@utils/paths";
 
 Astro.response.status = 404;
 
-const requestedPath =
-	Astro.url.searchParams.get("from") ??
-	Astro.locals.requestedPath ??
-	Astro.url.pathname;
+const requestedPath = safeRequestedPath(
+	Astro.url.searchParams.get("from"),
+	Astro.locals.requestedPath ?? Astro.url.pathname,
+);
 const agentMarkdown = notFoundMarkdown(requestedPath);
 ---
 

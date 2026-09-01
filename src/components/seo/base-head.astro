@@ -1,7 +1,7 @@
 ---
 import "src/styles/global.css";
 import KotlinPlaygroundScript from "@components/misc/kotlin-playground-script.astro";
-import { markdownAlternatePath } from "../../utils/paths.ts";
+import { markdownAlternatePath, safeRequestedPath } from "../../utils/paths.ts";
 import JsonLd from "./json-ld.astro";
 
 // all pages through the use of the <BaseHead /> component.
@@ -11,7 +11,10 @@ interface Props {
 	image?: string;
 }
 
-const pagePath = Astro.locals.requestedPath ?? Astro.url.pathname;
+const pagePath = safeRequestedPath(
+	Astro.locals.requestedPath,
+	Astro.url.pathname,
+);
 const canonicalURL = new URL(pagePath, Astro.site);
 const markdownURL = new URL(markdownAlternatePath(pagePath), Astro.site);
 const pageURL = new URL(pagePath, Astro.site);

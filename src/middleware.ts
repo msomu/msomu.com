@@ -4,6 +4,7 @@ import { resolvePageMarkdown } from "./utils/page-markdown.ts";
 import {
 	markdownAlternatePath,
 	normalizeContentPath,
+	safeRequestedPath,
 	shouldNegotiate,
 } from "./utils/paths.ts";
 import {
@@ -21,8 +22,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
 	const pathname = context.url.pathname;
 	const rewrittenFrom =
 		pathname === "/404" ? context.url.searchParams.get("from") : null;
-	if (rewrittenFrom) {
-		context.locals.requestedPath = normalizeContentPath(rewrittenFrom).path;
+	if (rewrittenFrom != null) {
+		context.locals.requestedPath = safeRequestedPath(rewrittenFrom);
 	} else if (!context.locals.requestedPath) {
 		context.locals.requestedPath = normalizeContentPath(pathname).path;
 	}

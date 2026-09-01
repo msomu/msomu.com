@@ -5,6 +5,7 @@ import { notFoundMarkdown, notFoundPage } from "../src/utils/not-found.ts";
 import {
 	markdownAlternatePath,
 	normalizeContentPath,
+	safeRequestedPath,
 	shouldNegotiate,
 } from "../src/utils/paths.ts";
 import { notAcceptableBody } from "../src/utils/vary.ts";
@@ -31,6 +32,20 @@ describe("path normalization", () => {
 	it("builds homepage alternate as /index.md", () => {
 		assert.equal(markdownAlternatePath("/"), "/index.md");
 		assert.equal(markdownAlternatePath("/about"), "/about.md");
+	});
+
+	it("keeps only same-origin rewrite from= values", () => {
+		assert.equal(safeRequestedPath("/writings/missing"), "/writings/missing");
+		assert.equal(safeRequestedPath("/about.md"), "/about");
+		assert.equal(safeRequestedPath("https://evil.example"), "/404");
+		assert.equal(safeRequestedPath("//evil.example"), "/404");
+		assert.equal(safeRequestedPath("http://["), "/404");
+		assert.equal(safeRequestedPath("  https://evil.example"), "/404");
+		assert.equal(
+			safeRequestedPath("https://evil.example", "/writings/x"),
+			"/writings/x",
+		);
+		assert.equal(safeRequestedPath(null, "/writings/x"), "/writings/x");
 	});
 
 	it("does not throw on invalid percent-encoding", () => {
