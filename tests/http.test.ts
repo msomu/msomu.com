@@ -136,6 +136,14 @@ describe("public agent endpoints", () => {
 
 		const broken = await request("/404?from=http://[");
 		assert.equal(broken.status, 404);
+
+		const backslash = await request("/404?from=/%5Cevil.example");
+		assert.equal(backslash.status, 404);
+		assert.doesNotMatch(backslash.body, /evil\.example/);
+
+		const tab = await request(`/404?from=${encodeURIComponent("/\t//evil.example")}`);
+		assert.equal(tab.status, 404);
+		assert.doesNotMatch(tab.body, /evil\.example/);
 	});
 
 	it("returns HTTP 404 for /404 markdown", async (t) => {

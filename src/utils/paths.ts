@@ -1,3 +1,5 @@
+import { SITE_URL } from "../data/index.ts";
+
 const SKIP_EXTENSIONS = new Set([
 	".png",
 	".jpg",
@@ -61,11 +63,17 @@ export function normalizeContentPath(pathname: string): NormalizedPath {
 export function safeRequestedPath(
 	from: string | null | undefined,
 	fallback = "/404",
+	site = SITE_URL,
 ): string {
 	if (from == null || from === "") return fallback;
 	const { path } = normalizeContentPath(from.trim());
-	if (path.startsWith("/") && !path.startsWith("//")) return path;
-	return fallback;
+	try {
+		const resolved = new URL(path, site);
+		if (resolved.origin !== new URL(site).origin) return fallback;
+		return resolved.pathname.replace(/\/+$/, "") || "/";
+	} catch {
+		return fallback;
+	}
 }
 
 export function markdownAlternatePath(pathname: string): string {
