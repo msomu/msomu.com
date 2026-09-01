@@ -1,6 +1,8 @@
 ---
 import "src/styles/global.css";
 import KotlinPlaygroundScript from "@components/misc/kotlin-playground-script.astro";
+import { markdownAlternatePath, safeRequestedPath } from "../../utils/paths.ts";
+import JsonLd from "./json-ld.astro";
 
 // all pages through the use of the <BaseHead /> component.
 interface Props {
@@ -9,7 +11,14 @@ interface Props {
 	image?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const pagePath = safeRequestedPath(
+	Astro.locals.requestedPath,
+	Astro.url.pathname,
+);
+const canonicalURL = new URL(pagePath, Astro.site);
+const markdownURL = new URL(markdownAlternatePath(pagePath), Astro.site);
+const pageURL = new URL(pagePath, Astro.site);
+const llmsURL = new URL("/llms.txt", Astro.site);
 
 const { title, description, image = "/images/ogimage.png" } = Astro.props;
 ---
@@ -66,6 +75,16 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 	rel='sitemap'
 	href='/sitemap-index.xml'
 />
+<link
+	rel='alternate'
+	type='text/markdown'
+	href={markdownURL}
+/>
+<link
+	rel='describedby'
+	href={llmsURL}
+/>
+<JsonLd />
 
 <!-- Global Metadata -->
 <meta charset='utf-8' />
@@ -190,7 +209,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='og:url'
-	content={Astro.url}
+	content={pageURL}
 />
 <meta
 	property='og:title'
@@ -202,7 +221,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='og:image'
-	content={new URL(image, Astro.url)}
+	content={new URL(image, pageURL)}
 />
 
 <!-- Twitter -->
@@ -212,7 +231,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='twitter:url'
-	content={Astro.url}
+	content={pageURL}
 />
 <meta
 	property='twitter:title'
@@ -224,7 +243,7 @@ const { title, description, image = "/images/ogimage.png" } = Astro.props;
 />
 <meta
 	property='twitter:image'
-	content={new URL(image, Astro.url)}
+	content={new URL(image, pageURL)}
 />
 
 <!-- Kotlin Playground Script -->

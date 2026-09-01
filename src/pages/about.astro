@@ -1,0 +1,20 @@
+---
+import PageLayout from "@layouts/page-layout.astro";
+import { aboutPage } from "@utils/trust-pages";
+---
+
+<PageLayout
+	title={aboutPage.title}
+	description={aboutPage.description}
+	heading={aboutPage.heading}>
+	{
+		aboutPage.sections.map((section) => (
+			<section>
+				<h2>{section.heading}</h2>
+				{section.paragraphs.map((paragraph) => (
+					<p>{paragraph}</p>
+				))}
+			</section>
+		))
+	}
+</PageLayout>

@@ -1,0 +1,27 @@
+---
+import PageLayout from "@layouts/page-layout.astro";
+import { contactPage } from "@utils/trust-pages";
+---
+
+<PageLayout
+	title={contactPage.title}
+	description={contactPage.description}
+	heading={contactPage.heading}>
+	{
+		contactPage.sections.map((section) => (
+			<section>
+				<h2>{section.heading}</h2>
+				{section.paragraphs.map((paragraph) => (
+					<p>{paragraph}</p>
+				))}
+				{section.list && (
+					<ul>
+						{section.list.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+				)}
+			</section>
+		))
+	}
+</PageLayout>
