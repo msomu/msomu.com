@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>An agent does not get to say done until it leaves a receipt · msomu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <style>
+      :root {
+        --orange: #f97316;
+        --orange-dim: #c2540a;
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --border: #262626;
+        --text: #e5e5e5;
+        --muted: #737373;
+        --green: #22c55e;
+        --red: #ef4444;
+      }
+
+      .reveal-viewport {
+        background: var(--bg);
+      }
+
+      .reveal {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        text-transform: none;
+        color: #fff;
+        text-shadow: none;
+      }
+
+      .reveal h1 { font-size: 2em; line-height: 1.1; }
+      .reveal h2 { font-size: 1.4em; line-height: 1.2; }
+      .reveal h3 { font-size: 0.95em; color: var(--orange); margin-bottom: 0.3em; }
+
+      .reveal p { color: var(--text); line-height: 1.6; }
+
+      .reveal ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .reveal ul li {
+        position: relative;
+        padding-left: 1.4em;
+        margin-bottom: 0.2em;
+        color: var(--text);
+        font-size: 0.72em;
+        line-height: 1.35;
+      }
+
+      .reveal ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--orange);
+      }
+
+      .reveal section {
+        text-align: left;
+      }
+
+      .slide-title {
+        text-align: center;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100% !important;
+        box-sizing: border-box;
+      }
+
+      .slide-title h1 {
+        font-size: 1.7em;
+        max-width: 22ch;
+        margin: 0 auto 0.4em;
+      }
+
+      .slide-title .orange { color: var(--orange); }
+
+      .slide-title .meta {
+        font-size: 0.6em;
+        color: var(--muted);
+        margin-top: 1em;
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .slide-title .meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1em;
+        align-items: start;
+      }
+
+      .cols-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.8em;
+        align-items: start;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.8em 1em;
+      }
+
+      .card h3 { margin-bottom: 0.3em; font-size: 0.78em; }
+
+      .stat {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: var(--orange);
+        line-height: 1;
+        margin-bottom: 0.1em;
+      }
+
+      .stat-label {
+        font-size: 0.65em;
+        color: var(--muted);
+      }
+
+      .tag {
+        display: inline-block;
+        font-size: 0.55em;
+        font-weight: 600;
+        padding: 0.2em 0.7em;
+        border-radius: 99px;
+        background: var(--orange);
+        color: #000;
+        vertical-align: middle;
+        margin-left: 0.4em;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .tag.bad { background: var(--red); color: #fff; }
+      .tag.good { background: var(--green); color: #000; }
+
+      hr.dim {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 0.5em 0;
+      }
+
+      blockquote.big {
+        border: none;
+        background: none;
+        padding: 0;
+        font-size: 1.05em;
+        font-style: italic;
+        color: #fff;
+        text-align: center;
+        line-height: 1.4;
+        box-shadow: none;
+      }
+
+      blockquote.big cite {
+        display: block;
+        font-size: 0.5em;
+        color: var(--muted);
+        margin-top: 0.8em;
+        font-style: normal;
+      }
+
+      .steps {
+        counter-reset: step;
+      }
+      .steps li {
+        counter-increment: step;
+        padding-left: 2em;
+        font-size: 0.68em;
+        margin-bottom: 0.3em;
+        line-height: 1.3;
+      }
+      .steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        width: 1.4em;
+        height: 1.4em;
+        background: var(--orange);
+        color: #000;
+        border-radius: 50%;
+        font-size: 0.9em;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0.05em;
+      }
+
+      .reveal footer {
+        position: fixed;
+        bottom: 1.2em;
+        right: 1.4em;
+        font-size: 0.45em;
+        color: var(--muted);
+        font-weight: 500;
+        z-index: 100;
+      }
+
+      .reveal .slides section { padding: 0.8em 1.5em; }
+
+      .section-header {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+      }
+
+      .section-header .number {
+        font-size: 3.5em;
+        font-weight: 700;
+        color: var(--border);
+        line-height: 1;
+        margin-bottom: 0.1em;
+      }
+
+      .section-header h2 {
+        color: var(--orange);
+        font-size: 1.2em;
+      }
+
+      .section-header .sub {
+        font-size: 0.6em;
+        color: var(--muted);
+        margin-top: 0.6em;
+        font-style: italic;
+      }
+
+      .reveal pre {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.7em 0.9em;
+        box-shadow: none;
+        font-size: 0.42em;
+        line-height: 1.45;
+        width: 100%;
+        margin: 0.6em 0 0;
+      }
+
+      .reveal pre code {
+        color: var(--text);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: none;
+      }
+
+      .cmd {
+        color: var(--orange);
+      }
+
+      .mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85em;
+        color: var(--orange);
+      }
+
+      @media (max-width: 720px) {
+        .cols,
+        .cols-3 {
+          grid-template-columns: 1fr;
+        }
+        .slide-title h1 {
+          font-size: 1.2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <footer>msomu · Kotlin Connect · Sep 2026</footer>
+      <div class="slides">
+
+        <section class="slide-title">
+          <h1>An agent does not get to say done until it leaves a <span class="orange">receipt</span></h1>
+          <p class="meta">
+            <strong>Somasundaram Mahesh</strong><br />
+            Kotlin Connect: Agents &amp; Data · 2 Sep 2026 · 7:50 PM IST
+          </p>
+          <aside class="notes">
+            Read the title out loud. Pause. That is the whole talk. 50 minutes. Simon just did Exposed. Panel with Simon and Shangeeth after. Press S for these notes. Live demo is minutes 28–43: cd sample &amp;&amp; ./verify.
+          </aside>
+        </section>
+
+        <section>
+          <h3>who's talking?</h3>
+          <h2>Somasundaram Mahesh</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Android engineer. Building mobile products for 8+ years.</li>
+            <li>Founding engineer at <span class="mono">agi.inc</span>.</li>
+            <li>Ships ToonGen and The Roaming King, with agents in the loop.</li>
+            <li><strong style="color:var(--orange)">@msomuin</strong> on X · msomu.com · github.com/msomu/receipt</li>
+          </ul>
+          <aside class="notes">
+            60 seconds. Do not recap your CV. The last line is the repo they should open on their laptop.
+          </aside>
+        </section>
+
+        <section class="section-header">
+          <div class="number">01</div>
+          <h2>The agent said done</h2>
+          <p class="sub">and I believed it</p>
+        </section>
+
+        <section>
+          <h3>the new failure mode</h3>
+          <h2>It writes a paragraph about itself</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:1em">
+            <div class="card">
+              <h3>what the agent reports</h3>
+              <ul>
+                <li>tests passed</li>
+                <li>screenshot looks good</li>
+                <li>logcat is clean</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>what is on disk</h3>
+              <ul>
+                <li>no XML</li>
+                <li>a PNG from last week</li>
+                <li><span class="mono">"ok": true</span> hardcoded</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="notes">
+            This is not theoretical. We shipped this this morning and killed it twice in review. Do not name reviewers. The point is: markdown is not evidence.
+          </aside>
+        </section>
+
+        <section>
+          <h3>this morning, on this plugin</h3>
+          <h2>Two lies. Same CLI. Two reviews.</h2>
+          <hr class="dim" />
+          <ul>
+            <li><strong>screenshot</strong> always <span class="mono">install -r</span> + <span class="mono">am start</span>, then ok if any PNG existed</li>
+            <li>failed install could still exit 0</li>
+            <li><strong>logcat</strong> always returned <span class="mono">"ok": true</span></li>
+            <li>on a real app, <span class="mono">verify test</span> was just assemble</li>
+          </ul>
+          <p style="margin-top:1em; font-size:0.7em; color:var(--muted)">
+            The CLI looked like infrastructure. It was a story.
+          </p>
+          <aside class="notes">
+            4 minutes. This is the tension for the room. Agents will write the verify script that flatters them. The review has to treat the CLI as the product.
+          </aside>
+        </section>
+
+        <section style="text-align:center; display:flex !important; flex-direction:column; align-items:center; justify-content:center; height:100% !important;">
+          <blockquote class="big">
+            Verification is infrastructure.
+            <cite>Lauren Tan · The Complete Guide to pstack Pt. 1 · 31 Aug 2026</cite>
+          </blockquote>
+          <aside class="notes">
+            One-line attribution. We are not a pstack clone. Inspired by, not named *stack. receipt is the name because the artifact is the point.
+          </aside>
+        </section>
+
+        <section class="section-header">
+          <div class="number">02</div>
+          <h2>receipt</h2>
+          <p class="sub">tools first. markdown second.</p>
+        </section>
+
+        <section>
+          <h3>what it is</h3>
+          <h2>A Cursor plugin. A local CLI. A Feature Map.</h2>
+          <hr class="dim" />
+          <div class="cols-3" style="margin-top:1em">
+            <div class="card">
+              <h3>/create-receipt</h3>
+              <p style="font-size:0.62em; color:var(--muted); margin:0">once per repo<br />writes the harness</p>
+            </div>
+            <div class="card">
+              <h3>/receipt</h3>
+              <p style="font-size:0.62em; color:var(--muted); margin:0">every task<br />done = proof on disk</p>
+            </div>
+            <div class="card">
+              <h3>/maintain-receipt</h3>
+              <p style="font-size:0.62em; color:var(--muted); margin:0">daily<br />re-drive the map</p>
+            </div>
+          </div>
+          <p style="margin-top:1.1em; font-size:0.7em; color:var(--muted)">
+            github.com/msomu/receipt · MIT · Android and Kotlin Multiplatform
+          </p>
+          <aside class="notes">
+            Install once. Create once. Receipt every task. Maintain daily. That loop is the rest of the talk.
+          </aside>
+        </section>
+
+        <section>
+          <h3>the loop</h3>
+          <h2>Install is not the product</h2>
+          <hr class="dim" />
+          <ul class="steps" style="margin-top:0.6em">
+            <li>Install the plugin once</li>
+            <li><span class="mono">/create-receipt</span> writes <span class="mono">.cursor/skills/verify-&lt;app&gt;/</span> — real CLI + 3–5 feature files</li>
+            <li><span class="mono">/receipt</span> on every bug, feature, or KMP test — no proof, not done</li>
+            <li><span class="mono">/maintain-receipt</span> daily so the map stays true to the app</li>
+            <li>Next agent starts cold with an honest harness</li>
+          </ul>
+          <aside class="notes">
+            Lauren's daily /maintain-verification-skill. Ours is /maintain-receipt. Cursor Automation or a cloud agent. Not a chat cron that spams a channel.
+          </aside>
+        </section>
+
+        <section>
+          <h3>done means files</h3>
+          <h2><span class="mono">.receipt/proof/&lt;id&gt;/</span></h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:1em">
+            <div class="card">
+              <h3>must exist</h3>
+              <ul>
+                <li>Gradle or bun output</li>
+                <li>JUnit XML, not a sentence</li>
+                <li>a PNG with PNG magic</li>
+                <li>logcat for the app pid</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>does not count</h3>
+              <ul>
+                <li>“tests look good”</li>
+                <li>any file that happens to be named .png</li>
+                <li>logcat ok with no process</li>
+                <li>assemble standing in for test</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="notes">
+            Screenshot is capture-only by default. --install and --launch are opt-in. ok = every step exit 0 AND \x89PNG. logcat uses pidof the package. App not running → ok: false.
+          </aside>
+        </section>
+
+        <section>
+          <h3>honest CLI</h3>
+          <h2>The commands that cannot flatter</h2>
+          <hr class="dim" />
+          <pre><code><span class="cmd">cd sample</span>
+./verify doctor
+./verify test
+./verify assemble
+./verify screenshot --install --launch   <span style="color:#737373"># cold start</span>
+./verify screenshot                      <span style="color:#737373"># current frame only</span>
+./verify logcat                          <span style="color:#737373"># pidof the package</span></code></pre>
+          <p style="margin-top:0.8em; font-size:0.62em; color:var(--muted)">
+            JSON. <span class="mono">--dry-run</span>. <span class="mono">--help</span>. AdbHarbor lease if present — never <span class="mono">--force</span>. Proof survives cleanup.
+          </p>
+          <aside class="notes">
+            If you increment the counter then screenshot with --launch, you get Counter 0. That is why capture-only is the default. We have a proof PNG that shows Counter 1 because we did not relaunch.
+          </aside>
+        </section>
+
+        <section class="section-header">
+          <div class="number">03</div>
+          <h2>Live</h2>
+          <p class="sub">15 minutes. The sample is the talk.</p>
+        </section>
+
+        <section>
+          <h3>demo · 15 minutes</h3>
+          <h2>Do not narrate. Run it.</h2>
+          <hr class="dim" />
+          <ul class="steps" style="margin-top:0.6em">
+            <li><strong>0:00</strong> — read the first sentence of the README out loud</li>
+            <li><strong>1:00</strong> — <span class="mono">./verify doctor</span> — JSON, not a paragraph</li>
+            <li><strong>3:00</strong> — <span class="mono">./verify test</span> — XML + log under <span class="mono">.receipt/proof/</span></li>
+            <li><strong>5:00</strong> — assemble, <span class="mono">screenshot --install --launch</span>, increment, <span class="mono">screenshot</span> again</li>
+            <li><strong>8:00</strong> — <span class="mono">/create-receipt</span> on any Android or KMP repo</li>
+            <li><strong>10:00</strong> — stop. Clone it. Watch the agent prove the change.</li>
+          </ul>
+          <aside class="notes">
+            Timed to 10 if questions ran long in the first half. Sample is Compose Android, three tabs: Counter, Settings, About. AGP 9. JVM unit tests stand in for shared KMP — this sample does not host KMP. kmp-test playbook is for repos that do.
+            Device: emulator preferred, or Nothing. Never the Samsung reserved for AGI. If adb is dead, doctor JSON is still the demo — do not fake a screenshot.
+          </aside>
+        </section>
+
+        <section>
+          <h3>what you should see</h3>
+          <h2>Counter 1. Not Counter 0.</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:1em">
+            <div class="card">
+              <h3>cold start</h3>
+              <p style="font-size:0.62em; margin:0"><span class="mono">--install --launch</span><br />always Counter 0</p>
+            </div>
+            <div class="card">
+              <h3>capture only</h3>
+              <p style="font-size:0.62em; margin:0"><span class="mono">./verify screenshot</span><br />the frame that is actually up</p>
+            </div>
+          </div>
+          <p style="margin-top:1.1em; font-size:0.7em; color:var(--muted)">
+            If the PNG does not open as a PNG, <span class="mono">ok</span> is false. Size is not a check. Magic bytes are.
+          </p>
+          <aside class="notes">
+            Open the proof folder on the projector. Leave it there. That folder is the receipt.
+          </aside>
+        </section>
+
+        <section class="section-header">
+          <div class="number">04</div>
+          <h2>It has to port</h2>
+          <p class="sub">a plugin that only works on its sample is a demo</p>
+        </section>
+
+        <section>
+          <h3>in production</h3>
+          <h2>Two real apps.</h2>
+          <hr class="dim" />
+          <div class="cols" style="margin-top:1em">
+            <div class="card">
+              <h3>ToonGen</h3>
+              <p style="font-size:0.58em; color:var(--muted); margin:0 0 0.4em">toongen.app</p>
+              <ul>
+                <li><span class="mono">verify-toongen</span></li>
+                <li>web + Android assemble</li>
+                <li>doctor ok</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>The Roaming King</h3>
+              <p style="font-size:0.58em; color:var(--muted); margin:0 0 0.4em">theroamingking.com</p>
+              <ul>
+                <li>board-game rental</li>
+                <li>live storefront</li>
+                <li>agents in the loop</li>
+              </ul>
+            </div>
+          </div>
+          <p style="margin-top:1em; font-size:0.65em; color:var(--muted)">
+            Android screenshots on ToonGen are still unproven on a device. The CLI will not fake one.
+          </p>
+          <aside class="notes">
+            Honesty copied from the plugin. Do not claim device proof you do not have. That sentence is the talk's credibility.
+          </aside>
+        </section>
+
+        <section>
+          <h3>daily</h3>
+          <h2>A maintain pass that never fails is untested</h2>
+          <hr class="dim" />
+          <ul>
+            <li>Cursor Automation — schedule <span class="mono">/maintain-receipt</span></li>
+            <li>or a cloud agent, same prompt, once a day</li>
+            <li>re-drive the Feature Map, fix drift, one PR or “clean”</li>
+            <li>the first real pass must be able to go red</li>
+          </ul>
+          <aside class="notes">
+            Lauren's daily maintain. Do not wire a chat message cron. The map is the memory the next agent inherits.
+          </aside>
+        </section>
+
+        <section class="section-header">
+          <div class="number">05</div>
+          <h2>Monday</h2>
+          <p class="sub">clone it. run verify. watch the agent prove the change.</p>
+        </section>
+
+        <section>
+          <h3>homework</h3>
+          <h2>One repo. One harness.</h2>
+          <hr class="dim" />
+          <ul class="steps" style="margin-top:0.6em">
+            <li>Clone <span class="mono">github.com/msomu/receipt</span></li>
+            <li>Cursor → Plugins → Add from GitHub → <span class="mono">msomu/receipt</span></li>
+            <li>In your Android or KMP repo, run <span class="mono">/create-receipt</span></li>
+            <li>Next task: <span class="mono">/receipt</span>. No <span class="mono">.receipt/proof/</span>, not done.</li>
+            <li>Tomorrow: <span class="mono">/maintain-receipt</span></li>
+          </ul>
+          <aside class="notes">
+            Leave this slide up into questions. Panel starts 8:40. Do not run past 8:38.
+          </aside>
+        </section>
+
+        <section class="slide-title">
+          <h1>Leave a <span class="orange">receipt</span></h1>
+          <hr class="dim" style="margin:1.5em auto; max-width:12em;" />
+          <p class="meta" style="margin-top:1em">
+            <strong>Somasundaram Mahesh</strong><br />
+            github.com/msomu/receipt<br />
+            msomu.com/talks · @msomuin
+          </p>
+          <aside class="notes">
+            Stop. Questions. Then panel.
+          </aside>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        controls: true,
+        progress: true,
+        center: false,
+        width: 1100,
+        height: 700,
+        margin: 0.06,
+      });
+    </script>
+  </body>
+</html>

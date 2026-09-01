@@ -1,0 +1,7 @@
+{
+  "title": "An agent does not get to say done until it leaves a receipt",
+  "description": "Verification is infrastructure. A Cursor plugin and a local verify CLI that make Gradle output, a real screenshot, and logcat the definition of done — not a paragraph the agent wrote about itself. Live at Kotlin Connect.",
+  "pubDate": "2026-09-02",
+  "venue": "Kotlin Connect: Agents & Data · KUG Chennai",
+  "slideUrl": "/talks/receipt/index.html"
+}
