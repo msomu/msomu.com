@@ -98,6 +98,8 @@ export function markdownAlternatePath(pathname: string): string {
 export function shouldNegotiate(pathname: string): boolean {
 	const { path, forceMarkdown } = normalizeContentPath(pathname);
 	if (forceMarkdown) return true;
+	// Reveal decks in public/talks/<slug>/ — not markdown pages.
+	if (/^\/talks\/[A-Za-z0-9_-]+(?:\/index\.html)?$/.test(path)) return false;
 	if (
 		SKIP_PREFIXES.some(
 			(prefix) => path.startsWith(prefix) || pathname.startsWith(prefix),
