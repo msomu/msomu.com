@@ -17,5 +17,11 @@ export default defineConfig({
 		tailwind(),
 	],
 	output: "server",
-	adapter: cloudflare(),
+	adapter: cloudflare({
+		// public/talks/<slug>/index.html is a static asset. Without this,
+		// CF 308s /index.html → / and the worker renders 404.astro.
+		routes: {
+			exclude: ["/talks/*"],
+		},
+	}),
 });

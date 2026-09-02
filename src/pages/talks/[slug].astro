@@ -1,0 +1,17 @@
+---
+import { listTalkSlugs, readTalkHtml } from "@utils/talk-decks";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+	return listTalkSlugs().map((slug) => ({ params: { slug } }));
+}
+
+const html = readTalkHtml(Astro.params.slug ?? "");
+if (!html) {
+	return Astro.rewrite(`/404?from=${encodeURIComponent(Astro.url.pathname)}`);
+}
+return new Response(html, {
+	headers: { "content-type": "text/html; charset=utf-8" },
+});
+---

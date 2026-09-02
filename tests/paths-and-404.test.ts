@@ -8,6 +8,7 @@ import {
 	safeRequestedPath,
 	shouldNegotiate,
 } from "../src/utils/paths.ts";
+import { listTalkSlugs, readTalkHtml } from "../src/utils/talk-decks.ts";
 import { notAcceptableBody } from "../src/utils/vary.ts";
 
 describe("path normalization", () => {
@@ -83,6 +84,22 @@ describe("path normalization", () => {
 		assert.equal(shouldNegotiate("/llms.txt"), false);
 		assert.equal(shouldNegotiate("/about"), true);
 		assert.equal(shouldNegotiate("/missing-page"), true);
+		assert.equal(shouldNegotiate("/talks"), true);
+		assert.equal(shouldNegotiate("/talks/receipt"), false);
+		assert.equal(shouldNegotiate("/talks/receipt/"), false);
+		assert.equal(shouldNegotiate("/talks/receipt/index.html"), false);
+		assert.equal(shouldNegotiate("/talks/stop-building-ai-demos"), false);
+	});
+});
+
+describe("talk decks on disk", () => {
+	it("lists the three public reveal decks", () => {
+		const slugs = listTalkSlugs();
+		assert.ok(slugs.includes("receipt"));
+		assert.ok(slugs.includes("stop-building-ai-demos"));
+		assert.ok(slugs.includes("five-eras-of-ai-assisted-android"));
+		assert.match(readTalkHtml("receipt") ?? "", /reveal|Receipt|receipt/i);
+		assert.equal(readTalkHtml("../etc"), null);
 	});
 });
 

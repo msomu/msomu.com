@@ -179,6 +179,21 @@ describe("public agent endpoints", () => {
 		assert.doesNotMatch(markdown.body, /<KotlinPlayground/);
 	});
 
+	it("serves reveal talk decks as HTML, not 404", async (t) => {
+		if (!requireBase(t)) return;
+		for (const path of [
+			"/talks/receipt/",
+			"/talks/receipt/index.html",
+			"/talks/stop-building-ai-demos/",
+			"/talks/five-eras-of-ai-assisted-android/",
+		]) {
+			const page = await request(path);
+			assert.equal(page.status, 200, path);
+			assert.match(page.body, /reveal/i, path);
+			assert.doesNotMatch(page.body, /not found/i);
+		}
+	});
+
 	it("publishes about, contact, and privacy with enough copy", async (t) => {
 		if (!requireBase(t)) return;
 		for (const path of ["/about", "/contact", "/privacy"]) {
