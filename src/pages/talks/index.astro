@@ -6,6 +6,10 @@ import { BaseHead } from "@components/seo";
 import { SITE_TITLE } from "@data/index";
 import RootLayout from "@layouts/root-layout.astro";
 
+// /talks/* is excluded from the SSR worker so reveal decks stay static.
+// This listing must be a static asset too, or /talks 404s.
+export const prerender = true;
+
 const talks = (await getCollection("talks")).sort(
 	(a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
 );

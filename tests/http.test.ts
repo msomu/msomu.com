@@ -179,6 +179,16 @@ describe("public agent endpoints", () => {
 		assert.doesNotMatch(markdown.body, /<KotlinPlayground/);
 	});
 
+	it("serves the talks listing as HTML, not 404", async (t) => {
+		if (!requireBase(t)) return;
+		for (const path of ["/talks", "/talks/", "/talks/index.html"]) {
+			const page = await request(path);
+			assert.equal(page.status, 200, path);
+			assert.match(page.body, /talks/i, path);
+			assert.doesNotMatch(page.body, /not found/i);
+		}
+	});
+
 	it("serves reveal talk decks as HTML, not 404", async (t) => {
 		if (!requireBase(t)) return;
 		for (const path of [
