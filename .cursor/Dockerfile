@@ -5,6 +5,9 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& curl -fsSL https://bun.sh/install | bash \
 	&& mv /root/.bun /opt/bun \
-	&& ln -s /opt/bun/bin/bun /usr/local/bin/bun
+	&& ln -s /opt/bun/bin/bun /usr/local/bin/bun \
+	&& usermod -l ubuntu node \
+	&& groupmod -n ubuntu node \
+	&& usermod -d /home/ubuntu -m ubuntu
 
-USER node
+USER ubuntu
