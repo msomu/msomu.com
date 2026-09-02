@@ -481,6 +481,60 @@
           </aside>
         </section>
 
+        <section>
+          <h3>this Mac</h3>
+          <h2>Shell to the phone. No MCP.</h2>
+          <hr class="dim" />
+          <pre><code>Cursor on this Mac
+  --shell--&gt;  ./verify  /  adbharbor
+  --lease--&gt;  phone</code></pre>
+          <p style="margin-top:0.8em; font-size:0.62em; color:var(--muted)">
+            Harbor owns <span class="mono">:5037</span>. Never raw adb.
+          </p>
+          <aside class="notes">
+            Today's live path. USB is here. The CLI is enough. Skip if late — the demo is still ./verify.
+          </aside>
+        </section>
+
+        <section>
+          <h3>cloud agent</h3>
+          <h2>The phone stays on the desk</h2>
+          <hr class="dim" />
+          <pre><code>Cursor Cloud
+  --https--&gt;  tunnel
+  --&gt;  harbor /mcp on this Mac
+  --lease--&gt;  same phone</code></pre>
+          <p style="margin-top:0.8em; font-size:0.62em; color:var(--muted)">
+            <span class="mono">adbharbor expose --via cloudflare</span>. Paste URL + token.
+          </p>
+          <aside class="notes">
+            A cloud VM has no USB. The tunnel is a door, not a farm. get_proof is a real PNG from this phone. Missing cloudflared → brew install. We do not vendor it.
+          </aside>
+        </section>
+
+        <section>
+          <h3>three repos</h3>
+          <h2>Harbor serves. Receipt asks.</h2>
+          <hr class="dim" />
+          <div class="cols-3" style="margin-top:1em">
+            <div class="card">
+              <h3>AdbHarbor</h3>
+              <p style="font-size:0.62em; color:var(--muted); margin:0">server<br />MCP, submit, expose</p>
+            </div>
+            <div class="card">
+              <h3>receipt</h3>
+              <p style="font-size:0.62em; color:var(--muted); margin:0">client<br /><span class="mono">./verify</span> here. MCP from the cloud</p>
+            </div>
+            <div class="card">
+              <h3>this deck</h3>
+              <p style="font-size:0.62em; color:var(--muted); margin:0">both loops<br />msomu.com/talks/receipt</p>
+            </div>
+          </div>
+          <aside class="notes">
+            Inspired by observe-over-MCP. New Go. No copied private code. The plugin ships no URL.
+          </aside>
+        </section>
+
         <section class="section-header">
           <div class="number">03</div>
           <h2>Live</h2>
