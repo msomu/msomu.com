@@ -9,13 +9,13 @@
 	"scripts": {
 		"dev": "astro dev",
 		"start": "astro dev",
-		"build": "astro check && astro build",
+		"build": "astro check && astro build && node scripts/dedupe-talks-routes.mjs",
 		"preview": "astro preview",
 		"astro": "astro",
 		"check": "biome check ./src",
 		"lint": "biome lint ./src",
 		"format": "biome format --write .",
-		"test": "node --experimental-strip-types --test tests/accept.test.ts tests/agent-identity.test.ts tests/paths-and-404.test.ts",
+		"test": "node --experimental-strip-types --test tests/accept.test.ts tests/agent-identity.test.ts tests/paths-and-404.test.ts tests/talks-routes.test.ts",
 		"test:http": "node --experimental-strip-types --test tests/http.test.ts"
 	},
 	"dependencies": {

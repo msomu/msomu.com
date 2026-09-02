@@ -18,10 +18,11 @@ export default defineConfig({
 	],
 	output: "server",
 	adapter: cloudflare({
-		// public/talks/<slug>/index.html is a static asset. Without this,
-		// CF 308s /index.html → / and the worker renders 404.astro.
+		// Decks stay on disk. Do not also exclude "/talks/" — Cloudflare
+		// Pages error 8000057 rejects it as overlapping "/talks/*".
+		// scripts/dedupe-talks-routes.mjs strips the auto-added twin.
 		routes: {
-			exclude: ["/talks/*"],
+			exclude: ["/talks", "/talks/*"],
 		},
 	}),
 });
