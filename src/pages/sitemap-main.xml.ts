@@ -75,6 +75,13 @@ export const GET: APIRoute = async () => {
       </url>
 
       <url>
+        <loc>${new URL("/connect", import.meta.env.SITE).href}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+      </url>
+
+      <url>
         <loc>${new URL("/llms.txt", import.meta.env.SITE).href}</loc>
         <lastmod>${new Date().toISOString()}</lastmod>
         <changefreq>weekly</changefreq>

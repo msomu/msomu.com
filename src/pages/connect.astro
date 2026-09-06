@@ -1,0 +1,51 @@
+---
+import ConnectLinks from "@components/misc/connect-links.astro";
+import { Header } from "@components/misc";
+import { BaseHead } from "@components/seo";
+import RootLayout from "@layouts/root-layout.astro";
+
+const pageTitle = "Connect - Somasundaram Mahesh";
+const pageDescription =
+	"Public social profiles and channels for Somasundaram Mahesh (msomu). Copy links for talks, publications, and collaborations.";
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={pageTitle}
+			description={pageDescription}
+			image='/images/ogimage.png'
+		/>
+	</head>
+
+	<RootLayout>
+		<div class='flex flex-col w-full gap-12 max-w-4xl'>
+			<Header />
+
+			<div class='flex flex-col gap-4'>
+				<h1 class='text-5xl sm:text-6xl font-medium tracking-tight'>
+					Connect
+				</h1>
+				<p class='text-lg text-gray-600 dark:text-gray-400'>
+					public profiles and channels where you can follow or reach Somasundaram Mahesh. click copy to grab a link for a talk bio, publication credit, or collaboration invite.
+				</p>
+			</div>
+
+			<section class='flex flex-col gap-6'>
+				<div class='flex items-center gap-3'>
+					<span class='text-3xl'>🌐</span>
+					<h2 class='text-3xl font-medium tracking-tight'>
+						Profiles
+					</h2>
+				</div>
+
+				<p class='text-base text-gray-600 dark:text-gray-400'>
+					find me on these platforms. click to open, or use copy for the raw URL.
+				</p>
+
+				<ConnectLinks />
+			</section>
+		</div>
+	</RootLayout>
+</html>

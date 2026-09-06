@@ -90,6 +90,7 @@ describe("llms.txt", () => {
 	it("uses H2 file lists with absolute markdown links", () => {
 		assert.match(body, /## When to use this/);
 		assert.match(body, /- \[About\]\(https:\/\/www\.msomu\.com\/about\.md\):/);
+		assert.match(body, /- \[Connect\]\(https:\/\/www\.msomu\.com\/connect\.md\):/);
 		assert.match(
 			body,
 			/- \[Claude Code changed everything\]\(https:\/\/www\.msomu\.com\/writings\/claude-code-changed-everything\.md\):/,

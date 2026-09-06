@@ -141,6 +141,7 @@ describe("agent 404 body", () => {
 		assert.match(body, /llms\.txt/);
 		assert.match(body, /sitemap-index\.xml/);
 		assert.match(body, /https:\/\/www\.msomu\.com\/about/);
+		assert.match(body, /https:\/\/www\.msomu\.com\/connect/);
 		assert.ok(body.length > 200);
 	});
 });

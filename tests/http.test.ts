@@ -204,9 +204,9 @@ describe("public agent endpoints", () => {
 		}
 	});
 
-	it("publishes about, contact, and privacy with enough copy", async (t) => {
+	it("publishes about, contact, privacy, and connect with enough copy", async (t) => {
 		if (!requireBase(t)) return;
-		for (const path of ["/about", "/contact", "/privacy"]) {
+		for (const path of ["/about", "/contact", "/privacy", "/connect"]) {
 			const page = await request(path);
 			assert.equal(page.status, 200, path);
 			const text = page.body.replace(/<[^>]+>/g, " ");
@@ -220,5 +220,17 @@ describe("public agent endpoints", () => {
 			assert.match(markdown.contentType, /text\/markdown/);
 			assert.ok(markdown.body.length >= 500, `${path} markdown is short`);
 		}
+	});
+
+	it("lists social profiles and WhatsApp on /connect", async (t) => {
+		if (!requireBase(t)) return;
+		const page = await request("/connect");
+		assert.equal(page.status, 200);
+		assert.match(page.body, /x\.com\/msomuin/);
+		assert.match(page.body, /instagram\.com\/msomu/);
+		assert.match(page.body, /github\.com\/msomu/);
+		assert.match(page.body, /linkedin\.com\/in\/msomu/);
+		assert.match(page.body, /whatsapp\.com\/channel\/0029VaGe5nY9sBIAggXBtg2E/);
+		assert.match(page.body, /href=['"]\/connect['"]/i);
 	});
 });

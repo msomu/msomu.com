@@ -6,6 +6,7 @@ import {
 	SITE_TITLE,
 	SITE_URL,
 } from "../data/index.ts";
+import { connectPageMarkdown } from "./connect-page.ts";
 import { stripMdxNoise } from "./mdx-body.ts";
 import { notFoundPage } from "./not-found.ts";
 import {
@@ -118,10 +119,12 @@ const STATIC_MARKDOWN: Record<string, () => string> = {
 			`Media assets, bios, and social links for publications that want to mention ${PERSON_NAME}.`,
 			"",
 			`- Portraits: ${SITE_URL}/images/portrait-1.jpg, ${SITE_URL}/images/portrait-2.jpg, ${SITE_URL}/images/portrait-3.jpg`,
+			`- Connect: ${SITE_URL}/connect.md`,
 			`- Contact: ${SITE_URL}/contact.md`,
 			`- About: ${SITE_URL}/about.md`,
 			"",
 		].join("\n"),
+	"/connect": () => connectPageMarkdown(),
 };
 
 async function homeMarkdown(): Promise<string> {
