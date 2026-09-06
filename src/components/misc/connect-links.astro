@@ -6,7 +6,7 @@ import { connectLinks } from "@data/index";
 	{
 		connectLinks.map((link) => (
 			<div class='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors'>
-				<div class='flex flex-col gap-1'>
+				<div class='flex flex-col gap-1 min-w-0'>
 					<span class='text-base font-medium text-gray-900 dark:text-gray-100'>
 						{link.label}
 					</span>
@@ -18,65 +18,15 @@ import { connectLinks } from "@data/index";
 						{link.url}
 					</a>
 				</div>
-				<button
-					class='copy-btn shrink-0 ml-4 px-4 py-2 text-sm font-medium bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-md transition-colors'
-					data-url={link.url}
-					aria-label={`Copy ${link.label} URL`}>
-					Copy
-				</button>
+				<a
+					href={link.url}
+					target='_blank'
+					rel='noopener noreferrer'
+					class='shrink-0 ml-4 px-4 py-2 text-sm font-medium bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 rounded-md transition-colors'
+					aria-label={`Connect on ${link.label}`}>
+					Connect
+				</a>
 			</div>
 		))
 	}
 </div>
-
-<script>
-	const copyButtons = document.querySelectorAll(".copy-btn");
-
-	copyButtons.forEach((button) => {
-		button.addEventListener("click", async () => {
-			const url = button.getAttribute("data-url");
-			const originalText = button.textContent;
-
-			if (!url) return;
-
-			try {
-				await navigator.clipboard.writeText(url);
-				button.textContent = "Copied!";
-				button.classList.add(
-					"bg-green-200",
-					"dark:bg-green-900",
-					"text-green-800",
-					"dark:text-green-200",
-				);
-				button.classList.remove(
-					"bg-gray-200",
-					"dark:bg-gray-800",
-					"text-gray-700",
-					"dark:text-gray-300",
-				);
-
-				setTimeout(() => {
-					button.textContent = originalText;
-					button.classList.remove(
-						"bg-green-200",
-						"dark:bg-green-900",
-						"text-green-800",
-						"dark:text-green-200",
-					);
-					button.classList.add(
-						"bg-gray-200",
-						"dark:bg-gray-800",
-						"text-gray-700",
-						"dark:text-gray-300",
-					);
-				}, 2000);
-			} catch (err) {
-				console.error("Failed to copy:", err);
-				button.textContent = "Failed";
-				setTimeout(() => {
-					button.textContent = originalText;
-				}, 2000);
-			}
-		});
-	});
-</script>
