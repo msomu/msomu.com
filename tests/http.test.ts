@@ -232,6 +232,8 @@ describe("public agent endpoints", () => {
 		assert.match(page.body, /linkedin\.com\/in\/msomu/);
 		assert.match(page.body, /whatsapp\.com\/channel\/0029VaGe5nY9sBIAggXBtg2E/);
 		assert.match(page.body, /href=['"]\/connect['"]/i);
+		assert.match(page.body, /aria-label=['"]Connect on @x['"]/);
+		assert.doesNotMatch(page.body, /copy-btn/);
 	});
 
 	it("keeps /resources as photos only", async (t) => {
