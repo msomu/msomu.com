@@ -47,7 +47,7 @@ export const aboutPage: TrustPage = {
 			heading: "What you will find here",
 			paragraphs: [
 				"Writings cover shipping AI products, agent workflows, and the mobile engineering habits that still matter when the model is the new runtime. Think in code is a slower lane: Kotlin walkthroughs of data-structure problems with runnable examples. Projects currently highlights ToonGen, an app that started as a photo filter and became a way to put a child into a printed story.",
-				"If you need a photo, a short bio, or social URLs for a talk or publication, the resources page is the press kit. If you need to reach him, use the contact page.",
+				"If you need a photo for a talk or publication, the resources page is the press kit. Bios live here. Social URLs live on the connect page. If you need to reach him, use the contact page.",
 			],
 		},
 	],

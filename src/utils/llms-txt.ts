@@ -128,12 +128,7 @@ export function buildLlmsTxt(input: {
 				{
 					title: "Resources",
 					url: `${SITE_URL}/resources.md`,
-					notes: "Photos and bios for publications.",
-				},
-				{
-					title: "Connect",
-					url: `${SITE_URL}/connect.md`,
-					notes: "Social profiles and WhatsApp channel.",
+					notes: "Press photos for publications.",
 				},
 				{
 					title: "ToonGen privacy policy",

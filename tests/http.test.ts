@@ -233,4 +233,16 @@ describe("public agent endpoints", () => {
 		assert.match(page.body, /whatsapp\.com\/channel\/0029VaGe5nY9sBIAggXBtg2E/);
 		assert.match(page.body, /href=['"]\/connect['"]/i);
 	});
+
+	it("keeps /resources as photos only", async (t) => {
+		if (!requireBase(t)) return;
+		const page = await request("/resources");
+		assert.equal(page.status, 200);
+		assert.match(page.body, /portrait-1\.jpg/);
+		assert.match(page.body, /href=['"]\/about['"]/);
+		assert.match(page.body, /href=['"]\/connect['"]/);
+		assert.doesNotMatch(page.body, /Quick Intro/);
+		assert.doesNotMatch(page.body, /id=['"]about['"]/);
+		assert.doesNotMatch(page.body, /id=['"]connect['"]/);
+	});
 });

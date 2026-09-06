@@ -1,12 +1,11 @@
 ---
-import ConnectLinks from "@components/misc/connect-links.astro";
 import { Header } from "@components/misc";
 import { BaseHead } from "@components/seo";
 import RootLayout from "@layouts/root-layout.astro";
 
 const pageTitle = "Resources - Somasundaram Mahesh";
 const pageDescription =
-	"Media assets, bio, and social links for Somasundaram Mahesh (msomu)";
+	"Press photos for Somasundaram Mahesh (msomu). Bios live on /about. Social URLs live on /connect.";
 ---
 
 <!doctype html>
@@ -28,7 +27,11 @@ const pageDescription =
 					Resources
 				</h1>
 				<p class='text-lg text-gray-600 dark:text-gray-400'>
-					media assets, bio, and links for publications and collaborations.
+					press photos for publications. bios are on <a
+						href='/about'
+						class='text-orange-500 dark:text-orange-400 hover:underline underline-offset-2'>about</a>. social URLs are on <a
+						href='/connect'
+						class='text-orange-500 dark:text-orange-400 hover:underline underline-offset-2'>connect</a>.
 				</p>
 			</div>
 
@@ -98,75 +101,6 @@ const pageDescription =
 						</a>
 					</div>
 				</div>
-			</section>
-
-			<!-- About Section -->
-			<section id='about' class='flex flex-col gap-6'>
-				<div class='flex items-center gap-3'>
-					<span class='text-3xl'>👨‍💻</span>
-					<h2 class='text-3xl font-medium tracking-tight'>
-						About
-					</h2>
-				</div>
-
-				<p class='text-base text-gray-600 dark:text-gray-400'>
-					pick the version that fits your format.
-				</p>
-
-				<!-- Bio Content -->
-				<div class='mt-4 flex flex-col gap-10'>
-					<div class='flex flex-col gap-4'>
-						<h3 class='text-lg font-mono text-orange-500 dark:text-orange-400'>
-							Quick Intro
-						</h3>
-						<div class='p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border-l-4 border-orange-500 dark:border-orange-400'>
-							<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-								senior android developer at JioHotstar, specializing in streaming and entertainment apps. community leader at GDG Chennai. 10+ years shipping mobile solutions at scale.
-							</p>
-						</div>
-					</div>
-
-					<div class='flex flex-col gap-4'>
-						<h3 class='text-lg font-mono text-orange-500 dark:text-orange-400'>
-							Extended Bio
-						</h3>
-						<div class='p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border-l-4 border-orange-500 dark:border-orange-400'>
-							<div class='prose prose-lg dark:prose-invert max-w-none'>
-								<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-									somasundaram mahesh builds android apps at JioHotstar, crafting streaming experiences for millions of users. with over a decade of experience in mobile development, he specializes in solving complex problems at scale while maintaining high performance and reliability.
-								</p>
-								<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300 mt-4'>
-									as a senior android developer focused on streaming and entertainment platforms, he creates seamless user experiences that work flawlessly for massive audiences. beyond his day job, he leads the developer community at GDG Chennai, mentoring the next generation of android engineers.
-								</p>
-								<p class='text-lg leading-relaxed text-gray-700 dark:text-gray-300 mt-4'>
-									his expertise spans mobile architecture, performance optimization, and building resilient systems. he shares his knowledge through technical writing and speaking at developer conferences.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<!-- Connect Section -->
-			<section id='connect' class='flex flex-col gap-6'>
-				<div class='flex items-center gap-3'>
-					<span class='text-3xl'>🌐</span>
-					<h2 class='text-3xl font-medium tracking-tight'>
-						Connect
-					</h2>
-				</div>
-
-				<p class='text-base text-gray-600 dark:text-gray-400'>
-					find me on these platforms. click to copy the link, or visit the
-					<a
-						href='/connect'
-						class='text-orange-500 dark:text-orange-400 hover:underline underline-offset-2'>
-						connect page
-					</a>
-					for the full list.
-				</p>
-
-				<ConnectLinks />
 			</section>
 		</div>
 	</RootLayout>
