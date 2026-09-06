@@ -1,12 +1,12 @@
 ---
-import ConnectLinks from "@components/misc/connect-links.astro";
 import { Header } from "@components/misc";
+import ConnectLinks from "@components/misc/connect-links.astro";
 import { BaseHead } from "@components/seo";
+import { PERSON_DESCRIPTION, PERSON_NAME } from "@data/index";
 import RootLayout from "@layouts/root-layout.astro";
 
 const pageTitle = "Connect - Somasundaram Mahesh";
-const pageDescription =
-	"Public social profiles and channels for Somasundaram Mahesh (msomu). Open X, Instagram, GitHub, LinkedIn, or the WhatsApp channel.";
+const pageDescription = `${PERSON_NAME} (msomu). ${PERSON_DESCRIPTION}`;
 ---
 
 <!doctype html>
@@ -28,7 +28,7 @@ const pageDescription =
 					Connect
 				</h1>
 				<p class='text-lg text-gray-600 dark:text-gray-400'>
-					public profiles. tap connect to open that app.
+					{PERSON_NAME} (msomu). {PERSON_DESCRIPTION}
 				</p>
 			</div>
 
@@ -41,7 +41,7 @@ const pageDescription =
 				</div>
 
 				<p class='text-base text-gray-600 dark:text-gray-400'>
-					find me on these platforms. connect opens the profile.
+					public profiles. tap connect to open that app.
 				</p>
 
 				<ConnectLinks />

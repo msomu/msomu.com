@@ -11,6 +11,7 @@ export const PERSON_DESCRIPTION =
 export const CONTACT_TYPE = "inquiries";
 export const TOPMATE_URL =
 	"https://topmate.io/msomu/2148374?utm_source=public_profile&utm_campaign=msomu";
+export const YOUTUBE_URL = "https://youtube.com/@somasundaram.m";
 export const WHATSAPP_CHANNEL_URL =
 	"https://whatsapp.com/channel/0029VaGe5nY9sBIAggXBtg2E";
 export const POSTAL_ADDRESS = {
@@ -24,7 +25,16 @@ export interface MenuItem {
 	url: string;
 }
 
+export type SocialPlatform =
+	| "x"
+	| "instagram"
+	| "youtube"
+	| "github"
+	| "linkedin"
+	| "whatsapp";
+
 export interface SocialLink {
+	id: SocialPlatform;
 	label: string;
 	url: string;
 }
@@ -64,18 +74,27 @@ export const menuItems: MenuItem[] = [
 // Social links
 export const socialLinks: SocialLink[] = [
 	{
+		id: "x",
 		label: "@x",
 		url: "https://x.com/msomuin",
 	},
 	{
+		id: "instagram",
 		label: "instagram",
 		url: "https://www.instagram.com/msomu",
 	},
 	{
+		id: "youtube",
+		label: "youtube",
+		url: YOUTUBE_URL,
+	},
+	{
+		id: "github",
 		label: "github",
 		url: "https://github.com/msomu",
 	},
 	{
+		id: "linkedin",
 		label: "linkedin",
 		url: "https://www.linkedin.com/in/msomu/",
 	},
@@ -84,6 +103,7 @@ export const socialLinks: SocialLink[] = [
 export const connectLinks: SocialLink[] = [
 	...socialLinks,
 	{
+		id: "whatsapp",
 		label: "whatsapp channel",
 		url: WHATSAPP_CHANNEL_URL,
 	},
