@@ -56,7 +56,7 @@ export function buildLlmsTxt(input: {
 					title: "Connect",
 					url: `${SITE_URL}/connect.md`,
 					notes:
-						"Public social profiles and WhatsApp channel. Each row opens that app.",
+						"Who he is, plus public social profiles including YouTube and WhatsApp. Each row opens that app.",
 				},
 				{
 					title: "Writings",

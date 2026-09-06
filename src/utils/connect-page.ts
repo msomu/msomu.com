@@ -1,10 +1,15 @@
-import { connectLinks, PERSON_NAME, SITE_URL } from "../data/index.ts";
+import {
+	PERSON_DESCRIPTION,
+	PERSON_NAME,
+	SITE_URL,
+	connectLinks,
+} from "../data/index.ts";
 
 export function connectPageMarkdown(): string {
 	const lines = [
 		"# Connect",
 		"",
-		`> Public social profiles and channels for ${PERSON_NAME} (msomu).`,
+		`> ${PERSON_NAME} (msomu). ${PERSON_DESCRIPTION}`,
 		"",
 		"Use these URLs when you need to cite or link to a public profile in a talk listing, publication byline, podcast show notes, or event page. Each link below is the canonical public account on that platform.",
 		"",

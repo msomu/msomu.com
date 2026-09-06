@@ -1,22 +1,26 @@
 ---
 import { connectLinks } from "@data/index";
+import PlatformIcon from "./platform-icon.astro";
 ---
 
 <div class='flex flex-col gap-4 mt-4'>
 	{
 		connectLinks.map((link) => (
 			<div class='flex flex-col gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors sm:flex-row sm:items-center sm:justify-between'>
-				<div class='flex flex-col gap-1 min-w-0'>
-					<span class='text-base font-medium text-gray-900 dark:text-gray-100'>
-						{link.label}
-					</span>
-					<a
-						href={link.url}
-						target='_blank'
-						rel='noopener noreferrer'
-						class='text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 break-all max-w-full'>
-						{link.url}
-					</a>
+				<div class='flex items-start gap-3 min-w-0'>
+					<PlatformIcon id={link.id} />
+					<div class='flex flex-col gap-1 min-w-0'>
+						<span class='text-base font-medium text-gray-900 dark:text-gray-100'>
+							{link.label}
+						</span>
+						<a
+							href={link.url}
+							target='_blank'
+							rel='noopener noreferrer'
+							class='text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 break-all max-w-full'>
+							{link.url}
+						</a>
+					</div>
 				</div>
 				<a
 					href={link.url}

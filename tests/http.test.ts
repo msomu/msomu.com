@@ -228,6 +228,7 @@ describe("public agent endpoints", () => {
 		assert.equal(page.status, 200);
 		assert.match(page.body, /x\.com\/msomuin/);
 		assert.match(page.body, /instagram\.com\/msomu/);
+		assert.match(page.body, /youtube\.com\/@somasundaram\.m/);
 		assert.match(page.body, /github\.com\/msomu/);
 		assert.match(page.body, /linkedin\.com\/in\/msomu/);
 		assert.match(page.body, /whatsapp\.com\/channel\/0029VaGe5nY9sBIAggXBtg2E/);
