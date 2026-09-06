@@ -11,6 +11,8 @@ export const PERSON_DESCRIPTION =
 export const CONTACT_TYPE = "inquiries";
 export const TOPMATE_URL =
 	"https://topmate.io/msomu/2148374?utm_source=public_profile&utm_campaign=msomu";
+export const WHATSAPP_CHANNEL_URL =
+	"https://whatsapp.com/channel/0029VaGe5nY9sBIAggXBtg2E";
 export const POSTAL_ADDRESS = {
 	addressLocality: "Chennai",
 	addressRegion: "Tamil Nadu",
@@ -76,5 +78,13 @@ export const socialLinks: SocialLink[] = [
 	{
 		label: "linkedin",
 		url: "https://www.linkedin.com/in/msomu/",
+	},
+];
+
+export const connectLinks: SocialLink[] = [
+	...socialLinks,
+	{
+		label: "whatsapp channel",
+		url: WHATSAPP_CHANNEL_URL,
 	},
 ];

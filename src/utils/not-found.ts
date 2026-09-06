@@ -24,6 +24,7 @@ export function notFoundMarkdown(pathname: string): string {
 		`- [Sitemap](${SITE_URL}/sitemap-index.xml): complete list of public URLs`,
 		`- [Home](${SITE_URL}/): identity, recent writing, and links`,
 		`- [About](${SITE_URL}/about): who Somasundaram Mahesh is and what he works on`,
+		`- [Connect](${SITE_URL}/connect): public social profiles and channels`,
 		`- [Writings](${SITE_URL}/writings): articles on AI agents, shipping products, and mobile engineering`,
 		`- [Contact](${SITE_URL}/contact): email and booking`,
 		"",
@@ -36,6 +37,7 @@ export const NOT_FOUND_LINKS = [
 	{ href: "/sitemap-index.xml", label: "sitemap" },
 	{ href: "/", label: "home" },
 	{ href: "/about", label: "about" },
+	{ href: "/connect", label: "connect" },
 	{ href: "/writings", label: "writings" },
 	{ href: "/contact", label: "contact" },
 ] as const;

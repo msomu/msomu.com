@@ -53,6 +53,12 @@ export function buildLlmsTxt(input: {
 					notes: "Email and booking. Use this when a human should be reached.",
 				},
 				{
+					title: "Connect",
+					url: `${SITE_URL}/connect.md`,
+					notes:
+						"Public social profiles and WhatsApp channel with copyable URLs.",
+				},
+				{
 					title: "Writings",
 					url: `${SITE_URL}/writings.md`,
 					notes:
@@ -122,7 +128,7 @@ export function buildLlmsTxt(input: {
 				{
 					title: "Resources",
 					url: `${SITE_URL}/resources.md`,
-					notes: "Photos and bios for publications.",
+					notes: "Press photos for publications.",
 				},
 				{
 					title: "ToonGen privacy policy",
