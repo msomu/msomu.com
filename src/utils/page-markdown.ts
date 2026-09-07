@@ -15,6 +15,7 @@ import {
 	privacyPage,
 	trustPageMarkdown,
 } from "./trust-pages.ts";
+import { writingMarkdownPath } from "./writing-routes.ts";
 
 export interface MarkdownPage {
 	body: string;
@@ -78,7 +79,9 @@ const STATIC_MARKDOWN: Record<string, () => string> = {
 			"- [Play Store](https://play.google.com/store/apps/details?id=com.msomu.toongen)",
 			`- [Privacy policy](${SITE_URL}/projects/toongen/privacy-policy.md)`,
 			`- [Terms of service](${SITE_URL}/projects/toongen/terms-of-service.md)`,
-			`- [Why it was built](${SITE_URL}/writings/i-built-toongen-for-my-son.md)`,
+			`- [Why it was built](${SITE_URL}${writingMarkdownPath(
+				"i-built-toongen-for-my-son",
+			)})`,
 			"",
 		].join("\n"),
 	"/projects/toongen/privacy-policy": () =>
@@ -136,7 +139,7 @@ async function homeMarkdown(): Promise<string> {
 	const recent = writings
 		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 		.slice(0, 3);
-	const body = intro ? stripMdxNoise(intro.body) : PERSON_DESCRIPTION;
+	const body = intro ? stripMdxNoise(intro.body ?? "") : PERSON_DESCRIPTION;
 	const lines = [
 		`# ${intro?.data.title ?? SITE_TITLE}`,
 		"",
@@ -149,7 +152,9 @@ async function homeMarkdown(): Promise<string> {
 	];
 	for (const writing of recent) {
 		lines.push(
-			`- [${writing.data.title}](${SITE_URL}/writings/${writing.slug}.md): ${writing.data.description}`,
+			`- [${writing.data.title}](${SITE_URL}${writingMarkdownPath(
+				writing.id,
+			)}): ${writing.data.description}`,
 		);
 	}
 	lines.push(
@@ -170,7 +175,7 @@ async function writingsIndexMarkdown(): Promise<string> {
 		"Thoughts on shipping AI products, agent workflows, and mobile engineering.",
 		writings.map((writing) => ({
 			title: writing.data.title,
-			href: `${SITE_URL}/writings/${writing.slug}.md`,
+			href: `${SITE_URL}${writingMarkdownPath(writing.id)}`,
 			notes: writing.data.description,
 		})),
 	);
@@ -185,7 +190,7 @@ async function thinkInCodeIndexMarkdown(): Promise<string> {
 		"Kotlin data-structure walkthroughs with runnable playgrounds.",
 		items.map((item) => ({
 			title: item.data.title,
-			href: `${SITE_URL}/think-in-code/${item.slug}.md`,
+			href: `${SITE_URL}/think-in-code/${item.id}.md`,
 			notes: item.data.description,
 		})),
 	);
@@ -231,10 +236,10 @@ export async function resolvePageMarkdown(path: string): Promise<MarkdownPage> {
 		return { exists: true, body: await talksMarkdown() };
 	}
 
-	const writingMatch = path.match(/^\/writings\/([^/]+)$/);
-	if (writingMatch) {
-		const posts = await getCollection("writing");
-		const post = posts.find((entry) => entry.slug === writingMatch[1]);
+	const thinkMatch = path.match(/^\/think-in-code\/([^/]+)$/);
+	if (thinkMatch) {
+		const posts = await getCollection("thinkInCode");
+		const post = posts.find((entry) => entry.id === thinkMatch[1]);
 		if (!post) return notFoundPage(path);
 		return {
 			exists: true,
@@ -242,25 +247,27 @@ export async function resolvePageMarkdown(path: string): Promise<MarkdownPage> {
 				post.data.title,
 				post.data.description,
 				post.data.pubDate,
-				post.body,
+				post.body ?? "",
 			),
 		};
 	}
 
-	const thinkMatch = path.match(/^\/think-in-code\/([^/]+)$/);
-	if (thinkMatch) {
-		const posts = await getCollection("thinkInCode");
-		const post = posts.find((entry) => entry.slug === thinkMatch[1]);
-		if (!post) return notFoundPage(path);
-		return {
-			exists: true,
-			body: articleMarkdown(
-				post.data.title,
-				post.data.description,
-				post.data.pubDate,
-				post.body,
-			),
-		};
+	// Writings are flat: /{id}. Checked last so every named page above wins.
+	const writingMatch = path.match(/^\/([^/]+)$/);
+	if (writingMatch) {
+		const posts = await getCollection("writing");
+		const post = posts.find((entry) => entry.id === writingMatch[1]);
+		if (post) {
+			return {
+				exists: true,
+				body: articleMarkdown(
+					post.data.title,
+					post.data.description,
+					post.data.pubDate,
+					post.body ?? "",
+				),
+			};
+		}
 	}
 
 	return notFoundPage(path);

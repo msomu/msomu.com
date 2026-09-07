@@ -45,7 +45,7 @@ const writings = (await getCollection("writing")).sort(
 					<WritingItem
 						title={writing.data.title}
 						date={writing.data.pubDate}
-						slug={writing.slug}
+						slug={writing.id}
 					/>
 				))
 			}

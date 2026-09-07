@@ -37,7 +37,7 @@ const thinkInCodeItems = (await getCollection("thinkInCode")).sort(
 					<ThinkInCodeItem
 						title={item.data.title}
 						date={item.data.pubDate}
-						slug={item.slug}
+						slug={item.id}
 					/>
 				))
 			}

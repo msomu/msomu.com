@@ -1,10 +1,7 @@
-import { getCollection } from "astro:content";
 import type { APIRoute } from "astro";
 
+// /uses is a single static page; there is no `use` collection behind it.
 export const GET: APIRoute = async () => {
-	const useItems = await getCollection("use");
-
-	// Generate the sitemap
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <url>
@@ -13,19 +10,6 @@ export const GET: APIRoute = async () => {
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
       </url>
-
-      ${useItems
-				.map(
-					(item) => `
-        <url>
-          <loc>${new URL(`/uses/${item.slug}`, import.meta.env.SITE).href}</loc>
-          <lastmod>${item.data.pubDate.toISOString()}</lastmod>
-        <changefreq>daily</changefreq>
-          <priority>1.0</priority>
-        </url>
-      `,
-				)
-				.join("")}
     </urlset>
   `;
 

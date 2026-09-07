@@ -1,11 +1,11 @@
 import { getCollection } from "astro:content";
 import rss from "@astrojs/rss";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@data/index";
+import { writingPath } from "@utils/writing-routes";
 
 export async function GET(context) {
-	const [posts, uses, thinkInCodeItems] = await Promise.all([
+	const [posts, thinkInCodeItems] = await Promise.all([
 		getCollection("writing"),
-		getCollection("use"),
 		getCollection("thinkInCode"),
 	]);
 
@@ -13,18 +13,15 @@ export async function GET(context) {
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		site: context.site,
+		trailingSlash: false,
 		items: [
 			...posts.map((post) => ({
 				...post.data,
-				link: `/writings/${post.slug}/`,
-			})),
-			...uses.map((use) => ({
-				...use.data,
-				link: `/uses/${use.slug}/`,
+				link: writingPath(post.id),
 			})),
 			...thinkInCodeItems.map((item) => ({
 				...item.data,
-				link: `/think-in-code/${item.slug}/`,
+				link: `/think-in-code/${item.id}`,
 			})),
 		],
 	});

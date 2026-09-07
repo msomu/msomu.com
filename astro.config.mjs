@@ -1,28 +1,25 @@
-import { defineConfig } from "astro/config";
-import mdx from "@astrojs/mdx";
-import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
 import cloudflare from "@astrojs/cloudflare";
+import mdx from "@astrojs/mdx";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
 	site: "https://www.msomu.com",
-	integrations: [
-		mdx(),
-		sitemap({
-			changefreq: "weekly",
-			priority: 0.7,
-			lastmod: new Date().toISOString().split("T")[0],
-		}),
-		tailwind(),
-	],
+	trailingSlash: "never",
+	vite: {
+		plugins: [tailwindcss()],
+	},
+	// Sitemaps are hand-built in src/pages/sitemap-*.xml.ts. @astrojs/sitemap is
+	// not used: its static sitemap-index.xml would shadow the custom route.
+	integrations: [mdx()],
 	output: "server",
 	adapter: cloudflare({
-		// Decks stay on disk. Do not also exclude "/talks/" — Cloudflare
-		// Pages error 8000057 rejects it as overlapping "/talks/*".
-		// scripts/dedupe-talks-routes.mjs strips the auto-added twin.
-		routes: {
-			exclude: ["/talks", "/talks/*"],
-		},
+		// Talk decks are prerendered from public/talks/**/index.html via node:fs
+		// (src/utils/talk-decks.ts). workerd has no fs, so prerender in Node.
+		// At runtime Workers static assets serve /talks/* before the worker, so
+		// the old Pages `routes.exclude` (v9 adapter) is no longer needed;
+		// scripts/dedupe-talks-routes.mjs stays a no-op unless _routes.json exists.
+		prerenderEnvironment: "node",
 	}),
 });

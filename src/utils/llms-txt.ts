@@ -4,6 +4,7 @@ import {
 	SITE_TITLE,
 	SITE_URL,
 } from "../data/index.ts";
+import { writingMarkdownPath } from "./writing-routes.ts";
 
 export interface LlmsLink {
 	title: string;
@@ -106,7 +107,7 @@ export function buildLlmsTxt(input: {
 			heading: "Writings",
 			items: input.writings.map((writing) => ({
 				title: writing.title,
-				url: `${SITE_URL}/writings/${writing.slug}.md`,
+				url: `${SITE_URL}${writingMarkdownPath(writing.slug)}`,
 				notes: writing.description,
 			})),
 		},
