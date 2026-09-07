@@ -109,9 +109,39 @@ describe("public agent endpoints", () => {
 		);
 	});
 
+	it("serves writings flat at /{slug} and redirects the legacy path", async (t) => {
+		if (!requireBase(t)) return;
+		const slug = "claude-code-changed-everything";
+		const flat = await request(`/${slug}`);
+		assert.equal(flat.status, 200);
+		assert.match(flat.body, /Claude Code changed everything/);
+		assert.match(flat.body, new RegExp(`rel="canonical" href="[^"]*/${slug}"`));
+
+		const legacy = await fetch(new URL(`/writings/${slug}`, BASE_URL), {
+			redirect: "manual",
+		});
+		assert.equal(legacy.status, 308);
+		assert.match(legacy.headers.get("location") ?? "", new RegExp(`/${slug}$`));
+
+		const legacyMarkdown = await fetch(
+			new URL(`/writings/${slug}.md`, BASE_URL),
+			{ redirect: "manual" },
+		);
+		assert.equal(legacyMarkdown.status, 308);
+		assert.match(
+			legacyMarkdown.headers.get("location") ?? "",
+			new RegExp(`/${slug}\\.md$`),
+		);
+
+		const markdown = await request(`/${slug}`, { Accept: "text/markdown" });
+		assert.equal(markdown.status, 200);
+		assert.match(markdown.contentType, /text\/markdown/);
+		assert.match(markdown.body, /^# Claude Code changed everything/m);
+	});
+
 	it("keeps the requested slug on rewritten 404s", async (t) => {
 		if (!requireBase(t)) return;
-		const missing = "/writings/this-slug-does-not-exist";
+		const missing = "/this-slug-does-not-exist";
 		const html = await request(missing);
 		assert.equal(html.status, 404);
 		assert.match(html.body, /this-slug-does-not-exist/);

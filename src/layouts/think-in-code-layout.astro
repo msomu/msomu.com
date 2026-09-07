@@ -38,10 +38,8 @@ const { title, description, pubDate, heroImage }: Props = Astro.props;
 			</p>
 			<p
 				class='w-full text-start font-medium text-gray-700 dark:text-gray-300 text-lg'>
-					<span class='font-semibold text-orange-500'
-					>tl;dr:
-					</span>
-				{description}
+					<span class='font-semibold text-orange-500'>tl;dr:</span>
+				{" "}{description}
 			</p>
 			<!-- we're using the Image component from Astro to handle the image optimization -->
 			{

@@ -103,12 +103,12 @@ bun run format
 - **Thoughts**: Insights from building at scale and community experiences
 
 ## 🛠️ Tech Stack
-- **Astro**: Static site generator
-- **TailwindCSS**: Utility-first CSS framework
+- **Astro 7**: SSR site framework (`output: "server"`)
+- **TailwindCSS 4**: Utility-first CSS framework via `@tailwindcss/vite`
 - **Markdown/MDX**: Content formatting
 - **TypeScript**: Type-safe development
 - **Biome**: Code formatting and linting
-- **Cloudflare Pages**: Hosting and deployment
+- **Cloudflare Workers**: Hosting and deployment (`@astrojs/cloudflare` 14, `wrangler.jsonc`)
 
 ## 🎨 Design
 Dark theme optimized for readability, emphasizing technical content and professional experience.

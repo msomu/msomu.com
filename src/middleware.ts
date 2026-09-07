@@ -12,6 +12,10 @@ import {
 	markdownResponse,
 	notAcceptableResponse,
 } from "./utils/vary.ts";
+import {
+	WRITING_REDIRECT_STATUS,
+	legacyWritingRedirect,
+} from "./utils/writing-routes.ts";
 
 function describedByLink(pathname: string): string {
 	const alternate = markdownAlternatePath(pathname);
@@ -20,6 +24,17 @@ function describedByLink(pathname: string): string {
 
 export const onRequest = defineMiddleware(async (context, next) => {
 	const pathname = context.url.pathname;
+
+	// Writings moved from /writings/{id} to /{id}. Redirect before content
+	// negotiation so /writings/{id}.md lands on /{id}.md, not on a 404 body.
+	const legacyTarget = legacyWritingRedirect(pathname);
+	if (legacyTarget) {
+		return context.redirect(
+			`${legacyTarget}${context.url.search}`,
+			WRITING_REDIRECT_STATUS,
+		);
+	}
+
 	const rewrittenFrom =
 		pathname === "/404" ? context.url.searchParams.get("from") : null;
 	context.locals.requestedPath = safeRequestedPath(rewrittenFrom, pathname);

@@ -1,6 +1,50 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.mjs";
+@plugin "@tailwindcss/typography";
+
+/* Tailwind 4 defaults dark: to prefers-color-scheme. Keep the class toggle
+   that BaseHead's inline theme script sets on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@font-face {
+  font-family: 'UncutSans';
+  src:
+    local('UncutSans'),
+    url('/fonts/uncut/woff2/UncutSans-Bold.woff2') format('woff2'),
+    url('/fonts/uncut/woff/UncutSans-Bold.woff') format('woff');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UncutSans';
+  src:
+    local('UncutSans'),
+    url('/fonts/uncut/woff2/UncutSans-Semibold.woff2') format('woff2'),
+    url('/fonts/uncut/woff/UncutSans-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UncutSans';
+  src:
+    local('UncutSans'),
+    url('/fonts/uncut/woff2/UncutSans-Medium.woff2') format('woff2'),
+    url('/fonts/uncut/woff/UncutSans-Medium.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UncutSans';
+  src:
+    local('UncutSans'),
+    url('/fonts/uncut/woff2/UncutSans-Regular.woff2') format('woff2'),
+    url('/fonts/uncut/woff/UncutSans-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+}
 
 @layer base {
   html {
@@ -10,50 +54,5 @@
   body {
     font-family: 'UncutSans', sans-serif;
     @apply bg-white text-black dark:bg-black dark:text-white;
-  }
-
-
-  @font-face {
-    font-family: 'UncutSans';
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff2/UncutSans-Bold.woff2') format('woff2');
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff/UncutSans-Bold.woff') format('woff');
-    font-weight: 700;
-  }
-
-  @font-face {
-    font-family: 'UncutSans';
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff2/UncutSans-Semibold.woff2') format('woff2');
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff/UncutSans-Semibold.woff') format('woff');
-    font-weight: 600;
-  }
-
-  @font-face {
-    font-family: 'UncutSans';
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff2/UncutSans-Medium.woff2') format('woff2');
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff/UncutSans-Medium.woff') format('woff');
-    font-weight: 500;
-  }
-
-  @font-face {
-    font-family: 'UncutSans';
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff2/UncutSans-Regular.woff2') format('woff2');
-    src:
-      local('UncutSans'),
-      url('/fonts/uncut/woff/UncutSans-Regular.woff') format('woff');
-    font-weight: 400;
   }
 }

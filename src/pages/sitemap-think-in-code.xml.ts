@@ -19,7 +19,7 @@ export const GET: APIRoute = async () => {
 					(post) => `
         <url>
           <loc>${
-						new URL(`/think-in-code/${post.slug}`, import.meta.env.SITE).href
+						new URL(`/think-in-code/${post.id}`, import.meta.env.SITE).href
 					}</loc>
           <lastmod>${post.data.pubDate.toISOString()}</lastmod>
         <changefreq>daily</changefreq>

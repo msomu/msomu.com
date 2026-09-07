@@ -1,19 +1,18 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import { ScrollProgress } from "@components/misc";
 import ThinkInCodeLayout from "@layouts/think-in-code-layout.astro";
 
 const posts = await getCollection("thinkInCode");
-type Props = CollectionEntry<"thinkInCode">;
 
 const { slug } = Astro.params;
-const post = posts.find((page) => page.slug === slug);
+const post = posts.find((page) => page.id === slug);
 
 if (!post) {
 	return Astro.rewrite(`/404?from=${encodeURIComponent(Astro.url.pathname)}`);
 }
 
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <ThinkInCodeLayout {...post.data}>

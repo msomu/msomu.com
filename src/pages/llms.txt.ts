@@ -18,7 +18,7 @@ async function llmsBody(): Promise<string> {
 			.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 			.map((writing) => ({
 				title: writing.data.title,
-				slug: writing.slug,
+				slug: writing.id,
 				description: writing.data.description,
 			})),
 		talks: talks

@@ -20,7 +20,7 @@ Baseline preconditions for every drive:
 | ID | File | User-visible behavior |
 |----|------|------------------------|
 | `homepage` | [homepage.md](./homepage.md) | Landing hero, intro copy, recent writings teaser, social links, top nav |
-| `writings` | [writings.md](./writings.md) | Writings index, RSS link, individual MDX post pages |
+| `writings` | [writings.md](./writings.md) | Writings index, RSS link, flat `/{slug}` posts, 308 from `/writings/{slug}` |
 | `connect` | [connect.md](./connect.md) | Public profiles with Connect buttons and outbound URLs |
 | `talks` | [talks.md](./talks.md) | Talks listing plus static Reveal.js decks |
 | `agent-markdown` | [agent-markdown.md](./agent-markdown.md) | `Accept: text/markdown`, `/llms.txt`, agent-friendly 404 bodies |

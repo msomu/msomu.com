@@ -17,7 +17,7 @@ Not a human UI flow — HTTP clients set `Accept: text/markdown` or fetch `/abou
 
 1. `curl -fsS -D evidence/homepage-md.headers -H 'Accept: text/markdown' -o evidence/homepage.md http://127.0.0.1:4321/`
    - **Expect:** HTTP 200, `Content-Type` contains `text/markdown`, body mentions somu/msomu, no `<html`.
-2. `grep -i 'Vary: Accept' evidence/homepage-md.headers`
+2. `grep -qi 'vary: accept' evidence/homepage-md.headers`
    - **Expect:** match.
 3. `curl -fsS -o evidence/llms.txt http://127.0.0.1:4321/llms.txt`
    - **Expect:** HTTP 200, contains `When to use this site`.

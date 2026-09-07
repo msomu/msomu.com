@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import { WritingItem } from "@components/cards";
 import { Header } from "@components/misc";
 import { BaseHead } from "@components/seo";
@@ -10,7 +10,7 @@ import { clsx } from "@utils/index";
 const whoami = await getCollection("whoami");
 const whoamiData = whoami[0].data; // Get the first item from the collection
 const { description } = whoamiData;
-const { Content } = await whoami[0].render();
+const { Content } = await render(whoami[0]);
 
 // Get the 3 most recent writings
 const recentWritings = (await getCollection("writing"))
@@ -72,7 +72,7 @@ const recentWritings = (await getCollection("writing"))
 							<WritingItem
 								title={writing.data.title}
 								date={writing.data.pubDate}
-								slug={writing.slug}
+								slug={writing.id}
 							/>
 						))
 					}

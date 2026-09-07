@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from "astro:content";
+import { ScrollProgress } from "@components/misc";
+import WritingLayout from "@layouts/writing-layout.astro";
+
+// Flat writing URLs: /{id}. Every static page (about, connect, ...) is a more
+// specific route and wins before this catch-all runs.
+const { slug } = Astro.params;
+
+const writings = await getCollection("writing");
+const post = writings.find((entry) => entry.id === slug);
+
+if (!post) {
+	return Astro.rewrite(`/404?from=${encodeURIComponent(Astro.url.pathname)}`);
+}
+
+const { Content } = await render(post);
+---
+
+<WritingLayout {...post.data}>
+	<Content />
+	<ScrollProgress />
+</WritingLayout>

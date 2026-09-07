@@ -33,11 +33,17 @@ drive_homepage() {
 drive_writings() {
 	curl -fsS -D "$OUT_DIR/writings.headers" -o "$OUT_DIR/writings.html" "$BASE_URL/writings"
 	grep -qi 'writings' "$OUT_DIR/writings.html"
-	slug="$(grep -oE 'href="/writings/[^"]+"' "$OUT_DIR/writings.html" | head -1 | sed 's/href="\/writings\///;s/"//')"
+	slug="$(grep -oE 'href="/[a-z0-9-]+"' "$OUT_DIR/writings.html" | sed 's/href="\///;s/"//' | grep -vE '^(writings|talks|projects|uses|connect|about|contact|privacy|resources)$' | head -1)"
 	[[ -n "$slug" ]] || { echo "writings: no post slug found" >&2; exit 1; }
-	curl -fsS -D "$OUT_DIR/writing-detail.headers" -o "$OUT_DIR/writing-detail.html" "$BASE_URL/writings/$slug"
+	curl -fsS -D "$OUT_DIR/writing-detail.headers" -o "$OUT_DIR/writing-detail.html" "$BASE_URL/$slug"
 	grep -qi "$slug" "$OUT_DIR/writing-detail.html"
-	echo "writings: ok ($slug)"
+	redirect="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-redirs 0 "$BASE_URL/writings/$slug")"
+	printf '%s\n' "$redirect" >"$OUT_DIR/legacy-redirect.txt"
+	[[ "$redirect" == "308 $BASE_URL/$slug" || "$redirect" == "308 /$slug" ]] || {
+		echo "writings: expected 308 to /$slug, got: $redirect" >&2
+		exit 1
+	}
+	echo "writings: ok ($slug, legacy 308)"
 }
 
 drive_connect() {
@@ -49,7 +55,7 @@ drive_connect() {
 }
 
 drive_talks() {
-	for path in /talks /talks/receipt/ /talks/stop-building-ai-demos/; do
+	for path in /talks /talks/receipt /talks/stop-building-ai-demos; do
 		safe="$(echo "$path" | tr '/.' '_')"
 		curl -fsS -D "$OUT_DIR/${safe}.headers" -o "$OUT_DIR/${safe}.html" "$BASE_URL$path"
 		grep -qi 'talks\|reveal' "$OUT_DIR/${safe}.html"
@@ -60,7 +66,7 @@ drive_talks() {
 drive_agent_markdown() {
 	curl -fsS -D "$OUT_DIR/homepage-md.headers" -o "$OUT_DIR/homepage.md" -H 'Accept: text/markdown' "$BASE_URL/"
 	grep -qi 'Somasundaram\|somu\|msomu' "$OUT_DIR/homepage.md"
-	grep -q 'Vary: Accept' "$OUT_DIR/homepage-md.headers"
+	grep -qi 'vary: accept' "$OUT_DIR/homepage-md.headers"
 	curl -fsS -D "$OUT_DIR/llms.headers" -o "$OUT_DIR/llms.txt" "$BASE_URL/llms.txt"
 	grep -q 'When to use this site' "$OUT_DIR/llms.txt"
 	echo "agent-markdown: ok"
