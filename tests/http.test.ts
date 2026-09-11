@@ -211,10 +211,11 @@ describe("public agent endpoints", () => {
 
 	it("serves the talks listing as HTML, not 404", async (t) => {
 		if (!requireBase(t)) return;
-		for (const path of ["/talks", "/talks/", "/talks/index.html"]) {
+		for (const path of ["/talks"]) {
 			const page = await request(path);
 			assert.equal(page.status, 200, path);
 			assert.match(page.body, /talks/i, path);
+			assert.match(page.body, /I Gave AI a Computer and Walked Away/);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
 	});
@@ -222,10 +223,12 @@ describe("public agent endpoints", () => {
 	it("serves reveal talk decks as HTML, not 404", async (t) => {
 		if (!requireBase(t)) return;
 		for (const path of [
-			"/talks/receipt/",
+			"/talks/receipt",
 			"/talks/receipt/index.html",
-			"/talks/stop-building-ai-demos/",
-			"/talks/five-eras-of-ai-assisted-android/",
+			"/talks/stop-building-ai-demos",
+			"/talks/five-eras-of-ai-assisted-android",
+			"/talks/i-gave-ai-a-computer-and-walked-away",
+			"/talks/i-gave-ai-a-computer-and-walked-away/index.html",
 		]) {
 			const page = await request(path);
 			assert.equal(page.status, 200, path);

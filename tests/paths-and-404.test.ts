@@ -93,12 +93,17 @@ describe("path normalization", () => {
 });
 
 describe("talk decks on disk", () => {
-	it("lists the three public reveal decks", () => {
+	it("lists the public reveal decks", () => {
 		const slugs = listTalkSlugs();
 		assert.ok(slugs.includes("receipt"));
 		assert.ok(slugs.includes("stop-building-ai-demos"));
 		assert.ok(slugs.includes("five-eras-of-ai-assisted-android"));
+		assert.ok(slugs.includes("i-gave-ai-a-computer-and-walked-away"));
 		assert.match(readTalkHtml("receipt") ?? "", /reveal|Receipt|receipt/i);
+		assert.match(
+			readTalkHtml("i-gave-ai-a-computer-and-walked-away") ?? "",
+			/reveal|Walked Away/i,
+		);
 		assert.equal(readTalkHtml("../etc"), null);
 	});
 });
