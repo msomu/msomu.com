@@ -55,7 +55,7 @@ drive_connect() {
 }
 
 drive_talks() {
-	for path in /talks /talks/receipt /talks/stop-building-ai-demos; do
+	for path in /talks /talks/receipt /talks/stop-building-ai-demos /talks/i-gave-ai-a-computer-and-walked-away; do
 		safe="$(echo "$path" | tr '/.' '_')"
 		curl -fsS -D "$OUT_DIR/${safe}.headers" -o "$OUT_DIR/${safe}.html" "$BASE_URL$path"
 		grep -qi 'talks\|reveal' "$OUT_DIR/${safe}.html"
