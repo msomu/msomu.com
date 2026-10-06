@@ -9,6 +9,7 @@ The `/talks` index lists presentations from the `talks` content collection. Slid
 - `talks.deck.stop-building-ai-demos` — `/talks/stop-building-ai-demos`
 - `talks.deck.five-eras` — `/talks/five-eras-of-ai-assisted-android`
 - `talks.deck.i-gave-ai-a-computer` — `/talks/i-gave-ai-a-computer-and-walked-away`
+- `talks.deck.the-receipt-loop` — `/talks/the-receipt-loop` (slide images under `/talks/the-receipt-loop/slides/`)
 
 ## How to get to it (user POV)
 
@@ -18,9 +19,11 @@ Click **talks** in the header. Open a talk card’s slide link to view the Revea
 
 1. `curl -fsS -o evidence/talks.html http://127.0.0.1:4321/talks`
    - **Expect:** HTTP 200, talks listing markup.
-2. For each deck path `/talks/receipt`, `/talks/stop-building-ai-demos`, `/talks/five-eras-of-ai-assisted-android`, `/talks/i-gave-ai-a-computer-and-walked-away`:
+2. For each Reveal.js deck path `/talks/receipt`, `/talks/stop-building-ai-demos`, `/talks/five-eras-of-ai-assisted-android`, `/talks/i-gave-ai-a-computer-and-walked-away`:
    - `curl -fsS -o evidence/<slug>.html http://127.0.0.1:4321<path>`
    - **Expect:** HTTP 200, body mentions `reveal` (Reveal.js shell).
+3. For `/talks/the-receipt-loop` and `/talks/the-receipt-loop/slides/frame_1.png`:
+   - **Expect:** HTTP 200. The deck body contains `The Receipt Loop` and `/talks/the-receipt-loop/slides/frame_1.png`. The slide response is `image/png`.
 
 Or run: `.cursor/skills/verify-msomu/scripts/drive.sh talks`
 

@@ -60,6 +60,11 @@ drive_talks() {
 		curl -fsS -D "$OUT_DIR/${safe}.headers" -o "$OUT_DIR/${safe}.html" "$BASE_URL$path"
 		grep -qi 'talks\|reveal' "$OUT_DIR/${safe}.html"
 	done
+	curl -fsS -D "$OUT_DIR/_talks_the-receipt-loop.headers" -o "$OUT_DIR/_talks_the-receipt-loop.html" "$BASE_URL/talks/the-receipt-loop"
+	grep -q 'The Receipt Loop' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q '/talks/the-receipt-loop/slides/frame_1.png' "$OUT_DIR/_talks_the-receipt-loop.html"
+	curl -fsS -D "$OUT_DIR/_talks_the-receipt-loop_slide.headers" -o "$OUT_DIR/_talks_the-receipt-loop_frame_1.png" "$BASE_URL/talks/the-receipt-loop/slides/frame_1.png"
+	grep -qi 'content-type: image/png' "$OUT_DIR/_talks_the-receipt-loop_slide.headers"
 	echo "talks: ok"
 }
 
