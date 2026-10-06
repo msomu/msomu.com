@@ -216,6 +216,7 @@ describe("public agent endpoints", () => {
 			assert.equal(page.status, 200, path);
 			assert.match(page.body, /talks/i, path);
 			assert.match(page.body, /I Gave AI a Computer and Walked Away/);
+			assert.match(page.body, /The Receipt Loop/);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
 	});
@@ -235,6 +236,27 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /reveal/i, path);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
+	});
+
+	it("serves the Receipt Loop workshop deck and its first slide", async (t) => {
+		if (!requireBase(t)) return;
+		for (const path of [
+			"/talks/the-receipt-loop",
+			"/talks/the-receipt-loop/index.html",
+		]) {
+			const page = await request(path);
+			assert.equal(page.status, 200, path);
+			assert.match(page.body, /The Receipt Loop/, path);
+			assert.match(
+				page.body,
+				/\/talks\/the-receipt-loop\/slides\/frame_1\.png/,
+				path,
+			);
+			assert.doesNotMatch(page.body, /not found/i);
+		}
+		const slide = await request("/talks/the-receipt-loop/slides/frame_1.png");
+		assert.equal(slide.status, 200);
+		assert.match(slide.contentType, /image\/png/);
 	});
 
 	it("publishes about, contact, privacy, and connect with enough copy", async (t) => {

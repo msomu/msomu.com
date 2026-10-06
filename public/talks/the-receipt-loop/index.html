@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Receipt Loop — Poshmark Growth Week (Offline Presentation)</title>
+  <style>
+    :root {
+      --bg: #0b0d11;
+      --panel: #161a22;
+      --border: #262c36;
+      --accent: #388bfd;
+      --text: #f0f6fc;
+      --muted: #8b949e;
+      --success: #3fb950;
+      --warning: #d29922;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+    #stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    #main-slide {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    }
+    #chrome-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: rgba(11, 13, 17, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 10;
+      transition: opacity 0.2s;
+    }
+    #chrome-header:hover { opacity: 1; }
+    .badge {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(56, 139, 253, 0.2);
+      color: var(--accent);
+      border: 1px solid rgba(56, 139, 253, 0.4);
+      margin-right: 8px;
+    }
+    #slide-title { font-weight: 600; font-size: 14px; }
+    #slide-num { font-size: 13px; color: var(--muted); }
+
+    /* Presenter Notes Drawer */
+    #notes-drawer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(22, 26, 34, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 20px 30px;
+      max-height: 240px;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 20;
+    }
+    #notes-drawer.open { transform: translateY(0); }
+    #notes-title { font-size: 12px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-weight: bold; }
+    #notes-content { font-size: 15px; line-height: 1.5; color: #d0d7de; }
+
+    /* Thumbnails Tray */
+    #tray {
+      position: absolute;
+      top: 48px;
+      bottom: 0;
+      right: 0;
+      width: 260px;
+      background: rgba(16, 19, 24, 0.96);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 12px;
+      display: none;
+      z-index: 15;
+    }
+    #tray.open { display: block; }
+    .thumb-item {
+      margin-bottom: 12px;
+      cursor: pointer;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .thumb-item:hover { border-color: var(--accent); }
+    .thumb-item.active { border-color: var(--success); }
+    .thumb-item img { width: 100%; display: block; }
+    .thumb-label { font-size: 11px; padding: 4px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    #controls-tip {
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(0,0,0,0.6);
+      padding: 4px 8px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="stage">
+    <img id="main-slide" src="" alt="Slide">
+  </div>
+
+  <header id="chrome-header">
+    <div style="display:flex; align-items:center;">
+      <span class="badge">Offline Pack</span>
+      <span id="slide-title">Loading...</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <span id="slide-num">1 / 15</span>
+    </div>
+  </header>
+
+  <div id="notes-drawer">
+    <div id="notes-title">Presenter Cues & Demonstration Plan</div>
+    <div id="notes-content"></div>
+  </div>
+
+  <div id="tray"></div>
+
+  <div id="controls-tip">
+    Keys: <b>→ / Space</b>: Next · <b>←</b>: Prev · <b>N</b>: Cues · <b>T</b>: Tray · <b>F</b>: Fullscreen
+  </div>
+
+  <script>
+    const SLIDES = [
+      {
+        id: "f0",
+        name: "F0 — Title",
+        file: "/talks/the-receipt-loop/slides/frame_1.png",
+        cues: "Open session. Presenter: Somasundaram Mahesh (msomu) · Founding AI Engineer at AGI Inc (on-device AI) · previously Disney+Hotstar. Thesis: A claim becomes a receipt. A receipt becomes a rule. A rule becomes a rail."
+      },
+      {
+        id: "f1",
+        name: "F1 — Why trust is manufactured",
+        file: "/talks/the-receipt-loop/slides/frame_2.png",
+        cues: "Establish the 4-stage vocabulary: Claim -> Receipt -> Rule -> Rail. External examples, not our rate: Stripe Minions (1,300+ merged PRs/week, human-reviewed); Lauren Tan (2,000 personal PRs/month to production in video; her X post later says 2,500 — a separate report, not verified growth from 2,000; recording month unknown); Grok Bot team (hundreds of PRs/day; pstack is her quality practice, not a proven throughput cause). None of these is our rate."
+      },
+      {
+        id: "f2",
+        name: "F2 — The gap (intro item D1.1)",
+        file: "/talks/the-receipt-loop/slides/frame_3.png",
+        cues: "Intro assessment callback. Highlight that self-verification scored lowest across teams. Frame the remedy: not more prompt engineering, but an executable verification loop."
+      },
+      {
+        id: "f3",
+        name: "F3 — Bounded intent → executable acceptance",
+        file: "/talks/the-receipt-loop/slides/frame_4.png",
+        cues: "Showcase: terminal + repo. Demo `cat AGENTS.md` and `./verify test`. Feature map in PR #159 (4666f10, 9 files). Note .cursor/skills/ not auto-loaded by Claude Code (verify is interface); create step not recorded."
+      },
+      {
+        id: "f4",
+        name: "F4 — Isolated execution (S3 · D2.1)",
+        file: "/talks/the-receipt-loop/slides/frame_5.png",
+        cues: "Showcase: cloud + repo. Live walkthrough of recorded cloud evidence (PR #165, 10m 33s). Human/agent handoffs: manual launch (Tony), automatic webhook/wake/PR handoff, unproven monitoring trigger, gated human merge."
+      },
+      {
+        id: "f5",
+        name: "F5 — Repeatable verification and evidence",
+        file: "/talks/the-receipt-loop/slides/frame_6.png",
+        cues: "Showcase: app + terminal. Live walkthrough of joined device proof from OUTBOX/POSHMARK_DEMO_JOINED_RUN_PR165_2026-10-05/. Exact CI APK sha256 7fc7452b... installed on Nothing Phone (3); cold start 672ms; User #1 displayed on Detail."
+      },
+      {
+        id: "f6",
+        name: "F6 — Independent review: the cloud reviewer",
+        file: "/talks/the-receipt-loop/slides/frame_7.png",
+        cues: "Showcase: cloud + repo. Independent review PR #166 (Vedha VALIDATED). PR #165 automated gates audit: Bugbot 'no issues found' (scope unstated), Approval/Security status only (403 links), GitGuardian secrets only, build upkeep deprecations."
+      },
+      {
+        id: "f7",
+        name: "F7 — The eval as a quality gate (S5 · D1.4)",
+        file: "/talks/the-receipt-loop/slides/frame_8.png",
+        cues: "Showcase: terminal + CI. Live walkthrough of recorded eval scoring and CI wiring. Show 12-case golden set and CI job eval (replay) green. Clarify replay mode scores workflow mechanics without live model cost."
+      },
+      {
+        id: "f8",
+        name: "F8 — Human merge gate by risk (S6 · D2.3)",
+        file: "/talks/the-receipt-loop/slides/frame_9.png",
+        cues: "Showcase: repo. Walk through low, owned, and blast radius tiers from RISK_TIERS.md and CODEOWNERS in PR #162. Note that branch protection is a follow-up action for repo owners."
+      },
+      {
+        id: "f9",
+        name: "F9 — Correction: the staged red check (S7 · D1.3)",
+        file: "/talks/the-receipt-loop/slides/frame_10.png",
+        cues: "Showcase: CI + terminal. Walk through PR #163: failing run 37318711864 (`User [#]1` vs `User []1`) and green fix run 37319377367. Demo fixing the failure live together."
+      },
+      {
+        id: "f10",
+        name: "F10 — Write the correction as low as it goes",
+        file: "/talks/the-receipt-loop/slides/frame_11.png",
+        cues: "The durability ladder: codebase > CI check/lint > eval > rules/AGENTS.md > skill > style guide. Enforced quality: stock detekt (0 issues; no custom rule) and staged regression test."
+      },
+      {
+        id: "f11",
+        name: "F11 — The gardener: contain and measure debt",
+        file: "/talks/the-receipt-loop/slides/frame_12.png",
+        cues: "Showcase: repo. Prevent (Recorded in PR #162), contain (Known gap, planned in-room lint exercise), measure (counter-evidence: unattended Dependabot PRs #154/#155/#156/#158/#161 + CI upkeep deprecation warnings). Return arrow closes loop to F3."
+      },
+      {
+        id: "f12",
+        name: "F12 — Skill maintenance: the map stays honest",
+        file: "/talks/the-receipt-loop/slides/frame_13.png",
+        cues: "Showcase: repo + app. Badge: Recorded (cue: live walkthrough of recorded evidence; Live only if re-driven in room). PR #167 open at 0c94c253 off origin/main (unmerged). Rolex re-checked 4 features on Nothing Phone. Harness fixes (session reuse, 120s timeout) + HTTPS recipe fix. Vedha SHIP verdict."
+      },
+      {
+        id: "f13",
+        name: "F13 — Throughput vs risk",
+        file: "/talks/the-receipt-loop/slides/frame_14.png",
+        cues: "Automation raises the ceiling; proof and review set the safe one. Contrast 100 unattended agents generating slop against a verified rail yielding trusted throughput."
+      },
+      {
+        id: "f14",
+        name: "F14 — Outcomes, commitments, close",
+        file: "/talks/the-receipt-loop/slides/frame_15.png",
+        cues: "Showcase: board. Review Day 1 and Day 2 targets. Facilitate commitments on the board: Workflow, Owner, The One Gap to close. Reinforce the 5-point bar for an agent-ready repo."
+      }
+    ];
+
+    let currentIdx = 0;
+    const imgEl = document.getElementById('main-slide');
+    const titleEl = document.getElementById('slide-title');
+    const numEl = document.getElementById('slide-num');
+    const notesEl = document.getElementById('notes-content');
+    const drawerEl = document.getElementById('notes-drawer');
+    const trayEl = document.getElementById('tray');
+
+    function renderSlide(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= SLIDES.length) idx = SLIDES.length - 1;
+      currentIdx = idx;
+
+      const s = SLIDES[idx];
+      imgEl.src = s.file;
+      titleEl.textContent = s.name;
+      numEl.textContent = (idx + 1) + " / " + SLIDES.length;
+      notesEl.innerHTML = s.cues;
+
+      document.querySelectorAll('.thumb-item').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+    }
+
+    // Build tray
+    SLIDES.forEach((s, idx) => {
+      const item = document.createElement('div');
+      item.className = 'thumb-item' + (idx === 0 ? ' active' : '');
+      item.innerHTML = '<img src="' + s.file + '" alt="' + s.name + '"><div class="thumb-label">' + s.name + '</div>';
+      item.onclick = () => renderSlide(idx);
+      trayEl.appendChild(item);
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        renderSlide(currentIdx + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        renderSlide(currentIdx - 1);
+      } else if (e.key === 'Home') {
+        renderSlide(0);
+      } else if (e.key === 'End') {
+        renderSlide(SLIDES.length - 1);
+      } else if (e.key.toLowerCase() === 'n') {
+        drawerEl.classList.toggle('open');
+      } else if (e.key.toLowerCase() === 't') {
+        trayEl.classList.toggle('open');
+      } else if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    });
+
+    renderSlide(0);
+  </script>
+</body>
+</html>

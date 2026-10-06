@@ -89,6 +89,8 @@ describe("path normalization", () => {
 		assert.equal(shouldNegotiate("/talks/receipt/"), false);
 		assert.equal(shouldNegotiate("/talks/receipt/index.html"), false);
 		assert.equal(shouldNegotiate("/talks/stop-building-ai-demos"), false);
+		assert.equal(shouldNegotiate("/talks/the-receipt-loop"), false);
+		assert.equal(shouldNegotiate("/talks/the-receipt-loop/index.html"), false);
 	});
 });
 
@@ -99,7 +101,9 @@ describe("talk decks on disk", () => {
 		assert.ok(slugs.includes("stop-building-ai-demos"));
 		assert.ok(slugs.includes("five-eras-of-ai-assisted-android"));
 		assert.ok(slugs.includes("i-gave-ai-a-computer-and-walked-away"));
+		assert.ok(slugs.includes("the-receipt-loop"));
 		assert.match(readTalkHtml("receipt") ?? "", /reveal|Receipt|receipt/i);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /The Receipt Loop/);
 		assert.match(
 			readTalkHtml("i-gave-ai-a-computer-and-walked-away") ?? "",
 			/reveal|Walked Away/i,
