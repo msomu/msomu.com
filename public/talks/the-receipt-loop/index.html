@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Receipt Loop — Poshmark Growth Week · msomu</title>
+    <title>The Receipt Loop · msomu</title>
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
@@ -19,11 +19,7 @@
         --surface: #141414;
         --border: #262626;
         --text: #e5e5e5;
-        --muted: #a3a3a3;
-        --red: #f85149;
-        --blue: #58a6ff;
-        --green: #3fb950;
-        --purple: #d2a8ff;
+        --muted: #737373;
       }
 
       .reveal-viewport { background: var(--bg); }
@@ -41,161 +37,166 @@
         text-transform: none;
         color: #fff;
         text-shadow: none;
+        text-wrap: balance;
       }
 
-      .reveal h1 { font-size: 1.7em; line-height: 1.1; margin: 0; }
-      .reveal h2 { font-size: 0.92em; line-height: 1.15; margin: 0 0 0.28em; }
-      .reveal p { color: var(--text); line-height: 1.4; }
+      .reveal h1 { font-size: 2.05em; line-height: 1.08; margin: 0; }
+      .reveal h2 { font-size: 1.55em; line-height: 1.12; margin: 0; }
+      .reveal p { margin: 0; }
 
-      .reveal section { text-align: left; }
-      .reveal .slides section { padding: 0.45em 0.7em 0.3em; box-sizing: border-box; }
-
-      .slide-title {
-        text-align: center;
+      .reveal .slides section.present {
+        height: 100% !important;
+        min-width: 0;
         display: flex !important;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
-        height: 100% !important;
+        align-items: flex-start;
+        text-align: left;
+        box-sizing: border-box;
+        padding: 0 1.35em;
+      }
+
+      .kicker,
+      .sub,
+      .roster,
+      .marks,
+      .ladder,
+      .slide-stack p,
+      .reveal h1,
+      .reveal h2 {
+        min-width: 0;
+        max-width: 100%;
       }
 
       .kicker {
         color: var(--orange);
-        font-size: 0.48em;
-        font-weight: 600;
-        margin: 0 0 0.35em;
-      }
-
-      .byline {
         font-size: 0.42em;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin: 0 0 0.7em;
+      }
+
+      .sub {
+        margin-top: 0.7em;
+        max-width: 28ch;
         color: var(--muted);
-        margin: 0.45em 0 0;
-      }
-
-      .dayline,
-      .note,
-      .thesis,
-      .cue,
-      .external {
-        font-size: 0.4em;
+        font-size: 0.72em;
         line-height: 1.35;
-        margin: 0.35em 0 0;
-        padding: 0.45em 0.65em;
       }
 
-      .dayline { border: 1px solid var(--purple); color: #fff; text-align: center; }
-      .note { border: 1px solid var(--blue); text-align: center; }
-      .thesis {
-        border: 2px solid #fff;
+      .slide-title.present,
+      .slide-stack.present {
+        align-items: center;
+        text-align: center;
+      }
+
+      .slide-title h1 { max-width: 14ch; }
+      .slide-title .orange { color: var(--orange); }
+
+      .slide-title .meta,
+      .slide-stack .meta {
+        margin-top: 0.9em;
+        font-size: 0.58em;
+        line-height: 1.45;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .slide-title .meta strong,
+      .slide-stack .meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .slide-stack p {
+        font-size: 1.55em;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        color: #fff;
+        margin: 0.12em 0;
+      }
+
+      .slide-statement h2 { max-width: 16ch; }
+
+      .roster,
+      .marks,
+      .ladder {
+        list-style: none;
+        margin: 0.15em 0 0;
+        padding: 0;
+        width: min(100%, 720px);
+      }
+
+      .roster li,
+      .marks li,
+      .ladder li {
+        display: grid;
+        grid-template-columns: 9.2em 1fr;
+        column-gap: 1em;
+        align-items: baseline;
+        margin: 0;
+        padding: 0.28em 0;
+        border-top: 1px solid var(--border);
+        font-size: 0.62em;
+        line-height: 1.3;
+        color: var(--text);
+      }
+
+      .roster li:first-child,
+      .marks li:first-child,
+      .ladder li:first-child { border-top: 0; padding-top: 0; }
+
+      .roster strong,
+      .marks strong,
+      .ladder strong {
         color: #fff;
         font-weight: 600;
-        text-align: center;
-        font-size: 0.46em;
-      }
-      .external { border: 1px solid var(--purple); }
-      .cue { color: var(--muted); text-align: center; font-size: 0.32em; padding: 0.2em 0.4em; }
-
-      .split {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.4em;
-        width: 100%;
-        margin-top: 0.7em;
       }
 
-      .grid { display: grid; gap: 0.35em; }
-      .grid-2 { grid-template-columns: 1fr 1fr; }
-      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-      .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+      .marks strong { color: var(--orange); font-size: 0.85em; letter-spacing: 0.08em; text-transform: uppercase; }
 
-      .card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-top: 3px solid var(--accent, #fff);
-        padding: 0.4em 0.5em;
-        font-size: 0.34em;
-        line-height: 1.35;
-        overflow-wrap: anywhere;
+      .ladder { counter-reset: rung; }
+      .ladder li { grid-template-columns: 1.6em 1fr; }
+      .ladder li::before {
+        counter-increment: rung;
+        content: counter(rung);
+        color: var(--orange);
+        font-weight: 600;
       }
-
-      .card h3 {
-        font-size: 1.25em;
-        margin: 0 0 0.25em;
-      }
-
-      .card ul, .card ol { margin: 0.15em 0 0; padding-left: 1.15em; }
-      .card li { margin: 0.12em 0; }
-      .card p { margin: 0.2em 0 0; font-size: 1em; }
-
-      .c-red { --accent: var(--red); }
-      .c-orange { --accent: var(--orange); }
-      .c-blue { --accent: var(--blue); }
-      .c-green { --accent: var(--green); }
-      .c-purple { --accent: var(--purple); }
-
-      .ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.22em; }
-      .ladder li {
-        font-size: 0.42em;
-        padding: 0.28em 0.55em;
-        border: 1px solid var(--border);
-        border-left: 4px solid var(--accent, #fff);
-        background: var(--surface);
-        display: flex;
-        justify-content: space-between;
-        gap: 1em;
-      }
-      .ladder .rank { color: var(--muted); }
 
       .reveal footer {
         position: fixed;
         bottom: 1.2em;
         right: 1.4em;
-        font-size: 0.4em;
+        font-size: 0.45em;
         color: var(--muted);
         font-weight: 500;
         z-index: 100;
       }
 
       @media (max-width: 639px) {
-        html, body, .reveal-viewport, .reveal {
-          height: auto !important;
-          overflow: auto !important;
+        .reveal h1 { font-size: 1.45em; }
+        .reveal h2 { font-size: 1.28em; }
+        .slide-title h1 { max-width: 12ch; }
+        .slide-stack p { font-size: 1.15em; }
+        .kicker { font-size: 0.72rem; letter-spacing: 0.08em; max-width: 100%; }
+        .sub { font-size: 0.85em; max-width: 28ch; }
+        .roster li,
+        .marks li,
+        .ladder li {
+          grid-template-columns: 1fr;
+          row-gap: 0.08em;
+          font-size: 0.64em;
+          padding: 0.16em 0;
         }
-        .reveal .slides {
-          position: relative !important;
-          width: 100% !important;
-          height: auto !important;
-          inset: auto !important;
-          transform: none !important;
-          overflow: visible !important;
-        }
-        .reveal .slides section {
-          position: relative !important;
-          top: auto !important;
-          left: auto !important;
-          width: 100% !important;
-          height: auto !important;
-          min-height: 0 !important;
-          transform: none !important;
-          display: none !important;
-          padding: 1.1rem 0.9rem 2.4rem;
-        }
-        .reveal .slides section.present { display: block !important; }
-        .slide-title {
-          height: auto !important;
-          justify-content: flex-start;
-        }
-        .reveal h1 { font-size: 1.7rem; }
-        .reveal h2 { font-size: 1.25rem; line-height: 1.2; }
-        .kicker { font-size: 0.85rem; }
-        .byline { font-size: 0.95rem; }
-        .dayline, .note, .thesis, .external { font-size: 0.95rem; }
-        .card { font-size: 0.95rem; }
-        .cue { font-size: 0.85rem; }
-        .ladder li { font-size: 0.95rem; }
-        .grid-2, .grid-3, .grid-4, .split { grid-template-columns: 1fr; }
-        .reveal footer, .reveal .controls { display: none; }
-        .reveal .progress { position: fixed; }
+        .slide-statement h2 { font-size: 1.12em; }
+        .ladder li { grid-template-columns: 1.4em 1fr; }
+        .slide-title .meta,
+        .slide-stack .meta { font-size: 0.62em; color: #a3a3a3; }
+        .reveal footer,
+        .reveal .controls { display: none; }
       }
     </style>
   </head>
@@ -205,431 +206,309 @@
       <div class="slides">
 
         <section class="slide-title">
-          <p class="kicker">Poshmark Growth Week · 7–8 October 2026</p>
+          <p class="kicker">Poshmark Growth Week</p>
           <h1>The Receipt Loop</h1>
-          <p class="byline">Somasundaram Mahesh (msomu) · Founding AI Engineer at AGI Inc · previously Disney+Hotstar</p>
-          <p class="dayline">Day 1: Make agents trustworthy in our repos · Day 2: Orchestrate, don't prompt</p>
-          <p class="thesis">A claim becomes a receipt. A receipt becomes a rule. A rule becomes a rail.</p>
-          <p class="note">This board is the presentation. Showcases are terminal, repo, CI, app and cloud evidence — not screenshots of slides.</p>
-          <div class="split">
-            <div class="card">
-              <p>Cue Switch: board</p>
-              <p>Framework: First-Principles Automation</p>
-              <p>Platform: base-mvvm-android-kt</p>
-            </div>
-            <div class="card">
-              <p>Facilitation: Poshmark Growth Week</p>
-              <p>Sessions: Wed &amp; Thu (10:30–11:50 IST)</p>
-              <p>Poshmark India Office · Chetpet</p>
-            </div>
-          </div>
+          <p class="meta">
+            <strong>Somu</strong><br />
+            7–8 October 2026 · Chetpet<br />
+            Day 1: Make agents trustworthy in our repos<br />
+            Day 2: Orchestrate, don't prompt
+          </p>
+          <aside class="notes">
+            This board is the presentation. Showcases are terminal, repo, CI, app, and cloud evidence.
+          </aside>
         </section>
 
-        <section>
-          <h2>Trust is not a feeling. It is an artifact.</h2>
-          <div class="grid grid-4">
-            <div class="card c-red">
-              <h3>Claim</h3>
-              <p>[ A message ]</p>
-              <p>"Done."</p>
-              <p>A prompt assertion that lacks proof.</p>
-            </div>
-            <div class="card c-orange">
-              <h3>Receipt</h3>
-              <p>[ An artifact ]</p>
-              <p>command output · screenshot · logcat · CI run</p>
-            </div>
-            <div class="card c-blue">
-              <h3>Rule</h3>
-              <p>[ Receipt made permanent ]</p>
-              <p>a test · a required check · an eval case</p>
-            </div>
-            <div class="card c-green">
-              <h3>Rail</h3>
-              <p>[ Unattended execution ]</p>
-              <p>cloud agent opens a self-verifying PR</p>
-            </div>
-          </div>
-          <p class="thesis">An agent does not get to say done until it leaves a receipt.</p>
-          <p class="external">External examples, not our rate — Stripe Minions: 1,300+ merged PRs/week, minion-written, human-reviewed (Stripe, Feb 2026, self-reported). Lauren Tan (poteto): ~2,000 PRs/month to production, her personal result; her post later says 2,500. Grok Bot team: hundreds of PRs/day landed; pstack helps keep that code clean.</p>
-          <p class="cue">Cue Switch: board · Thesis: Trust is manufactured through verification, not prompts.</p>
+        <section class="slide-stack">
+          <p>A claim becomes a receipt.</p>
+          <p>A receipt becomes a rule.</p>
+          <p>A rule becomes a rail.</p>
+          <aside class="notes">
+            An agent does not get to say done until it leaves a receipt. Stripe, Poteto, and the Grok Bot team are their results, not our rate.
+          </aside>
         </section>
 
-        <section>
-          <h2>The intro named one gap: self-verification.</h2>
-          <div class="grid grid-2">
-            <div class="card c-blue">
-              <h3>Intro Assessment Callback</h3>
-              <p>[ Recorded ] · Cue: deck</p>
-              <ul>
-                <li>The intro named self-verification as the weakest scored area</li>
-                <li>Autonomous execution stalls when agents cannot verify their own changes</li>
-                <li>Low autonomy across repositories stems from missing proof, not missing prompts</li>
-                <li>Each team identifies their primary verification gap</li>
-              </ul>
-            </div>
-            <div class="card c-red">
-              <h3>The Diagnosis</h3>
-              <p>"Most teams have skills; few can prove a change works without a human."</p>
-              <ul>
-                <li>Self-verification is the weakest scored capability</li>
-                <li>Skills without proof generate unverified claims</li>
-                <li>The primary bottleneck is manual verification by engineers</li>
-              </ul>
-            </div>
-          </div>
-          <p class="thesis">The remedy is not more prompts. It is an executable verification loop.</p>
-          <p class="cue">Showcase: deck · Badge: Recorded · Attendee Output: Each team names its biggest readiness gap.</p>
+        <section class="slide-statement">
+          <p class="kicker">Four words</p>
+          <ul class="roster">
+            <li><strong>Claim</strong><span>A message. "Done."</span></li>
+            <li><strong>Receipt</strong><span>An artifact. Output, screenshot, log, CI run.</span></li>
+            <li><strong>Rule</strong><span>A receipt that stays. A test, a check, an eval.</span></li>
+            <li><strong>Rail</strong><span>A rule that runs unattended.</span></li>
+          </ul>
+          <p class="sub">Trust is not a feeling. It is an artifact.</p>
         </section>
 
-        <section>
-          <h2>One ticket. One acceptance line. One command that can fail.</h2>
-          <div class="grid grid-2">
-            <div class="card c-blue">
-              <h3>Intent: AGENTS.md</h3>
-              <ul>
-                <li>Task scope and the "stop when green" rule</li>
-                <li>Bounds agent actions to specific feature boundaries</li>
-                <li>Prevents hallucinated refactors</li>
-              </ul>
-              <p>Anchor: PR #162 AGENTS.md at e480eb2</p>
-            </div>
-            <div class="card c-green">
-              <h3>Acceptance: ./verify</h3>
-              <ul>
-                <li>Command that runs deterministic checks</li>
-                <li>Drives user path, captures evidence, exits 0 or 1</li>
-                <li>Command line: ./verify doctor | test | assemble</li>
-              </ul>
-              <p>Anchor: base-mvvm-android-kt sample/verify</p>
-            </div>
-          </div>
-          <div class="card c-purple" style="margin-top: 0.35em">
-            <h3>The Feature Map: Materialized Navigation (.cursor/skills/verify-basemvvm/)</h3>
-            <ul>
-              <li>Merged in PR #159 (2 Sep 2026 as 4666f10, 9 files under .cursor/skills/verify-basemvvm/)</li>
-              <li>Tells agents exactly how a user reaches: home · detail · loading-error · theme</li>
-              <li>Caveat: .cursor/skills/ is NOT auto-loaded by Claude Code (./verify is the stable interface)</li>
-              <li>Caveat: PR #159 shows produced skill structure; the create step itself was not recorded.</li>
-            </ul>
-          </div>
-          <p class="thesis">Acceptance is a command, not a paragraph.</p>
-          <p class="cue">Showcase: terminal + repo · Badge: Live · Demo: cat AGENTS.md → ./verify test</p>
+        <section class="slide-statement">
+          <p class="kicker">The gap</p>
+          <h2>Self-verification.</h2>
+          <p class="sub">Most teams have skills. Few can prove a change works without a human.</p>
+          <aside class="notes">
+            The remedy is not more prompts. It is an executable verification loop. Badge: Recorded.
+          </aside>
         </section>
 
-        <section>
-          <h2>A ticket goes in. A sandbox comes up. No babysitter.</h2>
-          <div class="grid grid-2">
-            <div class="card c-blue">
-              <h3>Headless Cloud Agent Execution (Issue #164 → PR #165)</h3>
-              <ol>
-                <li>Ticket created: Issue #164 (Detail shows User #1)</li>
-                <li>Cloud agent clones repo into ephemeral sandbox</li>
-                <li>Installs dependencies and runs ./verify doctor</li>
-                <li>Consults unmerged PR #162 policy (AGENTS.md not on main); implements fix</li>
-                <li>Runs ./verify test (passes 2 unit tests + detekt)</li>
-                <li>Opens PR #165 with evidence attached in 10m 33s</li>
-                <li>CI build run 37320968461 SUCCESS — zero human babysitting</li>
-              </ol>
-              <p>Review &amp; Phone Proof: Vedha SHIP at 6c4e4be. Joined CI APK verified on Nothing Phone (3).</p>
-            </div>
-            <div class="card c-green">
-              <h3>Human / agent handoffs (name them precisely)</h3>
-              <ul>
-                <li>Cloud launch: Human (Tony, manual by hand)</li>
-                <li>Implementation: Cloud agent (proven, PR #165 at 6c4e4be6; consulted unmerged PR #162 policy; AGENTS.md not on main)</li>
-                <li>Completion: Automatic webhook → Buzz wake (webhookUrl in cloud-runs/*.json; wake lines 412853f4 / fdf1be3e)</li>
-                <li>Monitoring trigger: UNPROVEN (no Sentry/alert trigger)</li>
-                <li>Review: Cloud agent (PR #166) + Vedha human baseline</li>
-                <li>Merge: Gated human decision (not automated)</li>
-                <li>Caveat: PR #160 unmerged; agent installed SDK itself</li>
-              </ul>
-            </div>
-          </div>
-          <p class="thesis">This is the stage that fails without trust: 100 agents without proof is slop.</p>
-          <p class="cue">Showcase: cloud + repo · Badge: Recorded (PR #165, buzz://pr?id=6edd4674e9255ecc905efa500976488b3f9bf44ff9942554533718ab84122864). Cue: live walkthrough of recorded cloud evidence. Joined device proof verified on hardware.</p>
+        <section class="slide-statement">
+          <p class="kicker">Intent</p>
+          <h2>One ticket. One command that can fail.</h2>
+          <p class="sub">Acceptance is a command, not a paragraph. ./verify</p>
+          <aside class="notes">
+            Demo: cat AGENTS.md, then ./verify test. Badge: Live. PR #162 at e480eb2 is unmerged. ./verify is the interface. The skill directory is not auto-loaded.
+          </aside>
         </section>
 
-        <section>
-          <h2>A receipt survives cleanup.</h2>
-          <div class="grid grid-2">
-            <div class="card c-green">
-              <h3>Joined CI APK Proof on Nothing Phone (A024)</h3>
-              <ul>
-                <li>Target: Exact PR #165 CI APK (Run 37320968461, commit 6c4e4be6)</li>
-                <li>Checksum match: CI artifact and phone base.apk identical SHA256: 7fc7452b…</li>
-                <li>Cold start measured: 672 ms (TotalTime 672ms in logcat)</li>
-                <li>Driven interaction: Home → tap (530, 494) → Todo Details</li>
-                <li>Verified result: Detail screen displays User #1 at bounds [384,705][522,749] under title</li>
-              </ul>
-              <p>Proof artifacts: 04_home_tree.xml, 06_detail_tree.xml, 07_logcat_launch_to_detail.txt, 05_tap.txt, 08_assertions.txt, 06_detail.png</p>
-            </div>
-            <div class="card">
-              <h3>Proof Directory</h3>
-              <p>OUTBOX/POSHMARK_DEMO_JOINED_RUN_PR165_2026-10-05/</p>
-              <p>[ Recorded ]</p>
-              <p>Verified by Rolex at 19:43 IST. Hardware: Nothing Phone (3), A024. Exact CI APK installed and proven. Survivable evidence that review can audit.</p>
-            </div>
-          </div>
-          <p class="thesis">A cold launch is not proof. A driven path is.</p>
-          <p class="cue">Showcase: app + terminal · Badge: Recorded. Cue: live walkthrough of recorded device proof (exact CI APK, 672ms cold start, User #1 on Detail).</p>
+        <section class="slide-statement">
+          <p class="kicker">Isolated execution</p>
+          <h2>A ticket goes in. A sandbox comes up.</h2>
+          <p class="sub">A person starts it. The finish can be automatic. 100 agents without proof is slop.</p>
+          <aside class="notes">
+            Badge: Recorded. PR #165. Launch is human. Completion webhook to Buzz is proven. A monitoring trigger that starts a run is not proven.
+          </aside>
         </section>
 
-        <section>
+        <section class="slide-statement">
+          <p class="kicker">Evidence</p>
+          <h2>A cold launch is not proof.</h2>
+          <p class="sub">A driven path is. The receipt survives cleanup.</p>
+          <aside class="notes">
+            Badge: Recorded. Exact CI APK on Nothing Phone (3). Cold start 672 ms. Detail shows User #1.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Review</p>
           <h2>The author is not the reviewer.</h2>
-          <div class="grid grid-2">
-            <div class="card c-blue">
-              <h3>Autonomous Read-Only Review Agent</h3>
-              <ul>
-                <li>Candidate: PR #162 at pinned SHA e480eb2 (10 files)</li>
-                <li>Permissions: read-only check execution; writes one report PR</li>
-                <li>Prohibited: cannot push code, approve, change labels, or merge</li>
-                <li>Evidence: report PR #166 at a449fe52 — Vedha VALIDATED as workshop evidence (19:04 IST)</li>
-                <li>Flagged M1 (replay scores predicted without reparsing raw) and L1 (doctor omits android_home)</li>
-                <li>Caveats: VM lacked Android SDK; candidate CI observed, not locally repeated</li>
-              </ul>
-            </div>
-            <div class="card c-orange">
-              <h3>PR #165 automated gates (status only — not reviews)</h3>
-              <ul>
-                <li>Bugbot (dc425b7a…): "no issues found" (2m 51s; scope unstated; zero annotations or PR comments)</li>
-                <li>Approval Agent (bc-eee94a74…) and Security Agent (bc-da9f45cd…): status only — public output is "run completed successfully" plus a 403 login link; neither posted PR reviews</li>
-                <li>GitGuardian: 1 commit scanned, secrets only</li>
-                <li>GitHub build: success, but 3 annotations are CI-upkeep warnings (Node 20, setup-java@v4, Ubuntu 26)</li>
-              </ul>
-              <p>Green automation badges are status, not full code reviews.</p>
-            </div>
-          </div>
-          <p class="thesis">A reviewer that cannot merge is a control, not a rubber stamp.</p>
-          <p class="cue">Showcase: cloud + repo · Badge: Recorded · Anchor: PR #166 (buzz://pr?id=db64b1b3dfbba418113c59ba125f6e770e44222aa8a86f1556629be7787a9e6). Cue: live walkthrough of recorded review evidence (never Live). Unmerged; candidate CI observed.</p>
+          <p class="sub">A reviewer that cannot merge is a control, not a rubber stamp.</p>
+          <aside class="notes">
+            Badge: Recorded. Report PR #166. Vedha validated it as workshop evidence. Green automation badges are status, not reviews.
+          </aside>
         </section>
 
-        <section>
+        <section class="slide-statement">
+          <p class="kicker">Eval</p>
           <h2>An eval is not an app test.</h2>
-          <div class="grid grid-2">
-            <div class="card c-purple">
-              <h3>Golden Set Evaluation (evals/)</h3>
-              <ul>
-                <li>12 labelled cases: 6 real PRs, 6 synthetic edge cases</li>
-                <li>Evaluates workflow model quality (for example, risk classification)</li>
-                <li>CI job: eval (replay) green at commit e480eb2</li>
-                <li>GitHub Actions run: 37318641680</li>
-                <li>Replay score: 12/12 pass; deliberate error harness scored 10/12</li>
-              </ul>
-            </div>
-            <div class="card c-orange">
-              <h3>Evaluation Modes</h3>
-              <p>[ Recorded ]</p>
-              <p>Label: eval in CI (replay mode)</p>
-              <p>Replay proves scoring mechanics and CI wiring. Live model run is excluded without a CI key.</p>
-            </div>
-          </div>
-          <p class="thesis">Correct is not the same as good — and neither is the same as fresh.</p>
-          <p class="cue">Showcase: terminal + CI · Badge: Recorded · Exact label: eval in CI (replay mode). Cue: live walkthrough of recorded eval scoring and CI wiring.</p>
+          <p class="sub">Correct is not the same as good. Neither is the same as fresh.</p>
+          <aside class="notes">
+            Label: eval in CI (replay mode). 12 cases. A replay is recorded. A live model run is a separate gate.
+          </aside>
         </section>
 
-        <section>
-          <h2>Merge is a human decision, sized by blast radius.</h2>
-          <div class="grid grid-3">
-            <div class="card c-green">
-              <h3>low</h3>
-              <ul>
-                <li>No shared contract</li>
-                <li>Easily reverted</li>
-                <li>Verify check is green</li>
-              </ul>
-              <p>Gate: Agent may proceed directly to code review without extra approvals.</p>
-            </div>
-            <div class="card c-orange">
-              <h3>owned</h3>
-              <ul>
-                <li>Touches one team's code</li>
-                <li>Isolated feature or logic change</li>
-                <li>Evidence receipt attached</li>
-              </ul>
-              <p>Gate: Code-owner review required before merge.</p>
-            </div>
-            <div class="card c-red">
-              <h3>blast radius</h3>
-              <ul>
-                <li>Shared library, schema, auth, infra</li>
-                <li>High customer / platform impact</li>
-              </ul>
-              <p>Gate: Extra reviewer + required CI check + staged rollout.</p>
-            </div>
-          </div>
-          <p class="thesis">Trust lives in the process, not in the reviewer's memory.</p>
-          <p class="cue">Showcase: repo · Badge: Prepared (files: RISK_TIERS.md + CODEOWNERS in PR #162). Enforcement excluded: branch protection on main is 404 today.</p>
+        <section class="slide-statement">
+          <p class="kicker">Merge</p>
+          <h2>A human decision, sized by blast radius.</h2>
+          <ul class="roster">
+            <li><strong>Low</strong><span>No shared contract. Easy to revert.</span></li>
+            <li><strong>Owned</strong><span>One team's code. A receipt is attached.</span></li>
+            <li><strong>Blast radius</strong><span>Shared library, schema, auth, or infra.</span></li>
+          </ul>
+          <aside class="notes">
+            Badge: Prepared. RISK_TIERS.md and CODEOWNERS are in unmerged PR #162. Branch protection on main is absent.
+          </aside>
         </section>
 
-        <section>
+        <section class="slide-statement">
+          <p class="kicker">Correction</p>
           <h2>A failure becomes a rule.</h2>
-          <div class="grid grid-2">
-            <div class="card c-red">
-              <h3>1. The staged failure</h3>
-              <ul>
-                <li>PR #163 at commit 87cfda7</li>
-                <li>GitHub Actions run: 37318711864</li>
-                <li>Fails at unit test: expected:&lt;User [#]1&gt; but was:&lt;User []1&gt;</li>
-                <li>Demonstrates real failure reproduction in CI</li>
-              </ul>
-            </div>
-            <div class="card c-green">
-              <h3>2. The verified fix</h3>
-              <ul>
-                <li>Solution commit: 015efb5</li>
-                <li>GitHub Actions run: 37319377367 turned green</li>
-                <li>Same-SHA local verification confirmed</li>
-                <li>Branch reset to red commit for live workshop diagnosis</li>
-              </ul>
-            </div>
-          </div>
-          <p class="thesis">A fix that is not recorded is a fix you will make again.</p>
-          <p class="cue">Showcase: CI + terminal · Badge: Live · Exact label: staged red check. Command: gh run view --log-failed → apply fix → verify green.</p>
+          <p class="sub">A fix that is not recorded is a fix you will make again.</p>
+          <aside class="notes">
+            Badge: Live. Label: staged red check. PR #163 failed on User #1, then the fix went green.
+          </aside>
         </section>
 
-        <section>
-          <h2>Write the correction as low as it goes.</h2>
+        <section class="slide-statement">
+          <p class="kicker">Where it lives</p>
+          <h2>Write it as low as it goes.</h2>
           <ol class="ladder">
-            <li class="c-green"><span>1. codebase</span><span class="rank">best / strongest</span></li>
-            <li class="c-green"><span>2. required CI check / lint / compiler</span><span class="rank">Showcase: CI</span></li>
-            <li class="c-orange"><span>3. eval / golden set</span><span class="rank">Showcase: terminal + CI</span></li>
-            <li class="c-orange"><span>4. rules / bugbot / AGENTS.md</span><span class="rank">Showcase: repo</span></li>
-            <li class="c-red"><span>5. skill / verify command</span><span class="rank">Showcase: terminal</span></li>
-            <li class="c-red"><span>6. style guide</span><span class="rank">weakest</span></li>
+            <li><span>Codebase</span></li>
+            <li><span>Required check, lint, compiler</span></li>
+            <li><span>Eval</span></li>
+            <li><span>Rules and AGENTS.md</span></li>
+            <li><span>Skill and verify command</span></li>
+            <li><span>Style guide</span></li>
           </ol>
-          <p class="thesis">Prompt memory does not survive. The repo does.</p>
-          <p class="cue">Showcase: repo + terminal · PR #162 unmerged (reviewable artifacts, main lacks branch protection) · CI: stock detekt runs (0 issues found; no custom lint rule) and staged test.</p>
+          <p class="sub">Prompt memory does not survive. The repo does.</p>
+          <aside class="notes">
+            Stock detekt runs. No custom lint rule. The staged test is a real CI check, not an always-red check.
+          </aside>
         </section>
 
-        <section>
-          <h2>Bad patterns spread like a virus. A gardener stops them.</h2>
-          <div class="grid grid-3">
-            <div class="card c-green">
-              <h3>1. Prevent [Recorded]</h3>
-              <ul>
-                <li>Codebase types and compiler gates</li>
-                <li>Required static analysis (stock detekt in CI)</li>
-                <li>Bans anti-patterns before merge</li>
-                <li>Recorded in PR #162 (RISK_TIERS.md)</li>
-              </ul>
-            </div>
-            <div class="card c-orange">
-              <h3>2. Contain [Known gap]</h3>
-              <ul>
-                <li>Add a targeted lint rule</li>
-                <li>Stops bleeding while old code exists</li>
-                <li>Planned cue: in-room lint exercise</li>
-                <li>Reality: no custom lint rule exists yet</li>
-              </ul>
-            </div>
-            <div class="card c-orange">
-              <h3>3. Measure [Debt evidence]</h3>
-              <ul>
-                <li>Name the debt and its owner</li>
-                <li>Counter-evidence: Dependabot PRs #154, #155, #156, #158, #161 open and unattended (Aug–Sep)</li>
-                <li>Counter-evidence: per-build CI-upkeep deprecation warnings (Node 20, setup-java, Ubuntu)</li>
-                <li>Proof of debt waiting for a gardener — no cleanup claimed</li>
-              </ul>
-            </div>
-          </div>
-          <p class="thesis">We do not promise zero debt. We promise a path for every correction, and an owner.</p>
-          <p class="cue">Showcase: repo · Badge: Recorded (scoped to ladder + RISK_TIERS.md only) · Gardener: Known gap (planned cue). Honest ledger: 5 unattended Dependabot PRs + per-build CI upkeep warnings show debt. Return arrow closes the loop.</p>
+        <section class="slide-statement">
+          <p class="kicker">Debt</p>
+          <h2>No promise of zero debt.</h2>
+          <p class="sub">A path for every correction, and an owner. A gardener run does not exist yet.</p>
+          <aside class="notes">
+            Known gap. Dependabot PRs sit unattended. That is the debt, not a cleanup that ran.
+          </aside>
         </section>
 
-        <section>
+        <section class="slide-statement">
+          <p class="kicker">The map</p>
           <h2>A map that rots is worse than no map.</h2>
-          <div class="grid grid-2">
-            <div class="card c-purple">
-              <h3>The maintain-verification-skill routine (PR #167)</h3>
-              <ul>
-                <li>Full source audit: re-checked 4 features against code (home, detail, loading-error, theme)</li>
-                <li>Live hardware drives on Nothing Phone (3): home, detail, theme night, error HTTPS proof captured</li>
-                <li>Harness: adbharbor session reuse (ADB_HARBOR_SESSION) prevents deadlock; adds 120s timeout; stops fallback to an arbitrary device on lease failure</li>
-                <li>Feature map: loading-error recipe switched to https://127.0.0.1:9/ (cleartext HTTP is blocked before a connection error)</li>
-                <li>Verification: ./verify doctor (ok) · ./verify test (33 green, 5s) · CI 37328150477 green (4m 4s)</li>
-                <li>Device proofs: session reuse ok, foreign session fails fast, screencap captured</li>
-                <li>Caveat: unmerged — reviewable correction artifact, not inherited on main</li>
-              </ul>
-            </div>
-            <div class="card c-green">
-              <h3>Durable correction PR</h3>
-              <p>[ Recorded ]</p>
-              <p>Commit: 0c94c253</p>
-              <p>PR: msomu/base-mvvm-android-kt#167</p>
-              <p>CI: run 37328150477 SUCCESS (4m 4s)</p>
-              <p>Evidence: OUTBOX/POSHMARK_DEMO_MAINTAIN_PASS_2026-10-05/ — live/ (UI trees, screenshots, logs) and harness/ (lease concurrency proofs)</p>
-              <p>Review: Vedha SHIP at 0c94c253 (0 blockers/warnings). Caveat: unmerged — not inherited on main.</p>
-            </div>
-          </div>
-          <p class="thesis">Better memory makes the next intent cheaper.</p>
-          <p class="cue">Showcase: repo + app · Badge: Recorded (cue: live walkthrough of recorded evidence; Live only if re-driven in room). Evidence: PR #167 open at 0c94c253. Vedha SHIP verdict. Caveat: unmerged, not inherited on main.</p>
+          <p class="sub">Better memory makes the next intent cheaper.</p>
+          <aside class="notes">
+            Badge: Recorded. Maintain pass PR #167. Vedha returned SHIP. The pull request is unmerged, so it is not on main.
+          </aside>
         </section>
 
-        <section>
-          <h2>Automation raises the ceiling.<br />Proof and review set the safe one.</h2>
-          <div class="grid grid-2">
-            <div class="card c-blue">
-              <h3>Throughput Potential</h3>
-              <ul>
-                <li>Unattended background agents</li>
-                <li>Concurrent execution across isolated branches</li>
-                <li>Concurrency raises capacity; measure accepted throughput and rework.</li>
-              </ul>
-              <p>Risk: 100 agents without proof = slop and regressions.</p>
-            </div>
-            <div class="card c-green">
-              <h3>The Verification Ceiling</h3>
-              <ul>
-                <li>Deterministic test and screenshot receipts</li>
-                <li>Independent read-only cloud review</li>
-                <li>Risk-tiered human merge gates</li>
-              </ul>
-              <p>Result: Higher throughput with evidence-backed review.</p>
-            </div>
-          </div>
-          <p class="external">Poteto's 2,000 PRs/month is her case study, not our target. Our target is the mechanism that made it safe.</p>
-          <p class="cue">Cue Switch: board · Core lesson: show the gate before the scale.</p>
+        <section class="slide-stack">
+          <p>Automation raises the ceiling.</p>
+          <p>Proof and review set the safe one.</p>
+          <p class="meta">Higher throughput with evidence. Not a bug-free guarantee.</p>
+          <aside class="notes">
+            Poteto's 2,000 pull requests in a month is her case study, not our target. 100 agents without proof is slop.
+          </aside>
         </section>
 
-        <section>
-          <h2>The bar: an intern + Claude can navigate the repo.</h2>
-          <p class="dayline">Day 1 target: every repo has a verify command and one green, required check<br />Day 2 target: each team leaves with one workflow, an owner and a gap to close</p>
-          <div class="grid grid-3">
-            <div class="card c-green">
-              <h3>Workflow</h3>
-              <p>Which team workflow will your pair own?</p>
-              <ul>
-                <li>Android verify in CI</li>
-                <li>iOS build and test skill</li>
-                <li>Web coverage gate in Claude</li>
-                <li>Server test harness</li>
-                <li>Backend verify endpoint</li>
-              </ul>
-            </div>
-            <div class="card c-orange">
-              <h3>Owner</h3>
-              <p>Who on the team stewards this after Friday?</p>
-              <ul>
-                <li>Named engineer per repo</li>
-                <li>Keeps verify command green</li>
-                <li>Curates AGENTS.md features</li>
-                <li>Triages agent regressions</li>
-              </ul>
-            </div>
-            <div class="card c-red">
-              <h3>The one gap</h3>
-              <p>What is the single blocking gap?</p>
-              <ul>
-                <li>Always-red check repaired</li>
-                <li>12-case golden set in CI</li>
-                <li>Tests runnable without a dev box</li>
-                <li>Deterministic screenshot proof</li>
-              </ul>
-            </div>
-          </div>
-          <p class="thesis">The 5-point bar: verify command exists · drives a real user path · evidence survives cleanup · a required CI check runs it · AGENTS.md says how to reach each feature</p>
-          <p class="cue">Showcase: board · Badge: Live · Benchmark = autonomy, not a frozen standard.</p>
+        <section class="slide-statement">
+          <p class="kicker">The bar</p>
+          <h2>An intern and Claude can navigate the repo.</h2>
+          <ul class="ladder">
+            <li><span>A verify command exists</span></li>
+            <li><span>It drives one real user path</span></li>
+            <li><span>The evidence survives cleanup</span></li>
+            <li><span>A required check runs it</span></li>
+            <li><span>AGENTS.md says how to reach each feature</span></li>
+          </ul>
+          <aside class="notes">
+            Day 1: every repo has a verify command and one green required check. Day 2: one workflow, an owner, and a gap to close.
+          </aside>
+        </section>
+
+        <section class="slide-title">
+          <p class="kicker">From this room</p>
+          <h1>From This Room to the <span class="orange">Internet</span></h1>
+          <p class="meta">A suggestion becomes a pull request.<br />It is on the site only after I merge.</p>
+          <aside class="notes">
+            Open Wispr and start recording. Take two or three suggestions. Do not say it is already on the website.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>A suggestion becomes a pull request.</p>
+          <p class="meta">It is on the site only after I merge.</p>
+        </section>
+
+        <section class="slide-stack">
+          <p>A model answers.</p>
+          <p>A harness finishes.</p>
+          <aside class="notes">
+            A chat window gives you a paragraph and stops. A harness is the files, the tools, and permission to try again.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Gather the context.</p>
+          <p>Ask the model.</p>
+          <p>Use a tool.</p>
+          <p>Repeat.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Three harnesses</p>
+          <ul class="roster">
+            <li><strong>Claude Code</strong><span>The terminal. It reads the project and keeps going.</span></li>
+            <li><strong>Codex</strong><span>You give it a job, not a single question.</span></li>
+            <li><strong>Cursor</strong><span>The editor. It can see the code and open a pull request.</span></li>
+          </ul>
+          <p class="sub">Three cars. One kind of engine.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">What people stack on top</p>
+          <ul class="roster">
+            <li><strong>pstack</strong><span>Prove it. The agent runs a real check before it can say it is done.</span></li>
+            <li><strong>Superpowers</strong><span>Plan it. Ask, write a plan, write a failing test, then review.</span></li>
+            <li><strong>gstack</strong><span>Staff it. Garry Tan's setup splits the job across roles.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">One person, many workers</p>
+          <ul class="roster">
+            <li><strong>Grok Bot</strong><span>A fleet. Their number, not ours.</span></li>
+            <li><strong>Several at once</strong><span>Claude Code, Codex, and Cursor, open together.</span></li>
+            <li><strong>cmux</strong><span>A pane lights up when an agent needs you.</span></li>
+            <li><strong>Ghostty</strong><span>The terminal under cmux.</span></li>
+            <li><strong>py</strong><span>Pi, at pi.dev. Small on purpose. You extend it.</span></li>
+          </ul>
+          <aside class="notes">
+            Do not say four tools. Do not say it has no MCP. pi.dev leads with four modes: interactive, print or JSON, RPC, and SDK.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>I close the laptop.</p>
+          <p>The work keeps going.</p>
+          <aside class="notes">
+            A cloud agent runs on its own machine. Do not say bus.xyz. That name does not load.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">What you are about to see</p>
+          <h2>Watch this become a pull request.</h2>
+          <ul class="marks">
+            <li><strong>Live</strong><span>Wispr records the room.</span></li>
+            <li><strong>Live</strong><span>A summary after you stop, once the recording is past five minutes.</span></li>
+            <li><strong>Live</strong><span>One ticket, dictated. Wispr types. It does not file it.</span></li>
+            <li><strong>Live</strong><span>A person assigns it to Cursor, or Tony starts the agent.</span></li>
+            <li><strong>Live</strong><span>verify-msomu, if someone runs it on the local server.</span></li>
+          </ul>
+          <aside class="notes">
+            Do not promise ten seconds. The first summary can take about two minutes, and that is not a guarantee. Shorter than five minutes, tap generate.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">What stays held</p>
+          <h2>The last step is mine.</h2>
+          <ul class="marks">
+            <li><strong>Hold</strong><span>Wispr does not file the tickets.</span></li>
+            <li><strong>Hold</strong><span>A ticket does not start an agent by itself.</span></li>
+            <li><strong>Recorded</strong><span>A GitHub green check. This repo has no workflows.</span></li>
+            <li><strong>Hold</strong><span>The merge. My tap.</span></li>
+            <li><strong>Recorded</strong><span>Already on the site. Not this room. Not yet.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-stack">
+          <p>You talk.</p>
+          <p>Wispr writes it down.</p>
+          <aside class="notes">
+            Automatic only after five minutes. If the summary is slow, use the rehearsal summary and say so.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Wispr types.</p>
+          <p class="meta">It does not file the ticket.</p>
+          <aside class="notes">
+            A useful ticket has a title, the context, and what done looks like. Then a person assigns it, or Tony starts the agent.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Hand it over.</p>
+          <p>A pull request opens.</p>
+          <aside class="notes">
+            They do not start on their own. Do not promise a clock time. Do not say the builds are already waiting unless they are on screen.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>msomu.com</p>
+          <p class="meta">Tell me what is wrong with it.</p>
+          <aside class="notes">
+            If the site will not load, use a screenshot with two or three marks already on it.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Here is the pull request it just opened.</p>
+          <p>It waits for my tap.</p>
+          <aside class="notes">
+            It is not on the site until I merge it. If no pull request has opened yet, show one from rehearsal and call it a recording. The check you can run live is verify-msomu, on the local server, and only if someone runs it.
+          </aside>
         </section>
 
       </div>
@@ -640,17 +519,16 @@
       const phone = window.innerWidth < 640;
       Reveal.initialize({
         hash: true,
-        transition: phone ? "none" : "fade",
+        transition: "fade",
         transitionSpeed: "fast",
-        controls: !phone,
+        controls: true,
         progress: true,
         center: false,
-        disableLayout: phone,
-        width: phone ? 390 : 1200,
-        height: phone ? 844 : 760,
-        margin: 0.04,
-        minScale: 0.2,
-        maxScale: 1.6,
+        width: phone ? 390 : 1100,
+        height: phone ? 844 : 700,
+        margin: phone ? 0.08 : 0.06,
+        minScale: 0.5,
+        maxScale: 1.4,
       });
     </script>
   </body>
