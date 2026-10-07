@@ -66,6 +66,8 @@ drive_talks() {
 	grep -q 'From This Room to the <span class="orange">Internet</span>' "$OUT_DIR/_talks_the-receipt-loop.html"
 	grep -q 'Pi, at pi.dev' "$OUT_DIR/_talks_the-receipt-loop.html"
 	grep -q 'It waits for my tap' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'Issue triage' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'somu-agi' "$OUT_DIR/_talks_the-receipt-loop.html"
 	grep -qi 'reveal' "$OUT_DIR/_talks_the-receipt-loop.html"
 	if grep -q 'frame_1.png' "$OUT_DIR/_talks_the-receipt-loop.html"; then
 		echo "talks: receipt loop still references tldraw frame images" >&2

@@ -256,6 +256,8 @@ describe("public agent endpoints", () => {
 			);
 			assert.match(page.body, /Pi, at pi\.dev/, path);
 			assert.match(page.body, /It waits for my tap/, path);
+			assert.match(page.body, /Issue triage/, path);
+			assert.match(page.body, /somu-agi/, path);
 			assert.doesNotMatch(page.body, /frame_1\.png/, path);
 			assert.doesNotMatch(page.body, /not found/i);
 		}

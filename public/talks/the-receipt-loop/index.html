@@ -44,16 +44,27 @@
       .reveal h2 { font-size: 1.55em; line-height: 1.12; margin: 0; }
       .reveal p { margin: 0; }
 
-      .reveal .slides section.present {
+      .slide-title,
+      .slide-stack,
+      .slide-statement {
         height: 100% !important;
         min-width: 0;
         display: flex !important;
         flex-direction: column;
         justify-content: center;
-        align-items: flex-start;
-        text-align: left;
         box-sizing: border-box;
         padding: 0 1.35em;
+      }
+
+      .slide-statement {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .slide-title,
+      .slide-stack {
+        align-items: center;
+        text-align: center;
       }
 
       .kicker,
@@ -89,12 +100,6 @@
         line-height: 1.35;
       }
 
-      .slide-title.present,
-      .slide-stack.present {
-        align-items: center;
-        text-align: center;
-      }
-
       .slide-title h1 { max-width: 14ch; }
       .slide-title .orange { color: var(--orange); }
 
@@ -124,6 +129,17 @@
 
       .slide-statement h2 { max-width: 16ch; }
       .slide-statement h2.wide { max-width: 100%; }
+
+      .slide-figure img {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        max-height: 520px;
+        margin-top: 0.45em;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #f4f4f5;
+      }
 
       .roster,
       .marks,
@@ -450,6 +466,113 @@
           </ul>
         </section>
 
+        <section class="slide-title">
+          <p class="kicker">A workflow</p>
+          <h1>Issue triage</h1>
+        </section>
+
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Trigger</p>
+          <h2 class="wide">An issue is created, or its status changes.</h2>
+          <img data-asset="assets/linear-issue-triage-trigger.png" alt="Linear triggers: issue created, and status changed." />
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Whose work</p>
+          <h2>Only issues assigned to me.</h2>
+          <ul class="roster">
+            <li><strong>Somu</strong><span>Somasundaram M. msomu.</span></li>
+            <li><strong>Anyone else</strong><span>Skip it. Do not comment.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">When it starts</p>
+          <h2>Todo, and nothing is blocking it.</h2>
+          <ul class="roster">
+            <li><strong>Status</strong><span>Todo.</span></li>
+            <li><strong>Kind</strong><span>A bug report, or a feature request.</span></li>
+            <li><strong>Blockers</strong><span>None open. No dependency still open.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-stack">
+          <p>Otherwise, do nothing.</p>
+          <p class="meta">Do not comment. Do not create noise.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Left alone</p>
+          <ul class="roster">
+            <li><strong>In progress</strong><span>Already taken.</span></li>
+            <li><strong>In review</strong><span>Already in review.</span></li>
+            <li><strong>QA review</strong><span>Already with QA.</span></li>
+            <li><strong>Done</strong><span>Finished.</span></li>
+            <li><strong>Backlog</strong><span>Not ready.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-stack">
+          <p>Examine the issue.</p>
+          <p>Add an eyes reaction.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Assignment</p>
+          <h2>New work comes back to me.</h2>
+          <ul class="roster">
+            <li><strong>Linear</strong><span>Somasundaram M. Sub-issues too.</span></li>
+            <li><strong>GitHub</strong><span>msomu. The pull request too.</span></li>
+            <li><strong>The original issue</strong><span>Stays assigned to Somasundaram M.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Bug report</p>
+          <h2>Investigate. Then say what you found.</h2>
+          <ul class="roster">
+            <li><strong>Finding</strong><span>Refute the bug, or name the likely cause.</span></li>
+            <li><strong>Sentry</strong><span>Logs, when they apply.</span></li>
+            <li><strong>PostHog</strong><span>Events, when they are needed.</span></li>
+            <li><strong>Easy fix</strong><span>In Progress. Open a pull request. Assign it to somu-agi.</span></li>
+            <li><strong>Maestro</strong><span>A test on the checks, so this bug does not return.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Feature request</p>
+          <h2>Write the approach. Then split the work.</h2>
+          <ul class="roster">
+            <li><strong>Comment</strong><span>The approach, on the issue.</span></li>
+            <li><strong>Sub-issues</strong><span>Context on each one. Move them to Todo.</span></li>
+            <li><strong>Other agents</strong><span>Each takes one and opens its own pull request.</span></li>
+            <li><strong>Easy change</strong><span>In Progress. Implement it. Open a pull request.</span></li>
+            <li><strong>Maestro</strong><span>A test on the checks from the first day.</span></li>
+            <li><strong>The pull request</strong><span>Assigned to somu-agi.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-stack">
+          <p>Resolves BUG-123.</p>
+          <p class="meta">The Linear issue id, on the pull request, so the two stay linked.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Slack</p>
+          <h2>Ask for review only when it is ready.</h2>
+          <ul class="roster">
+            <li><strong>#pr-review</strong><span>Aryan and Sanju.</span></li>
+            <li><strong>Ready</strong><span>No further test. No regression you can see.</span></li>
+            <li><strong>Otherwise</strong><span>Post nothing.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Tools</p>
+          <h2 class="wide">The action is a set of tools.</h2>
+          <img data-asset="assets/linear-issue-triage-action.png" alt="Tools: open a pull request, Linear, Sentry, PostHog, and Slack." />
+        </section>
+
         <section class="slide-stack">
           <p>I close the laptop.</p>
           <p>The work keeps going.</p>
@@ -527,6 +650,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
     <script>
+      const path = location.pathname;
+      const deckBase = path.endsWith("/")
+        ? path
+        : path.endsWith(".html")
+          ? path.replace(/[^/]+$/, "")
+          : path + "/";
+      document.querySelectorAll("[data-asset]").forEach((img) => {
+        img.src = deckBase + img.getAttribute("data-asset");
+      });
+
       const phone = window.innerWidth < 640;
       Reveal.initialize({
         hash: true,
