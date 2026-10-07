@@ -111,6 +111,10 @@ describe("talk decks on disk", () => {
 		);
 		assert.match(
 			readTalkHtml("the-receipt-loop") ?? "",
+			/Their results, not our rate/,
+		);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
 			/From This Room to the <span class="orange">Internet<\/span>/,
 		);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Pi, at pi\.dev/);

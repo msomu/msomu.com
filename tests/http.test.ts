@@ -249,6 +249,7 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /The Receipt Loop/, path);
 			assert.match(page.body, /reveal/i, path);
 			assert.match(page.body, /A claim becomes a receipt/, path);
+			assert.match(page.body, /Their results, not our rate/, path);
 			assert.match(
 				page.body,
 				/From This Room to the <span class="orange">Internet<\/span>/,

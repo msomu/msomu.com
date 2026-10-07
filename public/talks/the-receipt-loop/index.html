@@ -258,10 +258,12 @@
           <p class="kicker">Poshmark Growth Week</p>
           <h1>The Receipt Loop</h1>
           <p class="meta">
-            <strong>Somu</strong><br />
-            7–8 October 2026 · Chetpet<br />
+            <strong>Somu</strong> · Somasundaram Mahesh<br />
+            7–8 October 2026 · Poshmark India Office · Chetpet<br />
+            Wed and Thu · 10:30–11:50 IST<br />
             Day 1: Make agents trustworthy in our repos<br />
-            Day 2: Orchestrate, don't prompt
+            Day 2: Orchestrate, don't prompt<br />
+            Platform: base-mvvm-android-kt
           </p>
           <aside class="notes">
             This board is the presentation. Showcases are terminal, repo, CI, app, and cloud evidence.
@@ -280,18 +282,33 @@
         <section class="slide-statement">
           <p class="kicker">Four words</p>
           <ul class="roster">
-            <li><strong>Claim</strong><span>A message. "Done."</span></li>
-            <li><strong>Receipt</strong><span>An artifact. Output, screenshot, log, CI run.</span></li>
-            <li><strong>Rule</strong><span>A receipt that stays. A test, a check, an eval.</span></li>
-            <li><strong>Rail</strong><span>A rule that runs unattended.</span></li>
+            <li><strong>Claim</strong><span>A message. "Done." A prompt assertion with no proof.</span></li>
+            <li><strong>Receipt</strong><span>Command output, screenshot, logcat, a CI run.</span></li>
+            <li><strong>Rule</strong><span>A test, a required check, an eval case.</span></li>
+            <li><strong>Rail</strong><span>A cloud agent opens a self-verifying pull request.</span></li>
           </ul>
           <p class="sub">Trust is not a feeling. It is an artifact.</p>
         </section>
 
         <section class="slide-statement">
+          <p class="kicker">Their results, not our rate</p>
+          <ul class="roster">
+            <li><strong>Stripe</strong><span>1,300 merged pull requests a week. Minion-written, human-reviewed. Their number, February 2026.</span></li>
+            <li><strong>Poteto</strong><span>About 2,000 pull requests a month. Her result, not our target.</span></li>
+            <li><strong>Grok Bot</strong><span>Hundreds of pull requests a day. Their number, not ours.</span></li>
+          </ul>
+          <p class="sub">An agent does not get to say done until it leaves a receipt.</p>
+        </section>
+
+        <section class="slide-statement">
           <p class="kicker">The gap</p>
           <h2>Self-verification.</h2>
-          <p class="sub">Most teams have skills. Few can prove a change works without a human.</p>
+          <ul class="roster">
+            <li><strong>The gap</strong><span>The weakest scored area. Autonomy stalls when an agent cannot prove its own change.</span></li>
+            <li><strong>The diagnosis</strong><span>Most teams have skills. Few can prove a change works without a human.</span></li>
+            <li><strong>The remedy</strong><span>Not more prompts. An executable verification loop.</span></li>
+            <li><strong>Recorded</strong><span>Named in the intro. Each team names its own gap.</span></li>
+          </ul>
           <aside class="notes">
             The remedy is not more prompts. It is an executable verification loop. Badge: Recorded.
           </aside>
@@ -300,7 +317,12 @@
         <section class="slide-statement">
           <p class="kicker">Intent</p>
           <h2>One ticket. One command that can fail.</h2>
-          <p class="sub">Acceptance is a command, not a paragraph. ./verify</p>
+          <ul class="roster">
+            <li><strong>AGENTS.md</strong><span>The scope, and stop when green. Pull request #162 at e480eb2.</span></li>
+            <li><strong>./verify</strong><span>doctor, test, or assemble. It exits 0 or 1.</span></li>
+            <li><strong>The map</strong><span>Home, detail, loading and error, theme. Pull request #159.</span></li>
+          </ul>
+          <p class="sub">Acceptance is a command, not a paragraph.</p>
           <aside class="notes">
             Demo: cat AGENTS.md, then ./verify test. Badge: Live. PR #162 at e480eb2 is unmerged. ./verify is the interface. The skill directory is not auto-loaded.
           </aside>
@@ -309,7 +331,12 @@
         <section class="slide-statement">
           <p class="kicker">Isolated execution</p>
           <h2>A ticket goes in. A sandbox comes up.</h2>
-          <p class="sub">A person starts it. The finish can be automatic. 100 agents without proof is slop.</p>
+          <ul class="roster">
+            <li><strong>Issue #164</strong><span>Detail shows User #1. The cloud agent opens pull request #165.</span></li>
+            <li><strong>The run</strong><span>./verify doctor, then ./verify test. CI 37320968461 green. 10 minutes 33 seconds.</span></li>
+            <li><strong>The phone</strong><span>Vedha SHIP at 6c4e4be. The CI apk on Nothing Phone (3).</span></li>
+            <li><strong>The launch</strong><span>A person starts it. The finish can be automatic.</span></li>
+          </ul>
           <aside class="notes">
             Badge: Recorded. PR #165. Launch is human. Completion webhook to Buzz is proven. A monitoring trigger that starts a run is not proven.
           </aside>
@@ -318,6 +345,12 @@
         <section class="slide-statement">
           <p class="kicker">Evidence</p>
           <h2>A cold launch is not proof.</h2>
+          <ul class="roster">
+            <li><strong>The apk</strong><span>The exact CI build of pull request #165. Commit 6c4e4be. The same SHA on the phone.</span></li>
+            <li><strong>Cold start</strong><span>672 ms.</span></li>
+            <li><strong>The path</strong><span>Home, a tap, Todo Details. The screen shows User #1.</span></li>
+            <li><strong>Recorded</strong><span>Rolex, 19:43 IST. Nothing Phone (3), A024.</span></li>
+          </ul>
           <p class="sub">A driven path is. The receipt survives cleanup.</p>
           <aside class="notes">
             Badge: Recorded. Exact CI APK on Nothing Phone (3). Cold start 672 ms. Detail shows User #1.
@@ -327,7 +360,12 @@
         <section class="slide-statement">
           <p class="kicker">Review</p>
           <h2>The author is not the reviewer.</h2>
-          <p class="sub">A reviewer that cannot merge is a control, not a rubber stamp.</p>
+          <ul class="roster">
+            <li><strong>The candidate</strong><span>Pull request #162 at e480eb2. Read-only. It writes one report.</span></li>
+            <li><strong>The report</strong><span>Pull request #166. Vedha validated it as workshop evidence.</span></li>
+            <li><strong>The limit</strong><span>It cannot push, approve, relabel, or merge.</span></li>
+            <li><strong>The badges</strong><span>A green check is status, not a review.</span></li>
+          </ul>
           <aside class="notes">
             Badge: Recorded. Report PR #166. Vedha validated it as workshop evidence. Green automation badges are status, not reviews.
           </aside>
@@ -336,6 +374,11 @@
         <section class="slide-statement">
           <p class="kicker">Eval</p>
           <h2>An eval is not an app test.</h2>
+          <ul class="roster">
+            <li><strong>The set</strong><span>12 cases. 6 real pull requests, 6 synthetic.</span></li>
+            <li><strong>Replay</strong><span>12 of 12. GitHub run 37318641680. Commit e480eb2.</span></li>
+            <li><strong>Live model</strong><span>A separate gate. No CI key, so it does not run here.</span></li>
+          </ul>
           <p class="sub">Correct is not the same as good. Neither is the same as fresh.</p>
           <aside class="notes">
             Label: eval in CI (replay mode). 12 cases. A replay is recorded. A live model run is a separate gate.
@@ -346,10 +389,11 @@
           <p class="kicker">Merge</p>
           <h2>A human decision, sized by blast radius.</h2>
           <ul class="roster">
-            <li><strong>Low</strong><span>No shared contract. Easy to revert.</span></li>
-            <li><strong>Owned</strong><span>One team's code. A receipt is attached.</span></li>
-            <li><strong>Blast radius</strong><span>Shared library, schema, auth, or infra.</span></li>
+            <li><strong>Low</strong><span>No shared contract. Easy to revert. Green verify, then review.</span></li>
+            <li><strong>Owned</strong><span>One team's code. A receipt is attached. A code owner reviews.</span></li>
+            <li><strong>Blast radius</strong><span>Shared library, schema, auth, or infra. Extra reviewer, required check, staged rollout.</span></li>
           </ul>
+          <p class="sub">RISK_TIERS.md and CODEOWNERS are in pull request #162. Branch protection on main is absent.</p>
           <aside class="notes">
             Badge: Prepared. RISK_TIERS.md and CODEOWNERS are in unmerged PR #162. Branch protection on main is absent.
           </aside>
@@ -358,6 +402,10 @@
         <section class="slide-statement">
           <p class="kicker">Correction</p>
           <h2>A failure becomes a rule.</h2>
+          <ul class="roster">
+            <li><strong>The red check</strong><span>Pull request #163. Expected User #1. The test saw User 1.</span></li>
+            <li><strong>The fix</strong><span>015efb5. The same check went green.</span></li>
+          </ul>
           <p class="sub">A fix that is not recorded is a fix you will make again.</p>
           <aside class="notes">
             Badge: Live. Label: staged red check. PR #163 failed on User #1, then the fix went green.
@@ -375,7 +423,7 @@
             <li><span>Skill and verify command</span></li>
             <li><span>Style guide</span></li>
           </ol>
-          <p class="sub">Prompt memory does not survive. The repo does.</p>
+          <p class="sub">Prompt memory does not survive. The repo does. Stock detekt runs. No custom lint rule yet.</p>
           <aside class="notes">
             Stock detekt runs. No custom lint rule. The staged test is a real CI check, not an always-red check.
           </aside>
@@ -384,6 +432,11 @@
         <section class="slide-statement">
           <p class="kicker">Debt</p>
           <h2>No promise of zero debt.</h2>
+          <ul class="roster">
+            <li><strong>Prevent</strong><span>Types, the compiler, stock detekt. Recorded in pull request #162.</span></li>
+            <li><strong>Contain</strong><span>No custom lint rule yet. That is the known gap.</span></li>
+            <li><strong>Measure</strong><span>Dependabot pull requests 154, 155, 156, 158, and 161 sit open.</span></li>
+          </ul>
           <p class="sub">A path for every correction, and an owner. A gardener run does not exist yet.</p>
           <aside class="notes">
             Known gap. Dependabot PRs sit unattended. That is the debt, not a cleanup that ran.
@@ -393,6 +446,11 @@
         <section class="slide-statement">
           <p class="kicker">The map</p>
           <h2>A map that rots is worse than no map.</h2>
+          <ul class="roster">
+            <li><strong>The pass</strong><span>Pull request #167. Home, detail, loading and error, theme.</span></li>
+            <li><strong>The phone</strong><span>Nothing Phone (3). ./verify test, 33 green. CI 37328150477.</span></li>
+            <li><strong>The review</strong><span>Vedha SHIP. Unmerged, so it is not on main.</span></li>
+          </ul>
           <p class="sub">Better memory makes the next intent cheaper.</p>
           <aside class="notes">
             Badge: Recorded. Maintain pass PR #167. Vedha returned SHIP. The pull request is unmerged, so it is not on main.
@@ -402,7 +460,7 @@
         <section class="slide-stack">
           <p>Automation raises the ceiling.</p>
           <p>Proof and review set the safe one.</p>
-          <p class="meta">Higher throughput with evidence. Not a bug-free guarantee.</p>
+          <p class="meta">Higher throughput with evidence. Not a bug-free guarantee.<br />100 agents without proof is slop. Poteto's 2,000 a month is her case, not our target.</p>
           <aside class="notes">
             Poteto's 2,000 pull requests in a month is her case study, not our target. 100 agents without proof is slop.
           </aside>
@@ -421,6 +479,17 @@
           <aside class="notes">
             Day 1: every repo has a verify command and one green required check. Day 2: one workflow, an owner, and a gap to close.
           </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Leave with this</p>
+          <ul class="roster">
+            <li><strong>Day 1</strong><span>Every repo has a verify command and one green required check.</span></li>
+            <li><strong>Day 2</strong><span>One workflow, an owner, and a gap to close.</span></li>
+            <li><strong>The workflow</strong><span>Which one will your pair own?</span></li>
+            <li><strong>The owner</strong><span>Who stewards it after Friday?</span></li>
+            <li><strong>The gap</strong><span>What is the single thing still blocking?</span></li>
+          </ul>
         </section>
 
         <section class="slide-title">
