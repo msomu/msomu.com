@@ -266,6 +266,8 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /Naman &lt;&gt; Somu 1-on-1/, path);
 			assert.match(page.body, /somu-agi/, path);
 			assert.doesNotMatch(page.body, /frame_1\.png/, path);
+			assert.match(page.body, /board-title\.png/, path);
+			assert.match(page.body, /board-bar\.png/, path);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
 	});

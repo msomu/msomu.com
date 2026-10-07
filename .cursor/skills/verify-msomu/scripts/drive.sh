@@ -76,6 +76,8 @@ drive_talks() {
 		echo "talks: receipt loop still references tldraw frame images" >&2
 		exit 1
 	fi
+	grep -q 'board-title.png' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'board-bar.png' "$OUT_DIR/_talks_the-receipt-loop.html"
 	echo "talks: ok"
 }
 

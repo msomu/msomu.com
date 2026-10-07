@@ -130,6 +130,8 @@ describe("talk decks on disk", () => {
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Naman &lt;&gt; Somu 1-on-1/);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /somu-agi/);
 		assert.doesNotMatch(readTalkHtml("the-receipt-loop") ?? "", /frame_1\.png/);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /board-title\.png/);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /board-bar\.png/);
 		assert.match(
 			readTalkHtml("i-gave-ai-a-computer-and-walked-away") ?? "",
 			/reveal|Walked Away/i,
