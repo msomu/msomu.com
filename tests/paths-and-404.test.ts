@@ -104,6 +104,28 @@ describe("talk decks on disk", () => {
 		assert.ok(slugs.includes("the-receipt-loop"));
 		assert.match(readTalkHtml("receipt") ?? "", /reveal|Receipt|receipt/i);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /The Receipt Loop/);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /reveal/i);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
+			/A claim becomes a receipt/,
+		);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
+			/From This Room to the <span class="orange">Internet<\/span>/,
+		);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Pi, at pi\.dev/);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
+			/It waits for my tap/,
+		);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
+			/You are an issue triage automation for Linear\./,
+		);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Daily Sync/);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Naman &lt;&gt; Somu 1-on-1/);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /somu-agi/);
+		assert.doesNotMatch(readTalkHtml("the-receipt-loop") ?? "", /frame_1\.png/);
 		assert.match(
 			readTalkHtml("i-gave-ai-a-computer-and-walked-away") ?? "",
 			/reveal|Walked Away/i,

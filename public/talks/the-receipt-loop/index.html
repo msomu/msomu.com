@@ -1,311 +1,717 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Receipt Loop — Poshmark Growth Week (Offline Presentation)</title>
-  <style>
-    :root {
-      --bg: #0b0d11;
-      --panel: #161a22;
-      --border: #262c36;
-      --accent: #388bfd;
-      --text: #f0f6fc;
-      --muted: #8b949e;
-      --success: #3fb950;
-      --warning: #d29922;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-      user-select: none;
-    }
-    #stage {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-    }
-    #main-slide {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-    }
-    #chrome-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 48px;
-      background: rgba(11, 13, 17, 0.85);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      z-index: 10;
-      transition: opacity 0.2s;
-    }
-    #chrome-header:hover { opacity: 1; }
-    .badge {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: rgba(56, 139, 253, 0.2);
-      color: var(--accent);
-      border: 1px solid rgba(56, 139, 253, 0.4);
-      margin-right: 8px;
-    }
-    #slide-title { font-weight: 600; font-size: 14px; }
-    #slide-num { font-size: 13px; color: var(--muted); }
-
-    /* Presenter Notes Drawer */
-    #notes-drawer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(22, 26, 34, 0.95);
-      border-top: 1px solid var(--border);
-      padding: 20px 30px;
-      max-height: 240px;
-      overflow-y: auto;
-      transform: translateY(100%);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 20;
-    }
-    #notes-drawer.open { transform: translateY(0); }
-    #notes-title { font-size: 12px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-weight: bold; }
-    #notes-content { font-size: 15px; line-height: 1.5; color: #d0d7de; }
-
-    /* Thumbnails Tray */
-    #tray {
-      position: absolute;
-      top: 48px;
-      bottom: 0;
-      right: 0;
-      width: 260px;
-      background: rgba(16, 19, 24, 0.96);
-      border-left: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 12px;
-      display: none;
-      z-index: 15;
-    }
-    #tray.open { display: block; }
-    .thumb-item {
-      margin-bottom: 12px;
-      cursor: pointer;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 2px solid transparent;
-      transition: all 0.15s;
-    }
-    .thumb-item:hover { border-color: var(--accent); }
-    .thumb-item.active { border-color: var(--success); }
-    .thumb-item img { width: 100%; display: block; }
-    .thumb-label { font-size: 11px; padding: 4px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    #controls-tip {
-      position: absolute;
-      bottom: 12px;
-      right: 16px;
-      font-size: 11px;
-      color: var(--muted);
-      background: rgba(0,0,0,0.6);
-      padding: 4px 8px;
-      border-radius: 4px;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-  <div id="stage">
-    <img id="main-slide" src="" alt="Slide">
-  </div>
-
-  <header id="chrome-header">
-    <div style="display:flex; align-items:center;">
-      <span class="badge">Offline Pack</span>
-      <span id="slide-title">Loading...</span>
-    </div>
-    <div style="display:flex; align-items:center; gap:16px;">
-      <span id="slide-num">1 / 15</span>
-    </div>
-  </header>
-
-  <div id="notes-drawer">
-    <div id="notes-title">Presenter Cues & Demonstration Plan</div>
-    <div id="notes-content"></div>
-  </div>
-
-  <div id="tray"></div>
-
-  <div id="controls-tip">
-    Keys: <b>→ / Space</b>: Next · <b>←</b>: Prev · <b>N</b>: Cues · <b>T</b>: Tray · <b>F</b>: Fullscreen
-  </div>
-
-  <script>
-    const SLIDES = [
-      {
-        id: "f0",
-        name: "F0 — Title",
-        file: "/talks/the-receipt-loop/slides/frame_1.png",
-        cues: "Open session. Presenter: Somasundaram Mahesh (msomu) · Founding AI Engineer at AGI Inc (on-device AI) · previously Disney+Hotstar. Thesis: A claim becomes a receipt. A receipt becomes a rule. A rule becomes a rail."
-      },
-      {
-        id: "f1",
-        name: "F1 — Why trust is manufactured",
-        file: "/talks/the-receipt-loop/slides/frame_2.png",
-        cues: "Establish the 4-stage vocabulary: Claim -> Receipt -> Rule -> Rail. External examples, not our rate: Stripe Minions (1,300+ merged PRs/week, human-reviewed); Lauren Tan (2,000 personal PRs/month to production in video; her X post later says 2,500 — a separate report, not verified growth from 2,000; recording month unknown); Grok Bot team (hundreds of PRs/day; pstack is her quality practice, not a proven throughput cause). None of these is our rate."
-      },
-      {
-        id: "f2",
-        name: "F2 — The gap (intro item D1.1)",
-        file: "/talks/the-receipt-loop/slides/frame_3.png",
-        cues: "Intro assessment callback. Highlight that self-verification scored lowest across teams. Frame the remedy: not more prompt engineering, but an executable verification loop."
-      },
-      {
-        id: "f3",
-        name: "F3 — Bounded intent → executable acceptance",
-        file: "/talks/the-receipt-loop/slides/frame_4.png",
-        cues: "Showcase: terminal + repo. Demo `cat AGENTS.md` and `./verify test`. Feature map in PR #159 (4666f10, 9 files). Note .cursor/skills/ not auto-loaded by Claude Code (verify is interface); create step not recorded."
-      },
-      {
-        id: "f4",
-        name: "F4 — Isolated execution (S3 · D2.1)",
-        file: "/talks/the-receipt-loop/slides/frame_5.png",
-        cues: "Showcase: cloud + repo. Live walkthrough of recorded cloud evidence (PR #165, 10m 33s). Human/agent handoffs: manual launch (Tony), automatic webhook/wake/PR handoff, unproven monitoring trigger, gated human merge."
-      },
-      {
-        id: "f5",
-        name: "F5 — Repeatable verification and evidence",
-        file: "/talks/the-receipt-loop/slides/frame_6.png",
-        cues: "Showcase: app + terminal. Live walkthrough of joined device proof from OUTBOX/POSHMARK_DEMO_JOINED_RUN_PR165_2026-10-05/. Exact CI APK sha256 7fc7452b... installed on Nothing Phone (3); cold start 672ms; User #1 displayed on Detail."
-      },
-      {
-        id: "f6",
-        name: "F6 — Independent review: the cloud reviewer",
-        file: "/talks/the-receipt-loop/slides/frame_7.png",
-        cues: "Showcase: cloud + repo. Independent review PR #166 (Vedha VALIDATED). PR #165 automated gates audit: Bugbot 'no issues found' (scope unstated), Approval/Security status only (403 links), GitGuardian secrets only, build upkeep deprecations."
-      },
-      {
-        id: "f7",
-        name: "F7 — The eval as a quality gate (S5 · D1.4)",
-        file: "/talks/the-receipt-loop/slides/frame_8.png",
-        cues: "Showcase: terminal + CI. Live walkthrough of recorded eval scoring and CI wiring. Show 12-case golden set and CI job eval (replay) green. Clarify replay mode scores workflow mechanics without live model cost."
-      },
-      {
-        id: "f8",
-        name: "F8 — Human merge gate by risk (S6 · D2.3)",
-        file: "/talks/the-receipt-loop/slides/frame_9.png",
-        cues: "Showcase: repo. Walk through low, owned, and blast radius tiers from RISK_TIERS.md and CODEOWNERS in PR #162. Note that branch protection is a follow-up action for repo owners."
-      },
-      {
-        id: "f9",
-        name: "F9 — Correction: the staged red check (S7 · D1.3)",
-        file: "/talks/the-receipt-loop/slides/frame_10.png",
-        cues: "Showcase: CI + terminal. Walk through PR #163: failing run 37318711864 (`User [#]1` vs `User []1`) and green fix run 37319377367. Demo fixing the failure live together."
-      },
-      {
-        id: "f10",
-        name: "F10 — Write the correction as low as it goes",
-        file: "/talks/the-receipt-loop/slides/frame_11.png",
-        cues: "The durability ladder: codebase > CI check/lint > eval > rules/AGENTS.md > skill > style guide. Enforced quality: stock detekt (0 issues; no custom rule) and staged regression test."
-      },
-      {
-        id: "f11",
-        name: "F11 — The gardener: contain and measure debt",
-        file: "/talks/the-receipt-loop/slides/frame_12.png",
-        cues: "Showcase: repo. Prevent (Recorded in PR #162), contain (Known gap, planned in-room lint exercise), measure (counter-evidence: unattended Dependabot PRs #154/#155/#156/#158/#161 + CI upkeep deprecation warnings). Return arrow closes loop to F3."
-      },
-      {
-        id: "f12",
-        name: "F12 — Skill maintenance: the map stays honest",
-        file: "/talks/the-receipt-loop/slides/frame_13.png",
-        cues: "Showcase: repo + app. Badge: Recorded (cue: live walkthrough of recorded evidence; Live only if re-driven in room). PR #167 open at 0c94c253 off origin/main (unmerged). Rolex re-checked 4 features on Nothing Phone. Harness fixes (session reuse, 120s timeout) + HTTPS recipe fix. Vedha SHIP verdict."
-      },
-      {
-        id: "f13",
-        name: "F13 — Throughput vs risk",
-        file: "/talks/the-receipt-loop/slides/frame_14.png",
-        cues: "Automation raises the ceiling; proof and review set the safe one. Contrast 100 unattended agents generating slop against a verified rail yielding trusted throughput."
-      },
-      {
-        id: "f14",
-        name: "F14 — Outcomes, commitments, close",
-        file: "/talks/the-receipt-loop/slides/frame_15.png",
-        cues: "Showcase: board. Review Day 1 and Day 2 targets. Facilitate commitments on the board: Workflow, Owner, The One Gap to close. Reinforce the 5-point bar for an agent-ready repo."
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Receipt Loop · msomu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <style>
+      :root {
+        --orange: #f97316;
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --border: #262626;
+        --text: #e5e5e5;
+        --muted: #737373;
       }
-    ];
 
-    let currentIdx = 0;
-    const imgEl = document.getElementById('main-slide');
-    const titleEl = document.getElementById('slide-title');
-    const numEl = document.getElementById('slide-num');
-    const notesEl = document.getElementById('notes-content');
-    const drawerEl = document.getElementById('notes-drawer');
-    const trayEl = document.getElementById('tray');
+      .reveal-viewport { background: var(--bg); }
 
-    function renderSlide(idx) {
-      if (idx < 0) idx = 0;
-      if (idx >= SLIDES.length) idx = SLIDES.length - 1;
-      currentIdx = idx;
+      .reveal {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+      }
 
-      const s = SLIDES[idx];
-      imgEl.src = s.file;
-      titleEl.textContent = s.name;
-      numEl.textContent = (idx + 1) + " / " + SLIDES.length;
-      notesEl.innerHTML = s.cues;
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        text-transform: none;
+        color: #fff;
+        text-shadow: none;
+        text-wrap: balance;
+      }
 
-      document.querySelectorAll('.thumb-item').forEach((el, i) => {
-        el.classList.toggle('active', i === idx);
-      });
-    }
+      .reveal h1 { font-size: 2.05em; line-height: 1.08; margin: 0; }
+      .reveal h2 { font-size: 1.55em; line-height: 1.12; margin: 0; }
+      .reveal p { margin: 0; }
 
-    // Build tray
-    SLIDES.forEach((s, idx) => {
-      const item = document.createElement('div');
-      item.className = 'thumb-item' + (idx === 0 ? ' active' : '');
-      item.innerHTML = '<img src="' + s.file + '" alt="' + s.name + '"><div class="thumb-label">' + s.name + '</div>';
-      item.onclick = () => renderSlide(idx);
-      trayEl.appendChild(item);
-    });
+      .slide-title,
+      .slide-stack,
+      .slide-statement {
+        height: 100% !important;
+        min-width: 0;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 0 1.35em;
+      }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-        renderSlide(currentIdx + 1);
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        renderSlide(currentIdx - 1);
-      } else if (e.key === 'Home') {
-        renderSlide(0);
-      } else if (e.key === 'End') {
-        renderSlide(SLIDES.length - 1);
-      } else if (e.key.toLowerCase() === 'n') {
-        drawerEl.classList.toggle('open');
-      } else if (e.key.toLowerCase() === 't') {
-        trayEl.classList.toggle('open');
-      } else if (e.key.toLowerCase() === 'f') {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {});
-        } else {
-          document.exitFullscreen().catch(() => {});
+      .slide-statement {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .slide-title,
+      .slide-stack {
+        align-items: center;
+        text-align: center;
+      }
+
+      .kicker,
+      .sub,
+      .roster,
+      .marks,
+      .ladder,
+      .slide-stack p,
+      .reveal h1,
+      .reveal h2 {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .reveal .slides section aside.notes {
+        display: none !important;
+      }
+
+      .kicker {
+        color: var(--orange);
+        font-size: 0.42em;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin: 0 0 0.7em;
+      }
+
+      .sub {
+        margin-top: 0.7em;
+        max-width: 28ch;
+        color: var(--muted);
+        font-size: 0.72em;
+        line-height: 1.35;
+      }
+
+      .slide-title h1 { max-width: 14ch; }
+      .slide-title .orange { color: var(--orange); }
+
+      .slide-title .meta,
+      .slide-stack .meta {
+        margin-top: 0.9em;
+        font-size: 0.58em;
+        line-height: 1.45;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .slide-title .meta strong,
+      .slide-stack .meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .slide-stack p {
+        font-size: 1.55em;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        color: #fff;
+        margin: 0.12em 0;
+      }
+
+      .slide-statement h2 { max-width: 16ch; }
+      .slide-statement h2.wide { max-width: 100%; }
+
+      .slide-prompt {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .slide-prompt p {
+        font-size: 0.72em;
+        font-weight: 500;
+        line-height: 1.38;
+        letter-spacing: 0;
+        color: #fff;
+        max-width: 32em;
+        text-align: left;
+        overflow-wrap: break-word;
+      }
+
+      .slide-figure img {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        max-height: 520px;
+        margin-top: 0.45em;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #f4f4f5;
+      }
+
+      .roster,
+      .marks,
+      .ladder {
+        list-style: none;
+        margin: 0.15em 0 0;
+        padding: 0;
+        width: min(100%, 720px);
+      }
+
+      .roster li,
+      .marks li,
+      .ladder li {
+        display: grid;
+        grid-template-columns: 9.2em 1fr;
+        column-gap: 1em;
+        align-items: baseline;
+        margin: 0;
+        padding: 0.28em 0;
+        border-top: 1px solid var(--border);
+        font-size: 0.62em;
+        line-height: 1.3;
+        color: var(--text);
+        min-width: 0;
+        overflow-wrap: break-word;
+      }
+
+      .roster li:first-child,
+      .marks li:first-child,
+      .ladder li:first-child { border-top: 0; padding-top: 0; }
+
+      .roster strong,
+      .marks strong,
+      .ladder strong,
+      .roster span,
+      .marks span,
+      .ladder span {
+        min-width: 0;
+        overflow-wrap: break-word;
+      }
+
+      .roster strong,
+      .marks strong,
+      .ladder strong {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .marks strong { color: var(--orange); font-size: 0.85em; letter-spacing: 0.08em; text-transform: uppercase; }
+
+      .ladder { counter-reset: rung; }
+      .ladder li { grid-template-columns: 1.6em 1fr; }
+      .ladder li::before {
+        counter-increment: rung;
+        content: counter(rung);
+        color: var(--orange);
+        font-weight: 600;
+      }
+
+      .reveal footer {
+        position: fixed;
+        bottom: 1.2em;
+        right: 1.4em;
+        font-size: 0.45em;
+        color: var(--muted);
+        font-weight: 500;
+        z-index: 100;
+      }
+
+      @media (max-width: 639px) {
+        .reveal h1 { font-size: 1.45em; }
+        .reveal h2 { font-size: 1.28em; }
+        .slide-title h1 { max-width: 12ch; }
+        .slide-stack p { font-size: 1.15em; }
+        .kicker { font-size: 0.72rem; letter-spacing: 0.08em; max-width: 100%; }
+        .sub { font-size: 0.85em; max-width: 28ch; }
+        .roster li,
+        .marks li,
+        .ladder li {
+          grid-template-columns: 1fr;
+          row-gap: 0.08em;
+          font-size: 0.64em;
+          padding: 0.16em 0;
         }
+        .slide-statement h2 { font-size: 1.12em; }
+        .ladder li { grid-template-columns: 1.4em 1fr; }
+        .slide-title .meta,
+        .slide-stack .meta { font-size: 0.62em; color: #a3a3a3; }
+        .reveal footer,
+        .reveal .controls { display: none; }
       }
-    });
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <footer>msomu · Poshmark Growth Week · Oct 2026</footer>
+      <div class="slides">
 
-    renderSlide(0);
-  </script>
-</body>
+        <section class="slide-title">
+          <p class="kicker">Poshmark Growth Week</p>
+          <h1>The Receipt Loop</h1>
+          <p class="meta">
+            <strong>Somu</strong><br />
+            7–8 October 2026 · Chetpet<br />
+            Day 1: Make agents trustworthy in our repos<br />
+            Day 2: Orchestrate, don't prompt
+          </p>
+          <aside class="notes">
+            This board is the presentation. Showcases are terminal, repo, CI, app, and cloud evidence.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>A claim becomes a receipt.</p>
+          <p>A receipt becomes a rule.</p>
+          <p>A rule becomes a rail.</p>
+          <aside class="notes">
+            An agent does not get to say done until it leaves a receipt. Stripe, Poteto, and the Grok Bot team are their results, not our rate.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Four words</p>
+          <ul class="roster">
+            <li><strong>Claim</strong><span>A message. "Done."</span></li>
+            <li><strong>Receipt</strong><span>An artifact. Output, screenshot, log, CI run.</span></li>
+            <li><strong>Rule</strong><span>A receipt that stays. A test, a check, an eval.</span></li>
+            <li><strong>Rail</strong><span>A rule that runs unattended.</span></li>
+          </ul>
+          <p class="sub">Trust is not a feeling. It is an artifact.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The gap</p>
+          <h2>Self-verification.</h2>
+          <p class="sub">Most teams have skills. Few can prove a change works without a human.</p>
+          <aside class="notes">
+            The remedy is not more prompts. It is an executable verification loop. Badge: Recorded.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Intent</p>
+          <h2>One ticket. One command that can fail.</h2>
+          <p class="sub">Acceptance is a command, not a paragraph. ./verify</p>
+          <aside class="notes">
+            Demo: cat AGENTS.md, then ./verify test. Badge: Live. PR #162 at e480eb2 is unmerged. ./verify is the interface. The skill directory is not auto-loaded.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Isolated execution</p>
+          <h2>A ticket goes in. A sandbox comes up.</h2>
+          <p class="sub">A person starts it. The finish can be automatic. 100 agents without proof is slop.</p>
+          <aside class="notes">
+            Badge: Recorded. PR #165. Launch is human. Completion webhook to Buzz is proven. A monitoring trigger that starts a run is not proven.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Evidence</p>
+          <h2>A cold launch is not proof.</h2>
+          <p class="sub">A driven path is. The receipt survives cleanup.</p>
+          <aside class="notes">
+            Badge: Recorded. Exact CI APK on Nothing Phone (3). Cold start 672 ms. Detail shows User #1.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Review</p>
+          <h2>The author is not the reviewer.</h2>
+          <p class="sub">A reviewer that cannot merge is a control, not a rubber stamp.</p>
+          <aside class="notes">
+            Badge: Recorded. Report PR #166. Vedha validated it as workshop evidence. Green automation badges are status, not reviews.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Eval</p>
+          <h2>An eval is not an app test.</h2>
+          <p class="sub">Correct is not the same as good. Neither is the same as fresh.</p>
+          <aside class="notes">
+            Label: eval in CI (replay mode). 12 cases. A replay is recorded. A live model run is a separate gate.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Merge</p>
+          <h2>A human decision, sized by blast radius.</h2>
+          <ul class="roster">
+            <li><strong>Low</strong><span>No shared contract. Easy to revert.</span></li>
+            <li><strong>Owned</strong><span>One team's code. A receipt is attached.</span></li>
+            <li><strong>Blast radius</strong><span>Shared library, schema, auth, or infra.</span></li>
+          </ul>
+          <aside class="notes">
+            Badge: Prepared. RISK_TIERS.md and CODEOWNERS are in unmerged PR #162. Branch protection on main is absent.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Correction</p>
+          <h2>A failure becomes a rule.</h2>
+          <p class="sub">A fix that is not recorded is a fix you will make again.</p>
+          <aside class="notes">
+            Badge: Live. Label: staged red check. PR #163 failed on User #1, then the fix went green.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Where it lives</p>
+          <h2>Write it as low as it goes.</h2>
+          <ol class="ladder">
+            <li><span>Codebase</span></li>
+            <li><span>Required check, lint, compiler</span></li>
+            <li><span>Eval</span></li>
+            <li><span>Rules and AGENTS.md</span></li>
+            <li><span>Skill and verify command</span></li>
+            <li><span>Style guide</span></li>
+          </ol>
+          <p class="sub">Prompt memory does not survive. The repo does.</p>
+          <aside class="notes">
+            Stock detekt runs. No custom lint rule. The staged test is a real CI check, not an always-red check.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Debt</p>
+          <h2>No promise of zero debt.</h2>
+          <p class="sub">A path for every correction, and an owner. A gardener run does not exist yet.</p>
+          <aside class="notes">
+            Known gap. Dependabot PRs sit unattended. That is the debt, not a cleanup that ran.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The map</p>
+          <h2>A map that rots is worse than no map.</h2>
+          <p class="sub">Better memory makes the next intent cheaper.</p>
+          <aside class="notes">
+            Badge: Recorded. Maintain pass PR #167. Vedha returned SHIP. The pull request is unmerged, so it is not on main.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Automation raises the ceiling.</p>
+          <p>Proof and review set the safe one.</p>
+          <p class="meta">Higher throughput with evidence. Not a bug-free guarantee.</p>
+          <aside class="notes">
+            Poteto's 2,000 pull requests in a month is her case study, not our target. 100 agents without proof is slop.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The bar</p>
+          <h2>An intern and Claude can navigate the repo.</h2>
+          <ul class="ladder">
+            <li><span>A verify command exists</span></li>
+            <li><span>It drives one real user path</span></li>
+            <li><span>The evidence survives cleanup</span></li>
+            <li><span>A required check runs it</span></li>
+            <li><span>AGENTS.md says how to reach each feature</span></li>
+          </ul>
+          <aside class="notes">
+            Day 1: every repo has a verify command and one green required check. Day 2: one workflow, an owner, and a gap to close.
+          </aside>
+        </section>
+
+        <section class="slide-title">
+          <p class="kicker">Workflow</p>
+          <h1>Coding</h1>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Trigger</p>
+          <h2 class="wide">Coding</h2>
+          <img data-asset="assets/linear-issue-triage-trigger.png" alt="Triggers: issue created, and status changed." />
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>You are an issue triage automation for Linear.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>My name is called Somu or Somasudnaram M or msomu and we will work only on the issues that are assigned for me.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>You will work only on issues that are assigned to me and skip other issues.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If the issue is neither not assigned to me, or not a bug report nor a feature request, do nothing. Do not comment, do not create noise.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If the issue status is only in TODO and there are no blockers or dependency issues open only then you will pick it. If the issue is `in progress`, `in review` or `qa review` or `done` or in `backlog` you will not pick this up and you won&#x27;t do anything about this.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>You will examine the issue. Add an eyes emoji reaction.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>When creating sub Linear tickets or opening PRs, always assign them to me on both Linear and Github.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>In Linear, assign to: Somasundaram M</p>
+          <p>In GitHub/PRs, assign to: msomu</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>When opening PRs, include a line like “Resolves BUG-123” or “Fixes BUG-123” where BUG-123 is the Linear issue ID, so the PR gets properly linked to the issue.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Bug report</p>
+          <p>If it’s a bug report, investigate the bug and report your findings. This can be either refuting the bug or explaining the likely root cause.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Use sentry logs to assist, if applicable. Query posthog events if needed.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If it’s an easy fix, move the ticket to In Progress and work on it and open a PR and assign it to somu-agi.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>When ever possible add a mastero test case and add it to the PR checks so that this bug is never regressed again.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Make sure the Linear issue stays assigned to Somasundaram M.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Feature request</p>
+          <p>If it’s a feature request, plan out the high-level approach and comment with the approach. And if needed create sub-issues with all the context on Linear and move them to Todo so the other agents can pick them independently and work on it with separate PRs.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If it’s an easy change, move the ticket to in progress and implement the change and open a PR.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>For all featuers as much as possible add a mastero test case and add it to the PR checks so that this feature is developed and tested end to end from day one.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Always assign the PR (if created one) to somu-agi, never miss this step, else it is going to be tough for me to get it merged.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Make sure the Linear issue stays assigned to Somasundaram M.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If you create a PR and if you think no testing is needed and if you think it is complete ready without any regression only then on the Slack channel #pr-review post a message asking for review from @Aryan @Sanju else don&#x27;t post anything.</p>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Action</p>
+          <h2 class="wide">Coding</h2>
+          <img data-asset="assets/linear-issue-triage-action.png" alt="Tools: open a pull request, Linear, Sentry, PostHog, and Slack." />
+        </section>
+        <section class="slide-title">
+          <p class="kicker">Workflow</p>
+          <h1>Daily Sync</h1>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Trigger</p>
+          <h2 class="wide">Daily Sync</h2>
+          <img data-asset="assets/fireflies-daily-sync-trigger.png" alt="Trigger: custom schedule for Gather Priority and Update todos for today." />
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Check the last 2 meetings on fireflies there should be &quot;Daily Sync&quot; and &quot;Eng/Product Sync&quot; from these two meetings grab all the Action Items that are discussed by Somu/Somasundaram M and check the linear if these relavent tickets are already created and there or not.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there is a linear ticket already there leave it. Only if they are not there go ahead and create a linear ticket for it in the Iris project with the context from the meeting and assign it to Somasundaram M and set the status as Triage and put it in the current cycle by default override if these are menetioned on the meetings. Make sure to add a tshirt size for the issues created.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>For every new ticket you create, post a message to the Slack channel #iris-app-issue-enricher with the issue title, the Linear issue link, the t-shirt size, and a short excerpt of the meeting context you used to create it.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there are any other things mentioned and we need to update them on Linear let&#x27;s do that as well all related to Somasundaram M only. Don&#x27;t touch or change any other tickets that are not assigned to Somasundaram M</p>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Action</p>
+          <h2 class="wide">Daily Sync</h2>
+          <img data-asset="assets/fireflies-daily-sync-action.png" alt="Tools: Slack #iris-app-issue-enricher, Fireflies, and Linear." />
+        </section>
+        <section class="slide-title">
+          <p class="kicker">Workflow</p>
+          <h1>Naman &lt;&gt; Somu</h1>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Trigger</p>
+          <h2 class="wide">Naman &lt;&gt; Somu</h2>
+          <img data-asset="assets/fireflies-one-on-one-trigger.png" alt="Trigger: every Tuesday at 11:00 for Naman Somu 1:1." />
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Check the last meeting on fireflies there should be meeting called &quot;Naman &lt;&gt; Somu 1-on-1&quot; from this meeting grab all the Action Items that are discussed by Somu/Somasundaram M and check the linear if these relavent tickets are already created and there or not.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there is a linear ticket already there leave it. Only if they are not there go ahead and create a linear ticket for it in the Iris project with the context from the meeting and assign it to Somasundaram M and set the status as Triage and put it in the current cycle by default override if these are menetioned on the meetings. Make sure to add a tshirt size for the issues created.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>For every new ticket you create, post a message to the Slack channel #iris-app-issue-enricher with the issue title, the Linear issue link, the t-shirt size, and a short excerpt of the meeting context you used to create it.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there are any other things mentioned and we need to update them on Linear let&#x27;s do that as well all related to Somasundaram M only. Don&#x27;t touch or change any other tickets that are not assigned to Somasundaram M</p>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Action</p>
+          <h2 class="wide">Naman &lt;&gt; Somu</h2>
+          <img data-asset="assets/fireflies-one-on-one-action.png" alt="Tools: Slack #iris-app-issue-enricher, Fireflies, and Linear." />
+        </section>
+        <section class="slide-title">
+          <p class="kicker">From this room</p>
+          <h1>From This Room to the <span class="orange">Internet</span></h1>
+          <aside class="notes">
+            Open Wispr and start recording. Take two or three suggestions.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>A suggestion becomes a pull request.</p>
+          <p class="meta">It is on the site only after I merge.</p>
+        </section>
+
+        <section class="slide-stack">
+          <p>A model answers.</p>
+          <p>A harness finishes.</p>
+          <aside class="notes">
+            A chat window gives you a paragraph and stops. A harness is the files, the tools, and permission to try again.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Gather the context.</p>
+          <p>Ask the model.</p>
+          <p>Use a tool.</p>
+          <p>Repeat.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Three harnesses</p>
+          <ul class="roster">
+            <li><strong>Claude Code</strong><span>The terminal. It reads the project and keeps going.</span></li>
+            <li><strong>Codex</strong><span>You give it a job, not a single question.</span></li>
+            <li><strong>Cursor</strong><span>The editor. It can see the code and open a pull request.</span></li>
+          </ul>
+          <p class="sub">Three cars. One kind of engine.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">What people stack on top</p>
+          <ul class="roster">
+            <li><strong>pstack</strong><span>Prove it. The agent runs a real check before it can say it is done.</span></li>
+            <li><strong>Superpowers</strong><span>Plan it. Ask, write a plan, write a failing test, then review.</span></li>
+            <li><strong>gstack</strong><span>Staff it. Garry Tan's setup splits the job across roles.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">One person, many workers</p>
+          <h2 class="wide">Not one chat. A window full of workers.</h2>
+          <ul class="roster">
+            <li><strong>Grok Bot</strong><span>A fleet. Their number, not ours.</span></li>
+            <li><strong>Several at once</strong><span>Claude Code, Codex, and Cursor, open together.</span></li>
+            <li><strong>cmux</strong><span>A pane lights up when an agent needs you.</span></li>
+            <li><strong>Ghostty</strong><span>The terminal under cmux.</span></li>
+            <li><strong>Pi, at pi.dev</strong><span>Small on purpose. You extend it.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-stack">
+          <p>I close the laptop.</p>
+          <p>The work keeps going.</p>
+          <aside class="notes">
+            A cloud agent runs on its own machine.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">What you are about to see</p>
+          <h2>Watch this become a pull request.</h2>
+          <ul class="marks">
+            <li><strong>Live</strong><span>Wispr records the room.</span></li>
+            <li><strong>Live</strong><span>A summary after you stop, once the recording is past five minutes.</span></li>
+            <li><strong>Live</strong><span>One ticket, dictated. Wispr types. It does not file it.</span></li>
+            <li><strong>Live</strong><span>A person assigns it to Cursor, or Tony starts the agent.</span></li>
+            <li><strong>Live</strong><span>verify-msomu, if someone runs it on the local server.</span></li>
+          </ul>
+          <aside class="notes">
+            The first summary can take about two minutes, and that is not a guarantee.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">What stays held</p>
+          <h2>The last step is mine.</h2>
+          <ul class="marks">
+            <li><strong>Not live</strong><span>Wispr does not file the tickets.</span></li>
+            <li><strong>Recorded</strong><span>A ticket does not start an agent by itself.</span></li>
+            <li><strong>Recorded</strong><span>A GitHub green check. This repo has no workflows.</span></li>
+            <li><strong>Hold</strong><span>The merge. My tap.</span></li>
+            <li><strong>Recorded</strong><span>Already on the site. Not this room. Not yet.</span></li>
+          </ul>
+        </section>
+
+        <section class="slide-stack">
+          <p>You talk.</p>
+          <p>Wispr writes it down.</p>
+          <aside class="notes">
+            Automatic only after five minutes.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Wispr types.</p>
+          <p class="meta">It does not file the ticket.</p>
+          <aside class="notes">
+            A useful ticket has a title, the context, and what done looks like. Then a person assigns it, or Tony starts the agent.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Hand it over.</p>
+          <p>A pull request opens.</p>
+          <aside class="notes">
+            They do not start on their own.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>msomu.com</p>
+          <p class="meta">Tell me what is wrong with it.</p>
+        </section>
+
+        <section class="slide-stack">
+          <p>Here is the pull request it just opened.</p>
+          <p>It waits for my tap.</p>
+          <aside class="notes">
+            It is not on the site until I merge it. The check you can run live is verify-msomu, on the local server, and only if someone runs it.
+          </aside>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      const path = location.pathname;
+      const deckBase = path.endsWith("/")
+        ? path
+        : path.endsWith(".html")
+          ? path.replace(/[^/]+$/, "")
+          : path + "/";
+      document.querySelectorAll("[data-asset]").forEach((img) => {
+        img.src = deckBase + img.getAttribute("data-asset");
+      });
+
+      const phone = window.innerWidth < 640;
+      Reveal.initialize({
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        controls: true,
+        progress: true,
+        center: false,
+        width: phone ? 390 : 1100,
+        height: phone ? 844 : 700,
+        margin: phone ? 0.08 : 0.06,
+        minScale: 0.5,
+        maxScale: 1.4,
+      });
+    </script>
+  </body>
 </html>

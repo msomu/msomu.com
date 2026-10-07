@@ -9,7 +9,7 @@ The `/talks` index lists presentations from the `talks` content collection. Slid
 - `talks.deck.stop-building-ai-demos` — `/talks/stop-building-ai-demos`
 - `talks.deck.five-eras` — `/talks/five-eras-of-ai-assisted-android`
 - `talks.deck.i-gave-ai-a-computer` — `/talks/i-gave-ai-a-computer-and-walked-away`
-- `talks.deck.the-receipt-loop` — `/talks/the-receipt-loop` (slide images under `/talks/the-receipt-loop/slides/`)
+- `talks.deck.the-receipt-loop` — `/talks/the-receipt-loop` (Reveal.js HTML, same shell as the walked-away deck)
 
 ## How to get to it (user POV)
 
@@ -22,8 +22,8 @@ Click **talks** in the header. Open a talk card’s slide link to view the Revea
 2. For each Reveal.js deck path `/talks/receipt`, `/talks/stop-building-ai-demos`, `/talks/five-eras-of-ai-assisted-android`, `/talks/i-gave-ai-a-computer-and-walked-away`:
    - `curl -fsS -o evidence/<slug>.html http://127.0.0.1:4321<path>`
    - **Expect:** HTTP 200, body mentions `reveal` (Reveal.js shell).
-3. For `/talks/the-receipt-loop` and `/talks/the-receipt-loop/slides/frame_1.png`:
-   - **Expect:** HTTP 200. The deck body contains `The Receipt Loop` and `/talks/the-receipt-loop/slides/frame_1.png`. The slide response is `image/png`.
+3. For `/talks/the-receipt-loop`:
+   - **Expect:** HTTP 200. The deck body contains `The Receipt Loop`, `A claim becomes a receipt`, `From This Room to the`, `Pi, at pi.dev`, `It waits for my tap`, `You are an issue triage automation for Linear.`, `Daily Sync`, `Naman <> Somu 1-on-1`, `somu-agi`, and `reveal`. It does not reference `frame_1.png`.
 
 Or run: `.cursor/skills/verify-msomu/scripts/drive.sh talks`
 

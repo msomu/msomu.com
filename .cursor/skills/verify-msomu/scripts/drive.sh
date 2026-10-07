@@ -62,9 +62,19 @@ drive_talks() {
 	done
 	curl -fsS -D "$OUT_DIR/_talks_the-receipt-loop.headers" -o "$OUT_DIR/_talks_the-receipt-loop.html" "$BASE_URL/talks/the-receipt-loop"
 	grep -q 'The Receipt Loop' "$OUT_DIR/_talks_the-receipt-loop.html"
-	grep -q '/talks/the-receipt-loop/slides/frame_1.png' "$OUT_DIR/_talks_the-receipt-loop.html"
-	curl -fsS -D "$OUT_DIR/_talks_the-receipt-loop_slide.headers" -o "$OUT_DIR/_talks_the-receipt-loop_frame_1.png" "$BASE_URL/talks/the-receipt-loop/slides/frame_1.png"
-	grep -qi 'content-type: image/png' "$OUT_DIR/_talks_the-receipt-loop_slide.headers"
+	grep -q 'A claim becomes a receipt' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'From This Room to the <span class="orange">Internet</span>' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'Pi, at pi.dev' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'It waits for my tap' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'You are an issue triage automation for Linear.' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'Daily Sync' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'Naman &lt;&gt; Somu 1-on-1' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'somu-agi' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -qi 'reveal' "$OUT_DIR/_talks_the-receipt-loop.html"
+	if grep -q 'frame_1.png' "$OUT_DIR/_talks_the-receipt-loop.html"; then
+		echo "talks: receipt loop still references tldraw frame images" >&2
+		exit 1
+	fi
 	echo "talks: ok"
 }
 
