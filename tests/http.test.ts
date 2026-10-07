@@ -249,6 +249,13 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /The Receipt Loop/, path);
 			assert.match(page.body, /reveal/i, path);
 			assert.match(page.body, /A claim becomes a receipt/, path);
+			assert.match(
+				page.body,
+				/From This Room to the <span class="orange">Internet<\/span>/,
+				path,
+			);
+			assert.match(page.body, /Pi, at pi\.dev/, path);
+			assert.match(page.body, /It waits for my tap/, path);
 			assert.doesNotMatch(page.body, /frame_1\.png/, path);
 			assert.doesNotMatch(page.body, /not found/i);
 		}

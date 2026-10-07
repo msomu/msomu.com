@@ -63,6 +63,9 @@ drive_talks() {
 	curl -fsS -D "$OUT_DIR/_talks_the-receipt-loop.headers" -o "$OUT_DIR/_talks_the-receipt-loop.html" "$BASE_URL/talks/the-receipt-loop"
 	grep -q 'The Receipt Loop' "$OUT_DIR/_talks_the-receipt-loop.html"
 	grep -q 'A claim becomes a receipt' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'From This Room to the <span class="orange">Internet</span>' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'Pi, at pi.dev' "$OUT_DIR/_talks_the-receipt-loop.html"
+	grep -q 'It waits for my tap' "$OUT_DIR/_talks_the-receipt-loop.html"
 	grep -qi 'reveal' "$OUT_DIR/_talks_the-receipt-loop.html"
 	if grep -q 'frame_1.png' "$OUT_DIR/_talks_the-receipt-loop.html"; then
 		echo "talks: receipt loop still references tldraw frame images" >&2

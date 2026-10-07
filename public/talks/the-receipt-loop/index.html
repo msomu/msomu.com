@@ -123,6 +123,7 @@
       }
 
       .slide-statement h2 { max-width: 16ch; }
+      .slide-statement h2.wide { max-width: 100%; }
 
       .roster,
       .marks,
@@ -146,11 +147,23 @@
         font-size: 0.62em;
         line-height: 1.3;
         color: var(--text);
+        min-width: 0;
+        overflow-wrap: break-word;
       }
 
       .roster li:first-child,
       .marks li:first-child,
       .ladder li:first-child { border-top: 0; padding-top: 0; }
+
+      .roster strong,
+      .marks strong,
+      .ladder strong,
+      .roster span,
+      .marks span,
+      .ladder span {
+        min-width: 0;
+        overflow-wrap: break-word;
+      }
 
       .roster strong,
       .marks strong,
@@ -381,7 +394,6 @@
         <section class="slide-title">
           <p class="kicker">From this room</p>
           <h1>From This Room to the <span class="orange">Internet</span></h1>
-          <p class="meta">A suggestion becomes a pull request.<br />It is on the site only after I merge.</p>
           <aside class="notes">
             Open Wispr and start recording. Take two or three suggestions.
           </aside>
@@ -428,6 +440,7 @@
 
         <section class="slide-statement">
           <p class="kicker">One person, many workers</p>
+          <h2 class="wide">Not one chat. A window full of workers.</h2>
           <ul class="roster">
             <li><strong>Grok Bot</strong><span>A fleet. Their number, not ours.</span></li>
             <li><strong>Several at once</strong><span>Claude Code, Codex, and Cursor, open together.</span></li>
@@ -464,8 +477,8 @@
           <p class="kicker">What stays held</p>
           <h2>The last step is mine.</h2>
           <ul class="marks">
-            <li><strong>Hold</strong><span>Wispr does not file the tickets.</span></li>
-            <li><strong>Hold</strong><span>A ticket does not start an agent by itself.</span></li>
+            <li><strong>Not live</strong><span>Wispr does not file the tickets.</span></li>
+            <li><strong>Recorded</strong><span>A ticket does not start an agent by itself.</span></li>
             <li><strong>Recorded</strong><span>A GitHub green check. This repo has no workflows.</span></li>
             <li><strong>Hold</strong><span>The merge. My tap.</span></li>
             <li><strong>Recorded</strong><span>Already on the site. Not this room. Not yet.</span></li>

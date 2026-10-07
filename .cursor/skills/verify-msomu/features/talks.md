@@ -23,7 +23,7 @@ Click **talks** in the header. Open a talk card’s slide link to view the Revea
    - `curl -fsS -o evidence/<slug>.html http://127.0.0.1:4321<path>`
    - **Expect:** HTTP 200, body mentions `reveal` (Reveal.js shell).
 3. For `/talks/the-receipt-loop`:
-   - **Expect:** HTTP 200. The deck body contains `The Receipt Loop`, `A claim becomes a receipt`, and `reveal`. It does not reference `frame_1.png`.
+   - **Expect:** HTTP 200. The deck body contains `The Receipt Loop`, `A claim becomes a receipt`, `From This Room to the`, `Pi, at pi.dev`, `It waits for my tap`, and `reveal`. It does not reference `frame_1.png`.
 
 Or run: `.cursor/skills/verify-msomu/scripts/drive.sh talks`
 
