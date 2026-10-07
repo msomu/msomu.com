@@ -1,311 +1,657 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Receipt Loop — Poshmark Growth Week (Offline Presentation)</title>
-  <style>
-    :root {
-      --bg: #0b0d11;
-      --panel: #161a22;
-      --border: #262c36;
-      --accent: #388bfd;
-      --text: #f0f6fc;
-      --muted: #8b949e;
-      --success: #3fb950;
-      --warning: #d29922;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-      user-select: none;
-    }
-    #stage {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-    }
-    #main-slide {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-    }
-    #chrome-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 48px;
-      background: rgba(11, 13, 17, 0.85);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      z-index: 10;
-      transition: opacity 0.2s;
-    }
-    #chrome-header:hover { opacity: 1; }
-    .badge {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: rgba(56, 139, 253, 0.2);
-      color: var(--accent);
-      border: 1px solid rgba(56, 139, 253, 0.4);
-      margin-right: 8px;
-    }
-    #slide-title { font-weight: 600; font-size: 14px; }
-    #slide-num { font-size: 13px; color: var(--muted); }
-
-    /* Presenter Notes Drawer */
-    #notes-drawer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(22, 26, 34, 0.95);
-      border-top: 1px solid var(--border);
-      padding: 20px 30px;
-      max-height: 240px;
-      overflow-y: auto;
-      transform: translateY(100%);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 20;
-    }
-    #notes-drawer.open { transform: translateY(0); }
-    #notes-title { font-size: 12px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-weight: bold; }
-    #notes-content { font-size: 15px; line-height: 1.5; color: #d0d7de; }
-
-    /* Thumbnails Tray */
-    #tray {
-      position: absolute;
-      top: 48px;
-      bottom: 0;
-      right: 0;
-      width: 260px;
-      background: rgba(16, 19, 24, 0.96);
-      border-left: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 12px;
-      display: none;
-      z-index: 15;
-    }
-    #tray.open { display: block; }
-    .thumb-item {
-      margin-bottom: 12px;
-      cursor: pointer;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 2px solid transparent;
-      transition: all 0.15s;
-    }
-    .thumb-item:hover { border-color: var(--accent); }
-    .thumb-item.active { border-color: var(--success); }
-    .thumb-item img { width: 100%; display: block; }
-    .thumb-label { font-size: 11px; padding: 4px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    #controls-tip {
-      position: absolute;
-      bottom: 12px;
-      right: 16px;
-      font-size: 11px;
-      color: var(--muted);
-      background: rgba(0,0,0,0.6);
-      padding: 4px 8px;
-      border-radius: 4px;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-  <div id="stage">
-    <img id="main-slide" src="" alt="Slide">
-  </div>
-
-  <header id="chrome-header">
-    <div style="display:flex; align-items:center;">
-      <span class="badge">Offline Pack</span>
-      <span id="slide-title">Loading...</span>
-    </div>
-    <div style="display:flex; align-items:center; gap:16px;">
-      <span id="slide-num">1 / 15</span>
-    </div>
-  </header>
-
-  <div id="notes-drawer">
-    <div id="notes-title">Presenter Cues & Demonstration Plan</div>
-    <div id="notes-content"></div>
-  </div>
-
-  <div id="tray"></div>
-
-  <div id="controls-tip">
-    Keys: <b>→ / Space</b>: Next · <b>←</b>: Prev · <b>N</b>: Cues · <b>T</b>: Tray · <b>F</b>: Fullscreen
-  </div>
-
-  <script>
-    const SLIDES = [
-      {
-        id: "f0",
-        name: "F0 — Title",
-        file: "/talks/the-receipt-loop/slides/frame_1.png",
-        cues: "Open session. Presenter: Somasundaram Mahesh (msomu) · Founding AI Engineer at AGI Inc (on-device AI) · previously Disney+Hotstar. Thesis: A claim becomes a receipt. A receipt becomes a rule. A rule becomes a rail."
-      },
-      {
-        id: "f1",
-        name: "F1 — Why trust is manufactured",
-        file: "/talks/the-receipt-loop/slides/frame_2.png",
-        cues: "Establish the 4-stage vocabulary: Claim -> Receipt -> Rule -> Rail. External examples, not our rate: Stripe Minions (1,300+ merged PRs/week, human-reviewed); Lauren Tan (2,000 personal PRs/month to production in video; her X post later says 2,500 — a separate report, not verified growth from 2,000; recording month unknown); Grok Bot team (hundreds of PRs/day; pstack is her quality practice, not a proven throughput cause). None of these is our rate."
-      },
-      {
-        id: "f2",
-        name: "F2 — The gap (intro item D1.1)",
-        file: "/talks/the-receipt-loop/slides/frame_3.png",
-        cues: "Intro assessment callback. Highlight that self-verification scored lowest across teams. Frame the remedy: not more prompt engineering, but an executable verification loop."
-      },
-      {
-        id: "f3",
-        name: "F3 — Bounded intent → executable acceptance",
-        file: "/talks/the-receipt-loop/slides/frame_4.png",
-        cues: "Showcase: terminal + repo. Demo `cat AGENTS.md` and `./verify test`. Feature map in PR #159 (4666f10, 9 files). Note .cursor/skills/ not auto-loaded by Claude Code (verify is interface); create step not recorded."
-      },
-      {
-        id: "f4",
-        name: "F4 — Isolated execution (S3 · D2.1)",
-        file: "/talks/the-receipt-loop/slides/frame_5.png",
-        cues: "Showcase: cloud + repo. Live walkthrough of recorded cloud evidence (PR #165, 10m 33s). Human/agent handoffs: manual launch (Tony), automatic webhook/wake/PR handoff, unproven monitoring trigger, gated human merge."
-      },
-      {
-        id: "f5",
-        name: "F5 — Repeatable verification and evidence",
-        file: "/talks/the-receipt-loop/slides/frame_6.png",
-        cues: "Showcase: app + terminal. Live walkthrough of joined device proof from OUTBOX/POSHMARK_DEMO_JOINED_RUN_PR165_2026-10-05/. Exact CI APK sha256 7fc7452b... installed on Nothing Phone (3); cold start 672ms; User #1 displayed on Detail."
-      },
-      {
-        id: "f6",
-        name: "F6 — Independent review: the cloud reviewer",
-        file: "/talks/the-receipt-loop/slides/frame_7.png",
-        cues: "Showcase: cloud + repo. Independent review PR #166 (Vedha VALIDATED). PR #165 automated gates audit: Bugbot 'no issues found' (scope unstated), Approval/Security status only (403 links), GitGuardian secrets only, build upkeep deprecations."
-      },
-      {
-        id: "f7",
-        name: "F7 — The eval as a quality gate (S5 · D1.4)",
-        file: "/talks/the-receipt-loop/slides/frame_8.png",
-        cues: "Showcase: terminal + CI. Live walkthrough of recorded eval scoring and CI wiring. Show 12-case golden set and CI job eval (replay) green. Clarify replay mode scores workflow mechanics without live model cost."
-      },
-      {
-        id: "f8",
-        name: "F8 — Human merge gate by risk (S6 · D2.3)",
-        file: "/talks/the-receipt-loop/slides/frame_9.png",
-        cues: "Showcase: repo. Walk through low, owned, and blast radius tiers from RISK_TIERS.md and CODEOWNERS in PR #162. Note that branch protection is a follow-up action for repo owners."
-      },
-      {
-        id: "f9",
-        name: "F9 — Correction: the staged red check (S7 · D1.3)",
-        file: "/talks/the-receipt-loop/slides/frame_10.png",
-        cues: "Showcase: CI + terminal. Walk through PR #163: failing run 37318711864 (`User [#]1` vs `User []1`) and green fix run 37319377367. Demo fixing the failure live together."
-      },
-      {
-        id: "f10",
-        name: "F10 — Write the correction as low as it goes",
-        file: "/talks/the-receipt-loop/slides/frame_11.png",
-        cues: "The durability ladder: codebase > CI check/lint > eval > rules/AGENTS.md > skill > style guide. Enforced quality: stock detekt (0 issues; no custom rule) and staged regression test."
-      },
-      {
-        id: "f11",
-        name: "F11 — The gardener: contain and measure debt",
-        file: "/talks/the-receipt-loop/slides/frame_12.png",
-        cues: "Showcase: repo. Prevent (Recorded in PR #162), contain (Known gap, planned in-room lint exercise), measure (counter-evidence: unattended Dependabot PRs #154/#155/#156/#158/#161 + CI upkeep deprecation warnings). Return arrow closes loop to F3."
-      },
-      {
-        id: "f12",
-        name: "F12 — Skill maintenance: the map stays honest",
-        file: "/talks/the-receipt-loop/slides/frame_13.png",
-        cues: "Showcase: repo + app. Badge: Recorded (cue: live walkthrough of recorded evidence; Live only if re-driven in room). PR #167 open at 0c94c253 off origin/main (unmerged). Rolex re-checked 4 features on Nothing Phone. Harness fixes (session reuse, 120s timeout) + HTTPS recipe fix. Vedha SHIP verdict."
-      },
-      {
-        id: "f13",
-        name: "F13 — Throughput vs risk",
-        file: "/talks/the-receipt-loop/slides/frame_14.png",
-        cues: "Automation raises the ceiling; proof and review set the safe one. Contrast 100 unattended agents generating slop against a verified rail yielding trusted throughput."
-      },
-      {
-        id: "f14",
-        name: "F14 — Outcomes, commitments, close",
-        file: "/talks/the-receipt-loop/slides/frame_15.png",
-        cues: "Showcase: board. Review Day 1 and Day 2 targets. Facilitate commitments on the board: Workflow, Owner, The One Gap to close. Reinforce the 5-point bar for an agent-ready repo."
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Receipt Loop — Poshmark Growth Week · msomu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <style>
+      :root {
+        --orange: #f97316;
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --border: #262626;
+        --text: #e5e5e5;
+        --muted: #a3a3a3;
+        --red: #f85149;
+        --blue: #58a6ff;
+        --green: #3fb950;
+        --purple: #d2a8ff;
       }
-    ];
 
-    let currentIdx = 0;
-    const imgEl = document.getElementById('main-slide');
-    const titleEl = document.getElementById('slide-title');
-    const numEl = document.getElementById('slide-num');
-    const notesEl = document.getElementById('notes-content');
-    const drawerEl = document.getElementById('notes-drawer');
-    const trayEl = document.getElementById('tray');
+      .reveal-viewport { background: var(--bg); }
 
-    function renderSlide(idx) {
-      if (idx < 0) idx = 0;
-      if (idx >= SLIDES.length) idx = SLIDES.length - 1;
-      currentIdx = idx;
+      .reveal {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+      }
 
-      const s = SLIDES[idx];
-      imgEl.src = s.file;
-      titleEl.textContent = s.name;
-      numEl.textContent = (idx + 1) + " / " + SLIDES.length;
-      notesEl.innerHTML = s.cues;
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        text-transform: none;
+        color: #fff;
+        text-shadow: none;
+      }
 
-      document.querySelectorAll('.thumb-item').forEach((el, i) => {
-        el.classList.toggle('active', i === idx);
-      });
-    }
+      .reveal h1 { font-size: 1.7em; line-height: 1.1; margin: 0; }
+      .reveal h2 { font-size: 0.92em; line-height: 1.15; margin: 0 0 0.28em; }
+      .reveal p { color: var(--text); line-height: 1.4; }
 
-    // Build tray
-    SLIDES.forEach((s, idx) => {
-      const item = document.createElement('div');
-      item.className = 'thumb-item' + (idx === 0 ? ' active' : '');
-      item.innerHTML = '<img src="' + s.file + '" alt="' + s.name + '"><div class="thumb-label">' + s.name + '</div>';
-      item.onclick = () => renderSlide(idx);
-      trayEl.appendChild(item);
-    });
+      .reveal section { text-align: left; }
+      .reveal .slides section { padding: 0.45em 0.7em 0.3em; box-sizing: border-box; }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-        renderSlide(currentIdx + 1);
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        renderSlide(currentIdx - 1);
-      } else if (e.key === 'Home') {
-        renderSlide(0);
-      } else if (e.key === 'End') {
-        renderSlide(SLIDES.length - 1);
-      } else if (e.key.toLowerCase() === 'n') {
-        drawerEl.classList.toggle('open');
-      } else if (e.key.toLowerCase() === 't') {
-        trayEl.classList.toggle('open');
-      } else if (e.key.toLowerCase() === 'f') {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {});
-        } else {
-          document.exitFullscreen().catch(() => {});
+      .slide-title {
+        text-align: center;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100% !important;
+      }
+
+      .kicker {
+        color: var(--orange);
+        font-size: 0.48em;
+        font-weight: 600;
+        margin: 0 0 0.35em;
+      }
+
+      .byline {
+        font-size: 0.42em;
+        color: var(--muted);
+        margin: 0.45em 0 0;
+      }
+
+      .dayline,
+      .note,
+      .thesis,
+      .cue,
+      .external {
+        font-size: 0.4em;
+        line-height: 1.35;
+        margin: 0.35em 0 0;
+        padding: 0.45em 0.65em;
+      }
+
+      .dayline { border: 1px solid var(--purple); color: #fff; text-align: center; }
+      .note { border: 1px solid var(--blue); text-align: center; }
+      .thesis {
+        border: 2px solid #fff;
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+        font-size: 0.46em;
+      }
+      .external { border: 1px solid var(--purple); }
+      .cue { color: var(--muted); text-align: center; font-size: 0.32em; padding: 0.2em 0.4em; }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4em;
+        width: 100%;
+        margin-top: 0.7em;
+      }
+
+      .grid { display: grid; gap: 0.35em; }
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+      .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-top: 3px solid var(--accent, #fff);
+        padding: 0.4em 0.5em;
+        font-size: 0.34em;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+      }
+
+      .card h3 {
+        font-size: 1.25em;
+        margin: 0 0 0.25em;
+      }
+
+      .card ul, .card ol { margin: 0.15em 0 0; padding-left: 1.15em; }
+      .card li { margin: 0.12em 0; }
+      .card p { margin: 0.2em 0 0; font-size: 1em; }
+
+      .c-red { --accent: var(--red); }
+      .c-orange { --accent: var(--orange); }
+      .c-blue { --accent: var(--blue); }
+      .c-green { --accent: var(--green); }
+      .c-purple { --accent: var(--purple); }
+
+      .ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.22em; }
+      .ladder li {
+        font-size: 0.42em;
+        padding: 0.28em 0.55em;
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--accent, #fff);
+        background: var(--surface);
+        display: flex;
+        justify-content: space-between;
+        gap: 1em;
+      }
+      .ladder .rank { color: var(--muted); }
+
+      .reveal footer {
+        position: fixed;
+        bottom: 1.2em;
+        right: 1.4em;
+        font-size: 0.4em;
+        color: var(--muted);
+        font-weight: 500;
+        z-index: 100;
+      }
+
+      @media (max-width: 639px) {
+        html, body, .reveal-viewport, .reveal {
+          height: auto !important;
+          overflow: auto !important;
         }
+        .reveal .slides {
+          position: relative !important;
+          width: 100% !important;
+          height: auto !important;
+          inset: auto !important;
+          transform: none !important;
+          overflow: visible !important;
+        }
+        .reveal .slides section {
+          position: relative !important;
+          top: auto !important;
+          left: auto !important;
+          width: 100% !important;
+          height: auto !important;
+          min-height: 0 !important;
+          transform: none !important;
+          display: none !important;
+          padding: 1.1rem 0.9rem 2.4rem;
+        }
+        .reveal .slides section.present { display: block !important; }
+        .slide-title {
+          height: auto !important;
+          justify-content: flex-start;
+        }
+        .reveal h1 { font-size: 1.7rem; }
+        .reveal h2 { font-size: 1.25rem; line-height: 1.2; }
+        .kicker { font-size: 0.85rem; }
+        .byline { font-size: 0.95rem; }
+        .dayline, .note, .thesis, .external { font-size: 0.95rem; }
+        .card { font-size: 0.95rem; }
+        .cue { font-size: 0.85rem; }
+        .ladder li { font-size: 0.95rem; }
+        .grid-2, .grid-3, .grid-4, .split { grid-template-columns: 1fr; }
+        .reveal footer, .reveal .controls { display: none; }
+        .reveal .progress { position: fixed; }
       }
-    });
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <footer>msomu · Poshmark Growth Week · Oct 2026</footer>
+      <div class="slides">
 
-    renderSlide(0);
-  </script>
-</body>
+        <section class="slide-title">
+          <p class="kicker">Poshmark Growth Week · 7–8 October 2026</p>
+          <h1>The Receipt Loop</h1>
+          <p class="byline">Somasundaram Mahesh (msomu) · Founding AI Engineer at AGI Inc · previously Disney+Hotstar</p>
+          <p class="dayline">Day 1: Make agents trustworthy in our repos · Day 2: Orchestrate, don't prompt</p>
+          <p class="thesis">A claim becomes a receipt. A receipt becomes a rule. A rule becomes a rail.</p>
+          <p class="note">This board is the presentation. Showcases are terminal, repo, CI, app and cloud evidence — not screenshots of slides.</p>
+          <div class="split">
+            <div class="card">
+              <p>Cue Switch: board</p>
+              <p>Framework: First-Principles Automation</p>
+              <p>Platform: base-mvvm-android-kt</p>
+            </div>
+            <div class="card">
+              <p>Facilitation: Poshmark Growth Week</p>
+              <p>Sessions: Wed &amp; Thu (10:30–11:50 IST)</p>
+              <p>Poshmark India Office · Chetpet</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Trust is not a feeling. It is an artifact.</h2>
+          <div class="grid grid-4">
+            <div class="card c-red">
+              <h3>Claim</h3>
+              <p>[ A message ]</p>
+              <p>"Done."</p>
+              <p>A prompt assertion that lacks proof.</p>
+            </div>
+            <div class="card c-orange">
+              <h3>Receipt</h3>
+              <p>[ An artifact ]</p>
+              <p>command output · screenshot · logcat · CI run</p>
+            </div>
+            <div class="card c-blue">
+              <h3>Rule</h3>
+              <p>[ Receipt made permanent ]</p>
+              <p>a test · a required check · an eval case</p>
+            </div>
+            <div class="card c-green">
+              <h3>Rail</h3>
+              <p>[ Unattended execution ]</p>
+              <p>cloud agent opens a self-verifying PR</p>
+            </div>
+          </div>
+          <p class="thesis">An agent does not get to say done until it leaves a receipt.</p>
+          <p class="external">External examples, not our rate — Stripe Minions: 1,300+ merged PRs/week, minion-written, human-reviewed (Stripe, Feb 2026, self-reported). Lauren Tan (poteto): ~2,000 PRs/month to production, her personal result; her post later says 2,500. Grok Bot team: hundreds of PRs/day landed; pstack helps keep that code clean.</p>
+          <p class="cue">Cue Switch: board · Thesis: Trust is manufactured through verification, not prompts.</p>
+        </section>
+
+        <section>
+          <h2>The intro named one gap: self-verification.</h2>
+          <div class="grid grid-2">
+            <div class="card c-blue">
+              <h3>Intro Assessment Callback</h3>
+              <p>[ Recorded ] · Cue: deck</p>
+              <ul>
+                <li>The intro named self-verification as the weakest scored area</li>
+                <li>Autonomous execution stalls when agents cannot verify their own changes</li>
+                <li>Low autonomy across repositories stems from missing proof, not missing prompts</li>
+                <li>Each team identifies their primary verification gap</li>
+              </ul>
+            </div>
+            <div class="card c-red">
+              <h3>The Diagnosis</h3>
+              <p>"Most teams have skills; few can prove a change works without a human."</p>
+              <ul>
+                <li>Self-verification is the weakest scored capability</li>
+                <li>Skills without proof generate unverified claims</li>
+                <li>The primary bottleneck is manual verification by engineers</li>
+              </ul>
+            </div>
+          </div>
+          <p class="thesis">The remedy is not more prompts. It is an executable verification loop.</p>
+          <p class="cue">Showcase: deck · Badge: Recorded · Attendee Output: Each team names its biggest readiness gap.</p>
+        </section>
+
+        <section>
+          <h2>One ticket. One acceptance line. One command that can fail.</h2>
+          <div class="grid grid-2">
+            <div class="card c-blue">
+              <h3>Intent: AGENTS.md</h3>
+              <ul>
+                <li>Task scope and the "stop when green" rule</li>
+                <li>Bounds agent actions to specific feature boundaries</li>
+                <li>Prevents hallucinated refactors</li>
+              </ul>
+              <p>Anchor: PR #162 AGENTS.md at e480eb2</p>
+            </div>
+            <div class="card c-green">
+              <h3>Acceptance: ./verify</h3>
+              <ul>
+                <li>Command that runs deterministic checks</li>
+                <li>Drives user path, captures evidence, exits 0 or 1</li>
+                <li>Command line: ./verify doctor | test | assemble</li>
+              </ul>
+              <p>Anchor: base-mvvm-android-kt sample/verify</p>
+            </div>
+          </div>
+          <div class="card c-purple" style="margin-top: 0.35em">
+            <h3>The Feature Map: Materialized Navigation (.cursor/skills/verify-basemvvm/)</h3>
+            <ul>
+              <li>Merged in PR #159 (2 Sep 2026 as 4666f10, 9 files under .cursor/skills/verify-basemvvm/)</li>
+              <li>Tells agents exactly how a user reaches: home · detail · loading-error · theme</li>
+              <li>Caveat: .cursor/skills/ is NOT auto-loaded by Claude Code (./verify is the stable interface)</li>
+              <li>Caveat: PR #159 shows produced skill structure; the create step itself was not recorded.</li>
+            </ul>
+          </div>
+          <p class="thesis">Acceptance is a command, not a paragraph.</p>
+          <p class="cue">Showcase: terminal + repo · Badge: Live · Demo: cat AGENTS.md → ./verify test</p>
+        </section>
+
+        <section>
+          <h2>A ticket goes in. A sandbox comes up. No babysitter.</h2>
+          <div class="grid grid-2">
+            <div class="card c-blue">
+              <h3>Headless Cloud Agent Execution (Issue #164 → PR #165)</h3>
+              <ol>
+                <li>Ticket created: Issue #164 (Detail shows User #1)</li>
+                <li>Cloud agent clones repo into ephemeral sandbox</li>
+                <li>Installs dependencies and runs ./verify doctor</li>
+                <li>Consults unmerged PR #162 policy (AGENTS.md not on main); implements fix</li>
+                <li>Runs ./verify test (passes 2 unit tests + detekt)</li>
+                <li>Opens PR #165 with evidence attached in 10m 33s</li>
+                <li>CI build run 37320968461 SUCCESS — zero human babysitting</li>
+              </ol>
+              <p>Review &amp; Phone Proof: Vedha SHIP at 6c4e4be. Joined CI APK verified on Nothing Phone (3).</p>
+            </div>
+            <div class="card c-green">
+              <h3>Human / agent handoffs (name them precisely)</h3>
+              <ul>
+                <li>Cloud launch: Human (Tony, manual by hand)</li>
+                <li>Implementation: Cloud agent (proven, PR #165 at 6c4e4be6; consulted unmerged PR #162 policy; AGENTS.md not on main)</li>
+                <li>Completion: Automatic webhook → Buzz wake (webhookUrl in cloud-runs/*.json; wake lines 412853f4 / fdf1be3e)</li>
+                <li>Monitoring trigger: UNPROVEN (no Sentry/alert trigger)</li>
+                <li>Review: Cloud agent (PR #166) + Vedha human baseline</li>
+                <li>Merge: Gated human decision (not automated)</li>
+                <li>Caveat: PR #160 unmerged; agent installed SDK itself</li>
+              </ul>
+            </div>
+          </div>
+          <p class="thesis">This is the stage that fails without trust: 100 agents without proof is slop.</p>
+          <p class="cue">Showcase: cloud + repo · Badge: Recorded (PR #165, buzz://pr?id=6edd4674e9255ecc905efa500976488b3f9bf44ff9942554533718ab84122864). Cue: live walkthrough of recorded cloud evidence. Joined device proof verified on hardware.</p>
+        </section>
+
+        <section>
+          <h2>A receipt survives cleanup.</h2>
+          <div class="grid grid-2">
+            <div class="card c-green">
+              <h3>Joined CI APK Proof on Nothing Phone (A024)</h3>
+              <ul>
+                <li>Target: Exact PR #165 CI APK (Run 37320968461, commit 6c4e4be6)</li>
+                <li>Checksum match: CI artifact and phone base.apk identical SHA256: 7fc7452b…</li>
+                <li>Cold start measured: 672 ms (TotalTime 672ms in logcat)</li>
+                <li>Driven interaction: Home → tap (530, 494) → Todo Details</li>
+                <li>Verified result: Detail screen displays User #1 at bounds [384,705][522,749] under title</li>
+              </ul>
+              <p>Proof artifacts: 04_home_tree.xml, 06_detail_tree.xml, 07_logcat_launch_to_detail.txt, 05_tap.txt, 08_assertions.txt, 06_detail.png</p>
+            </div>
+            <div class="card">
+              <h3>Proof Directory</h3>
+              <p>OUTBOX/POSHMARK_DEMO_JOINED_RUN_PR165_2026-10-05/</p>
+              <p>[ Recorded ]</p>
+              <p>Verified by Rolex at 19:43 IST. Hardware: Nothing Phone (3), A024. Exact CI APK installed and proven. Survivable evidence that review can audit.</p>
+            </div>
+          </div>
+          <p class="thesis">A cold launch is not proof. A driven path is.</p>
+          <p class="cue">Showcase: app + terminal · Badge: Recorded. Cue: live walkthrough of recorded device proof (exact CI APK, 672ms cold start, User #1 on Detail).</p>
+        </section>
+
+        <section>
+          <h2>The author is not the reviewer.</h2>
+          <div class="grid grid-2">
+            <div class="card c-blue">
+              <h3>Autonomous Read-Only Review Agent</h3>
+              <ul>
+                <li>Candidate: PR #162 at pinned SHA e480eb2 (10 files)</li>
+                <li>Permissions: read-only check execution; writes one report PR</li>
+                <li>Prohibited: cannot push code, approve, change labels, or merge</li>
+                <li>Evidence: report PR #166 at a449fe52 — Vedha VALIDATED as workshop evidence (19:04 IST)</li>
+                <li>Flagged M1 (replay scores predicted without reparsing raw) and L1 (doctor omits android_home)</li>
+                <li>Caveats: VM lacked Android SDK; candidate CI observed, not locally repeated</li>
+              </ul>
+            </div>
+            <div class="card c-orange">
+              <h3>PR #165 automated gates (status only — not reviews)</h3>
+              <ul>
+                <li>Bugbot (dc425b7a…): "no issues found" (2m 51s; scope unstated; zero annotations or PR comments)</li>
+                <li>Approval Agent (bc-eee94a74…) and Security Agent (bc-da9f45cd…): status only — public output is "run completed successfully" plus a 403 login link; neither posted PR reviews</li>
+                <li>GitGuardian: 1 commit scanned, secrets only</li>
+                <li>GitHub build: success, but 3 annotations are CI-upkeep warnings (Node 20, setup-java@v4, Ubuntu 26)</li>
+              </ul>
+              <p>Green automation badges are status, not full code reviews.</p>
+            </div>
+          </div>
+          <p class="thesis">A reviewer that cannot merge is a control, not a rubber stamp.</p>
+          <p class="cue">Showcase: cloud + repo · Badge: Recorded · Anchor: PR #166 (buzz://pr?id=db64b1b3dfbba418113c59ba125f6e770e44222aa8a86f1556629be7787a9e6). Cue: live walkthrough of recorded review evidence (never Live). Unmerged; candidate CI observed.</p>
+        </section>
+
+        <section>
+          <h2>An eval is not an app test.</h2>
+          <div class="grid grid-2">
+            <div class="card c-purple">
+              <h3>Golden Set Evaluation (evals/)</h3>
+              <ul>
+                <li>12 labelled cases: 6 real PRs, 6 synthetic edge cases</li>
+                <li>Evaluates workflow model quality (for example, risk classification)</li>
+                <li>CI job: eval (replay) green at commit e480eb2</li>
+                <li>GitHub Actions run: 37318641680</li>
+                <li>Replay score: 12/12 pass; deliberate error harness scored 10/12</li>
+              </ul>
+            </div>
+            <div class="card c-orange">
+              <h3>Evaluation Modes</h3>
+              <p>[ Recorded ]</p>
+              <p>Label: eval in CI (replay mode)</p>
+              <p>Replay proves scoring mechanics and CI wiring. Live model run is excluded without a CI key.</p>
+            </div>
+          </div>
+          <p class="thesis">Correct is not the same as good — and neither is the same as fresh.</p>
+          <p class="cue">Showcase: terminal + CI · Badge: Recorded · Exact label: eval in CI (replay mode). Cue: live walkthrough of recorded eval scoring and CI wiring.</p>
+        </section>
+
+        <section>
+          <h2>Merge is a human decision, sized by blast radius.</h2>
+          <div class="grid grid-3">
+            <div class="card c-green">
+              <h3>low</h3>
+              <ul>
+                <li>No shared contract</li>
+                <li>Easily reverted</li>
+                <li>Verify check is green</li>
+              </ul>
+              <p>Gate: Agent may proceed directly to code review without extra approvals.</p>
+            </div>
+            <div class="card c-orange">
+              <h3>owned</h3>
+              <ul>
+                <li>Touches one team's code</li>
+                <li>Isolated feature or logic change</li>
+                <li>Evidence receipt attached</li>
+              </ul>
+              <p>Gate: Code-owner review required before merge.</p>
+            </div>
+            <div class="card c-red">
+              <h3>blast radius</h3>
+              <ul>
+                <li>Shared library, schema, auth, infra</li>
+                <li>High customer / platform impact</li>
+              </ul>
+              <p>Gate: Extra reviewer + required CI check + staged rollout.</p>
+            </div>
+          </div>
+          <p class="thesis">Trust lives in the process, not in the reviewer's memory.</p>
+          <p class="cue">Showcase: repo · Badge: Prepared (files: RISK_TIERS.md + CODEOWNERS in PR #162). Enforcement excluded: branch protection on main is 404 today.</p>
+        </section>
+
+        <section>
+          <h2>A failure becomes a rule.</h2>
+          <div class="grid grid-2">
+            <div class="card c-red">
+              <h3>1. The staged failure</h3>
+              <ul>
+                <li>PR #163 at commit 87cfda7</li>
+                <li>GitHub Actions run: 37318711864</li>
+                <li>Fails at unit test: expected:&lt;User [#]1&gt; but was:&lt;User []1&gt;</li>
+                <li>Demonstrates real failure reproduction in CI</li>
+              </ul>
+            </div>
+            <div class="card c-green">
+              <h3>2. The verified fix</h3>
+              <ul>
+                <li>Solution commit: 015efb5</li>
+                <li>GitHub Actions run: 37319377367 turned green</li>
+                <li>Same-SHA local verification confirmed</li>
+                <li>Branch reset to red commit for live workshop diagnosis</li>
+              </ul>
+            </div>
+          </div>
+          <p class="thesis">A fix that is not recorded is a fix you will make again.</p>
+          <p class="cue">Showcase: CI + terminal · Badge: Live · Exact label: staged red check. Command: gh run view --log-failed → apply fix → verify green.</p>
+        </section>
+
+        <section>
+          <h2>Write the correction as low as it goes.</h2>
+          <ol class="ladder">
+            <li class="c-green"><span>1. codebase</span><span class="rank">best / strongest</span></li>
+            <li class="c-green"><span>2. required CI check / lint / compiler</span><span class="rank">Showcase: CI</span></li>
+            <li class="c-orange"><span>3. eval / golden set</span><span class="rank">Showcase: terminal + CI</span></li>
+            <li class="c-orange"><span>4. rules / bugbot / AGENTS.md</span><span class="rank">Showcase: repo</span></li>
+            <li class="c-red"><span>5. skill / verify command</span><span class="rank">Showcase: terminal</span></li>
+            <li class="c-red"><span>6. style guide</span><span class="rank">weakest</span></li>
+          </ol>
+          <p class="thesis">Prompt memory does not survive. The repo does.</p>
+          <p class="cue">Showcase: repo + terminal · PR #162 unmerged (reviewable artifacts, main lacks branch protection) · CI: stock detekt runs (0 issues found; no custom lint rule) and staged test.</p>
+        </section>
+
+        <section>
+          <h2>Bad patterns spread like a virus. A gardener stops them.</h2>
+          <div class="grid grid-3">
+            <div class="card c-green">
+              <h3>1. Prevent [Recorded]</h3>
+              <ul>
+                <li>Codebase types and compiler gates</li>
+                <li>Required static analysis (stock detekt in CI)</li>
+                <li>Bans anti-patterns before merge</li>
+                <li>Recorded in PR #162 (RISK_TIERS.md)</li>
+              </ul>
+            </div>
+            <div class="card c-orange">
+              <h3>2. Contain [Known gap]</h3>
+              <ul>
+                <li>Add a targeted lint rule</li>
+                <li>Stops bleeding while old code exists</li>
+                <li>Planned cue: in-room lint exercise</li>
+                <li>Reality: no custom lint rule exists yet</li>
+              </ul>
+            </div>
+            <div class="card c-orange">
+              <h3>3. Measure [Debt evidence]</h3>
+              <ul>
+                <li>Name the debt and its owner</li>
+                <li>Counter-evidence: Dependabot PRs #154, #155, #156, #158, #161 open and unattended (Aug–Sep)</li>
+                <li>Counter-evidence: per-build CI-upkeep deprecation warnings (Node 20, setup-java, Ubuntu)</li>
+                <li>Proof of debt waiting for a gardener — no cleanup claimed</li>
+              </ul>
+            </div>
+          </div>
+          <p class="thesis">We do not promise zero debt. We promise a path for every correction, and an owner.</p>
+          <p class="cue">Showcase: repo · Badge: Recorded (scoped to ladder + RISK_TIERS.md only) · Gardener: Known gap (planned cue). Honest ledger: 5 unattended Dependabot PRs + per-build CI upkeep warnings show debt. Return arrow closes the loop.</p>
+        </section>
+
+        <section>
+          <h2>A map that rots is worse than no map.</h2>
+          <div class="grid grid-2">
+            <div class="card c-purple">
+              <h3>The maintain-verification-skill routine (PR #167)</h3>
+              <ul>
+                <li>Full source audit: re-checked 4 features against code (home, detail, loading-error, theme)</li>
+                <li>Live hardware drives on Nothing Phone (3): home, detail, theme night, error HTTPS proof captured</li>
+                <li>Harness: adbharbor session reuse (ADB_HARBOR_SESSION) prevents deadlock; adds 120s timeout; stops fallback to an arbitrary device on lease failure</li>
+                <li>Feature map: loading-error recipe switched to https://127.0.0.1:9/ (cleartext HTTP is blocked before a connection error)</li>
+                <li>Verification: ./verify doctor (ok) · ./verify test (33 green, 5s) · CI 37328150477 green (4m 4s)</li>
+                <li>Device proofs: session reuse ok, foreign session fails fast, screencap captured</li>
+                <li>Caveat: unmerged — reviewable correction artifact, not inherited on main</li>
+              </ul>
+            </div>
+            <div class="card c-green">
+              <h3>Durable correction PR</h3>
+              <p>[ Recorded ]</p>
+              <p>Commit: 0c94c253</p>
+              <p>PR: msomu/base-mvvm-android-kt#167</p>
+              <p>CI: run 37328150477 SUCCESS (4m 4s)</p>
+              <p>Evidence: OUTBOX/POSHMARK_DEMO_MAINTAIN_PASS_2026-10-05/ — live/ (UI trees, screenshots, logs) and harness/ (lease concurrency proofs)</p>
+              <p>Review: Vedha SHIP at 0c94c253 (0 blockers/warnings). Caveat: unmerged — not inherited on main.</p>
+            </div>
+          </div>
+          <p class="thesis">Better memory makes the next intent cheaper.</p>
+          <p class="cue">Showcase: repo + app · Badge: Recorded (cue: live walkthrough of recorded evidence; Live only if re-driven in room). Evidence: PR #167 open at 0c94c253. Vedha SHIP verdict. Caveat: unmerged, not inherited on main.</p>
+        </section>
+
+        <section>
+          <h2>Automation raises the ceiling.<br />Proof and review set the safe one.</h2>
+          <div class="grid grid-2">
+            <div class="card c-blue">
+              <h3>Throughput Potential</h3>
+              <ul>
+                <li>Unattended background agents</li>
+                <li>Concurrent execution across isolated branches</li>
+                <li>Concurrency raises capacity; measure accepted throughput and rework.</li>
+              </ul>
+              <p>Risk: 100 agents without proof = slop and regressions.</p>
+            </div>
+            <div class="card c-green">
+              <h3>The Verification Ceiling</h3>
+              <ul>
+                <li>Deterministic test and screenshot receipts</li>
+                <li>Independent read-only cloud review</li>
+                <li>Risk-tiered human merge gates</li>
+              </ul>
+              <p>Result: Higher throughput with evidence-backed review.</p>
+            </div>
+          </div>
+          <p class="external">Poteto's 2,000 PRs/month is her case study, not our target. Our target is the mechanism that made it safe.</p>
+          <p class="cue">Cue Switch: board · Core lesson: show the gate before the scale.</p>
+        </section>
+
+        <section>
+          <h2>The bar: an intern + Claude can navigate the repo.</h2>
+          <p class="dayline">Day 1 target: every repo has a verify command and one green, required check<br />Day 2 target: each team leaves with one workflow, an owner and a gap to close</p>
+          <div class="grid grid-3">
+            <div class="card c-green">
+              <h3>Workflow</h3>
+              <p>Which team workflow will your pair own?</p>
+              <ul>
+                <li>Android verify in CI</li>
+                <li>iOS build and test skill</li>
+                <li>Web coverage gate in Claude</li>
+                <li>Server test harness</li>
+                <li>Backend verify endpoint</li>
+              </ul>
+            </div>
+            <div class="card c-orange">
+              <h3>Owner</h3>
+              <p>Who on the team stewards this after Friday?</p>
+              <ul>
+                <li>Named engineer per repo</li>
+                <li>Keeps verify command green</li>
+                <li>Curates AGENTS.md features</li>
+                <li>Triages agent regressions</li>
+              </ul>
+            </div>
+            <div class="card c-red">
+              <h3>The one gap</h3>
+              <p>What is the single blocking gap?</p>
+              <ul>
+                <li>Always-red check repaired</li>
+                <li>12-case golden set in CI</li>
+                <li>Tests runnable without a dev box</li>
+                <li>Deterministic screenshot proof</li>
+              </ul>
+            </div>
+          </div>
+          <p class="thesis">The 5-point bar: verify command exists · drives a real user path · evidence survives cleanup · a required CI check runs it · AGENTS.md says how to reach each feature</p>
+          <p class="cue">Showcase: board · Badge: Live · Benchmark = autonomy, not a frozen standard.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      const phone = window.innerWidth < 640;
+      Reveal.initialize({
+        hash: true,
+        transition: phone ? "none" : "fade",
+        transitionSpeed: "fast",
+        controls: !phone,
+        progress: true,
+        center: false,
+        disableLayout: phone,
+        width: phone ? 390 : 1200,
+        height: phone ? 844 : 760,
+        margin: 0.04,
+        minScale: 0.2,
+        maxScale: 1.6,
+      });
+    </script>
+  </body>
 </html>

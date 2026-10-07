@@ -104,6 +104,12 @@ describe("talk decks on disk", () => {
 		assert.ok(slugs.includes("the-receipt-loop"));
 		assert.match(readTalkHtml("receipt") ?? "", /reveal|Receipt|receipt/i);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /The Receipt Loop/);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /reveal/i);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
+			/A claim becomes a receipt/,
+		);
+		assert.doesNotMatch(readTalkHtml("the-receipt-loop") ?? "", /frame_1\.png/);
 		assert.match(
 			readTalkHtml("i-gave-ai-a-computer-and-walked-away") ?? "",
 			/reveal|Walked Away/i,

@@ -238,7 +238,7 @@ describe("public agent endpoints", () => {
 		}
 	});
 
-	it("serves the Receipt Loop workshop deck and its first slide", async (t) => {
+	it("serves the Receipt Loop workshop as a Reveal deck", async (t) => {
 		if (!requireBase(t)) return;
 		for (const path of [
 			"/talks/the-receipt-loop",
@@ -247,16 +247,11 @@ describe("public agent endpoints", () => {
 			const page = await request(path);
 			assert.equal(page.status, 200, path);
 			assert.match(page.body, /The Receipt Loop/, path);
-			assert.match(
-				page.body,
-				/\/talks\/the-receipt-loop\/slides\/frame_1\.png/,
-				path,
-			);
+			assert.match(page.body, /reveal/i, path);
+			assert.match(page.body, /A claim becomes a receipt/, path);
+			assert.doesNotMatch(page.body, /frame_1\.png/, path);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
-		const slide = await request("/talks/the-receipt-loop/slides/frame_1.png");
-		assert.equal(slide.status, 200);
-		assert.match(slide.contentType, /image\/png/);
 	});
 
 	it("publishes about, contact, privacy, and connect with enough copy", async (t) => {
