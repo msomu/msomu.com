@@ -118,7 +118,12 @@ describe("talk decks on disk", () => {
 			readTalkHtml("the-receipt-loop") ?? "",
 			/It waits for my tap/,
 		);
-		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Issue triage/);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
+			/You are an issue triage automation for Linear\./,
+		);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Daily Sync/);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Naman &lt;&gt; Somu 1-on-1/);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /somu-agi/);
 		assert.doesNotMatch(readTalkHtml("the-receipt-loop") ?? "", /frame_1\.png/);
 		assert.match(

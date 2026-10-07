@@ -130,6 +130,22 @@
       .slide-statement h2 { max-width: 16ch; }
       .slide-statement h2.wide { max-width: 100%; }
 
+      .slide-prompt {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .slide-prompt p {
+        font-size: 0.72em;
+        font-weight: 500;
+        line-height: 1.38;
+        letter-spacing: 0;
+        color: #fff;
+        max-width: 32em;
+        text-align: left;
+        overflow-wrap: break-word;
+      }
+
       .slide-figure img {
         display: block;
         width: auto;
@@ -408,6 +424,135 @@
         </section>
 
         <section class="slide-title">
+          <p class="kicker">Workflow</p>
+          <h1>Coding</h1>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Trigger</p>
+          <h2 class="wide">Coding</h2>
+          <img data-asset="assets/linear-issue-triage-trigger.png" alt="Triggers: issue created, and status changed." />
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>You are an issue triage automation for Linear.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>My name is called Somu or Somasudnaram M or msomu and we will work only on the issues that are assigned for me.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>You will work only on issues that are assigned to me and skip other issues.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If the issue is neither not assigned to me, or not a bug report nor a feature request, do nothing. Do not comment, do not create noise.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If the issue status is only in TODO and there are no blockers or dependency issues open only then you will pick it. If the issue is `in progress`, `in review` or `qa review` or `done` or in `backlog` you will not pick this up and you won&#x27;t do anything about this.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>You will examine the issue. Add an eyes emoji reaction.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>When creating sub Linear tickets or opening PRs, always assign them to me on both Linear and Github.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>In Linear, assign to: Somasundaram M</p>
+          <p>In GitHub/PRs, assign to: msomu</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>When opening PRs, include a line like “Resolves BUG-123” or “Fixes BUG-123” where BUG-123 is the Linear issue ID, so the PR gets properly linked to the issue.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Bug report</p>
+          <p>If it’s a bug report, investigate the bug and report your findings. This can be either refuting the bug or explaining the likely root cause.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Use sentry logs to assist, if applicable. Query posthog events if needed.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If it’s an easy fix, move the ticket to In Progress and work on it and open a PR and assign it to somu-agi.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>When ever possible add a mastero test case and add it to the PR checks so that this bug is never regressed again.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Make sure the Linear issue stays assigned to Somasundaram M.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Feature request</p>
+          <p>If it’s a feature request, plan out the high-level approach and comment with the approach. And if needed create sub-issues with all the context on Linear and move them to Todo so the other agents can pick them independently and work on it with separate PRs.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If it’s an easy change, move the ticket to in progress and implement the change and open a PR.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>For all featuers as much as possible add a mastero test case and add it to the PR checks so that this feature is developed and tested end to end from day one.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Always assign the PR (if created one) to somu-agi, never miss this step, else it is going to be tough for me to get it merged.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Make sure the Linear issue stays assigned to Somasundaram M.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If you create a PR and if you think no testing is needed and if you think it is complete ready without any regression only then on the Slack channel #pr-review post a message asking for review from @Aryan @Sanju else don&#x27;t post anything.</p>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Action</p>
+          <h2 class="wide">Coding</h2>
+          <img data-asset="assets/linear-issue-triage-action.png" alt="Tools: open a pull request, Linear, Sentry, PostHog, and Slack." />
+        </section>
+        <section class="slide-title">
+          <p class="kicker">Workflow</p>
+          <h1>Daily Sync</h1>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Trigger</p>
+          <h2 class="wide">Daily Sync</h2>
+          <img data-asset="assets/fireflies-daily-sync-trigger.png" alt="Trigger: custom schedule for Gather Priority and Update todos for today." />
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Check the last 2 meetings on fireflies there should be &quot;Daily Sync&quot; and &quot;Eng/Product Sync&quot; from these two meetings grab all the Action Items that are discussed by Somu/Somasundaram M and check the linear if these relavent tickets are already created and there or not.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there is a linear ticket already there leave it. Only if they are not there go ahead and create a linear ticket for it in the Iris project with the context from the meeting and assign it to Somasundaram M and set the status as Triage and put it in the current cycle by default override if these are menetioned on the meetings. Make sure to add a tshirt size for the issues created.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>For every new ticket you create, post a message to the Slack channel #iris-app-issue-enricher with the issue title, the Linear issue link, the t-shirt size, and a short excerpt of the meeting context you used to create it.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there are any other things mentioned and we need to update them on Linear let&#x27;s do that as well all related to Somasundaram M only. Don&#x27;t touch or change any other tickets that are not assigned to Somasundaram M</p>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Action</p>
+          <h2 class="wide">Daily Sync</h2>
+          <img data-asset="assets/fireflies-daily-sync-action.png" alt="Tools: Slack #iris-app-issue-enricher, Fireflies, and Linear." />
+        </section>
+        <section class="slide-title">
+          <p class="kicker">Workflow</p>
+          <h1>Naman &lt;&gt; Somu</h1>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Trigger</p>
+          <h2 class="wide">Naman &lt;&gt; Somu</h2>
+          <img data-asset="assets/fireflies-one-on-one-trigger.png" alt="Trigger: every Tuesday at 11:00 for Naman Somu 1:1." />
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>Check the last meeting on fireflies there should be meeting called &quot;Naman &lt;&gt; Somu 1-on-1&quot; from this meeting grab all the Action Items that are discussed by Somu/Somasundaram M and check the linear if these relavent tickets are already created and there or not.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there is a linear ticket already there leave it. Only if they are not there go ahead and create a linear ticket for it in the Iris project with the context from the meeting and assign it to Somasundaram M and set the status as Triage and put it in the current cycle by default override if these are menetioned on the meetings. Make sure to add a tshirt size for the issues created.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>For every new ticket you create, post a message to the Slack channel #iris-app-issue-enricher with the issue title, the Linear issue link, the t-shirt size, and a short excerpt of the meeting context you used to create it.</p>
+        </section>
+        <section class="slide-statement slide-prompt">
+          <p>If there are any other things mentioned and we need to update them on Linear let&#x27;s do that as well all related to Somasundaram M only. Don&#x27;t touch or change any other tickets that are not assigned to Somasundaram M</p>
+        </section>
+        <section class="slide-statement slide-figure">
+          <p class="kicker">Action</p>
+          <h2 class="wide">Naman &lt;&gt; Somu</h2>
+          <img data-asset="assets/fireflies-one-on-one-action.png" alt="Tools: Slack #iris-app-issue-enricher, Fireflies, and Linear." />
+        </section>
+        <section class="slide-title">
           <p class="kicker">From this room</p>
           <h1>From This Room to the <span class="orange">Internet</span></h1>
           <aside class="notes">
@@ -464,113 +609,6 @@
             <li><strong>Ghostty</strong><span>The terminal under cmux.</span></li>
             <li><strong>Pi, at pi.dev</strong><span>Small on purpose. You extend it.</span></li>
           </ul>
-        </section>
-
-        <section class="slide-title">
-          <p class="kicker">A workflow</p>
-          <h1>Issue triage</h1>
-        </section>
-
-        <section class="slide-statement slide-figure">
-          <p class="kicker">Trigger</p>
-          <h2 class="wide">An issue is created, or its status changes.</h2>
-          <img data-asset="assets/linear-issue-triage-trigger.png" alt="Linear triggers: issue created, and status changed." />
-        </section>
-
-        <section class="slide-statement">
-          <p class="kicker">Whose work</p>
-          <h2>Only issues assigned to me.</h2>
-          <ul class="roster">
-            <li><strong>Somu</strong><span>Somasundaram M. msomu.</span></li>
-            <li><strong>Anyone else</strong><span>Skip it. Do not comment.</span></li>
-          </ul>
-        </section>
-
-        <section class="slide-statement">
-          <p class="kicker">When it starts</p>
-          <h2>Todo, and nothing is blocking it.</h2>
-          <ul class="roster">
-            <li><strong>Status</strong><span>Todo.</span></li>
-            <li><strong>Kind</strong><span>A bug report, or a feature request.</span></li>
-            <li><strong>Blockers</strong><span>None open. No dependency still open.</span></li>
-          </ul>
-        </section>
-
-        <section class="slide-stack">
-          <p>Otherwise, do nothing.</p>
-          <p class="meta">Do not comment. Do not create noise.</p>
-        </section>
-
-        <section class="slide-statement">
-          <p class="kicker">Left alone</p>
-          <ul class="roster">
-            <li><strong>In progress</strong><span>Already taken.</span></li>
-            <li><strong>In review</strong><span>Already in review.</span></li>
-            <li><strong>QA review</strong><span>Already with QA.</span></li>
-            <li><strong>Done</strong><span>Finished.</span></li>
-            <li><strong>Backlog</strong><span>Not ready.</span></li>
-          </ul>
-        </section>
-
-        <section class="slide-stack">
-          <p>Examine the issue.</p>
-          <p>Add an eyes reaction.</p>
-        </section>
-
-        <section class="slide-statement">
-          <p class="kicker">Assignment</p>
-          <h2>New work comes back to me.</h2>
-          <ul class="roster">
-            <li><strong>Linear</strong><span>Somasundaram M. Sub-issues too.</span></li>
-            <li><strong>GitHub</strong><span>msomu. The pull request too.</span></li>
-            <li><strong>The original issue</strong><span>Stays assigned to Somasundaram M.</span></li>
-          </ul>
-        </section>
-
-        <section class="slide-statement">
-          <p class="kicker">Bug report</p>
-          <h2>Investigate. Then say what you found.</h2>
-          <ul class="roster">
-            <li><strong>Finding</strong><span>Refute the bug, or name the likely cause.</span></li>
-            <li><strong>Sentry</strong><span>Logs, when they apply.</span></li>
-            <li><strong>PostHog</strong><span>Events, when they are needed.</span></li>
-            <li><strong>Easy fix</strong><span>In Progress. Open a pull request. Assign it to somu-agi.</span></li>
-            <li><strong>Maestro</strong><span>A test on the checks, so this bug does not return.</span></li>
-          </ul>
-        </section>
-
-        <section class="slide-statement">
-          <p class="kicker">Feature request</p>
-          <h2>Write the approach. Then split the work.</h2>
-          <ul class="roster">
-            <li><strong>Comment</strong><span>The approach, on the issue.</span></li>
-            <li><strong>Sub-issues</strong><span>Context on each one. Move them to Todo.</span></li>
-            <li><strong>Other agents</strong><span>Each takes one and opens its own pull request.</span></li>
-            <li><strong>Easy change</strong><span>In Progress. Implement it. Open a pull request.</span></li>
-            <li><strong>Maestro</strong><span>A test on the checks from the first day.</span></li>
-            <li><strong>The pull request</strong><span>Assigned to somu-agi.</span></li>
-          </ul>
-        </section>
-
-        <section class="slide-stack">
-          <p>Resolves BUG-123.</p>
-          <p class="meta">The Linear issue id, on the pull request, so the two stay linked.</p>
-        </section>
-
-        <section class="slide-statement">
-          <p class="kicker">Slack</p>
-          <h2>Ask for review only when it is ready.</h2>
-          <ul class="roster">
-            <li><strong>#pr-review</strong><span>Aryan and Sanju.</span></li>
-            <li><strong>Ready</strong><span>No further test. No regression you can see.</span></li>
-            <li><strong>Otherwise</strong><span>Post nothing.</span></li>
-          </ul>
-        </section>
-
-        <section class="slide-statement slide-figure">
-          <p class="kicker">Tools</p>
-          <h2 class="wide">The action is a set of tools.</h2>
-          <img data-asset="assets/linear-issue-triage-action.png" alt="Tools: open a pull request, Linear, Sentry, PostHog, and Slack." />
         </section>
 
         <section class="slide-stack">
