@@ -171,13 +171,16 @@ describe("talk decks on disk", () => {
 		);
 		assert.match(
 			readTalkHtml("one-job-per-bot") ?? "",
-			/auto-editor whisper video\.mp4 ggml-medium\.en\.bin/,
+			/auto-editor whisper video\.mp4 ggml-medium\.en\.bin --format srt -o video\.srt/,
 		);
 		assert.match(
 			readTalkHtml("one-job-per-bot") ?? "",
 			/auto-editor video\.mp4 --edit subtitle/,
 		);
-		assert.match(readTalkHtml("one-job-per-bot") ?? "", /--edit word:value/);
+		assert.doesNotMatch(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/--edit word:value/,
+		);
 		assert.doesNotMatch(
 			readTalkHtml("one-job-per-bot") ?? "",
 			/Delete lines, re-run/,

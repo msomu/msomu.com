@@ -361,8 +361,8 @@
             <li><span>ffmpeg and uv. The two prerequisites.</span></li>
             <li><span>The tool. npx skills add WyattBlue/auto-editor.</span></li>
             <li><span>The loudness pass. auto-editor path/<wbr>to/<wbr>your/<wbr>video.mp4. Dead space gone.</span></li>
-            <li><span>The transcript. auto-editor whisper video.mp4 ggml-medium.en.bin. The second argument is the model file.</span></li>
-            <li><span>The cut. auto-editor video.mp4 --edit subtitle. Or --edit word:value.</span></li>
+            <li><span>The transcript. auto-editor whisper video.mp4 ggml-medium.en.bin --format srt -o video.srt. The second argument is the model file.</span></li>
+            <li><span>The cut. auto-editor video.mp4 --edit subtitle. It reads video.srt.</span></li>
           </ol>
           <p class="sub">WyattBlue/auto-editor, skills/auto-editor-transcribe. The uv and ffmpeg gist.</p>
           <aside class="notes">
