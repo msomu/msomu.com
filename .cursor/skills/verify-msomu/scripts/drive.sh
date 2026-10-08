@@ -76,6 +76,21 @@ drive_talks() {
 		echo "talks: receipt loop still references tldraw frame images" >&2
 		exit 1
 	fi
+	curl -fsS -D "$OUT_DIR/_talks_one-job-per-bot.headers" -o "$OUT_DIR/_talks_one-job-per-bot.html" "$BASE_URL/talks/one-job-per-bot"
+	grep -q 'One Job Per Bot' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'Grok Bots' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'Edit Video' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'Generate Video' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'Which model for which job' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'No single model does the whole job' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'docs.x.ai/grok-bot' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'help.descript.com' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -q 'Veo 3.1' "$OUT_DIR/_talks_one-job-per-bot.html"
+	grep -qi 'reveal' "$OUT_DIR/_talks_one-job-per-bot.html"
+	if grep -q '<img' "$OUT_DIR/_talks_one-job-per-bot.html"; then
+		echo "talks: one job per bot includes an image" >&2
+		exit 1
+	fi
 	echo "talks: ok"
 }
 

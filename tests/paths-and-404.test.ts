@@ -91,6 +91,8 @@ describe("path normalization", () => {
 		assert.equal(shouldNegotiate("/talks/stop-building-ai-demos"), false);
 		assert.equal(shouldNegotiate("/talks/the-receipt-loop"), false);
 		assert.equal(shouldNegotiate("/talks/the-receipt-loop/index.html"), false);
+		assert.equal(shouldNegotiate("/talks/one-job-per-bot"), false);
+		assert.equal(shouldNegotiate("/talks/one-job-per-bot/index.html"), false);
 	});
 });
 
@@ -102,6 +104,7 @@ describe("talk decks on disk", () => {
 		assert.ok(slugs.includes("five-eras-of-ai-assisted-android"));
 		assert.ok(slugs.includes("i-gave-ai-a-computer-and-walked-away"));
 		assert.ok(slugs.includes("the-receipt-loop"));
+		assert.ok(slugs.includes("one-job-per-bot"));
 		assert.match(readTalkHtml("receipt") ?? "", /reveal|Receipt|receipt/i);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /The Receipt Loop/);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /reveal/i);
@@ -130,6 +133,23 @@ describe("talk decks on disk", () => {
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Naman &lt;&gt; Somu 1-on-1/);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /somu-agi/);
 		assert.doesNotMatch(readTalkHtml("the-receipt-loop") ?? "", /frame_1\.png/);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /One Job Per Bot/);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /reveal/i);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /Grok Bots/);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /Edit Video/);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /Generate Video/);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/Which model for which job/,
+		);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/No single model does the whole job/,
+		);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /docs\.x\.ai\/grok-bot/);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /help\.descript\.com/);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /Veo 3\.1/);
+		assert.doesNotMatch(readTalkHtml("one-job-per-bot") ?? "", /<img[\s>]/i);
 		assert.match(
 			readTalkHtml("i-gave-ai-a-computer-and-walked-away") ?? "",
 			/reveal|Walked Away/i,
