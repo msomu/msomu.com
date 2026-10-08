@@ -149,6 +149,43 @@ describe("talk decks on disk", () => {
 		assert.match(readTalkHtml("one-job-per-bot") ?? "", /docs\.x\.ai\/grok-bot/);
 		assert.match(readTalkHtml("one-job-per-bot") ?? "", /help\.descript\.com/);
 		assert.match(readTalkHtml("one-job-per-bot") ?? "", /Veo 3\.1/);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/Sora 2's API ended September 24, 2026\. Veo 3\.1 owns the cinematic lane/,
+		);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/OpenAI, Gemini, and ElevenLabs in one orchestration\. Sora 2's API ended September 24, 2026/,
+		);
+		assert.doesNotMatch(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/Sora 2 and Veo 3\.1 own the cinematic lane/,
+		);
+		assert.doesNotMatch(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/ElevenLabs, and Sora 2/,
+		);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/The loudness pass\. auto-editor path\/to\/your\/video\.mp4/,
+		);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/auto-editor whisper video\.mp4 ggml-medium\.en\.bin/,
+		);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/auto-editor video\.mp4 --edit subtitle/,
+		);
+		assert.match(readTalkHtml("one-job-per-bot") ?? "", /--edit word:value/);
+		assert.doesNotMatch(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/Delete lines, re-run/,
+		);
+		assert.doesNotMatch(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/Whisper installs itself/,
+		);
 		assert.doesNotMatch(readTalkHtml("one-job-per-bot") ?? "", /<img[\s>]/i);
 		assert.match(
 			readTalkHtml("i-gave-ai-a-computer-and-walked-away") ?? "",
