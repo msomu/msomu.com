@@ -10,6 +10,7 @@ The `/talks` index lists presentations from the `talks` content collection. Slid
 - `talks.deck.five-eras` — `/talks/five-eras-of-ai-assisted-android`
 - `talks.deck.i-gave-ai-a-computer` — `/talks/i-gave-ai-a-computer-and-walked-away`
 - `talks.deck.the-receipt-loop` — `/talks/the-receipt-loop` (Reveal.js HTML, same shell as the walked-away deck)
+- `talks.deck.one-job-per-bot` — `/talks/one-job-per-bot` (Reveal.js HTML, same shell)
 
 ## How to get to it (user POV)
 
@@ -24,6 +25,8 @@ Click **talks** in the header. Open a talk card’s slide link to view the Revea
    - **Expect:** HTTP 200, body mentions `reveal` (Reveal.js shell).
 3. For `/talks/the-receipt-loop`:
    - **Expect:** HTTP 200. The deck body contains `The Receipt Loop`, `A claim becomes a receipt`, `Their results, not our rate`, `From This Room to the`, `Pi, at pi.dev`, `It waits for my tap`, `You are an issue triage automation for Linear.`, `Daily Sync`, `Naman <> Somu 1-on-1`, `somu-agi`, and `reveal`. It does not reference `frame_1.png`.
+4. For `/talks/one-job-per-bot`:
+   - **Expect:** HTTP 200. The deck body contains `One Job Per Bot`, `Grok Bots`, `Edit Video`, `Generate Video`, `Which model for which job`, `No single model does the whole job`, `docs.x.ai/grok-bot`, `help.descript.com`, `Veo 3.1`, and `reveal`. It contains no `img` element.
 
 Or run: `.cursor/skills/verify-msomu/scripts/drive.sh talks`
 

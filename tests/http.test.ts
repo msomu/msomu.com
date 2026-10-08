@@ -217,6 +217,7 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /talks/i, path);
 			assert.match(page.body, /I Gave AI a Computer and Walked Away/);
 			assert.match(page.body, /The Receipt Loop/);
+			assert.match(page.body, /One Job Per Bot/);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
 	});
@@ -266,6 +267,29 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /Naman &lt;&gt; Somu 1-on-1/, path);
 			assert.match(page.body, /somu-agi/, path);
 			assert.doesNotMatch(page.body, /frame_1\.png/, path);
+			assert.doesNotMatch(page.body, /not found/i);
+		}
+	});
+
+	it("serves the One Job Per Bot session as a Reveal deck", async (t) => {
+		if (!requireBase(t)) return;
+		for (const path of [
+			"/talks/one-job-per-bot",
+			"/talks/one-job-per-bot/index.html",
+		]) {
+			const page = await request(path);
+			assert.equal(page.status, 200, path);
+			assert.match(page.body, /One Job Per Bot/, path);
+			assert.match(page.body, /reveal/i, path);
+			assert.match(page.body, /Grok Bots/, path);
+			assert.match(page.body, /Edit Video/, path);
+			assert.match(page.body, /Generate Video/, path);
+			assert.match(page.body, /Which model for which job/, path);
+			assert.match(page.body, /No single model does the whole job/, path);
+			assert.match(page.body, /docs\.x\.ai\/grok-bot/, path);
+			assert.match(page.body, /help\.descript\.com/, path);
+			assert.match(page.body, /Veo 3\.1/, path);
+			assert.doesNotMatch(page.body, /<img[\s>]/i, path);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
 	});

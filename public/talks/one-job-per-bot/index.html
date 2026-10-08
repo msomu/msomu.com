@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Job Per Bot · msomu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <style>
+      :root {
+        --orange: #f97316;
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --border: #262626;
+        --text: #e5e5e5;
+        --muted: #737373;
+      }
+
+      .reveal-viewport { background: var(--bg); }
+
+      .reveal {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        text-transform: none;
+        color: #fff;
+        text-shadow: none;
+        text-wrap: balance;
+      }
+
+      .reveal h1 { font-size: 2.05em; line-height: 1.08; margin: 0; }
+      .reveal h2 { font-size: 1.55em; line-height: 1.12; margin: 0; }
+      .reveal p { margin: 0; }
+
+      .slide-title,
+      .slide-stack,
+      .slide-statement {
+        height: 100% !important;
+        min-width: 0;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 0 1.35em;
+      }
+
+      .slide-statement {
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .slide-title,
+      .slide-stack {
+        align-items: center;
+        text-align: center;
+      }
+
+      .kicker,
+      .sub,
+      .roster,
+      .ladder,
+      .slide-stack p,
+      .reveal h1,
+      .reveal h2 {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .reveal .slides section aside.notes {
+        display: none !important;
+      }
+
+      .kicker {
+        color: var(--orange);
+        font-size: 0.42em;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin: 0 0 0.7em;
+      }
+
+      .sub {
+        margin-top: 0.7em;
+        max-width: 28ch;
+        color: var(--muted);
+        font-size: 0.72em;
+        line-height: 1.35;
+      }
+
+      .slide-title h1 { max-width: 14ch; }
+      .slide-title .orange { color: var(--orange); }
+
+      .slide-title .meta,
+      .slide-stack .meta {
+        margin-top: 0.9em;
+        font-size: 0.58em;
+        line-height: 1.45;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .slide-title .meta strong,
+      .slide-stack .meta strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .slide-stack p {
+        font-size: 1.55em;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: -0.03em;
+        color: #fff;
+        margin: 0.12em 0;
+      }
+
+      .slide-statement h2 { max-width: 16ch; }
+      .slide-statement h2.wide { max-width: 100%; }
+
+      .roster,
+      .ladder {
+        list-style: none;
+        margin: 0.15em 0 0;
+        padding: 0;
+        width: min(100%, 720px);
+      }
+
+      .roster li,
+      .ladder li {
+        display: grid;
+        grid-template-columns: 9.2em 1fr;
+        column-gap: 1em;
+        align-items: baseline;
+        margin: 0;
+        padding: 0.28em 0;
+        border-top: 1px solid var(--border);
+        font-size: 0.62em;
+        line-height: 1.3;
+        color: var(--text);
+        min-width: 0;
+        overflow-wrap: break-word;
+      }
+
+      .roster li:first-child,
+      .ladder li:first-child { border-top: 0; padding-top: 0; }
+
+      .roster strong,
+      .ladder strong,
+      .roster span,
+      .ladder span {
+        min-width: 0;
+        overflow-wrap: break-word;
+      }
+
+      .roster strong,
+      .ladder strong {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .ladder { counter-reset: rung; }
+      .ladder li { grid-template-columns: 1.6em 1fr; }
+      .ladder li::before {
+        counter-increment: rung;
+        content: counter(rung);
+        color: var(--orange);
+        font-weight: 600;
+      }
+
+      .reveal footer {
+        position: fixed;
+        bottom: 1.2em;
+        right: 1.4em;
+        font-size: 0.45em;
+        color: var(--muted);
+        font-weight: 500;
+        z-index: 100;
+      }
+
+      @media (max-width: 639px) {
+        .reveal h1 { font-size: 1.45em; }
+        .reveal h2 { font-size: 1.28em; }
+        .slide-title h1 { max-width: 12ch; }
+        .slide-stack p { font-size: 1.15em; }
+        .kicker { font-size: 0.72rem; letter-spacing: 0.08em; max-width: 100%; }
+        .sub { font-size: 0.68em; max-width: 100%; margin-top: 0.28em; }
+        .roster li,
+        .ladder li {
+          grid-template-columns: 1fr;
+          row-gap: 0.04em;
+          font-size: 0.56em;
+          line-height: 1.25;
+          padding: 0.08em 0;
+        }
+        .slide-statement h2 { font-size: 1.12em; }
+        .ladder li { grid-template-columns: 1.4em 1fr; }
+        .slide-title .meta,
+        .slide-stack .meta { font-size: 0.62em; color: #a3a3a3; }
+        .reveal footer,
+        .reveal .controls { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <footer>msomu · Poshmark Growth Week · Oct 2026</footer>
+      <div class="slides">
+
+        <section class="slide-title">
+          <p class="kicker">Poshmark Growth Week</p>
+          <h1>One Job Per Bot</h1>
+          <p class="meta">
+            <strong>Somu</strong> · Somasundaram Mahesh<br />
+            8 October 2026 · Poshmark India Office · Chetpet<br />
+            Thursday · the hands-on session<br />
+            Fix what broke. Then a bot, a cut, and a model.<br />
+            Bring a laptop
+          </p>
+          <aside class="notes">
+            Day 2 hands-on. Fix the skill setups from yesterday, then three things: Grok bots, editing video, generating video. Every number on this board comes from a cited source.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>A job becomes a bot.</p>
+          <p>An edit becomes a transcript.</p>
+          <p>A shot becomes a model call.</p>
+          <aside class="notes">
+            The whole session in three lines. One bot per job. One transcript per edit. One model per step.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Today</p>
+          <ul class="roster">
+            <li><strong>Fix</strong><span>The skills you set up yesterday. What broke, we fix. Bring a laptop.</span></li>
+            <li><strong>Grok Bots</strong><span>How people run one bot per job, on one shared computer.</span></li>
+            <li><strong>Edit</strong><span>Cut a video by its transcript, and set that up.</span></li>
+            <li><strong>Generate</strong><span>Which model for which job. The multi-model side.</span></li>
+          </ul>
+          <p class="sub">Three parts. Every part ends in something you can run.</p>
+        </section>
+
+        <section class="slide-title">
+          <p class="kicker">Part one</p>
+          <h1>Grok Bots</h1>
+          <aside class="notes">
+            Sources for this part: docs.x.ai grok-bot pages, x.ai bot guides, grokbot.dev, and the public write-ups of people running fleets.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>It feels like texting a colleague.</p>
+          <p>The colleague keeps a real, persistent desktop.</p>
+          <aside class="notes">
+            x.ai bot guide, Grok Bot 101. It can do what you can: use apps, browse the web, write and run code. You chain specialists.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">What it is</p>
+          <ul class="roster">
+            <li><strong>A Bot</strong><span>An AI teammate with a name, a job, and context that compounds over time.</span></li>
+            <li><strong>A computer</strong><span>Every Bot works on a persistent cloud computer. A browser, a filesystem, a terminal.</span></li>
+            <li><strong>One computer</strong><span>Shared by all your Bots. Cookies, sessions, and files are shared.</span></li>
+            <li><strong>Not a draft</strong><span>Tasks finish in your real tools, instead of as chat drafts.</span></li>
+          </ul>
+          <p class="sub">docs.x.ai, Grok Bot overview and computer-and-apps.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The door</p>
+          <ul class="roster">
+            <li><strong>Two apps</strong><span>Grok is the chat app. Grok Bot is the agent with the computer. Different apps.</span></li>
+            <li><strong>Access</strong><span>Every paid individual Cursor plan, Cursor Teams, or a linked SuperGrok plan.</span></li>
+            <li><strong>Where</strong><span>A desktop app on macOS, Windows, and Linux. A companion app on iOS and Android.</span></li>
+          </ul>
+          <p class="sub">cursor.com/help/grok-bot and docs.x.ai/grok-bot, get-started.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Standing jobs, not questions</p>
+          <ul class="roster">
+            <li><strong>The filter</strong><span>A job goes to a bot when it happens on a schedule, produces something you check later, and does not need your laptop.</span></li>
+            <li><strong>One solopreneur</strong><span>8 agents running 11 routines across 15+ tools.</span></li>
+            <li><strong>One operator</strong><span>About 30 agents. A chief-of-staff bot, a family agent, engineering bots.</span></li>
+            <li><strong>The makers</strong><span>The Grok Bot team itself runs 14 bots for design, engineering, and daily life.</span></li>
+          </ul>
+          <p class="sub">christopheralarcon.com, justinbutlion, How I AI on chatprd.ai, codemypixel.</p>
+          <aside class="notes">
+            Their setups, not our mandate. The filter is the takeaway: schedule, checkable output, no laptop needed.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The receipts</p>
+          <ul class="roster">
+            <li><strong>Grok Ship</strong><span>A software factory inside Grok Bot. Hundreds of issues and pull requests a day.</span></li>
+            <li><strong>Three bots overnight</strong><span>A product manager, a lead engineer, a review engineer. 52 pull requests in 12 hours.</span></li>
+            <li><strong>Bots that run agents</strong><span>They create Cursor cloud agents, read transcripts, review proofs, and send follow-ups.</span></li>
+            <li><strong>Her number</strong><span>2,000 pull requests a month. Self-reported. Their rate, not our target.</span></li>
+          </ul>
+          <p class="sub">grokbot.dev, Harry Munro on LinkedIn, x.ai/bot/guides, Lauren Tan.</p>
+          <aside class="notes">
+            Same rule as yesterday. A claim becomes a receipt. These are theirs, not ours.
+          </aside>
+        </section>
+
+        <section class="slide-title">
+          <p class="kicker">Part two</p>
+          <h1>Edit Video</h1>
+          <aside class="notes">
+            Sources for this part: Descript help pages, auto-editor on GitHub, the Whisper-based editing pipelines, and the agent skills that drive ffmpeg.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>Edit the text.</p>
+          <p>The video follows.</p>
+          <aside class="notes">
+            Descript's own words. Change the transcript, and the underlying media updates automatically. No timeline required.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Transcript first</p>
+          <ul class="roster">
+            <li><strong>Descript</strong><span>Edit video like a doc. Change the transcript, the media updates. No timeline.</span></li>
+            <li><strong>auto-editor</strong><span>A command-line first pass. It cuts the dead space by audio loudness.</span></li>
+            <li><strong>Whisper pipelines</strong><span>They remove silences, filler words, and restarts from talking-head video.</span></li>
+            <li><strong>Word boundaries</strong><span>One skill cuts on Montreal Forced Aligner boundaries, 10 to 20 ms. It keeps the laughs.</span></li>
+          </ul>
+          <p class="sub">help.descript.com, WyattBlue/auto-editor, timkulbaev/ai-video-editor, cut-video.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Say it in a sentence</p>
+          <ul class="roster">
+            <li><strong>A skill</strong><span>Edit video in natural language. Trim, jump cuts, captions, overlays, speed. ffmpeg and Whisper underneath.</span></li>
+            <li><strong>A pipeline</strong><span>An 8-step automated pipeline built as skills. Silence, zoom, color, audio mastering, burned-in captions.</span></li>
+            <li><strong>Both ends</strong><span>Descript at the surface, or ffmpeg underneath. The transcript is the interface.</span></li>
+          </ul>
+          <p class="sub">Surojit16/video-editing-skill, chrislema/videoeditor.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Set it up today</p>
+          <ol class="ladder">
+            <li><span>ffmpeg and uv. The two prerequisites.</span></li>
+            <li><span>The tool. npx skills add WyattBlue/auto-editor.</span></li>
+            <li><span>The loudness pass. auto-editor path/<wbr>to/<wbr>your/<wbr>video.mp4. Dead space gone.</span></li>
+            <li><span>The transcript. auto-editor whisper video.mp4 ggml-medium.en.bin --format srt -o video.srt. The second argument is the model file.</span></li>
+            <li><span>The cut. auto-editor video.mp4 --edit subtitle. It reads video.srt.</span></li>
+          </ol>
+          <p class="sub">WyattBlue/auto-editor, skills/auto-editor-transcribe. The uv and ffmpeg gist.</p>
+          <aside class="notes">
+            Rung 3 also takes a margin. auto-editor example.mp4 --margin 0.2s pads the cuts so the edit feels nicer. 0.2 seconds is the default.
+          </aside>
+        </section>
+
+        <section class="slide-title">
+          <p class="kicker">Part three</p>
+          <h1>Generate Video</h1>
+          <aside class="notes">
+            Sources for this part: Google and OpenAI model pages, the Artificial Analysis leaderboard, the 2026 comparison write-ups, and real multi-model pipeline repos.
+          </aside>
+        </section>
+
+        <section class="slide-stack">
+          <p>No single model does the whole job.</p>
+          <p>A pipeline has a model per step.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The field, today</p>
+          <ul class="roster">
+            <li><strong>Veo 3.1</strong><span>8-second videos, 720p to 4K, with natively generated audio. In the Gemini API.</span></li>
+            <li><strong>Sora 2</strong><span>OpenAI's flagship video and audio model. Synced dialogue, sound effects. September 2025.</span></li>
+            <li><strong>The end</strong><span>The Sora app closed April 26, 2026. The API ended September 24, 2026. No replacement named.</span></li>
+            <li><strong>The field</strong><span>Wan 3.0, Seedance, MiniMax H3, Kling 3.0, FLUX 3, grok-imagine-video.</span></li>
+          </ul>
+          <p class="sub">ai.google.dev, openai.com, help.openai.com, Artificial Analysis.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Quality, priced</p>
+          <ul class="roster">
+            <li><strong>The vote</strong><span>Blind pairwise human preference. Video with audio, from a text prompt.</span></li>
+            <li><strong>The top</strong><span>Wan 3.0 at 1156. Dreamina Seedance 2.5 at 1143. MiniMax H3 at 1137.</span></li>
+            <li><strong>The price</strong><span>MiniMax H3, $4.80 a minute. Veo 3.1, $24.00 a minute.</span></li>
+            <li><strong>The catch</strong><span>Veo 3.1 ranks 18th on preference Elo. One axis, not the verdict.</span></li>
+          </ul>
+          <p class="sub">Artificial Analysis, AA-Video-T2V v2.0, retrieved 8 October 2026.</p>
+          <aside class="notes">
+            Elo answers "which clip do people prefer blind." It does not answer "which fits your pipeline, your price, your edit tool." Pick by the job.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Which model for which job</p>
+          <ul class="roster">
+            <li><strong>Cinematic realism</strong><span>Sora 2's API ended September 24, 2026. Veo 3.1 owns the cinematic lane.</span></li>
+            <li><strong>Image to video</strong><span>Kling keeps showing up in the image-to-video shootouts.</span></li>
+            <li><strong>Editing plus generation</strong><span>Runway Gen-4 with timeline tooling, when editing matters as much as generation.</span></li>
+            <li><strong>All-rounder and value</strong><span>Veo 3.1, prompt adherence, native audio, 4K. Kling 3.0, value to quality, multi-shot storyboards.</span></li>
+          </ul>
+          <p class="sub">motionvid.ai, toolcenter.ai, frankx.ai, 2026 comparisons.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The pipeline</p>
+          <ol class="ladder">
+            <li><span>A model writes the script.</span></li>
+            <li><span>A TTS voice speaks it.</span></li>
+            <li><span>An image model draws the frames.</span></li>
+            <li><span>An image-to-video model animates them.</span></li>
+            <li><span>BGM and assembly land the MP4.</span></li>
+          </ol>
+          <p class="sub">counter-eng/ai-video-factory. LLM, TTS, AI images, img2vid, BGM, assembly.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Who wires it</p>
+          <ul class="roster">
+            <li><strong>Eleven skills</strong><span>One job each. Research, script, storyboard, voice-over, images, timeline assembly.</span></li>
+            <li><strong>One Google line</strong><span>Gemini writes. Imagen draws. Veo animates. Story to movie.</span></li>
+            <li><strong>Multi-API</strong><span>OpenAI, Gemini, and ElevenLabs in one orchestration. Sora 2's API ended September 24, 2026.</span></li>
+            <li><strong>Local</strong><span>The whole pipeline runs on your own GPU.</span></li>
+          </ul>
+          <p class="sub">chenyujinchj/video-agent-skills, SDSmirnov/AI-Story-To-Movie, wonderstone843, counter-eng.</p>
+          <aside class="notes">
+            Same shape as part one. One bot, one job. One skill, one job. One model, one step.
+          </aside>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">The lesson</p>
+          <h2>Do not marry the model.</h2>
+          <ul class="roster">
+            <li><strong>The fall</strong><span>The Sora app closed April 26, 2026. The API ended September 24, 2026.</span></li>
+            <li><strong>The gap</strong><span>No replacement was named. An endpoint migration, not a model-name swap.</span></li>
+            <li><strong>The pipeline</strong><span>A model per step swaps one step. A single-model stack rewrites itself.</span></li>
+          </ul>
+          <p class="sub">help.openai.com, aistackcurrent.com, September 24, 2026.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Sources · the bots</p>
+          <ul class="roster">
+            <li><strong>Grok Bot</strong><span>docs.x.ai/grok-bot. x.ai/bot/guides. grokbot.dev. cursor.com/help/grok-bot.</span></li>
+            <li><strong>The fleets</strong><span>justinbutlion.substack.com. chatprd.ai/how-i-ai. christopheralarcon.com. codemypixel.com. Harry Munro on LinkedIn.</span></li>
+          </ul>
+          <p class="sub">Retrieved with Exa, 8 October 2026.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Sources · the video</p>
+          <ul class="roster">
+            <li><strong>Editing</strong><span>help.descript.com. auto-editor.com. timkulbaev/ai-video-editor. cut-video. Surojit16/video-editing-skill. chrislema/videoeditor.</span></li>
+            <li><strong>Generation</strong><span>ai.google.dev/gemini-api/docs/veo. openai.com/index/sora-2. help.openai.com. artificialanalysis.ai. motionvid.ai. toolcenter.ai. frankx.ai.</span></li>
+            <li><strong>Pipelines</strong><span>counter-eng/ai-video-factory. chenyujinchj/video-agent-skills. SDSmirnov/AI-Story-To-Movie. wonderstone843/genai-video-pipeline.</span></li>
+          </ul>
+          <p class="sub">Retrieved with Exa, 8 October 2026.</p>
+        </section>
+
+        <section class="slide-stack">
+          <p>One bot, one job.</p>
+          <p>One model, one step.</p>
+          <p class="meta">The pipeline is what you keep.</p>
+        </section>
+
+        <section class="slide-statement">
+          <p class="kicker">Leave with this</p>
+          <ul class="roster">
+            <li><strong>Fix</strong><span>The skill that broke yesterday. One repo. One verify run.</span></li>
+            <li><strong>Bot</strong><span>One standing job. Named, scheduled, checked later.</span></li>
+            <li><strong>Cut</strong><span>One video, edited by its transcript.</span></li>
+            <li><strong>Pick</strong><span>By the lane and the price, not the name.</span></li>
+          </ul>
+          <p class="sub">Bring a laptop. The rest is typing.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      const phone = window.innerWidth < 640;
+      Reveal.initialize({
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        controls: true,
+        progress: true,
+        center: false,
+        width: phone ? 390 : 1100,
+        height: phone ? 844 : 700,
+        margin: phone ? 0.08 : 0.06,
+        minScale: 0.5,
+        maxScale: 1.4,
+      });
+    </script>
+  </body>
+</html>
