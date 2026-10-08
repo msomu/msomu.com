@@ -167,7 +167,7 @@ describe("talk decks on disk", () => {
 		);
 		assert.match(
 			readTalkHtml("one-job-per-bot") ?? "",
-			/The loudness pass\. auto-editor path\/to\/your\/video\.mp4/,
+			/The loudness pass\. auto-editor path\/<wbr>to\/<wbr>your\/<wbr>video\.mp4/,
 		);
 		assert.match(
 			readTalkHtml("one-job-per-bot") ?? "",

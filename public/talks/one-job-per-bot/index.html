@@ -358,13 +358,13 @@
         <section class="slide-statement">
           <p class="kicker">Set it up today</p>
           <ol class="ladder">
-            <li><span>ffmpeg and uv. The two prerequisites. Whisper installs itself.</span></li>
+            <li><span>ffmpeg and uv. The two prerequisites.</span></li>
             <li><span>The tool. npx skills add WyattBlue/auto-editor.</span></li>
-            <li><span>The first pass. auto-editor path/to/your/video.mp4. Dead space gone.</span></li>
-            <li><span>The transcript. Whisper runs on the recording. Word-level text and timing.</span></li>
-            <li><span>The edit. Delete lines, re-run. The video reshuffles to match your text.</span></li>
+            <li><span>The loudness pass. auto-editor path/<wbr>to/<wbr>your/<wbr>video.mp4. Dead space gone.</span></li>
+            <li><span>The transcript. auto-editor whisper video.mp4 ggml-medium.en.bin. The second argument is the model file.</span></li>
+            <li><span>The cut. auto-editor video.mp4 --edit subtitle. Or --edit word:value.</span></li>
           </ol>
-          <p class="sub">auto-editor README, the uv and ffmpeg gist, timkulbaev/ai-video-editor.</p>
+          <p class="sub">WyattBlue/auto-editor, skills/auto-editor-transcribe. The uv and ffmpeg gist.</p>
           <aside class="notes">
             Rung 3 also takes a margin. auto-editor example.mp4 --margin 0.2s pads the cuts so the edit feels nicer. 0.2 seconds is the default.
           </aside>
@@ -411,7 +411,7 @@
         <section class="slide-statement">
           <p class="kicker">Which model for which job</p>
           <ul class="roster">
-            <li><strong>Cinematic realism</strong><span>Sora 2 and Veo 3.1 own the cinematic lane.</span></li>
+            <li><strong>Cinematic realism</strong><span>Sora 2's API ended September 24, 2026. Veo 3.1 owns the cinematic lane.</span></li>
             <li><strong>Image to video</strong><span>Kling keeps showing up in the image-to-video shootouts.</span></li>
             <li><strong>Editing plus generation</strong><span>Runway Gen-4 with timeline tooling, when editing matters as much as generation.</span></li>
             <li><strong>All-rounder and value</strong><span>Veo 3.1, prompt adherence, native audio, 4K. Kling 3.0, value to quality, multi-shot storyboards.</span></li>
@@ -436,7 +436,7 @@
           <ul class="roster">
             <li><strong>Eleven skills</strong><span>One job each. Research, script, storyboard, voice-over, images, timeline assembly.</span></li>
             <li><strong>One Google line</strong><span>Gemini writes. Imagen draws. Veo animates. Story to movie.</span></li>
-            <li><strong>Multi-API</strong><span>OpenAI, Gemini, ElevenLabs, and Sora 2 in one orchestration.</span></li>
+            <li><strong>Multi-API</strong><span>OpenAI, Gemini, and ElevenLabs in one orchestration. Sora 2's API ended September 24, 2026.</span></li>
             <li><strong>Local</strong><span>The whole pipeline runs on your own GPU.</span></li>
           </ul>
           <p class="sub">chenyujinchj/video-agent-skills, SDSmirnov/AI-Story-To-Movie, wonderstone843, counter-eng.</p>
