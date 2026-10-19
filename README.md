@@ -17,7 +17,7 @@ With 10+ years in mobile development, I specialize in building scalable streamin
 - E-commerce solutions
 - Ticketing systems
 
-As a community leader at GDG Chennai, I regularly speak at events and organize gatherings to share knowledge and experiences.
+I regularly speak at events to share knowledge and experiences.
 
 ## 📖 About Project
 A personal website built with [Astro](https://astro.build/), featuring a dark theme that emphasizes readability and showcases my work in Android development, automation, and technical problem-solving.
@@ -127,7 +127,6 @@ CLARITY_TRACKING_ID=your_clarity_tracking_id
 
 ## 📬 Connect
 - Email: msomasundaram93@gmail.com
-- GDG Chennai
 - LinkedIn
 - Twitter
 
