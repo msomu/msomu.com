@@ -40,7 +40,7 @@ export const aboutPage: TrustPage = {
 			heading: "What he works on",
 			paragraphs: [
 				"At AGI Inc he works on AI products at the application layer: agents, tools, and the unglamorous work of making model-backed features survive contact with real users. That includes evaluation, product taste, and the gap between a demo that impresses a room and a system people return to.",
-				"Outside work he founded United by AI, a community for builders who want peers rather than a pitch audience. Before this chapter he spent years on streaming clients at Disney+Hotstar, where playback quality and scale were the job.",
+				"Outside work he co-founded United by AI, a community for builders who want peers rather than a pitch audience. Before this chapter he spent years on streaming clients at Disney+Hotstar, where playback quality and scale were the job.",
 			],
 		},
 		{
