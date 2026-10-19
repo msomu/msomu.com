@@ -7,7 +7,7 @@ export const PERSON_ALTERNATE_NAMES = ["msomu", "somu"] as const;
 export const PERSON_EMAIL = "msomasundaram93@gmail.com";
 export const PERSON_JOB_TITLE = "Founding AI Engineer";
 export const PERSON_DESCRIPTION =
-	"Founding AI Engineer at AGI Inc. Founder of United by AI. Organiser at GDG Chennai. Previously crafted streaming experiences for millions at Disney+Hotstar.";
+	"Founding AI Engineer at AGI Inc. Co-founder of United by AI. Previously crafted streaming experiences for millions at Disney+Hotstar.";
 export const CONTACT_TYPE = "inquiries";
 export const TOPMATE_URL =
 	"https://topmate.io/msomu/2148374?utm_source=public_profile&utm_campaign=msomu";
