@@ -1,0 +1,1082 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Phone MCP: Your Phone, Driven by Any AI · msomu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a fixed 1920x1080 stage scaled to fit; letterboxed on wide screens, stacked and scrolled on phones.
+   Look: the AGI app's warm canvas, peach-amber glow and a single orange spark; ink slides mark each part. */
+:root {
+  --canvas: #f5f5f5;
+  --cream: #fbf8f3;
+  --paper: rgba(255, 255, 255, 0.72);
+  --ink: #111111;
+  --ink-2: #444444;
+  --ink-3: #666666;
+  --ink-4: #8a8580;
+  --rule: #e4ddd3;
+  --spark: #ff5500;
+  --spark-deep: #c43f00;
+  --peach: #eeba87;
+  --amber: #ecd99b;
+  --blush: #efdddd;
+  --night: #121110;
+  --night-2: #1d1a17;
+  --night-3: #2a2622;
+  --on-night: #f3ece3;
+  --on-night-2: #b9b0a6;
+  --ok: #1d9a36;
+  --warn: #c98a00;
+  --bad: #d9332f;
+  --info: #1e74c0;
+  --term-bg: #171513;
+  --term-fg: #efe7dc;
+  --term-dim: #8f857a;
+  --letterbox: #e9e6e1;
+
+  --f-sans: "Work Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-serif: "Fraunces", "Gambetta", Georgia, serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--letterbox);
+  color: var(--ink);
+  font-family: var(--f-sans);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+body.stack { overflow-y: auto; overflow-x: hidden; }
+
+#viewport {
+  position: relative;
+  height: 100%;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
+}
+.frame { position: absolute; inset: 0; display: none; }
+.frame.active { display: block; }
+.slide {
+  position: absolute;
+  left: var(--ox, 0px);
+  top: var(--oy, 0px);
+  width: 1920px;
+  height: 1080px;
+  transform: scale(var(--s, 0.5));
+  transform-origin: top left;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 156px 128px 112px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  background: var(--canvas);
+  color: var(--ink);
+  box-shadow: 0 10px 60px rgba(60, 40, 20, 0.12);
+}
+body.stack #viewport { height: auto; padding-block: 16px 96px; }
+body.stack .frame { position: relative; display: block; height: calc(1080px * var(--s)); margin-bottom: 16px; }
+body.stack .slide { left: 0; top: 0; border-radius: calc(12px / var(--s)); }
+
+.slide.dark { background: var(--night); color: var(--on-night); }
+.slide.cream { background: var(--cream); }
+
+/* chrome injected per slide */
+.chrome-logo { position: absolute; left: 128px; top: 64px; display: flex; align-items: center; gap: 16px; font-weight: 600; font-size: 28px; letter-spacing: -0.02em; z-index: 3; }
+.chrome-logo svg { width: 56px; height: 28px; }
+.chrome-sec { position: absolute; right: 128px; top: 66px; font-family: var(--f-serif); font-style: italic; font-size: 28px; color: var(--ink-3); z-index: 3; }
+.chrome-num { position: absolute; right: 128px; bottom: 56px; font-size: 22px; font-variant-numeric: tabular-nums; color: var(--ink-4); letter-spacing: 0.04em; z-index: 3; }
+.dark .chrome-sec { color: var(--on-night-2); }
+.dark .chrome-num { color: #7d746b; }
+.dark .chrome-logo { color: var(--on-night); }
+
+/* signature glow */
+.glow { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(40px); z-index: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(238,186,135,0.95) 0%, rgba(236,217,155,0.75) 38%, rgba(239,221,221,0.55) 62%, rgba(239,221,221,0) 72%); }
+.glow.spark { background: radial-gradient(circle at 50% 50%, rgba(255,85,0,0.85) 0%, rgba(238,186,135,0.6) 34%, rgba(239,221,221,0) 70%); }
+.slide.on .glow { animation: breathe 9s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.06); opacity: 1; } }
+.slide > *:not(.glow):not(.abs) { position: relative; z-index: 1; }
+
+/* type scale: 128 / 80 / 44 / 32 / 24 */
+.eyebrow { font-family: var(--f-serif); font-style: italic; font-weight: 300; font-size: 36px; color: var(--ink-3); letter-spacing: 0; }
+.dark .eyebrow { color: var(--on-night-2); }
+.display { font-size: 128px; font-weight: 700; letter-spacing: -0.05em; line-height: 0.96; margin: 0; text-wrap: balance; }
+h2 { font-size: 80px; font-weight: 600; letter-spacing: -0.04em; line-height: 1.02; margin: 0; text-wrap: balance; }
+h3 { font-size: 44px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin: 0; }
+.lede { font-size: 36px; font-weight: 400; line-height: 1.32; color: var(--ink-2); margin: 0; max-width: 1180px; letter-spacing: -0.015em; }
+.dark .lede { color: var(--on-night-2); }
+p { margin: 0; }
+.body { font-size: 32px; line-height: 1.36; color: var(--ink-2); letter-spacing: -0.01em; }
+.small { font-size: 24px; line-height: 1.4; color: var(--ink-3); }
+.dark .small { color: var(--on-night-2); }
+.spark-t { color: var(--spark); }
+.mono { font-family: var(--f-mono); letter-spacing: 0; }
+code, .code { font-family: var(--f-mono); font-size: 0.86em; background: rgba(17,17,17,0.06); padding: 2px 10px; border-radius: 8px; letter-spacing: 0; white-space: nowrap; }
+.dark code { background: rgba(243,236,227,0.1); }
+
+.row { display: flex; gap: 40px; }
+.col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.grow { flex: 1; min-width: 0; }
+.card { background: var(--paper); border: 1px solid #ffffff; border-radius: 24px; box-shadow: 0 0 24px rgba(0,0,0,0.06); padding: 32px 36px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.card.solid { background: #ffffff; }
+.dark .card { background: var(--night-2); border-color: var(--night-3); box-shadow: none; }
+.card h3 { font-size: 38px; }
+.card .body { font-size: 26px; }
+.tag { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; font-size: 22px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.dark .tag { color: var(--on-night-2); }
+.pill { display: inline-flex; align-items: center; gap: 12px; border-radius: 999px; padding: 12px 26px; font-size: 26px; font-weight: 600; background: var(--ink); color: #fff;
+  box-shadow: inset 4px 4px 8px rgba(255,255,255,0.2), inset -4px -4px 12px rgba(0,0,0,0.25), 0 2px 12px rgba(0,0,0,0.32); white-space: nowrap; }
+.pill.light { background: #fff; color: var(--ink); box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.pill.spark { background: var(--spark); color: #fff; }
+.dot { width: 14px; height: 14px; border-radius: 50%; background: var(--spark); display: inline-block; flex: none; }
+.dot.ok { background: var(--ok); }
+
+/* terminal and code */
+.term { background: var(--term-bg); color: var(--term-fg); border-radius: 24px; font-family: var(--f-mono); font-size: 27px; line-height: 1.55; padding: 0; overflow: hidden; box-shadow: 0 20px 60px rgba(40,25,10,0.22); min-width: 0; }
+.term-bar { display: flex; align-items: center; gap: 12px; padding: 20px 28px; background: #211e1b; color: var(--term-dim); font-size: 20px; }
+.term-bar i { width: 14px; height: 14px; border-radius: 50%; background: #3a3530; display: block; }
+.term-body { padding: 28px 36px 36px; white-space: pre-wrap; word-break: break-word; }
+.t-dim { color: var(--term-dim); }
+.t-sp { color: #ff8a4c; }
+.t-ok { color: #7fd38d; }
+.t-key { color: #f0c987; }
+.t-str { color: #e9b8a0; }
+.caret::after { content: ""; display: inline-block; width: 0.55em; height: 1.05em; background: #ff8a4c; vertical-align: -0.18em; margin-left: 4px; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+table.t { border-collapse: collapse; width: 100%; font-size: 26px; }
+table.t th { text-align: left; font-size: 20px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); padding: 0 24px 14px 0; border-bottom: 2px solid var(--ink); }
+table.t td { padding: 15px 24px 15px 0; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.3; color: var(--ink-2); }
+table.t td:first-child { white-space: nowrap; }
+table.t td code { font-size: 23px; }
+
+/* phone mockup */
+.phone { position: relative; width: 372px; height: 760px; border-radius: 58px; background: #0e0d0c; padding: 14px; box-shadow: 0 40px 90px rgba(60,35,10,0.28), inset 0 0 0 2px #2b2724; flex: none; }
+.phone .screen { position: relative; width: 100%; height: 100%; border-radius: 52px; overflow: hidden; background: var(--canvas); }
+.phone .notch { position: absolute; top: 18px; left: 50%; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: #0e0d0c; z-index: 9; }
+.scr { position: absolute; inset: 0; padding: 72px 28px 28px; display: flex; flex-direction: column; gap: 18px; font-size: 22px; opacity: 0; }
+.scr .s-title { font-size: 34px; font-weight: 600; letter-spacing: -0.03em; }
+.s-row { display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,0.8); border-radius: 18px; padding: 18px 20px; font-size: 21px; font-weight: 500; }
+.s-ic { width: 40px; height: 40px; border-radius: 12px; flex: none; background: var(--blush); }
+.s-cap { font-size: 18px; color: var(--ink-3); line-height: 1.35; }
+.agi-run { position: absolute; inset: 0; pointer-events: none; border-radius: 52px; box-shadow: inset 0 0 0 0 rgba(255,85,0,0); opacity: 0; }
+
+/* sequence + flow diagrams */
+.lane-h { font-size: 24px; font-weight: 600; text-align: center; padding: 14px 0; border-radius: 999px; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.dark .lane-h { background: var(--night-2); }
+.seq { position: relative; display: grid; gap: 0; }
+.msg { position: relative; height: 84px; }
+.msg .ln { position: absolute; top: 44px; height: 3px; background: var(--ink); transform-origin: left center; }
+.msg .ln.rev { transform-origin: right center; }
+.msg .ln::after { content: ""; position: absolute; right: -2px; top: -8px; border-left: 16px solid var(--ink); border-top: 9.5px solid transparent; border-bottom: 9.5px solid transparent; }
+.msg .ln.rev::after { right: auto; left: -2px; border-left: 0; border-right: 16px solid var(--ink); }
+.msg .ln.sp { background: var(--spark); }
+.msg .ln.sp::after { border-left-color: var(--spark); }
+.msg .ln.sp.rev::after { border-right-color: var(--spark); border-left-color: transparent; }
+.msg .lb { position: absolute; top: 2px; font-size: 23px; line-height: 1.25; text-align: center; color: var(--ink-2); }
+.msg .lb code { font-size: 21px; }
+.vline { position: absolute; top: 0; bottom: 0; width: 2px; background: repeating-linear-gradient(to bottom, #cfc6ba 0 10px, transparent 10px 20px); }
+
+/* animation vocabulary: elements are visible at rest; .on plays the entrance */
+.slide.on .a-rise { animation: rise 0.8s var(--ease) both; animation-delay: calc(var(--d, 0) * 1ms); }
+.slide.on .a-fade { animation: fade 0.9s var(--ease) both; animation-delay: calc(var(--d, 0) * 1ms); }
+.slide.on .a-pop { animation: pop 0.7s var(--ease) both; animation-delay: calc(var(--d, 0) * 1ms); }
+.slide.on .a-left { animation: left 0.8s var(--ease) both; animation-delay: calc(var(--d, 0) * 1ms); }
+.slide.on .a-grow { animation: grow 0.7s var(--ease) both; animation-delay: calc(var(--d, 0) * 1ms); }
+.slide.on .a-draw { stroke-dasharray: var(--len, 1200); animation: draw 1.6s var(--ease) both; animation-delay: calc(var(--d, 0) * 1ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.94); } }
+@keyframes left { from { opacity: 0; transform: translateX(-36px); } }
+@keyframes grow { from { transform: scaleX(0); } }
+@keyframes draw { from { stroke-dashoffset: var(--len, 1200); } to { stroke-dashoffset: 0; } }
+
+/* HUD */
+#hud { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 8px; z-index: 50;
+  background: rgba(255,255,255,0.86); border: 1px solid #fff; border-radius: 999px; padding: 6px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); backdrop-filter: blur(12px); transition: opacity 0.4s; }
+#hud.idle { opacity: 0; }
+#hud button { font: 600 14px var(--f-sans); color: var(--ink); background: transparent; border: 0; border-radius: 999px; height: 36px; min-width: 36px; padding: 0 12px; cursor: pointer; }
+#hud button:hover { background: rgba(17,17,17,0.07); }
+#hud button:focus-visible { outline: 2px solid rgba(255,85,0,0.7); outline-offset: 1px; }
+#hud .count { font: 500 14px var(--f-sans); font-variant-numeric: tabular-nums; color: var(--ink-3); padding: 0 6px; min-width: 64px; text-align: center; }
+#progress { position: fixed; left: 0; top: env(safe-area-inset-top, 0px); height: 3px; background: var(--spark); z-index: 51; transition: width 0.5s var(--ease); }
+body.stack #progress, body.stack #hud .nav-only { display: none; }
+#notes { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(68px + env(safe-area-inset-bottom, 0px)); max-width: 880px; margin: 0 auto;
+  background: var(--night); color: var(--on-night); border-radius: 20px; padding: 20px 26px; font: 400 17px/1.5 var(--f-sans); z-index: 49; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-height: 34vh; overflow-y: auto; }
+#notes b { color: #ff8a4c; font-weight: 600; display: block; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+aside.notes { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide *, .slide { animation: none !important; transition: none !important; }
+  .motion-only { display: none !important; }
+}
+</style></head><body>
+
+<div id="progress"></div>
+<div id="viewport">
+
+<!-- 1 · Cover -->
+<section class="slide" id="cover" data-sec="Workshop">
+  <div class="glow" style="width:1500px;height:1500px;right:-520px;top:-260px"></div>
+  <div class="abs" style="position:absolute;right:170px;top:300px;width:620px;z-index:1">
+    <svg viewBox="-10 -10 586 294" width="620" height="300" aria-label="AGI mark">
+      <path class="a-draw" style="--len:1900;--d:200" d="M 566.286 137.042 C 566.289 164.145 558.255 190.641 543.198 213.177 C 528.142 235.714 506.74 253.279 481.7 263.652 C 456.66 274.024 429.106 276.738 402.524 271.449 C 375.941 266.161 351.525 253.108 332.361 233.941 L 194.537 78.372 C 182.979 67.026 168.328 59.347 152.422 56.297 C 136.515 53.248 120.063 54.964 105.128 61.231 C 90.194 67.498 77.444 78.036 68.477 91.523 C 59.51 105.011 54.726 120.846 54.726 137.042 C 54.726 153.238 59.51 169.073 68.477 182.56 C 77.444 196.047 90.194 206.585 105.128 212.852 C 120.063 219.119 136.515 220.836 152.422 217.786 C 168.328 214.737 182.979 207.057 194.537 195.711 L 201.571 187.764" fill="none" stroke="#111111" stroke-width="10" stroke-linecap="round"/>
+      <path class="a-draw" style="--len:1900;--d:700" d="M 0 137.042 C 0 109.942 8.036 83.45 23.091 60.917 C 38.147 38.384 59.546 20.821 84.583 10.449 C 109.619 0.077 137.169 -2.638 163.749 2.648 C 190.329 7.933 214.744 20.981 233.908 40.142 L 371.733 195.711 C 383.291 207.057 397.942 214.737 413.848 217.786 C 429.754 220.836 446.207 219.119 461.141 212.852 C 476.075 206.585 488.826 196.047 497.793 182.56 C 506.76 169.073 511.543 153.238 511.543 137.042 C 511.543 120.846 506.76 105.011 497.793 91.523 C 488.826 78.036 476.075 67.498 461.141 61.231 C 446.207 54.964 429.754 53.248 413.848 56.297 C 397.942 59.347 383.291 67.026 371.733 78.372 L 364.699 86.32" fill="none" stroke="#ff5500" stroke-width="10" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div style="flex:1"></div>
+  <p class="eyebrow a-rise" style="--d:300">a hands-on workshop</p>
+  <h1 class="display a-rise" style="--d:450;max-width:1100px">Your phone, driven by any AI</h1>
+  <p class="lede a-rise" style="--d:650;max-width:1000px">AGI Agentic Phone MCP, end to end: set up the phone, connect a client, run tasks, and handle what comes back.</p>
+  <div class="row a-rise" style="--d:850;gap:20px;align-items:center">
+    <span class="pill">api.agi.tech/v1/mcp</span>
+    <span class="pill light">90 minutes</span>
+    <span class="pill light">Bring an Android phone</span>
+  </div>
+  <aside class="notes">Welcome everyone. By the end of this session every one of you will have an AI assistant on your laptop operating your own Android phone, and you will know what happens at every hop. Keep your phone unlocked and on Wi-Fi.</aside>
+</section>
+
+<!-- 2 · Agenda -->
+<section class="slide" id="agenda" data-sec="Agenda">
+  <p class="eyebrow a-rise">the next 90 minutes</p>
+  <h2 class="a-rise" style="--d:100">Where we're going</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:16px">
+    <div class="card a-rise" style="--d:200"><span class="tag">Part 1 · 10 min</span><h3>The idea</h3><p class="body">What MCP is, and the three pieces that make a phone controllable.</p></div>
+    <div class="card a-rise" style="--d:300"><span class="tag">Part 2 · 20 min</span><h3>Set up &amp; connect</h3><p class="body">Prepare the phone, attach Claude Code or another client, sign in.</p></div>
+    <div class="card a-rise" style="--d:400"><span class="tag">Part 3 · 25 min</span><h3>Run tasks</h3><p class="body">The start, monitor, act loop. Outcomes, handoffs, sessions, prompts.</p></div>
+    <div class="card a-rise" style="--d:500"><span class="tag">Part 4 · 35 min</span><h3>Go deeper &amp; build</h3><p class="body">Security, inside the phone, troubleshooting, then four hands-on labs.</p></div>
+  </div>
+  <div class="row a-rise" style="--d:650;align-items:center;gap:24px;margin-top:auto">
+    <span class="dot"></span>
+    <p class="body">You leave with a working connection, a mental model of every hop, and prompts that hold up on a real device.</p>
+  </div>
+  <aside class="notes">Four parts. The first two are about getting everyone connected, so if your setup fails, raise a hand early. Part 3 is the core mental model. Part 4 ends with labs where you drive your own phone.</aside>
+</section>
+
+<!-- 3 · Before you start -->
+<section class="slide cream" id="prework" data-sec="Agenda">
+  <p class="eyebrow a-rise">before we start</p>
+  <h2 class="a-rise" style="--d:100">Check you have these</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+    <div class="card a-left" style="--d:200;flex-direction:row;gap:28px;align-items:flex-start"><span class="pill spark" style="padding:10px 20px">Phone</span><div class="col" style="gap:8px"><h3>An Android phone</h3><p class="body">With the AGI Android app installed. Unlocked, charged, on Wi-Fi.</p></div></div>
+    <div class="card a-left" style="--d:300;flex-direction:row;gap:28px;align-items:flex-start"><span class="pill spark" style="padding:10px 20px">Account</span><div class="col" style="gap:8px"><h3>One AGI account</h3><p class="body">The same sign-in on the phone, in the browser and on platform.agi.tech.</p></div></div>
+    <div class="card a-left" style="--d:400;flex-direction:row;gap:28px;align-items:flex-start"><span class="pill spark" style="padding:10px 20px">Laptop</span><div class="col" style="gap:8px"><h3>An MCP client</h3><p class="body">Claude Code is fastest. Claude Desktop, Cursor and ChatGPT work too.</p></div></div>
+    <div class="card a-left" style="--d:500;flex-direction:row;gap:28px;align-items:flex-start"><span class="pill spark" style="padding:10px 20px">Desktop</span><div class="col" style="gap:8px"><h3>Node.js 18+</h3><p class="body">Only for Claude Desktop, which needs the <code>mcp-remote</code> bridge.</p></div></div>
+  </div>
+  <aside class="notes">Quick show of hands for each card. The account point matters most: a mismatch between the phone's account and the client's sign-in is the most common reason people see an empty device list, and it shows up as no devices, not as an auth error.</aside>
+</section>
+
+<!-- 4 · Section: The idea -->
+<section class="slide dark" id="part1" data-sec="Part 1">
+  <div class="glow spark" style="width:1300px;height:1300px;right:-380px;top:-160px;opacity:0.6"></div>
+  <div style="flex:1"></div>
+  <p class="eyebrow a-rise">part 1</p>
+  <h1 class="display a-rise" style="--d:150">The idea</h1>
+  <p class="lede a-rise" style="--d:300">Real apps, real screen, any assistant.</p>
+  <aside class="notes">Part 1. Ten minutes on the why and the shape of the system before anyone types a command.</aside>
+</section>
+
+<!-- 5 · The pitch: many clients, one phone -->
+<section class="slide" id="pitch" data-sec="Part 1 · The idea">
+  <div class="row" style="flex:1;align-items:center;gap:80px">
+    <div class="col" style="width:820px;gap:36px">
+      <p class="eyebrow a-rise">what it does</p>
+      <h2 class="a-rise" style="--d:100">Your assistant asks. Your phone does it.</h2>
+      <p class="lede a-rise" style="--d:250">Connect the AGI MCP server to any MCP client. The assistant runs plain-language tasks on your phone: opens apps, navigates, types and reports back while you watch.</p>
+      <div class="col a-rise" style="--d:400;gap:16px">
+        <p class="body"><b>No per-app integration.</b> Anything installable is automatable.</p>
+        <p class="body"><b>Visible.</b> Every action happens on the phone's own screen.</p>
+        <p class="body"><b>Native trust.</b> Logins and payments stay with you, on the device.</p>
+      </div>
+    </div>
+    <div class="grow" style="position:relative;height:760px">
+      <svg class="abs" viewBox="0 0 764 760" width="764" height="760" style="position:absolute;inset:0" aria-label="Four AI clients connected to one phone">
+        <g fill="none" stroke="#d8cfc3" stroke-width="3">
+          <path id="pp1" d="M 210 110 C 420 110 420 380 500 380"/>
+          <path id="pp2" d="M 210 290 C 400 290 420 380 500 380"/>
+          <path id="pp3" d="M 210 470 C 400 470 420 380 500 380"/>
+          <path id="pp4" d="M 210 650 C 420 650 420 380 500 380"/>
+        </g>
+        <g class="motion-only">
+          <circle r="8" fill="#ff5500"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-0.01s"><mpath href="#pp1"/></animateMotion></circle>
+          <circle r="8" fill="#ff5500"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-0.65s"><mpath href="#pp2"/></animateMotion></circle>
+          <circle r="8" fill="#ff5500"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.3s"><mpath href="#pp3"/></animateMotion></circle>
+          <circle r="8" fill="#ff5500"><animateMotion dur="2.6s" repeatCount="indefinite" begin="-1.95s"><mpath href="#pp4"/></animateMotion></circle>
+        </g>
+      </svg>
+      <span class="abs pill light a-left" style="--d:200;position:absolute;left:0;top:82px;width:210px;height:56px;box-sizing:border-box;justify-content:center">Claude Code</span>
+      <span class="abs pill light a-left" style="--d:300;position:absolute;left:0;top:262px;width:210px;height:56px;box-sizing:border-box;justify-content:center">Claude Desktop</span>
+      <span class="abs pill light a-left" style="--d:400;position:absolute;left:0;top:442px;width:210px;height:56px;box-sizing:border-box;justify-content:center">Cursor</span>
+      <span class="abs pill light a-left" style="--d:500;position:absolute;left:0;top:622px;width:210px;height:56px;box-sizing:border-box;justify-content:center">ChatGPT</span>
+      <div class="abs a-pop" style="--d:300;position:absolute;left:500px;top:150px;width:250px;height:470px;border-radius:44px;background:#0e0d0c;padding:10px;box-shadow:0 30px 70px rgba(60,35,10,0.25)">
+        <div style="width:100%;height:100%;border-radius:36px;background:radial-gradient(circle at 50% 115%, #eeba87 0%, #ecd99b 38%, #efdddd 58%, #f5f5f5 80%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px">
+          <svg viewBox="0 0 566 274" width="96" height="46" aria-label="AGI mark"><path fill="#111" d="M 566.286 137.042 C 566.289 164.145 558.255 190.641 543.198 213.177 C 528.142 235.714 506.74 253.279 481.7 263.652 C 456.66 274.024 429.106 276.738 402.524 271.449 C 375.941 266.161 351.525 253.108 332.361 233.941 L 331.242 232.731 L 194.537 78.372 C 182.979 67.026 168.328 59.347 152.422 56.297 C 136.515 53.248 120.063 54.964 105.128 61.231 C 90.194 67.498 77.444 78.036 68.477 91.523 C 59.51 105.011 54.726 120.846 54.726 137.042 C 54.726 153.238 59.51 169.073 68.477 182.56 C 77.444 196.047 90.194 206.585 105.128 212.852 C 120.063 219.119 136.515 220.836 152.422 217.786 C 168.328 214.737 182.979 207.057 194.537 195.711 L 201.571 187.764 C 203.956 185.065 206.85 182.862 210.087 181.281 C 213.324 179.7 216.841 178.773 220.437 178.551 C 224.032 178.33 227.636 178.818 231.043 179.99 C 234.45 181.161 237.592 182.992 240.292 185.377 C 242.991 187.763 245.194 190.657 246.774 193.894 C 248.355 197.131 249.283 200.648 249.504 204.244 C 249.726 207.839 249.237 211.443 248.066 214.85 C 246.895 218.257 245.064 221.399 242.678 224.098 L 235.028 232.731 L 233.908 233.941 C 214.744 253.102 190.329 266.15 163.749 271.436 C 137.169 276.721 109.619 274.006 84.583 263.634 C 59.546 253.262 38.147 235.7 23.091 213.166 C 8.036 190.633 0 164.142 0 137.042 C 0 109.942 8.036 83.45 23.091 60.917 C 38.147 38.384 59.546 20.821 84.583 10.449 C 109.619 0.077 137.169 -2.638 163.749 2.648 C 190.329 7.933 214.744 20.981 233.908 40.142 L 235.028 41.352 L 371.733 195.711 C 383.291 207.057 397.942 214.737 413.848 217.786 C 429.754 220.836 446.207 219.119 461.141 212.852 C 476.075 206.585 488.826 196.047 497.793 182.56 C 506.76 169.073 511.543 153.238 511.543 137.042 C 511.543 120.846 506.76 105.011 497.793 91.523 C 488.826 78.036 476.075 67.498 461.141 61.231 C 446.207 54.964 429.754 53.248 413.848 56.297 C 397.942 59.347 383.291 67.026 371.733 78.372 L 364.699 86.32 C 362.313 89.019 359.419 91.222 356.182 92.802 C 352.945 94.383 349.428 95.311 345.833 95.532 C 342.237 95.754 338.633 95.265 335.227 94.094 C 331.82 92.923 328.677 91.092 325.978 88.706 C 323.279 86.32 321.076 83.426 319.495 80.189 C 317.915 76.952 316.987 73.435 316.765 69.84 C 316.544 66.244 317.033 62.64 318.204 59.233 C 319.375 55.827 321.206 52.684 323.591 49.985 L 331.242 41.352 L 332.361 40.142 C 351.525 20.975 375.941 7.922 402.524 2.634 C 429.106 -2.655 456.66 0.059 481.7 10.431 C 506.74 20.804 528.142 38.369 543.198 60.906 C 558.255 83.443 566.289 109.938 566.286 137.042 Z"/></svg>
+          <span style="font-size:22px;font-weight:600;color:#111">Working…</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">The one-sentence pitch. Any assistant that speaks MCP gets the same phone tools. The agent works through the screen like a person, so there is no per-app API work, everything is visible on the device, and sensitive steps come back to the human.</aside>
+</section>
+
+<!-- 6 · MCP in 60 seconds -->
+<section class="slide" id="mcp101" data-sec="Part 1 · The idea">
+  <p class="eyebrow a-rise">mcp in sixty seconds</p>
+  <h2 class="a-rise" style="--d:100">A plug standard for AI tools</h2>
+  <div class="row" style="gap:56px;flex:1;align-items:stretch">
+    <div class="col" style="width:760px;gap:28px">
+      <p class="lede a-rise" style="--d:200">The Model Context Protocol lets any compliant client discover and call tools on a server. Nothing is hardcoded per client.</p>
+      <div class="card a-rise" style="--d:350;gap:20px">
+        <div class="row" style="gap:20px;align-items:baseline"><span class="mono spark-t" style="font-size:28px;width:190px;flex:none">tools/list</span><p class="body" style="font-size:28px">Ask the server which tools exist for this account.</p></div>
+        <div class="row" style="gap:20px;align-items:baseline"><span class="mono spark-t" style="font-size:28px;width:190px;flex:none">tools/call</span><p class="body" style="font-size:28px">Run one tool with JSON arguments, get JSON back.</p></div>
+      </div>
+      <p class="small a-rise" style="--d:500">AGI speaks MCP <code>2024-11-05</code> over JSON-RPC 2.0. Transport is Streamable HTTP with JSON responses, or SSE.</p>
+    </div>
+    <div class="term grow a-pop" style="--d:300">
+      <div class="term-bar"><i></i><i></i><i></i><span style="margin-left:12px">POST https://api.agi.tech/v1/mcp</span></div>
+      <div class="term-body"><span class="t-dim">// the client asks</span>
+{ <span class="t-key">"jsonrpc"</span>: <span class="t-str">"2.0"</span>, <span class="t-key">"id"</span>: 7,
+  <span class="t-key">"method"</span>: <span class="t-sp">"tools/call"</span>,
+  <span class="t-key">"params"</span>: {
+    <span class="t-key">"name"</span>: <span class="t-sp">"phone_run_task"</span>,
+    <span class="t-key">"arguments"</span>: { <span class="t-key">"prompt"</span>: <span class="t-str">"Open Settings and report the battery percentage."</span> } } }
+
+<span class="t-dim">// the server answers at once</span>
+{ <span class="t-key">"task_id"</span>: <span class="t-str">"…"</span>, <span class="t-key">"session_id"</span>: <span class="t-str">"…"</span> }</div>
+    </div>
+  </div>
+  <aside class="notes">For anyone new to MCP: it is a standard way for an AI client to discover tools and call them. Your assistant does this for you. You will rarely write JSON-RPC by hand, but it helps to know that every phone action is just a tools/call with a name and arguments.</aside>
+</section>
+
+<!-- 7 · Architecture -->
+<section class="slide" id="architecture" data-sec="Part 1 · The idea">
+  <p class="eyebrow a-rise">architecture</p>
+  <h2 class="a-rise" style="--d:100">Three pieces, one relay</h2>
+  <div style="position:relative;height:440px;flex:none">
+    <svg class="abs" viewBox="0 0 1664 440" width="1664" height="440" style="position:absolute;left:0;top:0" aria-label="Client to cloud to phone data flow">
+      <defs>
+        <path id="ar1" d="M 446 150 L 610 150"/>
+        <path id="ar2" d="M 1054 150 L 1218 150"/>
+        <path id="ar3" d="M 1218 290 L 1054 290"/>
+        <path id="ar4" d="M 610 290 L 446 290"/>
+      </defs>
+      <g stroke-width="3" fill="none">
+        <use href="#ar1" stroke="#ff5500" class="a-draw" style="--len:164;--d:600"/>
+        <use href="#ar2" stroke="#ff5500" class="a-draw" style="--len:160;--d:900"/>
+        <use href="#ar3" stroke="#111" class="a-draw" style="--len:160;--d:1200"/>
+        <use href="#ar4" stroke="#111" class="a-draw" style="--len:160;--d:1500"/>
+      </g>
+      <g class="motion-only">
+        <circle r="9" fill="#ff5500"><animateMotion dur="3.2s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.25;1" calcMode="linear"><mpath href="#ar1"/></animateMotion></circle>
+        <circle r="9" fill="#ff5500"><animateMotion dur="3.2s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.25;0.5;1" calcMode="linear"><mpath href="#ar2"/></animateMotion></circle>
+        <circle r="9" fill="#111"><animateMotion dur="3.2s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.5;0.75;1" calcMode="linear"><mpath href="#ar3"/></animateMotion></circle>
+        <circle r="9" fill="#111"><animateMotion dur="3.2s" repeatCount="indefinite" keyPoints="0;0;1" keyTimes="0;0.75;1" calcMode="linear"><mpath href="#ar4"/></animateMotion></circle>
+      </g>
+      <g font-family="Work Sans, system-ui, sans-serif" font-size="18" fill="#444" text-anchor="middle">
+        <text x="528" y="132">phone_run_task</text>
+        <text x="1136" y="132">dispatch</text>
+        <text x="1136" y="322">progress</text>
+        <text x="528" y="322">result</text>
+      </g>
+    </svg>
+    <div class="abs" style="position:absolute;left:0;top:0;width:1664px;display:grid;grid-template-columns:446px 444px 446px;column-gap:164px">
+      <div class="card solid a-rise" style="--d:200;height:440px;box-sizing:border-box"><span class="tag">Your AI client</span><h3>Decides what to do</h3><p class="body">Claude Code, Cursor, ChatGPT or your own agent. Calls tools and reads results. Never touches the phone.</p></div>
+      <div class="card a-rise" style="--d:350;height:440px;box-sizing:border-box;background:#111;border-color:#111;color:#f3ece3"><span class="tag" style="color:#b9b0a6">AGI cloud MCP server</span><h3>Queues and relays</h3><p class="body" style="color:#d6cdc2">Authenticates you, queues tasks, dispatches them to your device, relays progress back.</p><span class="mono" style="font-size:22px;color:#ff8a4c;margin-top:auto">api.agi.tech/v1/mcp</span></div>
+      <div class="card solid a-rise" style="--d:500;height:440px;box-sizing:border-box"><span class="tag">AGI Android app</span><h3>The agent itself</h3><p class="body">Executes on-device through Android accessibility: real apps, real UI. Streams progress back.</p></div>
+    </div>
+  </div>
+  <p class="body a-rise" style="--d:1700">Execution is <b>asynchronous</b>. A task takes seconds to minutes, so starting one returns a <code>task_id</code> at once and the client waits separately.</p>
+  <aside class="notes">This is the slide to remember. Three boxes. The client decides, the cloud server authenticates and relays, the phone app is the agent that actually taps and types. Watch the dots: the request goes right, the phone does the work, progress and the result flow back left. Because phone work takes seconds to minutes, starting a task never blocks.</aside>
+</section>
+
+<!-- 8 · Section: Set up & connect -->
+<section class="slide dark" id="part2" data-sec="Part 2">
+  <div class="glow spark" style="width:1300px;height:1300px;right:-380px;top:-160px;opacity:0.6"></div>
+  <div style="flex:1"></div>
+  <p class="eyebrow a-rise">part 2</p>
+  <h1 class="display a-rise" style="--d:150">Set up &amp; connect</h1>
+  <p class="lede a-rise" style="--d:300">Phone first, then your client, then one call to prove it.</p>
+  <aside class="notes">Part 2. We do this together, step by step. Phone first.</aside>
+</section>
+
+<!-- 9 · Phone setup -->
+<section class="slide" id="phone-setup" data-sec="Part 2 · Phone">
+  <div class="row" style="flex:1;gap:96px;align-items:center">
+    <div class="col" style="width:900px;gap:36px">
+      <p class="eyebrow a-rise">on the phone</p>
+      <h2 class="a-rise" style="--d:100">Four steps to Connected</h2>
+      <div class="col" style="gap:20px">
+        <div class="card a-left" style="--d:250;flex-direction:row;align-items:center;gap:28px;padding:28px 36px"><span class="pill" style="width:64px;justify-content:center;padding:10px 0">1</span><div class="col" style="gap:4px"><h3 style="font-size:34px">Install and sign in</h3><p class="body" style="font-size:26px">AGI Android app, same account as platform.agi.tech.</p></div></div>
+        <div class="card a-left" style="--d:400;flex-direction:row;align-items:center;gap:28px;padding:28px 36px"><span class="pill" style="width:64px;justify-content:center;padding:10px 0">2</span><div class="col" style="gap:4px"><h3 style="font-size:34px">Grant Accessibility and overlay</h3><p class="body" style="font-size:26px">How the agent reads the screen and shows while it works.</p></div></div>
+        <div class="card a-left" style="--d:550;flex-direction:row;align-items:center;gap:28px;padding:28px 36px"><span class="pill spark" style="width:64px;justify-content:center;padding:10px 0">3</span><div class="col" style="gap:4px"><h3 style="font-size:34px">Settings › Developer connection</h3><p class="body" style="font-size:26px">Tap <b>Connect device</b>. Wait for <b>Connected</b>.</p></div></div>
+        <div class="card a-left" style="--d:700;flex-direction:row;align-items:center;gap:28px;padding:28px 36px"><span class="pill" style="width:64px;justify-content:center;padding:10px 0">4</span><div class="col" style="gap:4px"><h3 style="font-size:34px">Verify from your client</h3><p class="body" style="font-size:26px"><code>list_devices</code> shows the phone as <code>online</code>.</p></div></div>
+      </div>
+    </div>
+    <div class="phone a-pop" style="--d:300">
+      <div class="notch"></div>
+      <div class="screen" id="devscreen" style="background:linear-gradient(180deg,#f5f5f5 0%,#f6efe6 60%,#f3dcc4 100%)">
+        <div class="scr" style="opacity:1;gap:22px">
+          <div class="row" style="align-items:center;justify-content:space-between;gap:12px">
+            <span style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:22px">‹</span>
+            <span class="s-title" style="font-size:28px">Developer</span>
+            <span style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:22px">↻</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.85);border-radius:24px;padding:28px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;margin-top:20px">
+            <div id="dev-ic" style="width:84px;height:84px;border-radius:50%;background:#dff2e2;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-weight:600;font-size:28px;color:#1d9a36">&lt;/&gt;</div>
+            <div id="dev-status" style="font-size:30px;font-weight:600;color:#1d9a36">Connected</div>
+            <div class="s-cap" id="dev-cap" style="font-size:19px">You can control this phone using your MCP client</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.85);border-radius:20px;padding:18px 20px;display:flex;flex-direction:column;gap:6px">
+            <span class="s-cap" style="font-size:16px">Device ID</span>
+            <span class="mono" style="font-size:16px">5b6dc94d-615c-461c-b8... c5839b69</span>
+          </div>
+          <div style="margin-top:auto;border-radius:999px;background:#111;color:#fff;font-weight:600;text-align:center;padding:20px;font-size:22px" id="dev-btn">Disconnect device</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">Everyone do this now. Install, sign in, grant the two permissions the app asks for. Then Settings, Developer connection, Connect device. The status goes Not connected, Connecting, Connected. If you see Needs attention, tap the refresh button top right. The caption flips to "You can control this phone using your MCP client" once it's live.</aside>
+</section>
+
+<!-- 10 · Claude Code -->
+<section class="slide" id="claude-code" data-sec="Part 2 · Client">
+  <p class="eyebrow a-rise">fastest path</p>
+  <h2 class="a-rise" style="--d:100">Connect Claude Code in one command</h2>
+  <div class="row" style="flex:1;gap:56px;align-items:stretch">
+    <div class="term grow a-pop" style="--d:250;display:flex;flex-direction:column">
+      <div class="term-bar"><i></i><i></i><i></i><span style="margin-left:12px">~ zsh</span></div>
+      <div class="term-body" style="flex:1"><span class="t-sp">$ </span><span data-type="claude mcp add --transport http agi-devices https://api.agi.tech/v1/mcp" data-delay="500">claude mcp add --transport http agi-devices https://api.agi.tech/v1/mcp</span>
+<span class="t-dim a-fade" style="--d:3400">Added HTTP MCP server agi-devices to local config</span>
+
+<span class="t-sp a-fade" style="--d:3900">$ </span><span class="a-fade" style="--d:3900">claude</span>
+<span class="t-sp a-fade" style="--d:4400">&gt; </span><span class="a-fade" style="--d:4400">/mcp</span>
+<span class="a-fade" style="--d:4900">  agi-devices  <span class="t-key">needs authentication</span>  → <span class="t-ok">Authenticate</span></span>
+<span class="t-dim a-fade" style="--d:5500">  Opening browser for AGI sign-in…</span>
+<span class="a-fade" style="--d:6400">  agi-devices  <span class="t-ok">✓ connected</span> · 14 tools</span>
+
+<span class="t-sp a-fade" style="--d:7000">$ </span><span class="a-fade" style="--d:7000">claude mcp list</span>
+<span class="a-fade" style="--d:7400">agi-devices: https://api.agi.tech/v1/mcp (HTTP) - <span class="t-ok">✓ Connected</span></span></div>
+    </div>
+    <div class="col" style="width:520px;gap:20px;justify-content:center">
+      <div class="card a-rise" style="--d:400"><span class="tag">1 · Add</span><p class="body">Registers the remote server under the name <code>agi-devices</code>.</p></div>
+      <div class="card a-rise" style="--d:600"><span class="tag">2 · Sign in</span><p class="body">Run <code>/mcp</code>, pick <code>agi-devices</code>, finish the browser sign-in.</p></div>
+      <div class="card a-rise" style="--d:800"><span class="tag">3 · Check</span><p class="body"><code>claude mcp list</code> shows it connected. Claude Code stores and refreshes the token.</p></div>
+    </div>
+  </div>
+  <p class="small a-rise" style="--d:1000;position:absolute;left:128px;bottom:52px">Terminal output is illustrative.</p>
+  <aside class="notes">Type along. One command adds the server. Then inside Claude Code run slash mcp, choose agi-devices and complete sign-in in the browser. No API key needed for Claude Code because it does OAuth. If you signed in with the wrong account, Clear authentication from the same menu.</aside>
+</section>
+
+<!-- 11 · Other clients -->
+<section class="slide" id="other-clients" data-sec="Part 2 · Client">
+  <p class="eyebrow a-rise">every other client</p>
+  <h2 class="a-rise" style="--d:100">Same URL, different config</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1">
+    <div class="card a-rise" style="--d:200;gap:14px"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="font-size:36px">Claude Desktop</h3><span class="tag">OAuth via bridge</span></div>
+      <pre class="term" style="margin:0;font-size:20px;line-height:1.4;padding:16px 22px;box-shadow:none">{ <span class="t-key">"mcpServers"</span>: { <span class="t-key">"agi-devices"</span>: {
+    <span class="t-key">"command"</span>: <span class="t-str">"npx"</span>,
+    <span class="t-key">"args"</span>: [<span class="t-str">"mcp-remote"</span>, <span class="t-str">"https://api.agi.tech/v1/mcp"</span>] } } }</pre>
+      <p class="small">In <code>claude_desktop_config.json</code>. Restart after saving. Needs Node 18+.</p></div>
+    <div class="card a-rise" style="--d:300;gap:14px"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="font-size:36px">Cursor</h3><span class="tag">API key</span></div>
+      <pre class="term" style="margin:0;font-size:20px;line-height:1.4;padding:16px 22px;box-shadow:none">{ <span class="t-key">"mcpServers"</span>: { <span class="t-key">"agi-devices"</span>: {
+    <span class="t-key">"url"</span>: <span class="t-str">"https://api.agi.tech/v1/mcp"</span>,
+    <span class="t-key">"headers"</span>: { <span class="t-key">"Authorization"</span>: <span class="t-str">"Bearer YOUR_API_KEY"</span> } } } }</pre>
+      <p class="small">In <code>.cursor/mcp.json</code>. Key from platform.agi.tech/me/api-keys.</p></div>
+    <div class="card a-rise" style="--d:400;gap:14px"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="font-size:36px">ChatGPT</h3><span class="tag">OAuth</span></div>
+      <p class="body" style="font-size:26px">Turn on developer mode in Settings › Apps › Advanced settings. Then Settings › Apps › Create, enter the URL, choose OAuth, select <b>Scan tools</b> and sign in.</p>
+      <p class="small">Plan and workspace availability is set by OpenAI.</p></div>
+    <div class="card a-rise" style="--d:500;gap:14px"><div class="row" style="justify-content:space-between;align-items:center"><h3 style="font-size:36px">VS Code, Windsurf, Zed</h3><span class="tag">API key</span></div>
+      <p class="body" style="font-size:26px">Add a remote HTTP server named <code>agi-devices</code> with header <code>Authorization: Bearer YOUR_API_KEY</code>, then reload.</p>
+      <p class="small">Any other client: OAuth 2.1 discovery or the same header.</p></div>
+  </div>
+  <aside class="notes">If you are not on Claude Code, find your client here. Claude Desktop's config file only launches local servers, so it uses the mcp-remote bridge, which still does OAuth in the browser. Clients without OAuth send an API key as a bearer header. Never paste that key into a shared repo.</aside>
+</section>
+
+<!-- 12 · Auth -->
+<section class="slide" id="auth" data-sec="Part 2 · Auth">
+  <p class="eyebrow a-rise">what the sign-in does</p>
+  <h2 class="a-rise" style="--d:100">OAuth 2.1, discovered automatically</h2>
+  <div class="row" style="flex:1;gap:56px">
+    <div class="grow" style="position:relative">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:12px">
+        <div class="lane-h a-fade" style="--d:150">Your client</div>
+        <div class="lane-h a-fade" style="--d:200">AGI MCP server</div>
+        <div class="lane-h a-fade" style="--d:250">AGI sign-in</div>
+      </div>
+      <div class="seq" id="authseq" style="position:relative">
+        <div class="vline" style="left:16.6%"></div><div class="vline" style="left:50%"></div><div class="vline" style="left:83.3%"></div>
+        <div class="msg"><div class="lb" style="left:17%;width:33%;--d:400" ><span class="a-fade" style="--d:400">request, no token</span></div><div class="ln a-grow" style="left:16.6%;width:33.4%;--d:400"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:33%"><span class="a-fade" style="--d:900"><code>401</code> + where to sign in</span></div><div class="ln rev sp a-grow" style="left:16.6%;width:33.4%;--d:900"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:66%"><span class="a-fade" style="--d:1400">fetch metadata, register client</span></div><div class="ln a-grow" style="left:16.6%;width:66.7%;--d:1400"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:66%"><span class="a-fade" style="--d:1900">browser sign-in · PKCE · <code>email</code> scope</span></div><div class="ln rev sp a-grow" style="left:16.6%;width:66.7%;--d:1900"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:33%"><span class="a-fade" style="--d:2400">retry with <code>Bearer</code> token</span></div><div class="ln a-grow" style="left:16.6%;width:33.4%;--d:2400"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:33%"><span class="a-fade" style="--d:2900"><code>tools/list</code> → phone tools</span></div><div class="ln rev sp a-grow" style="left:16.6%;width:33.4%;--d:2900"></div></div>
+      </div>
+    </div>
+    <div class="col" style="width:560px;gap:24px">
+      <div class="card a-rise" style="--d:500"><span class="tag">Recommended · OAuth</span><p class="body" style="font-size:25px">Add the URL with no token. The client discovers, registers itself and opens the browser. Tokens refresh on their own and are revocable per client.</p></div>
+      <div class="card a-rise" style="--d:700"><span class="tag">Fallback · API key</span><p class="body" style="font-size:25px">For clients without OAuth. Create it at platform.agi.tech/me/api-keys and send it on every request.</p></div>
+      <div class="card a-rise" style="--d:900;background:#fff4ec;border-color:#ffe2cf"><p class="body" style="font-size:25px"><b>Either credential is full control</b> of your registered phones. Treat it like your unlocked phone.</p></div>
+    </div>
+  </div>
+  <aside class="notes">You never do this by hand, but it explains the browser pop-up. The first call has no token, the server answers 401 with a pointer to its metadata, the client registers itself dynamically and runs an authorization-code flow with PKCE. The server requires the email scope. Standards for the curious: RFC 9728 resource metadata, RFC 8414 server metadata, RFC 7591 dynamic registration.</aside>
+</section>
+
+<!-- 13 · Verify -->
+<section class="slide" id="verify" data-sec="Part 2 · Verify">
+  <p class="eyebrow a-rise">prove it</p>
+  <h2 class="a-rise" style="--d:100">Ask: “Which of my phones are online?”</h2>
+  <div class="row" style="flex:1;gap:56px;align-items:stretch">
+    <div class="term grow a-pop" style="--d:250">
+      <div class="term-bar"><i></i><i></i><i></i><span style="margin-left:12px">list_devices → result</span></div>
+      <div class="term-body">{
+  <span class="t-key">"account_email"</span>: <span class="t-str">"you@example.com"</span>,
+  <span class="t-key">"devices"</span>: [ {
+    <span class="t-key">"device_id"</span>: <span class="t-str">"5b6dc94d-615c-461c-b829-c5839b6986e8"</span>,
+    <span class="t-key">"device_name"</span>: <span class="t-str">"samsung SM-S731U1"</span>,
+    <span class="t-key">"status"</span>: <span class="t-ok">"online"</span>,
+    <span class="t-key">"paused"</span>: false,
+    <span class="t-key">"is_default"</span>: true,
+    <span class="t-key">"last_seen"</span>: <span class="t-str">"2026-08-04T00:49:41Z"</span>
+  } ]
+}</div>
+    </div>
+    <div class="col" style="width:600px;gap:24px;justify-content:center">
+      <div class="card a-rise" style="--d:400"><div class="row" style="gap:16px;align-items:center"><span class="dot ok"></span><h3 style="font-size:30px">Phone listed, online</h3></div><p class="body" style="font-size:25px">You're done with setup. Move on.</p></div>
+      <div class="card a-rise" style="--d:600"><div class="row" style="gap:16px;align-items:center"><span class="dot"></span><h3 style="font-size:30px">Call works, no phone</h3></div><p class="body" style="font-size:25px">A phone-side problem. Check the account matches and Developer connection says Connected.</p></div>
+      <div class="card a-rise" style="--d:800"><div class="row" style="gap:16px;align-items:center"><span class="dot" style="background:#111"></span><h3 style="font-size:30px">Only 2 tools</h3></div><p class="body" style="font-size:25px">No device registered yet: only <code>list_devices</code> and <code>set_default_device</code> appear.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Everyone ask your assistant which phones are online. You want to see your device with status online. If the call works but the list is empty, it is almost always the account mismatch. If the tool call itself fails, it's auth or the client config.</aside>
+</section>
+
+<!-- 14 · Section: Run tasks -->
+<section class="slide dark" id="part3" data-sec="Part 3">
+  <div class="glow spark" style="width:1300px;height:1300px;right:-380px;top:-160px;opacity:0.6"></div>
+  <div style="flex:1"></div>
+  <p class="eyebrow a-rise">part 3</p>
+  <h1 class="display a-rise" style="--d:150">Run tasks</h1>
+  <p class="lede a-rise" style="--d:300">Start, monitor, act. Everything else is detail.</p>
+  <aside class="notes">Part 3, the core. First we watch one task end to end, then we take it apart.</aside>
+</section>
+
+<!-- 15 · Demo -->
+<section class="slide" id="demo" data-sec="Part 3 · First task">
+  <div class="row" style="flex:1;gap:72px;align-items:center">
+    <div class="col" style="flex:1;gap:16px;min-width:0">
+      <p class="eyebrow a-rise">your first task</p>
+      <div class="card solid a-rise" style="--d:150;padding:22px 30px;background:#111;color:#f3ece3;border-color:#111;gap:6px"><span class="tag" style="color:#b9b0a6">You</span><p style="font-size:27px;line-height:1.3">Check which of my Android devices are online, then open Settings on my phone and tell me the battery percentage.</p></div>
+      <div class="col" style="gap:10px;font-size:24px">
+        <div class="card a-left" style="--d:900;padding:14px 26px;gap:2px"><span class="mono spark-t" style="font-size:22px">list_devices</span><span class="small">1 device · samsung SM-S731U1 · online · default</span></div>
+        <div class="card a-left" style="--d:1700;padding:14px 26px;gap:2px"><span class="mono spark-t" style="font-size:22px">phone_run_task <span style="color:#8a8580">· "Open Settings and report the battery percentage."</span></span><span class="small">returns at once · task_id · session_id</span></div>
+        <div class="card a-left" style="--d:2600;padding:14px 26px;gap:2px"><span class="mono spark-t" style="font-size:22px">phone_task_monitor</span><span class="small">monitor_timed_out: true · still running, call again</span></div>
+        <div class="card a-left" style="--d:5400;padding:14px 26px;gap:2px"><span class="mono spark-t" style="font-size:22px">phone_task_monitor</span><span class="small">status: completed · terminal: <b style="color:#1d9a36">ok</b> · result: "Battery is at 82%."</span></div>
+      </div>
+      <div class="card solid a-rise" style="--d:6200;padding:20px 30px;gap:6px"><span class="tag">Assistant</span><p style="font-size:27px;line-height:1.3">Your Samsung is online. Battery is at 82%.</p></div>
+    </div>
+    <div class="phone a-pop" style="--d:300">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="scr" id="ph-home" style="opacity:1;background:radial-gradient(circle at 50% 110%, rgba(238,186,135,0.9), #f5f5f5 65%);justify-content:flex-end;padding-bottom:40px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
+            <div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#e8e2da"></div><div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#dfe8ef"></div><div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#efe0d9"></div><div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#5a5550"></div>
+            <div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#e3efe2"></div><div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#f2e7c8"></div><div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#ece3f0"></div><div class="s-ic" style="width:64px;height:64px;border-radius:20px;background:#dde4e8"></div>
+          </div>
+        </div>
+        <div class="scr" id="ph-settings">
+          <div class="s-title">Settings</div>
+          <div class="s-row"><span class="s-ic" style="background:#dfe8ef"></span>Connections</div>
+          <div class="s-row"><span class="s-ic" style="background:#efe0d9"></span>Sounds and vibration</div>
+          <div class="s-row"><span class="s-ic" style="background:#e3efe2"></span>Display</div>
+          <div class="s-row" id="ph-batt-row"><span class="s-ic" style="background:#dff2e2"></span>Battery</div>
+          <div class="s-row"><span class="s-ic" style="background:#f2e7c8"></span>Apps</div>
+          <div class="s-row"><span class="s-ic" style="background:#ece3f0"></span>Accessibility</div>
+        </div>
+        <div class="scr" id="ph-battery">
+          <div class="s-title">Battery</div>
+          <div style="background:rgba(255,255,255,0.85);border-radius:24px;padding:36px 24px;display:flex;flex-direction:column;align-items:center;gap:10px">
+            <div style="font-size:88px;font-weight:700;letter-spacing:-0.05em">82%</div>
+            <div class="s-cap">About 14 h remaining</div>
+            <div style="width:100%;height:16px;border-radius:999px;background:#eee;overflow:hidden"><div style="width:82%;height:100%;background:#1d9a36;border-radius:999px"></div></div>
+          </div>
+          <div class="s-row">Power saving</div>
+          <div class="s-row">Background usage limits</div>
+        </div>
+        <div class="agi-run" id="ph-glow"></div>
+        <div id="ph-tap" class="motion-only" style="position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(255,85,0,0.35);border:3px solid rgba(255,85,0,0.9);opacity:0;left:140px;top:380px;z-index:5"></div>
+      </div>
+    </div>
+  </div>
+  <p class="small a-rise" style="--d:300;position:absolute;left:128px;bottom:52px">Example run. Device and battery values are illustrative.</p>
+  <aside class="notes">Here is a whole task. The user asks in plain language. The assistant lists devices, starts a task, and gets a task id back immediately. It then waits on the monitor. The first monitor call times out because the phone is still working, which is normal. Meanwhile on the phone, the agent opens Settings and Battery. The next monitor call returns completed, terminal ok, with the result text. Press R to replay.</aside>
+</section>
+
+<!-- 16 · The loop -->
+<section class="slide" id="loop" data-sec="Part 3 · The loop">
+  <p class="eyebrow a-rise">the pattern</p>
+  <h2 class="a-rise" style="--d:100">Start. Monitor. Act.</h2>
+  <div class="row" style="flex:1;gap:80px;align-items:center">
+    <div style="position:relative;width:700px;height:640px;flex:none">
+      <svg class="abs" viewBox="0 0 700 640" width="700" height="640" style="position:absolute;inset:0" aria-label="Start, monitor, act loop">
+        <path id="loopring" d="M 350 70 A 260 260 0 1 1 349.9 70" fill="none" stroke="#e1d8cc" stroke-width="4"/>
+        <circle r="13" fill="#ff5500" class="motion-only"><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#loopring"/></animateMotion></circle>
+      </svg>
+      <div class="abs a-pop" style="--d:200;position:absolute;left:225px;top:12px;width:250px;text-align:center"><span class="pill" style="font-size:30px">1 · Start</span></div>
+      <div class="abs a-pop" style="--d:400;position:absolute;left:480px;top:440px;width:250px;text-align:center"><span class="pill spark" style="font-size:30px">2 · Monitor</span></div>
+      <div class="abs a-pop" style="--d:600;position:absolute;left:-20px;top:440px;width:250px;text-align:center"><span class="pill" style="font-size:30px">3 · Act</span></div>
+      <div class="abs a-fade" style="--d:800;position:absolute;left:190px;top:250px;width:320px;text-align:center;display:flex;flex-direction:column;gap:6px">
+        <span class="mono" style="font-size:24px;color:#666">monitor_timed_out: true</span>
+        <span style="font-size:28px;font-weight:600">just call it again</span>
+      </div>
+    </div>
+    <div class="col grow" style="gap:18px">
+      <div class="card a-rise" style="--d:300"><div class="row" style="gap:18px;align-items:baseline"><span class="mono spark-t" style="font-size:28px">phone_run_task</span></div><p class="body" style="font-size:25px">Send a prompt. Get <code>task_id</code> and <code>session_id</code> back right away.</p></div>
+      <div class="card a-rise" style="--d:500"><div class="row" style="gap:18px;align-items:baseline"><span class="mono spark-t" style="font-size:28px">phone_task_monitor</span></div><p class="body" style="font-size:25px">Blocks up to 120 s. Returns the moment the task is paused or completed. Timed out means still working.</p></div>
+      <div class="card a-rise" style="--d:700"><div class="row" style="gap:18px;align-items:baseline"><span class="mono spark-t" style="font-size:28px">read terminal</span></div><p class="body" style="font-size:25px"><code>ok</code> → use <code>result</code>. <code>needs_user_control</code> → answer it. Anything else has a recovery move.</p></div>
+      <p class="small a-rise" style="--d:900">Don't poll with <code>phone_task_status</code>. It is a snapshot, not a wait.</p>
+    </div>
+  </div>
+  <aside class="notes">Every workflow is these three beats. Start returns instantly. Monitor is the entire polling loop: it waits up to two minutes and comes back as soon as something actionable happens. If it comes back with monitor_timed_out true, that is not an error; the phone is still working, call it again. Then act on the terminal.</aside>
+</section>
+
+<!-- 17 · State machine -->
+<section class="slide" id="states" data-sec="Part 3 · Lifecycle">
+  <p class="eyebrow a-rise">task lifecycle</p>
+  <h2 class="a-rise" style="--d:100">Four states, one terminal</h2>
+  <div class="row" style="flex:1;gap:72px;align-items:center">
+    <div style="position:relative;width:860px;height:560px;flex:none">
+      <svg class="abs" viewBox="0 0 860 560" width="860" height="560" style="position:absolute;inset:0" aria-label="Task state machine">
+        <defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#111"/></marker></defs>
+        <g stroke="#111" stroke-width="3" fill="none" marker-end="url(#arw)">
+          <path class="a-draw" style="--len:120;--d:500" d="M 230 150 L 330 150"/>
+          <path class="a-draw" style="--len:120;--d:900" d="M 530 150 L 630 150"/>
+          <path class="a-draw" style="--len:200;--d:1300" d="M 400 200 C 380 280 380 320 400 380"/>
+          <path class="a-draw" style="--len:200;--d:1700" d="M 470 380 C 490 320 490 280 470 200"/>
+        </g>
+        <path id="stpath" d="M 130 150 L 430 150 L 430 150 C 395 260 395 330 430 420 C 470 330 470 260 430 150 L 730 150" fill="none" stroke="none"/>
+        <circle r="12" fill="#ff5500" class="motion-only"><animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;0.22;0.22;0.62;0.62;1;1" keyTimes="0;0.12;0.25;0.5;0.62;0.8;1" calcMode="linear"><mpath href="#stpath"/></animateMotion></circle>
+        <g font-family="Work Sans, system-ui, sans-serif" font-size="20" fill="#666">
+          <text x="280" y="92" text-anchor="middle">picked up</text>
+          <text x="580" y="92" text-anchor="middle">terminal</text>
+          <text x="368" y="296" text-anchor="end">pause</text>
+          <text x="500" y="296">resume</text>
+        </g>
+      </svg>
+      <div class="abs a-pop" style="--d:200;position:absolute;left:30px;top:110px;width:200px;height:80px;border-radius:999px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;font:500 30px var(--f-mono)">pending</div>
+      <div class="abs a-pop" style="--d:600;position:absolute;left:330px;top:110px;width:200px;height:80px;border-radius:999px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font:500 30px var(--f-mono)">running</div>
+      <div class="abs a-pop" style="--d:1000;position:absolute;left:630px;top:110px;width:220px;height:80px;border-radius:999px;background:#ff5500;color:#fff;display:flex;align-items:center;justify-content:center;font:500 30px var(--f-mono)">completed</div>
+      <div class="abs a-pop" style="--d:1400;position:absolute;left:330px;top:380px;width:200px;height:80px;border-radius:999px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;font:500 30px var(--f-mono)">paused</div>
+    </div>
+    <div class="col grow" style="gap:20px">
+      <p class="body a-rise" style="--d:600"><code>pending</code> means the server has it and the phone hasn't started.</p>
+      <p class="body a-rise" style="--d:800"><code>paused</code> keeps the same <code>task_id</code>. Paused time doesn't count against the timeout.</p>
+      <p class="body a-rise" style="--d:1000"><code>completed</code> always carries exactly one <code>terminal</code> that says why.</p>
+    </div>
+  </div>
+  <aside class="notes">Four states. Pending until the phone picks it up, running while it works, paused if you or the phone pause it, completed with exactly one terminal outcome. Pause and resume keep the same task id, and paused time is not counted against the execution deadline.</aside>
+</section>
+
+<!-- 18 · Terminal outcomes -->
+<section class="slide" id="terminals" data-sec="Part 3 · Lifecycle">
+  <p class="eyebrow a-rise">terminal outcomes</p>
+  <h2 class="a-rise" style="--d:100">Every ending has a next move</h2>
+  <table class="t a-rise" style="--d:250">
+    <tr><th style="width:360px">terminal</th><th>meaning</th><th style="width:640px">what to do</th></tr>
+    <tr><td><code style="color:#1d9a36">ok</code></td><td>Finished successfully.</td><td>Read <code>result</code>.</td></tr>
+    <tr><td><code style="color:#c43f00">needs_user_control</code></td><td>The phone needs you: login, confirmation, CAPTCHA.</td><td>Answer with <code>phone_task_message</code>.</td></tr>
+    <tr><td><code>timeout</code></td><td>Ran past its deadline.</td><td>Raise <code>per_call_timeout_s</code> or narrow the prompt.</td></tr>
+    <tr><td><code>queue_wait_exceeded</code></td><td>The phone never started it.</td><td>Check online and free, start a new task.</td></tr>
+    <tr><td><code>stopped_by_user</code></td><td>Cancelled, ended, or displaced by a new task.</td><td>Start a new task if still needed.</td></tr>
+    <tr><td><code>agent_error</code></td><td>The phone agent failed.</td><td>Retry. Read <code>error</code>.</td></tr>
+    <tr><td><code>device_offline</code></td><td>Couldn't reach the device.</td><td>Reconnect the phone, retry.</td></tr>
+    <tr><td><code>session_expired</code></td><td>Session ended first.</td><td>New session, new task.</td></tr>
+    <tr><td><code>iteration_limit</code></td><td>Hit the agent's action limit.</td><td>Split into smaller tasks.</td></tr>
+  </table>
+  <aside class="notes">This table is your error handling. Two rows matter most: ok, where you read result, and needs_user_control, which is not a failure but a handoff, next slide. For timeouts the default execution deadline is 300 seconds, maximum 900. Queue wait defaults to 60, maximum 300.</aside>
+</section>
+
+<!-- 19 · Handoff -->
+<section class="slide" id="handoff" data-sec="Part 3 · Handoffs">
+  <p class="eyebrow a-rise">human in the loop</p>
+  <h2 class="a-rise" style="--d:100">When the phone hands control back</h2>
+  <div class="row" style="flex:1;gap:56px">
+    <div class="grow" style="position:relative">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:12px">
+        <div class="lane-h a-fade" style="--d:150">Assistant</div>
+        <div class="lane-h a-fade" style="--d:200">AGI cloud</div>
+        <div class="lane-h a-fade" style="--d:250">Phone + you</div>
+      </div>
+      <div class="seq" style="position:relative">
+        <div class="vline" style="left:16.6%"></div><div class="vline" style="left:50%"></div><div class="vline" style="left:83.3%"></div>
+        <div class="msg"><div class="lb" style="left:50%;width:33%"><span class="a-fade" style="--d:500">login screen → <code>need_login</code></span></div><div class="ln rev sp a-grow" style="left:50%;width:33.3%;--d:500"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:33%"><span class="a-fade" style="--d:1000">monitor: <code>needs_user_control</code></span></div><div class="ln rev sp a-grow" style="left:16.6%;width:33.4%;--d:1000"></div></div>
+        <div class="msg"><div class="lb" style="left:52%;width:29%;text-align:right;top:30px"><span class="a-fade" style="--d:1500">you sign in on the phone</span></div><div class="a-pop" style="--d:1500;position:absolute;left:calc(83.3% - 12px);top:34px;width:24px;height:24px;border-radius:50%;background:#ff5500"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:33%"><span class="a-fade" style="--d:2000"><code>phone_task_message</code></span></div><div class="ln a-grow" style="left:16.6%;width:33.4%;--d:2000"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:33%"><span class="a-fade" style="--d:2500">→ <code>continuation_task_id</code></span></div><div class="ln rev sp a-grow" style="left:16.6%;width:33.4%;--d:2500"></div></div>
+        <div class="msg"><div class="lb" style="left:17%;width:66%"><span class="a-fade" style="--d:3000">monitor the <b>continuation</b> until <code>ok</code></span></div><div class="ln a-grow" style="left:16.6%;width:66.7%;--d:3000"></div></div>
+      </div>
+    </div>
+    <div class="col" style="width:540px;gap:22px">
+      <div class="card a-rise" style="--d:400"><span class="tag">Triggers</span><p class="body" style="font-size:24px">Logins, confirmations, CAPTCHAs, or the agent asking a question. Read <code>error.control_type</code> and <code>error.prompt</code>.</p></div>
+      <div class="card a-rise" style="--d:600"><span class="tag">Success signal</span><p class="body" style="font-size:24px">A <code>continuation_task_id</code> in the reply. <code>delivered_to_device: false</code> is fine here.</p></div>
+      <div class="card a-rise" style="--d:800;background:#fff4ec;border-color:#ffe2cf"><p class="body" style="font-size:24px"><b>Never send passwords through messages.</b> Let the user finish the step on the device.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Sensitive moments are never handled by the agent alone. The task completes with needs_user_control. The assistant tells you what the phone needs, you finish it on the phone, and the assistant sends a short acknowledgement with phone_task_message. That returns a continuation task id, and that is what you monitor next. The original task never runs again. A continuation can itself hand off again; repeat.</aside>
+</section>
+
+<!-- 20 · Tools -->
+<section class="slide" id="tools" data-sec="Part 3 · Tools">
+  <p class="eyebrow a-rise">the toolbox</p>
+  <h2 class="a-rise" style="--d:100">Fourteen tools, four jobs</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:28px;flex:1">
+    <div class="card a-rise" style="--d:200;gap:18px"><span class="tag">Devices</span>
+      <span class="mono" style="font-size:24px">list_devices</span><span class="mono" style="font-size:24px">set_default_device</span><span class="mono" style="font-size:24px">phone_device_status</span><span class="mono" style="font-size:24px">phone_device_pause</span><span class="mono" style="font-size:24px">phone_device_resume</span>
+      <p class="small" style="margin-top:auto">Find phones, pick a default, check health, stop new work.</p></div>
+    <div class="card a-rise" style="--d:300;gap:18px"><span class="tag">State</span>
+      <span class="mono" style="font-size:24px">phone_get_state</span>
+      <p class="small" style="margin-top:auto">Read-only snapshot: battery, network, locale, current app, launchable apps. No IMEI, contacts or location.</p></div>
+    <div class="card a-rise" style="--d:400;gap:18px"><span class="tag">Sessions</span>
+      <span class="mono" style="font-size:24px">phone_session_start</span><span class="mono" style="font-size:24px">phone_session_end</span>
+      <p class="small" style="margin-top:auto">Group a workflow on one phone. Usually automatic.</p></div>
+    <div class="card a-rise" style="--d:500;gap:18px;background:#111;border-color:#111;color:#f3ece3"><span class="tag" style="color:#b9b0a6">Tasks</span>
+      <span class="mono" style="font-size:24px;color:#ff8a4c">phone_run_task</span><span class="mono" style="font-size:24px;color:#ff8a4c">phone_task_monitor</span><span class="mono" style="font-size:24px">phone_task_status</span><span class="mono" style="font-size:24px">phone_task_message</span><span class="mono" style="font-size:24px">phone_task_pause</span><span class="mono" style="font-size:24px">phone_task_resume</span><span class="mono" style="font-size:24px">phone_task_cancel</span>
+      <p class="small" style="margin-top:auto;color:#b9b0a6">Start, wait, steer, pause, resume, cancel.</p></div>
+  </div>
+  <p class="body a-rise" style="--d:700">In practice you configure <b>one</b> tool, <code>phone_run_task</code>. The rest are handled by your assistant.</p>
+  <aside class="notes">Fourteen tools, but you will mostly use two: run task and monitor. The device tools find phones and act as a kill switch. Get state grounds a workflow, for example to check an app is installed before asking for it. The tool list depends on the app version the phone advertises, so keep the app updated.</aside>
+</section>
+
+<!-- 21 · Devices & sessions -->
+<section class="slide" id="lanes" data-sec="Part 3 · Sessions">
+  <p class="eyebrow a-rise">devices and sessions</p>
+  <h2 class="a-rise" style="--d:100">One phone, one task at a time</h2>
+  <div class="row" style="flex:1;gap:72px;align-items:center">
+    <div class="col" style="width:820px;gap:26px">
+      <div class="card solid a-rise" style="--d:200;gap:20px">
+        <span class="tag">Execution lane · samsung SM-S731U1</span>
+        <div style="position:relative;height:120px;border-radius:20px;background:#f5f1eb;overflow:hidden">
+          <div id="laneOld" style="position:absolute;left:20px;top:20px;width:560px;height:80px;border-radius:999px;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,0.08);display:flex;align-items:center;gap:16px;padding:0 28px;font-size:24px"><span class="mono">task A</span><span class="small" id="laneOldTxt">running</span></div>
+          <div id="laneNew" class="motion-only" style="position:absolute;left:20px;top:20px;width:560px;height:80px;border-radius:999px;background:#111;color:#fff;display:flex;align-items:center;gap:16px;padding:0 28px;font-size:24px;opacity:0"><span class="mono" style="color:#ff8a4c">task B</span><span style="font-size:22px;color:#b9b0a6">new phone_run_task</span></div>
+        </div>
+        <p class="body" style="font-size:26px">A new <code>phone_run_task</code> on the same phone cancels the old MCP task with <code>stopped_by_user</code>. A task you started in the app itself is not cancelled; it holds the lane and the MCP task waits as <code>pending</code>.</p>
+      </div>
+    </div>
+    <div class="col grow" style="gap:18px">
+      <table class="t a-rise" style="--d:400">
+        <tr><th>situation</th><th>do this</th></tr>
+        <tr><td>Follow-up, same workflow</td><td>Reuse the <code>session_id</code></td></tr>
+        <tr><td>Unrelated errand</td><td>Let <code>phone_run_task</code> decide</td></tr>
+        <tr><td>One task went wrong</td><td><code>phone_task_cancel</code>, keep session</td></tr>
+        <tr><td>Workflow finished</td><td><code>phone_session_end</code></td></tr>
+        <tr><td>Parallel work</td><td>One phone per workflow</td></tr>
+      </table>
+      <p class="small a-rise" style="--d:600">Changing the default device never reroutes a session that already started.</p>
+    </div>
+  </div>
+  <aside class="notes">Each phone is a single lane. Starting a new task replaces the old MCP task. That catches people out when two assistants share a phone. Sessions keep a multi-step workflow on one phone; your assistant passes the session id for follow-ups. End the session only when the whole workflow is done, because ending it cancels anything left in it.</aside>
+</section>
+
+<!-- 22 · Prompting -->
+<section class="slide cream" id="prompts" data-sec="Part 3 · Prompting">
+  <p class="eyebrow a-rise">task design</p>
+  <h2 class="a-rise" style="--d:100">Prompts that hold up on a real screen</h2>
+  <div class="row" style="gap:40px;flex:1">
+    <div class="col grow" style="gap:14px">
+      <div class="card a-left" style="--d:200;padding:18px 28px;gap:2px"><h3 style="font-size:29px">One errand per task</h3><p class="body" style="font-size:24px">Chain follow-ups in the same session. Big prompts burn the timeout.</p></div>
+      <div class="card a-left" style="--d:300;padding:18px 28px;gap:2px"><h3 style="font-size:29px">Name apps and people exactly</h3><p class="body" style="font-size:25px">“WhatsApp, not WhatsApp Business. Chat with Sam Rivera.”</p></div>
+      <div class="card a-left" style="--d:400;padding:18px 28px;gap:2px"><h3 style="font-size:29px">Gate anything that acts</h3><p class="body" style="font-size:25px">“Show me the draft and wait for my OK before sending.”</p></div>
+      <div class="card a-left" style="--d:500;padding:18px 28px;gap:2px"><h3 style="font-size:29px">Say what the result looks like</h3><p class="body" style="font-size:25px">“Airline / time / price, one per line. Say so if none.”</p></div>
+      <div class="card a-left" style="--d:600;padding:18px 28px;gap:2px"><h3 style="font-size:29px">Draw read-only lines</h3><p class="body" style="font-size:25px">“Don't reply, don't archive, don't open links.”</p></div>
+    </div>
+    <div class="col" style="width:760px;gap:24px">
+      <div class="card solid a-rise" style="--d:400;gap:12px;border:2px solid #f2c9c7"><span class="tag" style="color:#b3302d">Fragile</span><p class="mono" style="font-size:24px;line-height:1.5;color:#444">Check my battery, then go through all my unread email, reply to the important ones, find me a flight to Denver, and update my calendar.</p></div>
+      <div class="card solid a-rise" style="--d:600;gap:12px;border:2px solid #bfe3c6"><span class="tag" style="color:#1d7a30">Reliable</span><p class="mono" style="font-size:24px;line-height:1.5;color:#444">On my phone, open my calendar and tell me my first three events today. Don't change anything. If unsure, stop and ask me.</p></div>
+      <p class="small a-rise" style="--d:800">Always include an escape hatch: “if you're unsure, stop and ask me.” It turns a wrong guess into a handoff.</p>
+    </div>
+  </div>
+  <aside class="notes">The difference between flaky and reliable is almost always the prompt. Five habits. Size each task to one errand. Name apps and contacts exactly as they appear on the phone; use phone_get_state to check what's installed. Put a confirmation gate on anything that sends, buys, deletes or changes settings. Specify the output shape. And say what not to do on read-only tasks.</aside>
+</section>
+
+<!-- 23 · Section: Go deeper -->
+<section class="slide dark" id="part4" data-sec="Part 4">
+  <div class="glow spark" style="width:1300px;height:1300px;right:-380px;top:-160px;opacity:0.6"></div>
+  <div style="flex:1"></div>
+  <p class="eyebrow a-rise">part 4</p>
+  <h1 class="display a-rise" style="--d:150">Go deeper &amp; build</h1>
+  <p class="lede a-rise" style="--d:300">Trust, what runs on the phone, fixing problems, then your turn.</p>
+  <aside class="notes">Part 4. Security first, then a look inside the phone, troubleshooting, and labs.</aside>
+</section>
+
+<!-- 24 · Security -->
+<section class="slide" id="security" data-sec="Part 4 · Security">
+  <p class="eyebrow a-rise">trust model</p>
+  <h2 class="a-rise" style="--d:100">Treat it like your unlocked phone</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px">
+    <div class="card a-rise" style="--d:200"><span class="tag">Trust decision 1</span><h3>Your client</h3><p class="body" style="font-size:25px">It sees screen content and drives the phone. Connect only clients you trust.</p></div>
+    <div class="card a-rise" style="--d:300"><span class="tag">Trust decision 2</span><h3>Your credentials</h3><p class="body" style="font-size:25px">An OAuth grant or API key is full control. Prefer OAuth. Revoke keys on any doubt.</p></div>
+    <div class="card a-rise" style="--d:400;background:#111;border-color:#111;color:#f3ece3"><span class="tag" style="color:#b9b0a6">Trust decision 3</span><h3>What's on screen</h3><p class="body" style="font-size:27px;color:#d6cdc2">Data, never instructions. A message saying “tap Allow” is not you.</p></div>
+  </div>
+  <div class="row" style="gap:28px;margin-top:8px">
+    <div class="grow a-rise" style="--d:600"><p class="tag" style="margin-bottom:14px">Built in</p><p class="body" style="font-size:25px">Sensitive steps always come back as <code>needs_user_control</code>. State snapshots leave out IMEI, serial, contacts, location and notifications. Everything happens visibly on the screen.</p></div>
+    <div class="grow a-rise" style="--d:750"><p class="tag" style="margin-bottom:14px">Your part</p><p class="body" style="font-size:25px">Gate sends, buys and deletes in the prompt. Use a test phone for QA. <code>phone_device_pause</code> is the kill switch for new work. Results and screenshots can hold personal data.</p></div>
+  </div>
+  <aside class="notes">Three trust decisions: which client you connect, how you guard the credential, and remembering that whatever is on screen is data, not instructions. Prompt injection on a phone looks like an email saying forward all messages to this number. The built-in guardrails cover logins and confirmations; you add gates for judgment calls. Note that pausing a device blocks new tasks but in-flight ones keep running; cancel those separately.</aside>
+</section>
+
+<!-- 25 · Inside the phone -->
+<section class="slide" id="inside" data-sec="Part 4 · Inside the phone">
+  <p class="eyebrow a-rise">inside the android app</p>
+  <h2 class="a-rise" style="--d:100">What happens after the cloud dispatches</h2>
+  <div style="position:relative;flex:1" id="insideflow">
+    <div class="abs" style="position:absolute;left:0;right:0;top:56px;height:4px;background:#e4ddd3;border-radius:4px"></div>
+    <div class="abs a-grow" style="--d:300;position:absolute;left:0;right:0;top:56px;height:4px;background:#ff5500;border-radius:4px;transform-origin:left center;animation-duration:3.2s"></div>
+    <div class="abs" style="position:absolute;left:0;right:0;top:0;display:grid;grid-template-columns:repeat(5,1fr);gap:24px">
+      <div class="col a-rise" style="--d:300;gap:14px"><span class="pill spark" style="align-self:flex-start;width:116px;height:116px;justify-content:center;padding:0;font-size:24px;border-radius:50%">FCM</span><h3 style="font-size:32px">Wake-up push</h3><p class="body" style="font-size:24px" id="in-1">Agents API stores the task and sends an FCM <code>remote_task</code> push that only references it.</p></div>
+      <div class="col a-rise" style="--d:900;gap:14px"><span class="pill" style="align-self:flex-start;width:116px;height:116px;justify-content:center;padding:0;font-size:24px;border-radius:50%">Fetch</span><h3 style="font-size:32px">Load the task</h3><p class="body" style="font-size:24px" id="in-2">The app fetches the prompt and deadline from Agents API, retrying through replica lag.</p></div>
+      <div class="col a-rise" style="--d:1500;gap:14px"><span class="pill" style="align-self:flex-start;width:116px;height:116px;justify-content:center;padding:0;font-size:24px;border-radius:50%">Claim</span><h3 style="font-size:32px">Own the lane</h3><p class="body" style="font-size:24px" id="in-3">Persisted so it survives process death, then queued on the one device lane chat and voice also use.</p></div>
+      <div class="col a-rise" style="--d:2100;gap:14px"><span class="pill" style="align-self:flex-start;width:116px;height:116px;justify-content:center;padding:0;font-size:24px;border-radius:50%">Act</span><h3 style="font-size:32px">Step loop</h3><p class="body" style="font-size:24px" id="in-4">Each step asks the action model what to do next. Accessibility taps and types it.</p></div>
+      <div class="col a-rise" style="--d:2700;gap:14px"><span class="pill" style="align-self:flex-start;width:116px;height:116px;justify-content:center;padding:0;font-size:24px;border-radius:50%">Report</span><h3 style="font-size:32px">Steps and result</h3><p class="body" style="font-size:24px" id="in-5">Steps with screenshot thumbnails, then one terminal result. Retried up to 30 times; the first result wins.</p></div>
+    </div>
+  </div>
+  <p class="small a-rise" style="--d:3200">Source: <code>feature/remote-control</code> in agi-inc/mobile. One agent loop serves chat, voice and remote tasks, which is why the phone runs one task at a time.</p>
+  <aside class="notes">For the engineers. The cloud never holds a socket open to your phone. It stores the task and sends a push that points at it. The app fetches the task, claims the one agent loop on the phone, and runs a step loop: send the screen to the action model, get the next action, perform it through Accessibility. Progress and the final result go back to the Agents API with retries. That single shared agent loop is why each phone is one execution lane.</aside>
+</section>
+
+<!-- 26 · Wire -->
+<section class="slide" id="wire" data-sec="Part 4 · Inside the phone">
+  <p class="eyebrow a-rise">for engineers</p>
+  <h2 class="a-rise" style="--d:100">The phone's side of the contract</h2>
+  <div class="row" style="flex:1;gap:48px;align-items:stretch">
+    <div class="col" style="width:720px;gap:18px">
+      <div class="card a-rise" style="--d:200;gap:8px;padding:26px 32px"><span class="tag">Register</span><p class="mono" style="font-size:23px">POST /v1/devices/register</p><p class="body" style="font-size:23px">FCM token, device model, OS and app version, and the tools the app can answer itself. The response <code>id</code> is the Device ID on the Developer screen.</p></div>
+      <div class="card a-rise" style="--d:350;gap:8px;padding:26px 32px"><span class="tag">Stay alive</span><p class="mono" style="font-size:23px">POST /v1/devices/{id}/heartbeat</p><p class="body" style="font-size:23px">Every 15 minutes and after each push. A 404 triggers a fresh registration.</p></div>
+      <div class="card a-rise" style="--d:500;gap:8px;padding:26px 32px"><span class="tag">Answer directly</span><p class="mono" style="font-size:23px">mcp_request → POST /v1/devices/{id}/mcp-result</p><p class="body" style="font-size:23px"><code>phone_get_state</code> never starts the agent. The phone collects the snapshot and replies within 10 s.</p></div>
+    </div>
+    <div class="col grow" style="gap:16px">
+      <p class="tag a-rise" style="--d:300">Push types the phone accepts</p>
+      <table class="t a-rise" style="--d:400">
+        <tr><th>FCM type</th><th>what the phone does</th></tr>
+        <tr><td><code>remote_task</code></td><td>Fetch the task, queue it, run it</td></tr>
+        <tr><td><code>remote_followup</code></td><td>Deliver a steering message to the running task</td></tr>
+        <tr><td><code>remote_pause</code></td><td>Pause the task in place</td></tr>
+        <tr><td><code>remote_resume</code></td><td>Resume with an optional new instruction</td></tr>
+        <tr><td><code>remote_cancel</code></td><td>Stop it, stamped with a <code>stop_reason</code></td></tr>
+        <tr><td><code>mcp_request</code></td><td>Answer a direct tool call</td></tr>
+      </table>
+      <p class="small a-rise" style="--d:600">Every push carries an id, never the content. The phone fetches each body by reference, so a large prompt never hits FCM's payload size limit.</p>
+    </div>
+  </div>
+  <aside class="notes">For the engineers in the room. The phone registers its push token with the Agents API under your Clerk identity, heartbeats every fifteen minutes, and is woken by FCM pushes that carry only references. Six push types map onto the MCP tools you already know: run, follow-up message, pause, resume, cancel. phone_get_state is special: it is answered by the phone directly without running the agent, which is why it needs no extra permissions and returns fast.</aside>
+</section>
+
+<!-- 27 · Troubleshooting -->
+<section class="slide" id="triage" data-sec="Part 4 · Troubleshooting">
+  <p class="eyebrow a-rise">when it doesn't work</p>
+  <h2 class="a-rise" style="--d:100">The 60-second triage</h2>
+  <div class="row" style="flex:1;gap:56px;align-items:stretch">
+    <div class="col" style="width:880px;gap:0">
+      <div class="row a-left" style="--d:200;gap:24px;align-items:center"><span class="pill" style="width:60px;justify-content:center;padding:10px 0">1</span><h3 style="font-size:34px">Can you call <code>list_devices</code>?</h3></div>
+      <p class="body a-fade" style="--d:350;font-size:26px;padding:10px 0 26px 84px;border-left:3px solid #e4ddd3;margin-left:28px">No → authentication or client config. Check the URL, re-run sign-in, check the key.</p>
+      <div class="row a-left" style="--d:500;gap:24px;align-items:center"><span class="pill" style="width:60px;justify-content:center;padding:10px 0">2</span><h3 style="font-size:34px">Is the phone online and unpaused?</h3></div>
+      <p class="body a-fade" style="--d:650;font-size:26px;padding:10px 0 26px 84px;border-left:3px solid #e4ddd3;margin-left:28px">No → phone side. Same account? Developer connection says Connected? Tap Refresh.</p>
+      <div class="row a-left" style="--d:800;gap:24px;align-items:center"><span class="pill spark" style="width:60px;justify-content:center;padding:10px 0">3</span><h3 style="font-size:34px">What does the task say?</h3></div>
+      <p class="body a-fade" style="--d:950;font-size:26px;padding:10px 0 0 84px;margin-left:28px"><code>phone_task_status</code>: its <code>status</code>, <code>terminal</code> and <code>error</code> almost always name the problem.</p>
+    </div>
+    <div class="col grow" style="gap:20px">
+      <p class="tag a-rise" style="--d:300">Know your error layer</p>
+      <div class="card a-rise" style="--d:400;padding:26px 32px;gap:6px"><span class="mono spark-t" style="font-size:26px">HTTP 401</span><p class="body" style="font-size:25px">Credentials never reached MCP.</p></div>
+      <div class="card a-rise" style="--d:550;padding:26px 32px;gap:6px"><span class="mono spark-t" style="font-size:26px">JSON-RPC error</span><p class="body" style="font-size:25px"><code>device_paused</code>, <code>task_not_found</code>. Fix the call.</p></div>
+      <div class="card a-rise" style="--d:700;padding:26px 32px;gap:6px"><span class="mono spark-t" style="font-size:26px">Task terminal</span><p class="body" style="font-size:25px">The task ran and ended. Use the outcomes table.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Three questions in order. Can you list devices at all: if not, it's auth or client. Is the phone there, online and not paused: if not, it's the phone. Otherwise ask the task itself with phone_task_status. Knowing which layer the error comes from saves most of the debugging time. Stuck pending usually means the phone is offline, paused, or busy with a task started in the app.</aside>
+</section>
+
+<!-- 28 · Labs -->
+<section class="slide cream" id="labs" data-sec="Part 4 · Labs">
+  <p class="eyebrow a-rise">your turn · 25 minutes</p>
+  <h2 class="a-rise" style="--d:100">Four labs on your own phone</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1">
+    <div class="card solid a-rise" style="--d:200;gap:12px"><div class="row" style="justify-content:space-between"><span class="tag">Lab 1 · 5 min</span><span class="tag spark-t">the loop</span></div><p class="mono" style="font-size:23px;line-height:1.5">Open Settings on my phone and tell me the battery percentage.</p><p class="small">Watch for: <code>phone_run_task</code>, then <code>phone_task_monitor</code> until <code>ok</code>.</p></div>
+    <div class="card solid a-rise" style="--d:300;gap:12px"><div class="row" style="justify-content:space-between"><span class="tag">Lab 2 · 5 min</span><span class="tag spark-t">read-only</span></div><p class="mono" style="font-size:23px;line-height:1.5">Open my calendar and list my first three events today as time / title. Don't change anything.</p><p class="small">Watch for: a structured <code>result</code>, no edits on the phone.</p></div>
+    <div class="card solid a-rise" style="--d:400;gap:12px"><div class="row" style="justify-content:space-between"><span class="tag">Lab 3 · 8 min</span><span class="tag spark-t">handoff</span></div><p class="mono" style="font-size:23px;line-height:1.5">In WhatsApp, draft “workshop test” to my own chat. Ask me before sending.</p><p class="small">Watch for: <code>needs_user_control</code>, your reply, a <code>continuation_task_id</code>.</p></div>
+    <div class="card solid a-rise" style="--d:500;gap:12px"><div class="row" style="justify-content:space-between"><span class="tag">Lab 4 · 7 min</span><span class="tag spark-t">control</span></div><p class="mono" style="font-size:23px;line-height:1.5">Start a long browse task, then steer it mid-run, pause it, resume it, and finally pause the whole device.</p><p class="small">Watch for: <code>phone_task_message</code>, <code>phone_task_pause</code>, <code>phone_device_pause</code>.</p></div>
+  </div>
+  <aside class="notes">Pair up if your phone isn't working. Lab 1 proves the loop. Lab 2 practises output shape and read-only boundaries. Lab 3 is the important one: you will see a handoff, answer it, and follow the continuation task. Lab 4 is the control surface. Remember to resume your device at the end with phone_device_resume.</aside>
+</section>
+
+<!-- 29 · Close -->
+<section class="slide" id="close" data-sec="Wrap-up">
+  <div class="glow" style="width:1500px;height:1500px;right:-560px;top:-320px"></div>
+  <div style="flex:1"></div>
+  <p class="eyebrow a-rise">keep going</p>
+  <h1 class="display a-rise" style="--d:150;max-width:1100px">Questions?</h1>
+  <div class="col a-rise" style="--d:350;gap:16px;max-width:1080px">
+    <div class="row" style="gap:28px;align-items:baseline"><span class="tag" style="width:200px;flex:none">Server</span><span class="mono" style="font-size:32px">https://api.agi.tech/v1/mcp</span></div>
+    <div class="row" style="gap:28px;align-items:baseline"><span class="tag" style="width:200px;flex:none">Docs</span><a class="mono" style="font-size:32px;color:#111" href="https://docs.agi.tech" target="_blank" rel="noopener">docs.agi.tech</a></div>
+    <div class="row" style="gap:28px;align-items:baseline"><span class="tag" style="width:200px;flex:none">API keys</span><a class="mono" style="font-size:32px;color:#111" href="https://platform.agi.tech/me/api-keys" target="_blank" rel="noopener">platform.agi.tech/me/api-keys</a></div>
+    <div class="row" style="gap:28px;align-items:baseline"><span class="tag" style="width:200px;flex:none">Support</span><span class="mono" style="font-size:32px;user-select:all">support@theagi.company</span></div>
+  </div>
+  <aside class="notes">That's the end-to-end path. The docs site has a page per tool and symptom-based troubleshooting. If something broke during the labs, email support with the tool call, the full error and the task id.</aside>
+</section>
+
+</div>
+
+<div id="notes" hidden></div>
+<div id="hud" role="toolbar" aria-label="Slide controls">
+  <button type="button" class="nav-only" id="b-prev" aria-label="Previous slide">←</button>
+  <span class="count nav-only" id="b-count">1 / 1</span>
+  <button type="button" class="nav-only" id="b-next" aria-label="Next slide">→</button>
+  <button type="button" id="b-replay" class="nav-only" aria-label="Replay slide animation">Replay</button>
+  <button type="button" id="b-notes" aria-label="Toggle speaker notes">Notes</button>
+  <button type="button" id="b-full" class="nav-only" aria-label="Toggle fullscreen">Full</button>
+</div>
+
+<script>
+(function () {
+  const MARK = '<svg viewBox="0 0 566 274" aria-hidden="true"><path fill="currentColor" d="M566.3 137c0 27.1-8 53.6-23.1 76.1-15.1 22.6-36.5 40.1-61.5 50.5-25 10.4-52.6 13.1-79.2 7.8-26.6-5.3-51-18.3-70.2-37.5L194.5 78.4c-11.6-11.3-26.2-19-42.1-22.1-15.9-3-32.4-1.3-47.3 4.9-14.9 6.3-27.7 16.8-36.7 30.3-9 13.5-13.7 29.3-13.7 45.5s4.8 32 13.7 45.5c9 13.5 21.7 24 36.7 30.3 14.9 6.3 31.4 8 47.3 4.9 15.9-3 30.6-10.7 42.1-22.1l7-7.9c4.8-5.4 11.6-8.7 18.9-9.2 7.2-.4 14.3 2 19.8 6.8 5.4 4.8 8.7 11.6 9.2 18.9.4 7.2-2 14.3-6.8 19.8l-7.6 8.6C214.7 253.1 190.3 266.2 163.7 271.4c-26.6 5.3-54.1 2.6-79.2-7.8-25-10.4-46.4-27.9-61.5-50.5C8 190.6 0 164.1 0 137s8-53.6 23.1-76.1C38.1 38.4 59.5 20.8 84.6 10.4 109.6.1 137.2-2.6 163.7 2.6c26.6 5.3 51 18.3 70.2 37.5l137.8 155.6c11.6 11.3 26.2 19 42.1 22.1 15.9 3 32.4 1.3 47.3-4.9 14.9-6.3 27.7-16.8 36.7-30.3 9-13.5 13.7-29.3 13.7-45.5s-4.8-32-13.7-45.5c-9-13.5-21.7-24-36.7-30.3-14.9-6.3-31.4-8-47.3-4.9-15.9 3-30.6 10.7-42.1 22.1l-7 7.9c-4.8 5.4-11.6 8.7-18.9 9.2-7.2.4-14.3-2-19.8-6.8-5.4-4.8-8.7-11.6-9.2-18.9-.4-7.2 2-14.3 6.8-19.8l7.6-8.6C351.5 21 375.9 7.9 402.5 2.6c26.6-5.3 54.1-2.6 79.2 7.8 25 10.4 46.4 27.9 61.5 50.5 15.1 22.5 23.1 49 23.1 76.1z"/></svg>';
+
+  const vp = document.getElementById('viewport');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const frames = slides.map(function (s) { const f = document.createElement('div'); f.className = 'frame'; s.parentNode.insertBefore(f, s); f.appendChild(s); return f; });
+  const total = slides.length;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  slides.forEach(function (s, i) {
+    const logo = document.createElement('div'); logo.className = 'chrome-logo abs'; logo.innerHTML = MARK + '<span>AGI</span>';
+    const sec = document.createElement('div'); sec.className = 'chrome-sec abs'; sec.textContent = s.dataset.sec || '';
+    const num = document.createElement('div'); num.className = 'chrome-num abs'; num.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    s.appendChild(logo); if (i > 0) s.appendChild(sec); s.appendChild(num);
+  });
+
+  let idx = 0, stack = false, timers = [];
+  const store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+  function layout() {
+    const w = vp.clientWidth, h = window.innerHeight;
+    const pad = Math.max(16, parseFloat(getComputedStyle(vp).paddingLeft) || 16);
+    stack = w < 760 || (w < 1000 && h > w * 1.1);
+    document.body.classList.toggle('stack', stack);
+    let s, ox, oy;
+    if (stack) { s = (w - pad * 2) / 1920; ox = 0; oy = 0; }
+    else { s = Math.min((w - pad * 2) / 1920, (h - 32) / 1080); ox = (w - 1920 * s) / 2; oy = (h - 1080 * s) / 2; }
+    vp.style.setProperty('--s', s); vp.style.setProperty('--ox', ox + 'px'); vp.style.setProperty('--oy', oy + 'px');
+    if (stack) observe();
+  }
+
+  let io = null;
+  function observe() {
+    if (io || !('IntersectionObserver' in window)) { if (!io) slides.forEach(function (s) { s.classList.add('on'); }); return; }
+    io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting && !e.target.classList.contains('on')) { e.target.classList.add('on'); runScript(e.target); } }); }, { threshold: 0.35 });
+    slides.forEach(function (s) { io.observe(s); });
+  }
+
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+  function typeInto(el) {
+    const full = el.dataset.type; const delay = +el.dataset.delay || 0;
+    if (reduced) { el.textContent = full; return; }
+    el.textContent = ''; el.classList.add('caret');
+    let i = 0;
+    later(function tick() { i++; el.textContent = full.slice(0, i); if (i < full.length) later(tick, 26); else later(function () { el.classList.remove('caret'); }, 400); }, delay);
+  }
+
+  const scripts = {
+    'phone-setup': function () {
+      const st = document.getElementById('dev-status'), cap = document.getElementById('dev-cap'), ic = document.getElementById('dev-ic'), btn = document.getElementById('dev-btn');
+      const set = function (label, color, bg, caption, b) { st.textContent = label; st.style.color = color; ic.style.background = bg; ic.style.color = color; cap.textContent = caption; btn.textContent = b; };
+      const off = 'You control when this phone is available to developer tools.';
+      set('Not connected', '#666666', '#ececec', off, 'Connect device');
+      later(function () { set('Connecting', '#c98a00', '#fbf0d6', off, 'Connect device'); }, 1600);
+      later(function () { set('Connected', '#1d9a36', '#dff2e2', 'You can control this phone using your MCP client', 'Disconnect device'); }, 3200);
+    },
+    'demo': function () {
+      const home = document.getElementById('ph-home'), set = document.getElementById('ph-settings'), bat = document.getElementById('ph-battery'), glow = document.getElementById('ph-glow'), tap = document.getElementById('ph-tap'), row = document.getElementById('ph-batt-row');
+      const show = function (el) { [home, set, bat].forEach(function (x) { x.style.transition = 'opacity .5s'; x.style.opacity = x === el ? 1 : 0; }); };
+      const tapAt = function (x, y) { tap.style.transition = 'none'; tap.style.left = x + 'px'; tap.style.top = y + 'px'; tap.style.opacity = 1; tap.style.transform = 'scale(.6)'; requestAnimationFrame(function () { tap.style.transition = 'opacity .6s, transform .6s'; tap.style.transform = 'scale(1.3)'; tap.style.opacity = 0; }); };
+      show(home); glow.style.transition = 'none'; glow.style.opacity = 0; row.style.background = '';
+      later(function () { glow.style.transition = 'opacity .8s, box-shadow .8s'; glow.style.opacity = 1; glow.style.boxShadow = 'inset 0 0 60px 12px rgba(255,85,0,0.55)'; }, 1900);
+      later(function () { tapAt(148, 590); }, 2500);
+      later(function () { show(set); }, 2900);
+      later(function () { row.style.background = '#ffe9dc'; tapAt(150, 382); }, 3900);
+      later(function () { show(bat); }, 4400);
+      later(function () { glow.style.opacity = 0; }, 5500);
+    },
+    'lanes': function () {
+      const n = document.getElementById('laneNew'), o = document.getElementById('laneOld'), t = document.getElementById('laneOldTxt');
+      n.style.transition = 'none'; o.style.transition = 'none'; n.style.opacity = 0; n.style.transform = 'translateX(-40px)'; o.style.transform = 'none'; o.style.opacity = 1; t.textContent = 'running';
+      later(function () { o.style.transition = 'transform .8s cubic-bezier(.2,.8,.2,1), opacity .8s'; o.style.transform = 'translateX(640px)'; o.style.opacity = 0.35; t.textContent = 'stopped_by_user'; n.style.transition = 'transform .8s cubic-bezier(.2,.8,.2,1), opacity .8s'; n.style.opacity = 1; n.style.transform = 'none'; }, 1500);
+    }
+  };
+
+  function runScript(s) {
+    s.querySelectorAll('[data-type]').forEach(typeInto);
+    if (scripts[s.id] && !reduced) scripts[s.id]();
+  }
+
+  function go(n, replay) {
+    n = Math.max(0, Math.min(total - 1, n));
+    if (n === idx && !replay && frames[idx].classList.contains('active')) return;
+    clearTimers();
+    slides[idx].classList.remove('on'); frames[idx].classList.remove('active');
+    idx = n;
+    frames[idx].classList.add('active');
+    const target = slides[idx];
+    requestAnimationFrame(function () { requestAnimationFrame(function () { if (slides[idx] !== target) return; target.classList.add('on'); runScript(target); }); });
+    document.getElementById('b-count').textContent = (idx + 1) + ' / ' + total;
+    document.getElementById('progress').style.width = ((idx + 1) / total * 100) + '%';
+    const note = slides[idx].querySelector('aside.notes');
+    document.getElementById('notes').innerHTML = '<b>Speaker notes · ' + (idx + 1) + '</b>' + (note ? note.innerHTML : '');
+    if (location.hash !== '#' + slides[idx].id) history.replaceState(null, '', '#' + slides[idx].id);
+  }
+
+  function toggleNotes() { const el = document.getElementById('notes'); el.hidden = !el.hidden; store.set('pmw-notes', el.hidden ? '0' : '1'); }
+  function toggleFull() { try { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {}); else document.exitFullscreen().catch(function () {}); } catch (e) {} }
+
+  document.getElementById('b-prev').addEventListener('click', function () { go(idx - 1); });
+  document.getElementById('b-next').addEventListener('click', function () { go(idx + 1); });
+  document.getElementById('b-replay').addEventListener('click', function () { go(idx, true); });
+  document.getElementById('b-notes').addEventListener('click', toggleNotes);
+  document.getElementById('b-full').addEventListener('click', toggleFull);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (stack) { if (e.key === 'n' || e.key === 'N') toggleNotes(); return; }
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter') { e.preventDefault(); go(idx + 1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace') { e.preventDefault(); go(idx - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(total - 1);
+    else if (k === 'r' || k === 'R') go(idx, true);
+    else if (k === 'n' || k === 'N') toggleNotes();
+    else if (k === 'f' || k === 'F') toggleFull();
+  });
+
+  let tx = null;
+  vp.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  vp.addEventListener('touchend', function (e) { if (stack || tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1)); tx = null; });
+  vp.addEventListener('click', function (e) { if (stack || e.target.closest('a,button')) return; const r = vp.getBoundingClientRect(); go(idx + (e.clientX > r.left + r.width * 0.3 ? 1 : -1)); });
+
+  const hud = document.getElementById('hud'); let hudT;
+  function wake() { hud.classList.remove('idle'); clearTimeout(hudT); hudT = setTimeout(function () { if (!stack) hud.classList.add('idle'); }, 2600); }
+  document.addEventListener('mousemove', wake); document.addEventListener('keydown', wake); wake();
+
+  window.addEventListener('resize', layout);
+  layout();
+  const start = slides.findIndex(function (s) { return '#' + s.id === location.hash; });
+  idx = start > 0 ? start : 0;
+  frames[idx].classList.add('active');
+  go(idx, true);
+  if (store.get('pmw-notes') === '1') document.getElementById('notes').hidden = false;
+})();
+</script>
+
+</body></html>

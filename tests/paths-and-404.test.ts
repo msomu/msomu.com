@@ -93,6 +93,11 @@ describe("path normalization", () => {
 		assert.equal(shouldNegotiate("/talks/the-receipt-loop/index.html"), false);
 		assert.equal(shouldNegotiate("/talks/one-job-per-bot"), false);
 		assert.equal(shouldNegotiate("/talks/one-job-per-bot/index.html"), false);
+		assert.equal(shouldNegotiate("/talks/phone-mcp-workshop"), false);
+		assert.equal(
+			shouldNegotiate("/talks/phone-mcp-workshop/index.html"),
+			false,
+		);
 	});
 });
 
@@ -105,6 +110,15 @@ describe("talk decks on disk", () => {
 		assert.ok(slugs.includes("i-gave-ai-a-computer-and-walked-away"));
 		assert.ok(slugs.includes("the-receipt-loop"));
 		assert.ok(slugs.includes("one-job-per-bot"));
+		assert.ok(slugs.includes("phone-mcp-workshop"));
+		assert.match(
+			readTalkHtml("phone-mcp-workshop") ?? "",
+			/Your phone, driven by any AI/,
+		);
+		assert.match(
+			readTalkHtml("phone-mcp-workshop") ?? "",
+			/api\.agi\.tech\/v1\/mcp/,
+		);
 		assert.match(readTalkHtml("receipt") ?? "", /reveal|Receipt|receipt/i);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /The Receipt Loop/);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /reveal/i);
@@ -121,16 +135,16 @@ describe("talk decks on disk", () => {
 			/From This Room to the <span class="orange">Internet<\/span>/,
 		);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Pi, at pi\.dev/);
-		assert.match(
-			readTalkHtml("the-receipt-loop") ?? "",
-			/It waits for my tap/,
-		);
+		assert.match(readTalkHtml("the-receipt-loop") ?? "", /It waits for my tap/);
 		assert.match(
 			readTalkHtml("the-receipt-loop") ?? "",
 			/You are an issue triage automation for Linear\./,
 		);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Daily Sync/);
-		assert.match(readTalkHtml("the-receipt-loop") ?? "", /Naman &lt;&gt; Somu 1-on-1/);
+		assert.match(
+			readTalkHtml("the-receipt-loop") ?? "",
+			/Naman &lt;&gt; Somu 1-on-1/,
+		);
 		assert.match(readTalkHtml("the-receipt-loop") ?? "", /somu-agi/);
 		assert.doesNotMatch(readTalkHtml("the-receipt-loop") ?? "", /frame_1\.png/);
 		assert.match(readTalkHtml("one-job-per-bot") ?? "", /One Job Per Bot/);
@@ -146,7 +160,10 @@ describe("talk decks on disk", () => {
 			readTalkHtml("one-job-per-bot") ?? "",
 			/No single model does the whole job/,
 		);
-		assert.match(readTalkHtml("one-job-per-bot") ?? "", /docs\.x\.ai\/grok-bot/);
+		assert.match(
+			readTalkHtml("one-job-per-bot") ?? "",
+			/docs\.x\.ai\/grok-bot/,
+		);
 		assert.match(readTalkHtml("one-job-per-bot") ?? "", /help\.descript\.com/);
 		assert.match(readTalkHtml("one-job-per-bot") ?? "", /Veo 3\.1/);
 		assert.match(

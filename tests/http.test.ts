@@ -218,6 +218,7 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /I Gave AI a Computer and Walked Away/);
 			assert.match(page.body, /The Receipt Loop/);
 			assert.match(page.body, /One Job Per Bot/);
+			assert.match(page.body, /Your Phone, Driven by Any AI/);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
 	});
@@ -290,6 +291,20 @@ describe("public agent endpoints", () => {
 			assert.match(page.body, /help\.descript\.com/, path);
 			assert.match(page.body, /Veo 3\.1/, path);
 			assert.doesNotMatch(page.body, /<img[\s>]/i, path);
+			assert.doesNotMatch(page.body, /not found/i);
+		}
+	});
+
+	it("serves the Phone MCP Workshop as an interactive deck", async (t) => {
+		if (!requireBase(t)) return;
+		for (const path of [
+			"/talks/phone-mcp-workshop",
+			"/talks/phone-mcp-workshop/index.html",
+		]) {
+			const page = await request(path);
+			assert.equal(page.status, 200, path);
+			assert.match(page.body, /Your phone, driven by any AI/, path);
+			assert.match(page.body, /api\.agi\.tech\/v1\/mcp/, path);
 			assert.doesNotMatch(page.body, /not found/i);
 		}
 	});
