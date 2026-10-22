@@ -91,6 +91,9 @@ drive_talks() {
 		echo "talks: one job per bot includes an image" >&2
 		exit 1
 	fi
+	curl -fsS -D "$OUT_DIR/_talks_phone-mcp-workshop.headers" -o "$OUT_DIR/_talks_phone-mcp-workshop.html" "$BASE_URL/talks/phone-mcp-workshop"
+	grep -q 'Your phone, driven by any AI' "$OUT_DIR/_talks_phone-mcp-workshop.html"
+	grep -q 'api.agi.tech/v1/mcp' "$OUT_DIR/_talks_phone-mcp-workshop.html"
 	echo "talks: ok"
 }
 
