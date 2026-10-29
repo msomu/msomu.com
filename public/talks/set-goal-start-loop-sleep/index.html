@@ -1,0 +1,905 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Set Goal. Start Loop. Sleep. · msomu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <style>
+      :root {
+        --night: #060914;
+        --night-2: #0c1226;
+        --surface: rgba(148, 163, 214, 0.07);
+        --border: rgba(148, 163, 214, 0.18);
+        --moon: #f4ecd6;
+        --text: #d7dcef;
+        --muted: #7d87a8;
+        --lamp: #fbbf24;
+        --lamp-dim: rgba(251, 191, 36, 0.14);
+        --green: #6ee7b7;
+        --red: #fca5a5;
+        --serif: "Fraunces", Georgia, serif;
+        --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .reveal-viewport {
+        background-color: var(--night);
+        background-image:
+          radial-gradient(1px 1px at 12% 18%, rgba(244, 236, 214, 0.7), transparent 60%),
+          radial-gradient(1px 1px at 27% 72%, rgba(244, 236, 214, 0.45), transparent 60%),
+          radial-gradient(1.5px 1.5px at 44% 12%, rgba(244, 236, 214, 0.6), transparent 60%),
+          radial-gradient(1px 1px at 63% 38%, rgba(244, 236, 214, 0.4), transparent 60%),
+          radial-gradient(1px 1px at 78% 84%, rgba(244, 236, 214, 0.5), transparent 60%),
+          radial-gradient(1.5px 1.5px at 88% 22%, rgba(244, 236, 214, 0.65), transparent 60%),
+          radial-gradient(1px 1px at 6% 90%, rgba(244, 236, 214, 0.35), transparent 60%),
+          radial-gradient(1px 1px at 52% 94%, rgba(244, 236, 214, 0.3), transparent 60%),
+          radial-gradient(ellipse 80% 60% at 50% 120%, var(--night-2), transparent 70%);
+      }
+
+      .reveal {
+        font-family: var(--sans);
+        font-size: 38px;
+        color: var(--text);
+      }
+
+      .reveal .slides section { text-align: left; padding: 0.6em 1.4em; }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        font-family: var(--serif);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        text-transform: none;
+        color: var(--moon);
+        margin: 0 0 0.5em;
+      }
+
+      .reveal h1 { font-size: 2.4em; line-height: 1.05; }
+      .reveal h2 { font-size: 1.55em; line-height: 1.12; }
+      .reveal h3 { font-size: 0.95em; line-height: 1.2; }
+      .reveal p, .reveal li { line-height: 1.45; font-size: 0.82em; }
+      .reveal ul, .reveal ol { margin: 0 0 0 1em; }
+      .reveal li + li { margin-top: 0.35em; }
+      .reveal strong { color: var(--moon); font-weight: 600; }
+      .reveal em { color: var(--lamp); font-style: normal; }
+      .reveal a { color: var(--lamp); }
+
+      .lamp { color: var(--lamp); }
+      .muted { color: var(--muted); }
+      .small { font-size: 0.68em !important; }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 0.5em;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.9em;
+      }
+
+      .reveal code,
+      .reveal pre {
+        font-family: var(--mono);
+      }
+
+      .reveal :not(pre) > code {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 0.25em;
+        padding: 0.05em 0.3em;
+        font-size: 0.88em;
+        color: var(--moon);
+      }
+
+      .reveal pre {
+        width: 100%;
+        box-shadow: none;
+        margin: 0.4em 0;
+        font-size: 0.56em;
+      }
+
+      .reveal pre code {
+        display: block;
+        background: rgba(6, 9, 20, 0.75);
+        border: 1px solid var(--border);
+        border-radius: 0.6em;
+        padding: 1em 1.2em;
+        line-height: 1.55;
+        color: var(--text);
+        max-height: none;
+        white-space: pre-wrap;
+      }
+
+      .ok { color: var(--green); }
+      .bad { color: var(--red); }
+      .dim { color: var(--muted); }
+
+      /* Centered statement slides */
+      .center {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center !important;
+      }
+
+      /* Title */
+      .title .moon {
+        align-self: center;
+        width: 3.2em;
+        height: 3.2em;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fffaf0, var(--moon) 45%, #c9bf9f 100%);
+        box-shadow: 0 0 2.5em rgba(244, 236, 214, 0.35);
+        margin-bottom: 1em;
+      }
+      .title h1 { font-size: 2.3em; }
+      .title h1 span { display: block; }
+      .title h1 span:nth-child(3) { color: var(--lamp); }
+      .title .meta { font-size: 0.6em; color: var(--muted); margin-top: 1.2em; }
+      .title .meta strong { color: var(--text); }
+
+      /* Act dividers */
+      .act .clock {
+        font-family: var(--mono);
+        font-size: 1.6em;
+        color: var(--lamp);
+        letter-spacing: 0.04em;
+        margin-bottom: 0.2em;
+        text-shadow: 0 0 1.2em rgba(251, 191, 36, 0.35);
+      }
+      .act h1 { font-size: 3em; margin: 0; }
+      .act p { color: var(--muted); margin-top: 0.8em; }
+
+      .statement h2 { font-size: 1.9em; max-width: 20ch; }
+
+      /* Cards and grids */
+      .grid-2, .grid-3 { display: grid; gap: 0.7em; margin-top: 0.5em; }
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 0.7em;
+        padding: 0.8em 1em;
+      }
+      .card h3 { margin-bottom: 0.35em; }
+      .card p, .card li { font-size: 0.7em; margin: 0; }
+      .card.lit { border-color: rgba(251, 191, 36, 0.55); background: var(--lamp-dim); }
+      .card .tag {
+        font-family: var(--mono);
+        font-size: 0.45em;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 0.5em;
+      }
+
+      .goal-pair .fuzzy { font-size: 0.75em; color: var(--red); margin: 0 0 0.4em; }
+      .goal-pair .fuzzy::before { content: "✗ "; }
+      .goal-pair .sharp { font-size: 0.66em; color: var(--green); margin: 0; }
+      .goal-pair .sharp::before { content: "✓ "; }
+
+      /* Tables */
+      .reveal table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.6em;
+        margin-top: 0.4em;
+      }
+      .reveal table th {
+        text-align: left;
+        color: var(--muted);
+        font-weight: 500;
+        font-family: var(--mono);
+        font-size: 0.85em;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border);
+        padding: 0.5em 0.6em;
+      }
+      .reveal table td {
+        border-bottom: 1px solid var(--border);
+        padding: 0.6em 0.6em;
+        vertical-align: top;
+      }
+      .reveal table td:first-child { color: var(--moon); font-weight: 600; }
+
+      /* Loop diagram */
+      .loop {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5em;
+        align-items: stretch;
+        margin-top: 0.8em;
+      }
+      .loop .step {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 0.7em;
+        padding: 0.7em 0.6em;
+        font-size: 0.56em;
+        text-align: center;
+        position: relative;
+      }
+      .loop .step b {
+        display: block;
+        font-family: var(--mono);
+        color: var(--lamp);
+        font-size: 0.85em;
+        margin-bottom: 0.4em;
+      }
+      .loop-back {
+        margin-top: 0.7em;
+        font-family: var(--mono);
+        font-size: 0.5em;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      /* Checklist */
+      .checks { list-style: none; margin: 0 !important; padding: 0; }
+      .checks li { padding-left: 1.4em; position: relative; }
+      .checks li::before { content: "☐"; position: absolute; left: 0; color: var(--lamp); }
+
+      blockquote.quote {
+        border-left: 3px solid var(--lamp);
+        margin: 0.9em 0 0;
+        padding: 0.2em 0 0.2em 0.9em;
+        font-family: var(--serif);
+        font-size: 0.85em;
+        color: var(--moon);
+        width: auto;
+        box-shadow: none;
+        background: none;
+        font-style: normal;
+      }
+      blockquote.quote cite { display: block; font-family: var(--sans); font-size: 0.65em; color: var(--muted); margin-top: 0.4em; font-style: normal; }
+
+      .reveal .big-stat { font-family: var(--serif); font-size: 3.2em; color: var(--lamp); line-height: 1; margin: 0; }
+
+      .reveal footer {
+        position: fixed;
+        bottom: 1.1em;
+        right: 1.4em;
+        font-family: var(--mono);
+        font-size: 0.42em;
+        color: var(--muted);
+        z-index: 100;
+      }
+
+      .reveal .progress { color: var(--lamp); }
+      .reveal .controls { color: var(--lamp); }
+
+      @media (max-width: 639px) {
+        .reveal { font-size: 22px; }
+        .reveal .slides section { padding: 0.4em 0.5em; }
+        .grid-2, .grid-3, .loop { grid-template-columns: 1fr; }
+        .title h1 { font-size: 1.7em; }
+        .act h1 { font-size: 2.2em; }
+        .statement h2 { font-size: 1.4em; }
+        .reveal pre { font-size: 0.42em; }
+        .reveal table { font-size: 0.48em; }
+        .reveal footer, .reveal .controls { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <footer>msomu · Salem Devfest · Oct 2026</footer>
+      <div class="slides">
+
+        <!-- 01 Title -->
+        <section class="center title">
+          <div class="moon"></div>
+          <h1><span>Set Goal.</span><span>Start Loop.</span><span>Sleep.</span></h1>
+          <p class="meta"><strong>Somu</strong> · Salem Devfest · 31 Oct 2026</p>
+          <aside class="notes">
+            <ul>
+              <li>Hi Salem. Quick show of hands: who has used ChatGPT or Claude to write code? Who has left one running and walked away?</li>
+              <li>Today: how people run AI agents with no human in the loop, and why the human's job moves from typing prompts to writing the finish line.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 02 Four lines -->
+        <section>
+          <p class="eyebrow">What I typed</p>
+          <h2>Four lines.</h2>
+<pre><code>im going to bed. implement every function in src/index.js on a fresh branch.
+done means `node check.mjs` prints PASS. tests/, check.mjs and LOCK stay untouched.
+keep a decision log in decisions.tsv. don't ask me before committing.
+loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</code></pre>
+          <p class="muted small">Ten empty functions. 22 failing tests. That's the whole brief.</p>
+          <aside class="notes">
+            <ul>
+              <li>This is GOAL.md from a tiny repo I built for this talk. Ten stub functions, 22 tests, all red.</li>
+              <li>I typed these four lines and walked away. Don't read them closely yet, we'll come back to every line at the end.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 03 The receipt -->
+        <section>
+          <p class="eyebrow">What I came back to</p>
+          <h2>Then I walked away.</h2>
+<pre><code><span class="dim">$ ./morning.sh</span>
+== Finish line
+<span class="ok">PASS 22/22 tests passing</span>
+
+== Did the finish line move? <span class="dim">(empty)</span>
+== Commits
+a5bb586 Implement schedule (20/22 -> 22/22)
+<span class="dim">...</span>
+df372ff Implement formatINR (2/22 -> 5/22)
+7c43528 Implement slugify (0/22 -> 2/22)</code></pre>
+          <p class="small"><strong>10 commits. 10 kept. 0 discarded.</strong> <span class="muted">Nobody touched the keyboard.</span></p>
+          <aside class="notes">
+            <ul>
+              <li>One commit per function, each with the test count moving. The tests themselves were never edited, and the script proves it.</li>
+              <li>Honest: this run took about two minutes because the task is small. The point isn't the time, it's that I wasn't there.</li>
+              <li>If you did your own run Friday night, swap in your numbers here.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 04 Decision log -->
+        <section>
+          <p class="eyebrow">decisions.tsv</p>
+          <h2>And it left notes.</h2>
+          <table>
+            <thead>
+              <tr><th>function</th><th>decision</th><th>reason</th><th>result</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>formatINR</td><td>keep last 3 digits, group the rest in pairs</td><td>avoids depending on the Intl build</td><td class="ok">5/22 · kept</td></tr>
+              <tr><td>parseDuration</td><td>regex + explicit "both missing" check</td><td>empty string matches the regex otherwise</td><td class="ok">9/22 · kept</td></tr>
+              <tr><td>camelCase</td><td>lowercase first, then capitalize</td><td>turns LOOP into Loop, as the test expects</td><td class="ok">16/22 · kept</td></tr>
+              <tr><td>schedule</td><td>convert HH:MM to minutes, pad on the way out</td><td>handles hour rollover in one helper</td><td class="ok">PASS · kept</td></tr>
+            </tbody>
+          </table>
+          <p class="muted small">So how do you get from four lines to this? Three moves.</p>
+          <aside class="notes">
+            <ul>
+              <li>In the morning I don't read the transcript. I read ten rows. Each row is a decision, a reason, and evidence.</li>
+              <li>The parseDuration row is my favourite: it found an edge case on its own and wrote down why.</li>
+              <li>Transition: three moves. Set a goal. Start a loop. Sleep.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 05 Act I -->
+        <section class="center act">
+          <div class="clock">22:58</div>
+          <h1>Set Goal.</h1>
+          <p>Write the finish line before the first line of code.</p>
+          <aside class="notes">
+            <ul><li>Act one. Before bed, the only thing you have to do well is write the finish line.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 06 Prompt vs goal -->
+        <section>
+          <h2>A prompt is a request.<br /><span class="lamp">A goal is a finish line.</span></h2>
+          <div class="grid-2">
+            <div class="card">
+              <p class="tag">Prompt</p>
+              <h3>"Fix the login bug."</h3>
+              <p class="muted">The agent decides when it's done. It usually decides early.</p>
+            </div>
+            <div class="card lit">
+              <p class="tag">Goal</p>
+              <h3>"The login test passes, the old error is gone from the logs, nothing else in the suite turns red."</h3>
+              <p class="muted">Anyone can check it. Including another machine.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>A prompt ends when the model feels done. A goal ends when something outside the model says yes.</li>
+              <li>If you can't tell whether it's done, neither can the agent.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 07 Yes/no -->
+        <section class="center statement">
+          <h2>A good goal is a <span class="lamp">yes / no</span> question.</h2>
+          <p class="muted">tests green · bug no longer reproduces · all 5 PRs merged · pixel diff is zero</p>
+          <aside class="notes">
+            <ul>
+              <li>pstack calls this a "checkable predicate". Fancy word for: a question with a yes or no answer.</li>
+              <li>Read the examples. Every one of them a script can answer.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 08 Roast bad goals -->
+        <section>
+          <p class="eyebrow">Your turn · shout it out</p>
+          <h2>Fix these goals.</h2>
+          <div class="grid-3">
+            <div class="card goal-pair">
+              <p class="fuzzy">"Make the app better"</p>
+              <p class="sharp fragment">Home screen loads under 1s on a cold start, measured 5 times</p>
+            </div>
+            <div class="card goal-pair">
+              <p class="fuzzy">"Work on it for 4 hours"</p>
+              <p class="sharp fragment">Time isn't a finish line. You'll get 4 hours of activity.</p>
+            </div>
+            <div class="card goal-pair">
+              <p class="fuzzy">"Refactor the code"</p>
+              <p class="sharp fragment">No file over 300 lines, all tests still pass, no public API changed</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Give the room 30 seconds per card. Take two or three answers, then reveal.</li>
+              <li>This is the one skill they can use tomorrow, even with zero paid tools.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 09 /goal everywhere -->
+        <section>
+          <h2>Every agent now has <code>/goal</code>.</h2>
+          <div class="grid-2">
+            <div class="card">
+              <p class="tag">Claude Code</p>
+<pre><code>/goal all tests in test/auth pass
+      and the lint step is clean</code></pre>
+              <p class="muted">Keeps taking turns until the condition holds. Works headless: <code>claude -p "/goal ..."</code></p>
+            </div>
+            <div class="card">
+              <p class="tag">Codex</p>
+<pre><code>/goal Reduce p95 latency below 120 ms
+      without regressing correctness tests</code></pre>
+              <p class="muted">Pause, resume, clear, with a budget. "The evidence decides."</p>
+            </div>
+          </div>
+          <p class="small muted">In 2026 the tools converged on the same idea: the goal is the contract.</p>
+          <aside class="notes">
+            <ul>
+              <li>Two different companies, same command, same idea. That's usually a sign the idea is right.</li>
+              <li>Our demo used exactly this: claude -p "/goal node check.mjs prints PASS".</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 10 Never grades its own homework -->
+        <section class="center statement">
+          <h2>The worker never grades<br />its own homework.</h2>
+          <p class="muted">After every turn, a <strong>separate</strong> model or script checks the goal.<br />"Probably done" is not done.</p>
+          <aside class="notes">
+            <ul>
+              <li>In Claude Code's /goal, a fresh model checks the condition after each turn, not the one that did the work.</li>
+              <li>Even better: a script. Scripts don't get tired or optimistic.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 11 Our finish line -->
+        <section>
+          <p class="eyebrow">check.mjs</p>
+          <h2>Our finish line is a script.</h2>
+<pre><code><span class="dim">$ node check.mjs</span>
+<span class="bad">FAIL</span>
+- 0/22 tests passing
+- TODO stubs left in src/index.js
+
+<span class="dim">$ echo "// sneaky" >> tests/index.test.js && node check.mjs</span>
+<span class="bad">FAIL</span>
+- tests/index.test.js was changed. The finish line is not yours to move.</code></pre>
+          <p class="small muted">Tests and the checker are hashed in a LOCK file. Editing the test to win counts as losing.</p>
+          <aside class="notes">
+            <ul>
+              <li>Agents under pressure will sometimes "fix" the test instead of the code. So we lock the finish line.</li>
+              <li>The joke line lands well. Pause after it.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 12 Act II -->
+        <section class="center act">
+          <div class="clock">23:04</div>
+          <h1>Start Loop.</h1>
+          <p>One change. One check. Keep it or throw it away. Repeat.</p>
+          <aside class="notes">
+            <ul><li>Act two. A goal on its own does nothing. Something has to keep waking the agent up.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 13 Ralph -->
+        <section>
+          <p class="eyebrow">The dumbest loop that works</p>
+<pre style="font-size:0.85em"><code>while :; do cat PROMPT.md | claude ; done</code></pre>
+          <ul>
+            <li>Geoffrey Huntley calls it <strong>Ralph</strong>. Each pass is a fresh agent with a fresh memory.</li>
+            <li>The plan lives in a file on disk. Read the plan, do one thing, commit, exit, repeat.</li>
+            <li>A YC hackathon team ran it overnight and woke up to <em>6 shipped repos</em>.</li>
+          </ul>
+          <aside class="notes">
+            <ul>
+              <li>One line of bash. No framework. The repo's ralph.sh is the same idea with a stop condition.</li>
+              <li>Huntley's other line: "everything is a ralph loop". Watch the loop, and when it fails, fix the loop so it never fails that way again.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 14 Three ways to wake -->
+        <section>
+          <h2>Three ways to wake the agent up.</h2>
+          <table>
+            <thead><tr><th>Wake on</th><th>How</th><th>Use it when</th></tr></thead>
+            <tbody>
+              <tr><td>The last turn finished</td><td><code>/goal</code></td><td>One task, keep going until done</td></tr>
+              <tr><td>A timer</td><td><code>/loop 30m check the deploy</code></td><td>Nothing to wait on, just re-check</td></tr>
+              <tr><td>An event</td><td>CI finished, PR merged, Slack message</td><td>You're waiting on something real</td></tr>
+            </tbody>
+          </table>
+          <p class="small muted">pstack's rule: if there's an event, watch the event and keep a slow timer as backup.</p>
+          <aside class="notes">
+            <ul>
+              <li>Most people only know the first one. Events are the grown-up version: don't poll CI every minute, get woken when it finishes.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 15 One iteration -->
+        <section>
+          <h2>One iteration.</h2>
+          <div class="loop">
+            <div class="step"><b>1</b>Check the finish line</div>
+            <div class="step"><b>2</b>Make the smallest change that should help</div>
+            <div class="step"><b>3</b>Verify against the real thing</div>
+            <div class="step"><b>4</b>Better? <span class="ok">commit</span><br />Not? <span class="bad">discard</span></div>
+            <div class="step"><b>5</b>Write one log row</div>
+          </div>
+          <p class="loop-back">↻ back to 1, until the finish line says yes</p>
+          <aside class="notes">
+            <ul>
+              <li>This is straight from the pstack overnight guide. Point at step 4: the agent throws away work that didn't help.</li>
+              <li>Ask the room: when did you last delete code that didn't help? Agents should do it every loop.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 16 Three rules -->
+        <section>
+          <p class="eyebrow">Steal these</p>
+          <h2>Three loop rules.</h2>
+          <div class="grid-3">
+            <div class="card"><h3>"Might help" gets reverted.</h3><p class="muted">If it didn't move the number, it doesn't ride along.</p></div>
+            <div class="card"><h3>A plateau is not a stop.</h3><p class="muted">Stuck? Change approach. Don't quit, don't spin.</p></div>
+            <div class="card lit"><h3>Never relax the goal.</h3><p class="muted">Moving the finish line to declare victory is losing.</p></div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Third rule is the one that matters most. It's why we have the LOCK file.</li>
+              <li>And the escape hatch: if truly stuck, stop and write up why. Better than 8 hours of creative goal reinterpretation.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 17 pstack -->
+        <section>
+          <p class="eyebrow">Where those rules come from</p>
+          <h2>pstack</h2>
+          <div class="grid-2">
+            <div>
+              <ul>
+                <li>Lauren Tan (<strong>poteto</strong>), React core team, engineer at Cursor.</li>
+                <li>Open sourced in May 2026 after Cursor's own team used her skills <em>10,000 times in one week</em>.</li>
+                <li><code>/poteto-mode</code> routes your task to one of 23 playbooks: bug fix, perf, autonomous run, autopilot, orchestrate...</li>
+              </ul>
+            </div>
+            <div class="card">
+              <p class="tag">Free · MIT · any agent</p>
+<pre><code># Cursor
+/add-plugin pstack
+
+# Claude Code, Codex, others
+npx skills add backnotprop/pstack</code></pre>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Her line: "if you want to go fast, go deep first." pstack is about writing less code, but code you can trust.</li>
+              <li>The autonomous run playbook is basically this talk in six steps.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 18 Act III -->
+        <section class="center act">
+          <div class="clock">23:06</div>
+          <h1>Sleep.</h1>
+          <p>Where does the loop live when your laptop is closed?</p>
+          <aside class="notes">
+            <ul><li>Act three. You can't sleep if the loop needs your laptop to stay open.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 19 Laptop is a bad place -->
+        <section>
+          <h2>Your laptop is a bad place for a loop.</h2>
+          <div class="grid-2">
+            <div class="card"><h3>It sleeps.</h3><p class="muted">Lid closes, Wi-Fi drops, battery dies at 2am.</p></div>
+            <div class="card"><h3>It's crowded.</h3><p class="muted">Two agents fight each other (and you) for the same files and CPU.</p></div>
+            <div class="card"><h3>It's yours.</h3><p class="muted">Your SSH keys, your cookies, your bank tab. One bad command reaches all of it.</p></div>
+            <div class="card lit"><h3>So move the loop.</h3><p class="muted">To a machine that isn't yours, with only the keys the task needs.</p></div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Third card is the one students skip. Agents in a loop usually run with permissions turned off. A sandbox becomes your only seatbelt.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 20 Cursor cloud agents -->
+        <section>
+          <p class="eyebrow">Cursor</p>
+          <h2>Cloud agents</h2>
+          <div class="grid-2">
+            <ul>
+              <li>Every agent gets its <strong>own VM</strong>: terminal, browser, full desktop.</li>
+              <li>Start it from the editor, your phone, Slack or GitHub.</li>
+              <li>It tests its own work and attaches <em>videos and screenshots</em> to the PR.</li>
+            </ul>
+            <div class="center">
+              <p class="big-stat">30%+</p>
+              <p class="muted small">of PRs merged at Cursor are made by agents running on their own in cloud sandboxes<br />(Cursor, Feb 2026)</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Formerly "background agents". Now the default way Cursor itself ships.</li>
+              <li>The artifacts bit matters: the agent shows you a video of the feature working instead of telling you it works.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 21 Cursor Automations -->
+        <section>
+          <p class="eyebrow">Cursor</p>
+          <h2>Automations</h2>
+          <p>Cloud agents that start on a <strong>schedule</strong> or an <strong>event</strong>: a Slack message, a new Linear issue, a merged PR, a PagerDuty alert, a webhook. They keep a memory, so they get better each run.</p>
+          <div class="grid-3">
+            <div class="card"><p class="tag">Every push to main</p><p>Security review, high risk findings posted to Slack</p></div>
+            <div class="card"><p class="tag">Every morning</p><p>Find code without tests, open a PR adding them</p></div>
+            <div class="card"><p class="tag">Bug in Slack</p><p>Check duplicates, file it, try a fix, reply in thread</p></div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>These three are real automations Cursor runs on its own codebase.</li>
+              <li>Notice: nobody types a prompt. The event is the prompt.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 22 Claude Code cloud -->
+        <section>
+          <p class="eyebrow">Claude Code</p>
+          <h2>Cloud sessions + scheduled tasks</h2>
+          <div class="grid-2">
+            <div class="card">
+              <h3>Cloud sessions</h3>
+              <ul>
+                <li>Start from claude.ai/code, the phone app, or <code>claude --cloud</code></li>
+                <li>Close the laptop. It keeps going and opens a PR.</li>
+                <li>Watches its own PR: fixes CI, answers review comments.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Scheduled tasks</h3>
+              <ul>
+                <li>A saved prompt + repos + connectors</li>
+                <li>Fires on a schedule, an API call, or a GitHub event</li>
+                <li><em>"Every night at 2am: pull the top bug from Linear, attempt a fix, open a PR."</em></li>
+              </ul>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Fun fact for the room: the research and the demo repo for this talk were built in one of these cloud sessions, from my phone.</li>
+              <li>Scheduled tasks launched as "routines" in April 2026.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 23 Buzz -->
+        <section>
+          <p class="eyebrow">Block · open source · beta · July 2026</p>
+          <h2>Buzz: agents as teammates</h2>
+          <div class="grid-2">
+            <ul>
+              <li>Slack-like, but every agent has its <strong>own identity</strong>.</li>
+              <li>Bring any agent: Claude Code, Codex, goose.</li>
+              <li>Open source, self-host it.</li>
+            </ul>
+            <div class="card lit">
+              <p class="tag">How Block builds Buzz, in Buzz</p>
+              <ol>
+                <li>A human opens a channel and states the goal</li>
+                <li>Agents research, build and test in the thread</li>
+                <li>A <strong>different</strong> agent reviews the builder</li>
+                <li>Humans decide scope and what merges</li>
+              </ol>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Same pattern as this whole talk: human sets the goal, agents loop, a separate checker reviews, human signs off in the morning.</li>
+              <li>The difference: it's a team of agents in a group chat, not one agent in a terminal.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 24 Side by side -->
+        <section>
+          <h2>Where should your loop live?</h2>
+          <table>
+            <thead><tr><th></th><th>Starts from</th><th>Runs on</th><th>Good for</th></tr></thead>
+            <tbody>
+              <tr><td><code>/goal</code>, <code>/loop</code></td><td>your session</td><td>your machine</td><td>one task, you're nearby</td></tr>
+              <tr><td>Cursor cloud + Automations</td><td>editor, phone, Slack, events</td><td>Cursor VMs or your own</td><td>parallel PRs, event chores</td></tr>
+              <tr><td>Claude Code cloud + scheduled tasks</td><td>web, phone, CLI, schedule, GitHub</td><td>Anthropic cloud or your own</td><td>overnight runs, recurring jobs</td></tr>
+              <tr><td>Buzz</td><td>a channel</td><td>wherever your agents run</td><td>a team of humans + agents</td></tr>
+            </tbody>
+          </table>
+          <aside class="notes">
+            <ul>
+              <li>Don't pick a winner for them. Start with /goal on your laptop, move to the cloud when you want to close the lid.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 25 Act IV -->
+        <section class="center act">
+          <div class="clock">07:30</div>
+          <h1>Morning.</h1>
+          <p>You audit decisions, not code.</p>
+          <aside class="notes">
+            <ul><li>Act four. The part nobody demos: what you do when you wake up.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 26 Contract annotated -->
+        <section>
+          <p class="eyebrow">Back to the four lines</p>
+          <h2>The overnight contract.</h2>
+          <div class="grid-2">
+            <div class="card"><p class="tag">1 · Goal</p><p>"implement every function in src/index.js on a fresh branch"</p></div>
+            <div class="card lit"><p class="tag">2 · Finish line</p><p>"done means node check.mjs prints PASS. tests stay untouched"</p></div>
+            <div class="card"><p class="tag">3 · Permission</p><p>"don't ask me before committing"</p></div>
+            <div class="card"><p class="tag">4 · Escape hatch</p><p>"if you're truly stuck, stop, write STUCK.md explaining why"</p></div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Now the four lines from slide two make sense. Each one removes a reason for the agent to stop and wait for you.</li>
+              <li>Permission line: otherwise it blocks at 11pm asking "can I commit?" and you find that out at 7am.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 27 Earn the sleep -->
+        <section>
+          <h2>Earn the sleep first.</h2>
+          <ul class="checks">
+            <li>You've done the task once by hand, or watched an agent do it.</li>
+            <li>The agent has the tools you'd use: tests, logs, screenshots.</li>
+            <li>Every step proves its work and can stop the line.</li>
+            <li>You've read a few runs and turned repeat failures into checks.</li>
+          </ul>
+          <blockquote class="quote">"It's not if it gets popped, it's when. And what is the blast radius?"<cite>Geoffrey Huntley, on running loops without a sandbox</cite></blockquote>
+          <aside class="notes">
+            <ul>
+              <li>Checklist is from the pstack guide. A loop you don't trust just makes unchecked work faster.</li>
+              <li>Sandbox, only the keys it needs, and a branch, never main.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 28 Audit -->
+        <section>
+          <h2>Read 10 rows, not 8 hours.</h2>
+          <div class="grid-2">
+            <div>
+              <ul>
+                <li>A decision log: time, decision, reason, evidence, result.</li>
+                <li>A reviewer on a <strong>different model</strong> reads it and flags what needs your eyes.</li>
+                <li>Our <code>morning.sh</code>: did it pass, did the finish line move, what got committed.</li>
+              </ul>
+            </div>
+<pre><code><span class="dim">$ ./morning.sh</span>
+== Finish line
+<span class="ok">PASS 22/22</span>
+== Did the finish line move?
+<span class="dim">(empty)</span>
+== Commits overnight
+10
+== Decision log
+10 kept · 0 discarded</code></pre>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>pstack's /show-me-your-work does this with an "Attention" section at the end. Read that first.</li>
+              <li>The second line of morning.sh is the important one. If the finish line moved, nothing else matters.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 29 Your job changed -->
+        <section class="center statement">
+          <h2>Your job changed.</h2>
+          <div class="grid-2" style="width:100%;max-width:26em">
+            <div class="card"><p class="tag">Before</p><p>Type. Wait. Read. Type again.</p></div>
+            <div class="card lit"><p class="tag">Now</p><p>Write the finish line. Pick where the loop lives. Read the receipts.</p></div>
+          </div>
+          <aside class="notes">
+            <ul><li>The skill that matters isn't prompting anymore. It's knowing what done looks like.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 30 Homework -->
+        <section>
+          <p class="eyebrow">Homework for tonight</p>
+          <h2>Try it before you sleep.</h2>
+          <ol>
+            <li>Pick one small thing in your college project.</li>
+            <li>Write a goal that's a <em>yes / no question</em>.</li>
+            <li>Run <code>/goal</code> in Claude Code or Codex, or install pstack in Cursor.</li>
+            <li>Go to sleep. Tell me what you woke up to.</li>
+          </ol>
+          <p class="small muted">The demo repo: github.com/msomu/msomu.com/tree/main/demos/overnight-loop</p>
+          <aside class="notes">
+            <ul>
+              <li>Clone the demo repo, run ./ralph.sh or /goal, then ./morning.sh. It's free to read and copy.</li>
+              <li>Ask them to tag you with what they woke up to.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 31 Thanks -->
+        <section class="center title">
+          <div class="moon"></div>
+          <h1><span>Set Goal.</span><span>Start Loop.</span><span>Sleep.</span></h1>
+          <p class="meta"><strong>Somu</strong> · msomu.com · slides at msomu.com/talks</p>
+          <aside class="notes">
+            <ul><li>Thank you. Questions.</li></ul>
+          </aside>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+    <script>
+      const phone = window.innerWidth < 640;
+      Reveal.initialize({
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        controls: true,
+        progress: true,
+        center: true,
+        width: phone ? 390 : 1200,
+        height: phone ? 844 : 700,
+        margin: phone ? 0.06 : 0.05,
+        minScale: 0.4,
+        maxScale: 1.4,
+        plugins: [RevealNotes],
+      });
+    </script>
+  </body>
+</html>
