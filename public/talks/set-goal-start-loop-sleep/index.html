@@ -167,6 +167,14 @@
       .grid-2, .grid-3 { display: grid; gap: 0.7em; margin-top: 0.5em; }
       .grid-2 { grid-template-columns: 1fr 1fr; }
       .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+      .grid-4 { display: grid; gap: 0.55em; margin-top: 0.5em; grid-template-columns: repeat(4, 1fr); }
+      .part .num { font-family: var(--mono); color: var(--lamp); font-size: 0.5em; letter-spacing: 0.08em; margin-bottom: 0.35em; }
+      .part h3 { font-size: 0.78em; margin-bottom: 0.3em; }
+      .part p { font-size: 0.56em !important; }
+      .part .ours { color: var(--green); margin-top: 0.5em !important; }
+      .grid-4.compact .card { padding: 0.6em 0.75em; }
+      .grid-4.compact h3 { font-size: 0.7em; }
+      .reveal .equation { font-family: var(--serif); font-size: 1.9em; color: var(--moon); margin: 0.2em 0 0.4em; }
       .card {
         background: var(--surface);
         border: 1px solid var(--border);
@@ -284,7 +292,7 @@
       @media (max-width: 639px) {
         .reveal { font-size: 22px; }
         .reveal .slides section { padding: 0.4em 0.5em; }
-        .grid-2, .grid-3, .loop { grid-template-columns: 1fr; }
+        .grid-2, .grid-3, .grid-4, .loop { grid-template-columns: 1fr; }
         .title h1 { font-size: 1.7em; }
         .act h1 { font-size: 2.2em; }
         .statement h2 { font-size: 1.4em; }
@@ -615,6 +623,120 @@ npx skills add backnotprop/pstack</code></pre>
             <ul>
               <li>Her line: "if you want to go fast, go deep first." pstack is about writing less code, but code you can trust.</li>
               <li>The autonomous run playbook is basically this talk in six steps.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 17a Harness: definition -->
+        <section>
+          <p class="eyebrow">Zoom out · Shubham Saboo, Google · 30 Oct 2026</p>
+          <h2>wtf is an agent harness?</h2>
+          <p class="equation">Agent = Model + <span class="lamp">Harness</span></p>
+          <div class="grid-2">
+            <div class="card">
+              <p class="tag">The model</p>
+              <p>Reads the context and picks the next action. That's all it does.</p>
+            </div>
+            <div class="card lit">
+              <p class="tag">The harness</p>
+              <p>All the code that turns that choice into work. Claude Code, Codex, Antigravity, OpenClaw and Hermes Agent are all harnesses.</p>
+            </div>
+          </div>
+          <p class="small muted">Everything we've built tonight lives in the harness, not the model.</p>
+          <aside class="notes">
+            <ul>
+              <li>Shubham Saboo (Google, awesome-llm-apps) posted this as I was finishing the deck. It's the cleanest map of everything in this talk.</li>
+              <li>Same model, different harness, very different agent. When people say "this model is bad at coding", half the time it's the harness.</li>
+              <li>Next slide: the 8 parts. Then we go through them and see where each one showed up in our overnight run.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 17b Harness: the 8 parts -->
+        <section>
+          <h2>8 parts every harness shares.</h2>
+          <div class="grid-4 compact">
+            <div class="card part lit"><p class="num">01</p><h3>The loop</h3><p>Model, tools, results, repeat, decide when done</p></div>
+            <div class="card part"><p class="num">02</p><h3>Tools + sandbox</h3><p>Terminal, files, browser, in an isolated computer</p></div>
+            <div class="card part"><p class="num">03</p><h3>Subagents</h3><p>Side tasks in parallel, fresh context, short summary back</p></div>
+            <div class="card part"><p class="num">04</p><h3>Context</h3><p>What the model sees each turn</p></div>
+            <div class="card part"><p class="num">05</p><h3>Memory</h3><p>Notes and git on disk. Next session picks up</p></div>
+            <div class="card part"><p class="num">06</p><h3>Guardrails</h3><p>Risky actions wait for you. Keys stay outside</p></div>
+            <div class="card part lit"><p class="num">07</p><h3>Verification</h3><p>Tests or a separate grader before "done" is allowed</p></div>
+            <div class="card part"><p class="num">08</p><h3>Observability</h3><p>Trace every call. Catch the repeat failure</p></div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Read the titles only, don't read every card. The two lit ones are this talk: the loop is "Start Loop", verification is "Set Goal".</li>
+              <li>Ask: which of these did you already see tonight? Most hands should say loop and verification.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 17c Harness parts 1 to 4 in our demo -->
+        <section>
+          <p class="eyebrow">The 8 parts in our overnight run · 1 to 4</p>
+          <div class="grid-2">
+            <div class="card part">
+              <p class="num">01 · THE LOOP</p>
+              <p>Sends context to the model, runs the tools it asks for, feeds results back, and decides when the task is finished.</p>
+              <p class="ours">Ours: <code>/goal</code> or <code>ralph.sh</code>. "Finished" means check.mjs says PASS, nothing else.</p>
+            </div>
+            <div class="card part">
+              <p class="num">02 · TOOLS + SANDBOX</p>
+              <p>Gives the model a terminal, files, a browser and your apps, each task in its own isolated computer, so a bad command stays inside.</p>
+              <p class="ours">Ours: only <code>node</code> and <code>git</code> allowed, run in a scratch copy or a cloud VM.</p>
+            </div>
+            <div class="card part">
+              <p class="num">03 · SUBAGENTS</p>
+              <p>Takes side tasks off the main agent and runs them in parallel, each with a fresh context, sending back only a short summary.</p>
+              <p class="ours">Ours: not needed for 10 functions. pstack's autopilot uses a swarm of fresh verifiers per PR.</p>
+            </div>
+            <div class="card part">
+              <p class="num">04 · CONTEXT MANAGEMENT</p>
+              <p>Decides what the model sees each turn. Loads skills and files only when needed, summarizes old history before the window fills.</p>
+              <p class="ours">Ours: GOAL.md + AGENTS.md every pass. Ralph starts each pass with a clean window.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>White text is Shubham's definition. Green line is where it lives in the demo repo they can clone.</li>
+              <li>Be honest on subagents: our task was too small to need them. That's fine, not every harness part is needed for every job.</li>
+              <li>Context: the reason Ralph works is that each pass forgets everything except what's on disk. That's a feature.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 17d Harness parts 5 to 8 in our demo -->
+        <section>
+          <p class="eyebrow">The 8 parts in our overnight run · 5 to 8</p>
+          <div class="grid-2">
+            <div class="card part">
+              <p class="num">05 · MEMORY</p>
+              <p>Stores progress notes, git history and skills on disk, so a new session reads what the last one did and picks up where it stopped.</p>
+              <p class="ours">Ours: one commit per function + decisions.tsv. Kill it at 2am, restart, it carries on.</p>
+            </div>
+            <div class="card part">
+              <p class="num">06 · GUARDRAILS</p>
+              <p>Holds risky actions (emails, payments, deletes) for your approval and keeps real credentials outside, so a prompt injection has nothing to steal.</p>
+              <p class="ours">Ours: a branch, never main. LOCK seals the tests. No keys in the box.</p>
+            </div>
+            <div class="card part">
+              <p class="num">07 · VERIFICATION</p>
+              <p>Stops a summary that only sounds finished. Runs tests, browser checks or a separate grader, and only then allows "done".</p>
+              <p class="ours">Ours: check.mjs. In <code>/goal</code>, a separate model judges the condition.</p>
+            </div>
+            <div class="card part">
+              <p class="num">08 · OBSERVABILITY</p>
+              <p>Traces every model and tool call, spots the agent repeating the same failed edit, and pushes it to try something different.</p>
+              <p class="ours">Ours: the decision log + morning.sh. pstack: "a plateau means pivot".</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Guardrails and verification are the two that let you sleep. Without them, a loop just makes mistakes faster.</li>
+              <li>Observability is what catches the agent trying the same broken fix 40 times at 3am.</li>
+              <li>Transition: we've built the harness. Now, where does it run when the laptop closes?</li>
             </ul>
           </aside>
         </section>
