@@ -355,6 +355,226 @@
       @media (max-width: 639px) {
         .hp, .flow, .stats { grid-template-columns: 1fr; }
       }
+
+      /* ===== Motion: ambient ===== */
+      .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+      .stars i {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        background: var(--moon);
+        opacity: 0.1;
+        animation: twinkle var(--d) ease-in-out infinite;
+        animation-delay: var(--t);
+      }
+      @keyframes twinkle { 0%, 100% { opacity: 0.06; } 50% { opacity: 0.75; } }
+      .reveal { z-index: 1; }
+
+      .title .moon { animation: moonfloat 7s ease-in-out infinite; }
+      @keyframes moonfloat {
+        0%, 100% { transform: translateY(0); box-shadow: 0 0 2.5em rgba(244, 236, 214, 0.3); }
+        50% { transform: translateY(-0.25em); box-shadow: 0 0 3.6em rgba(244, 236, 214, 0.5); }
+      }
+
+      /* ===== Motion: entrances (auto-play when a slide becomes current) ===== */
+      .reveal section .a { opacity: 0; }
+      .reveal section.in .a {
+        animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        animation-delay: calc(var(--i) * 120ms + 80ms);
+      }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(16px); filter: blur(4px); }
+        to { opacity: 1; transform: none; filter: none; }
+      }
+
+      /* Terminal lines appear one by one */
+      .reveal pre .ln { opacity: 0; }
+      .reveal section.in pre .ln {
+        animation: lineIn 0.45s ease both;
+        animation-delay: calc(var(--i, 0) * 120ms + 350ms + var(--l) * 110ms);
+      }
+      @keyframes lineIn { from { opacity: 0; filter: blur(3px); } to { opacity: 1; filter: none; } }
+
+      /* Progress bars fill */
+      .reveal section.in .phase .bar i {
+        animation: fill 1.3s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+        animation-delay: calc(var(--i) * 120ms + 450ms);
+      }
+      @keyframes fill { from { width: 0; } }
+      .reveal section.in .phase .st.bad { animation: nope 0.5s ease both; animation-delay: calc(var(--i) * 120ms + 1.6s); }
+      @keyframes nope {
+        0% { opacity: 0; transform: translateX(0); }
+        30% { opacity: 1; transform: translateX(-4px); }
+        60% { transform: translateX(4px); }
+        100% { opacity: 1; transform: none; }
+      }
+
+      /* Loops keep running: a light chases around the steps */
+      .reveal section.in .loop .step.a,
+      .reveal section.in .flow .step.a {
+        animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both, chase 5s ease-in-out infinite;
+        animation-delay: calc(var(--i) * 120ms + 80ms), calc(1.6s + var(--k) * 1s);
+      }
+      @keyframes chase {
+        0%, 22%, 100% { border-color: var(--border); box-shadow: none; }
+        8% { border-color: rgba(251, 191, 36, 0.85); box-shadow: 0 0 1.4em rgba(251, 191, 36, 0.28); }
+      }
+      .reveal section.in .loop-back.a { animation: rise 0.8s both, spin-hint 5s linear infinite; animation-delay: calc(var(--i) * 120ms + 80ms), 1.6s; }
+      @keyframes spin-hint { 0%, 100% { color: var(--muted); } 50% { color: var(--lamp); } }
+
+      /* Lit cards breathe */
+      .reveal section.in .card.lit.a {
+        animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both, breathe 4s ease-in-out infinite;
+        animation-delay: calc(var(--i) * 120ms + 80ms), 1.5s;
+      }
+      @keyframes breathe {
+        0%, 100% { box-shadow: 0 0 0 rgba(251, 191, 36, 0); }
+        50% { box-shadow: 0 0 1.6em rgba(251, 191, 36, 0.18); }
+      }
+
+      /* Strikes that draw themselves */
+      .strike { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: transparent; }
+      .reveal section.in .strike { animation: strike 0.5s ease both; animation-delay: var(--sd, 1.8s); }
+      @keyframes strike { to { text-decoration-color: var(--red); } }
+      .reveal .ladder li.ngmi { text-decoration-color: transparent; }
+      .reveal section.in .ladder li.ngmi { animation: rise 0.8s both, strikemuted 0.6s ease both; animation-delay: calc(var(--i) * 120ms + 80ms), 1.9s; }
+      @keyframes strikemuted { to { text-decoration-color: var(--muted); } }
+
+      /* Act clocks: colon blinks while the time runs forward */
+      .clock .colon { animation: blink 1s steps(1) infinite; }
+      @keyframes blink { 50% { opacity: 0.2; } }
+
+      /* Chat: messages arrive, Claude types */
+      .chat .msg { opacity: 0; transform: translateY(10px); transition: opacity 0.35s ease, transform 0.35s ease; }
+      .chat .msg.show { opacity: 1; transform: none; }
+      .chat .dots { display: inline-flex; gap: 0.25em; padding: 0.2em 0; }
+      .chat .dots b { width: 0.4em; height: 0.4em; border-radius: 50%; background: var(--muted); animation: dot 1s ease-in-out infinite; }
+      .chat .dots b:nth-child(2) { animation-delay: 0.15s; }
+      .chat .dots b:nth-child(3) { animation-delay: 0.3s; }
+      @keyframes dot { 0%, 100% { opacity: 0.25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+      .chat .caret::after { content: "▍"; color: var(--lamp); animation: blink 0.8s steps(1) infinite; margin-left: 1px; }
+
+      /* ===== Story thread 1: the night timeline ===== */
+      .nightline {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 40px;
+        z-index: 20;
+        pointer-events: none;
+        padding: 0 5.5em 0 1.6em;
+        font-family: var(--mono);
+      }
+      .nightline .track {
+        position: absolute;
+        left: 1.6em;
+        right: 5.5em;
+        bottom: 12px;
+        height: 3px;
+        border-radius: 3px;
+        background: rgba(148, 163, 214, 0.14);
+      }
+      .nightline .fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-radius: 3px;
+        background: linear-gradient(90deg, #f59e0b, #a78bfa 30%, #4f46e5 60%, #fbbf24);
+        background-size: var(--tw, 1000px) 100%;
+        transition: width 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+      }
+      .nightline .marker {
+        position: absolute;
+        bottom: -5px;
+        width: 13px;
+        height: 13px;
+        margin-left: -6.5px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fffaf0, var(--moon) 50%, #c9bf9f);
+        box-shadow: 0 0 10px rgba(244, 236, 214, 0.6);
+        transition: left 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+      }
+      .nightline .tick {
+        position: absolute;
+        bottom: 18px;
+        transform: translateX(-50%);
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        white-space: nowrap;
+        opacity: 0.55;
+        transition: color 0.5s, opacity 0.5s;
+      }
+      .nightline .tick::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 15px;
+        width: 1px;
+        height: 7px;
+        background: rgba(148, 163, 214, 0.35);
+      }
+      .nightline .tick.past { opacity: 0.8; }
+      .nightline .tick.up { bottom: 30px; }
+      .nightline .tick.up::after { height: 19px; }
+      .nightline .tick.now { color: var(--lamp); opacity: 1; }
+
+      /* ===== Story thread 2: the four failures tracker ===== */
+      .quest {
+        position: fixed;
+        top: 14px;
+        right: 18px;
+        z-index: 20;
+        display: flex;
+        gap: 6px;
+        pointer-events: none;
+        font-family: var(--mono);
+        font-size: 11px;
+        transition: opacity 0.6s;
+      }
+      .quest.hide { opacity: 0; }
+      .quest .q {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(6, 9, 20, 0.7);
+        color: var(--muted);
+        transition: color 0.5s, border-color 0.5s, background 0.5s;
+      }
+      .quest .q i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); transition: background 0.5s, box-shadow 0.5s; }
+      .quest .q.bad { color: var(--red); border-color: rgba(252, 165, 165, 0.35); }
+      .quest .q.bad i { background: var(--red); box-shadow: 0 0 8px rgba(252, 165, 165, 0.7); animation: alarm 1.6s ease-in-out infinite; }
+      @keyframes alarm { 50% { opacity: 0.35; } }
+      .quest .q.ok { color: var(--green); border-color: rgba(110, 231, 183, 0.4); }
+      .quest .q.ok i { background: var(--green); box-shadow: 0 0 8px rgba(110, 231, 183, 0.7); }
+      .quest .q.pop { animation: pop 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
+      @keyframes pop {
+        0% { transform: scale(1); }
+        35% { transform: scale(1.25); background: rgba(110, 231, 183, 0.18); }
+        100% { transform: scale(1); }
+      }
+      .quest .q.off { opacity: 0.25; }
+
+      .reveal footer { top: 1.1em; bottom: auto; left: 1.4em; right: auto; }
+
+      /* Still mode (reduced motion or ?still): everything visible, nothing moves */
+      .still .reveal section .a,
+      .still .reveal pre .ln,
+      .still .chat .msg { opacity: 1 !important; animation: none !important; transform: none !important; filter: none !important; }
+      .still .reveal section .bar i, .still .reveal .phase .st.bad { animation: none !important; opacity: 1 !important; }
+      .still .strike { text-decoration-color: var(--red); }
+      .still .reveal .ladder li.ngmi { text-decoration-color: var(--muted); }
+
+      @media (max-width: 639px) {
+        .quest, .nightline .tick { display: none; }
+        .nightline .track { right: 1.6em; }
+      }
     </style>
   </head>
   <body>
@@ -367,7 +587,7 @@
         <!-- 00 Flash-forward -->
         <section class="center act">
           <div class="clock">07:30</div>
-          <h2 style="font-family:var(--mono);font-size:1.3em;color:var(--green);margin:0.2em 0">PASS 22/22</h2>
+          <h2 style="font-family:var(--mono);font-size:1.3em;color:var(--green);margin:0.2em 0" data-count="PASS 22/22">PASS 22/22</h2>
           <p>10 commits. 10 decisions logged. Nobody typed "continue".</p>
           <p class="small muted" style="margin-top:1.4em">To get here, we have to go back to an afternoon when nothing worked.</p>
           <aside class="notes">
@@ -485,7 +705,7 @@
         </section>
 
         <!-- 08 Four failures -->
-        <section>
+        <section data-fail-intro>
           <h2>Four ways an agent fails<br />when you look away.</h2>
           <div class="grid-2">
             <div class="card fail lit"><p class="num">01</p><h3>It stops early.</h3><p class="muted">Says "done" when it isn't. (My story.)</p></div>
@@ -532,7 +752,7 @@
           <h2>It cheats.</h2>
           <p>Not on purpose. A failing test is often easier to change than the code.</p>
 <pre><code><span class="dim">// before</span>
-expect(total(cart)).toBe(<span class="bad">1499</span>)
+expect(total(cart)).toBe(<span class="bad strike">1499</span>)
 <span class="dim">// after "fixing" it</span>
 expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// updated to match output</span></code></pre>
           <p class="small muted">Also seen: skipping the test, mocking the thing under test, catching and swallowing the error.</p>
@@ -672,7 +892,7 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         </section>
 
         <!-- 18 /goal -->
-        <section>
+        <section data-fix="1">
           <h2>Every agent now has <code>/goal</code>.</h2>
           <div class="grid-2">
             <div class="card">
@@ -709,7 +929,7 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         </section>
 
         <!-- 20 Lock the finish line -->
-        <section>
+        <section data-fix="2">
           <p class="eyebrow">Fixes failure 02</p>
           <h2>Lock the finish line.</h2>
 <pre><code><span class="dim">$ node check.mjs</span>
@@ -792,7 +1012,7 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         </section>
 
         <!-- 25 Overnight contract -->
-        <section>
+        <section data-fix="3">
           <p class="eyebrow">Fixes failure 03</p>
           <h2>Answer its questions before you leave.</h2>
 <pre><code>im going to bed. implement every function in src/index.js on a fresh branch.
@@ -1052,7 +1272,7 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <!-- ============ ACT V: PSTACK ============ -->
 
         <!-- 37 pstack intro -->
-        <section>
+        <section data-stop="pstack">
           <p class="eyebrow">Someone already wrote the playbook</p>
           <h2>pstack</h2>
           <div class="grid-2">
@@ -1092,10 +1312,10 @@ npx skills add backnotprop/pstack</code></pre>
             <div class="step lit"><b>Proof + PRs</b>verified on the real app, small ordered PRs</div>
           </div>
           <div class="stats">
-            <div><b>54</b><span>skills</span></div>
-            <div><b>23</b><span>playbooks</span></div>
-            <div><b>24</b><span>one-rule principles</span></div>
-            <div><b>~7k</b><span>lines of scripts</span></div>
+            <div><b data-count="54">54</b><span>skills</span></div>
+            <div><b data-count="23">23</b><span>playbooks</span></div>
+            <div><b data-count="24">24</b><span>one-rule principles</span></div>
+            <div><b data-count="~7k">~7k</b><span>lines of scripts</span></div>
           </div>
           <aside class="notes">
             <ul>
@@ -1283,7 +1503,7 @@ symptom.</code></pre>
         </section>
 
         <!-- 44 Laptop -->
-        <section>
+        <section data-fix="4">
           <h2>Your laptop is a bad place for a loop.</h2>
           <div class="grid-2">
             <div class="card"><h3>It sleeps.</h3><p class="muted">Lid closes, Wi-Fi drops, battery dies at 2am.</p></div>
@@ -1308,7 +1528,7 @@ symptom.</code></pre>
               <li>Automations start them on a schedule or an event: a merged PR, a Slack message, an alert.</li>
             </ul>
             <div class="center">
-              <p class="big-stat">30%+</p>
+              <p class="big-stat" data-count="30%+">30%+</p>
               <p class="muted small">of PRs merged at Cursor are made by agents running on their own in cloud sandboxes<br />(Cursor, Feb 2026)</p>
             </div>
           </div>
@@ -1530,7 +1750,7 @@ df372ff Implement formatINR (2/22 -> 5/22)
         transition: "fade",
         transitionSpeed: "fast",
         controls: true,
-        progress: true,
+        progress: false,
         center: true,
         width: phone ? 390 : 1200,
         height: phone ? 844 : 700,
@@ -1539,6 +1759,240 @@ df372ff Implement formatINR (2/22 -> 5/22)
         maxScale: 1.4,
         plugins: [RevealNotes],
       });
+
+      // ===== Motion and story threads =====
+      (() => {
+        const still =
+          /[?&]still\b/.test(location.search) ||
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (still) document.documentElement.classList.add("still");
+
+        // Starfield
+        const stars = document.createElement("div");
+        stars.className = "stars";
+        for (let n = 0; n < 70; n++) {
+          const s = document.createElement("i");
+          s.style.left = `${Math.random() * 100}%`;
+          s.style.top = `${Math.random() * 100}%`;
+          s.style.setProperty("--d", `${3 + Math.random() * 5}s`);
+          s.style.setProperty("--t", `${-Math.random() * 8}s`);
+          if (Math.random() < 0.2) s.style.width = s.style.height = "3px";
+          stars.appendChild(s);
+        }
+        document.body.prepend(stars);
+
+        const slides = Reveal.getSlides();
+
+        // Mark what animates on each slide, in reading order
+        const CONTAINERS =
+          ".grid-2,.grid-3,.grid-4,.loop,.flow,.stats,.phases,.hp,.fixed-wrap,ul,ol,table,thead,tbody";
+        const LEAVES = ".card,.msg,.phase,.step,.moon,.chat";
+        for (const slide of slides) {
+          let i = 0;
+          const mark = (el) => {
+            if (el.matches("aside, .notes, script, .fragment")) return;
+            if (el.matches(".moon")) return;
+            if (el.matches(".chat")) return;
+            const isGenericDiv =
+              el.tagName === "DIV" && !el.matches(LEAVES) && !el.className.includes("clock") && el.children.length;
+            if (el.matches(CONTAINERS) || isGenericDiv) {
+              [...el.children].forEach(mark);
+              return;
+            }
+            el.classList.add("a");
+            el.style.setProperty("--i", i++);
+          };
+          [...slide.children].forEach(mark);
+          slide.querySelectorAll(".loop .step, .flow .step").forEach((s, k) => s.style.setProperty("--k", k));
+          // Split terminal blocks into lines
+          slide.querySelectorAll("pre code").forEach((code) => {
+            code.innerHTML = code.innerHTML
+              .split("\n")
+              .map((line, l) => `<span class="ln" style="--l:${l}">${line}</span>`)
+              .join("\n");
+          });
+          // Chat messages: remember the text so it can be typed
+          slide.querySelectorAll(".chat .msg").forEach((m) => {
+            const who = m.querySelector(".who");
+            const text = [...m.childNodes].filter((n) => n !== who).map((n) => n.textContent).join("");
+            m.dataset.text = text;
+          });
+        }
+
+        // Clocks count forward from the previous act's time
+        const clocks = [...document.querySelectorAll(".act .clock")];
+        const toMin = (t) => {
+          const [h, m] = t.split(":").map(Number);
+          return h * 60 + m;
+        };
+        const fmt = (m) => {
+          m = ((m % 1440) + 1440) % 1440;
+          return `${String(Math.floor(m / 60)).padStart(2, "0")}<span class="colon">:</span>${String(m % 60).padStart(2, "0")}`;
+        };
+        clocks.forEach((c, k) => {
+          c.dataset.to = c.textContent.trim();
+          c.dataset.from = k ? clocks[k - 1].dataset.to : "07:00";
+          c.innerHTML = fmt(toMin(c.dataset.to));
+        });
+
+        let gen = 0;
+        const later = (ms, fn) => {
+          const g = gen;
+          setTimeout(() => g === gen && fn(), ms);
+        };
+        const tween = (ms, step) => {
+          const g = gen;
+          const t0 = performance.now();
+          const tick = (now) => {
+            if (g !== gen) return;
+            const p = Math.min(1, (now - t0) / ms);
+            step(1 - (1 - p) ** 3);
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+
+        function play(slide) {
+          gen++;
+          // Restart entrance animations
+          if (!Reveal.isScrollView?.()) {
+            setTimeout(() => slides.forEach((s) => s !== Reveal.getCurrentSlide() && s.classList.remove("in")), 700);
+          }
+          slide.classList.remove("in");
+          void slide.offsetWidth;
+          slide.classList.add("in");
+
+          // Clock runs forward
+          const clock = slide.matches(".act") ? slide.querySelector(".clock") : null;
+          if (clock?.dataset.to) {
+            const a = toMin(clock.dataset.from);
+            let b = toMin(clock.dataset.to);
+            if (b < a) b += 1440;
+            if (still) clock.innerHTML = fmt(b);
+            else tween(1400, (p) => (clock.innerHTML = fmt(Math.round(a + (b - a) * p))));
+          }
+
+          // Numbers count up
+          slide.querySelectorAll("[data-count]").forEach((el) => {
+            const tpl = el.dataset.count;
+            const target = Number(tpl.match(/\d+/)[0]);
+            if (still) return void (el.textContent = tpl);
+            tween(1500, (p) => (el.textContent = tpl.replace(/\d+/, Math.round(target * p))));
+          });
+
+          // Chat plays out
+          let t = 350;
+          slide.querySelectorAll(".chat .msg").forEach((m) => {
+            const who = m.querySelector(".who").outerHTML;
+            const text = m.dataset.text;
+            if (still) {
+              m.innerHTML = who + text;
+              m.classList.add("show");
+              return;
+            }
+            m.classList.remove("show");
+            m.innerHTML = who + "&nbsp;";
+            if (m.classList.contains("me")) {
+              later(t, () => {
+                m.innerHTML = who + text;
+                m.classList.add("show");
+              });
+              t += 900;
+            } else {
+              const chars = Array.from(text);
+              later(t, () => {
+                m.innerHTML = `${who}<span class="dots"><b></b><b></b><b></b></span>`;
+                m.classList.add("show");
+              });
+              t += 900;
+              const start = t;
+              later(start, () => {
+                m.innerHTML = `${who}<span class="txt caret"></span>`;
+                const span = m.querySelector(".txt");
+                chars.forEach((ch, n) => later(n * 24, () => (span.textContent += ch)));
+                later(chars.length * 24 + 400, () => span.classList.remove("caret"));
+              });
+              t += chars.length * 24 + 700;
+            }
+          });
+
+          updateThreads();
+        }
+
+        // Story thread 1: night timeline
+        const line = document.createElement("div");
+        line.className = "nightline";
+        line.innerHTML = '<div class="track"><div class="fill"></div><div class="marker"></div></div>';
+        document.body.appendChild(line);
+        const track = line.querySelector(".track");
+        const fill = line.querySelector(".fill");
+        const marker = line.querySelector(".marker");
+        const last = slides.length - 1;
+        const stops = [{ idx: slides.findIndex((s) => s.matches(".title")), label: "afternoon" }];
+        slides.forEach((s, idx) => {
+          const h1 = s.matches(".act") && s.querySelector("h1");
+          if (h1) stops.push({ idx, label: `${s.querySelector(".clock").dataset.to} ${h1.textContent.replace(".", "").replace(/^the /i, "").toLowerCase()}` });
+          if (s.dataset.stop) stops.push({ idx, label: s.dataset.stop });
+        });
+        stops.sort((x, y) => x.idx - y.idx);
+        let lastUp = false;
+        const ticks = stops.map((st, k) => {
+          const el = document.createElement("span");
+          const close = k > 0 && (st.idx - stops[k - 1].idx) / last < 0.1;
+          lastUp = close && !lastUp;
+          el.className = lastUp ? "tick up" : "tick";
+          el.textContent = st.label;
+          el.style.left = `${(st.idx / last) * 100}%`;
+          track.appendChild(el);
+          return el;
+        });
+
+        // Story thread 2: the four failures
+        const quest = document.createElement("div");
+        quest.className = "quest hide";
+        const names = ["stops early", "cheats", "waits", "breaks things"];
+        quest.innerHTML = names.map((n, k) => `<span class="q off" data-q="${k + 1}"><i></i>0${k + 1} ${n}</span>`).join("");
+        document.body.appendChild(quest);
+        const introIdx = slides.findIndex((s) => s.hasAttribute("data-fail-intro"));
+        const fixIdx = {};
+        slides.forEach((s, idx) => s.dataset.fix && (fixIdx[s.dataset.fix] = idx));
+        let prevIdx = -1;
+
+        function updateThreads() {
+          const idx = Math.max(0, slides.indexOf(Reveal.getCurrentSlide()));
+          const p = idx / last;
+          track.style.setProperty("--tw", `${track.clientWidth}px`);
+          fill.style.width = `${p * 100}%`;
+          marker.style.left = `${p * 100}%`;
+          let now = 0;
+          stops.forEach((st, k) => idx >= st.idx && (now = k));
+          ticks.forEach((el, k) => {
+            el.classList.toggle("now", k === now && idx >= stops[0].idx);
+            el.classList.toggle("past", k < now);
+          });
+
+          const onTitle = slides[idx].matches(".title");
+          quest.classList.toggle("hide", idx < introIdx || onTitle);
+          quest.querySelectorAll(".q").forEach((q) => {
+            const n = q.dataset.q;
+            const fixed = fixIdx[n] !== undefined && idx >= fixIdx[n];
+            const wasFixed = fixIdx[n] !== undefined && prevIdx >= fixIdx[n];
+            q.classList.toggle("ok", fixed);
+            q.classList.toggle("bad", !fixed && idx >= introIdx);
+            q.classList.toggle("off", idx < introIdx);
+            if (fixed && !wasFixed && idx === fixIdx[n] && !still) {
+              q.classList.remove("pop");
+              void q.offsetWidth;
+              q.classList.add("pop");
+            }
+          });
+          prevIdx = idx;
+        }
+
+        Reveal.on("ready", (e) => play(e.currentSlide || Reveal.getCurrentSlide()));
+        Reveal.on("slidechanged", (e) => play(e.currentSlide));
+        window.addEventListener("resize", updateThreads);
+      })();
     </script>
   </body>
 </html>
