@@ -575,6 +575,407 @@
         .quest, .nightline .tick { display: none; }
         .nightline .track { right: 1.6em; }
       }
+
+      /* ===================== VISUAL COMPONENTS ===================== */
+      .viz { position: relative; margin: 0.4em auto 0; }
+      .cap { font-size: 0.6em !important; color: var(--muted); text-align: center; margin-top: 0.7em !important; }
+      .lbl { font-family: var(--mono); font-size: 0.45em; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+      .reveal section.in .pop { animation: popin 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.4) both; animation-delay: var(--d, 0s); }
+      .reveal section .pop { opacity: 0; }
+      @keyframes popin { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: none; } }
+      .reveal section.in .fadein { animation: lineIn 0.6s ease both; animation-delay: var(--d, 0s); }
+      .reveal section .fadein { opacity: 0; }
+      .chip {
+        display: inline-flex; align-items: center; gap: 0.4em;
+        font-family: var(--mono); font-size: 0.5em;
+        padding: 0.35em 0.8em; border-radius: 999px;
+        border: 1px solid var(--border); background: var(--surface); color: var(--text);
+        white-space: nowrap;
+      }
+      .chip.red { color: var(--red); border-color: rgba(252, 165, 165, 0.4); }
+      .chip.green { color: var(--green); border-color: rgba(110, 231, 183, 0.45); }
+      .chip.amber { color: var(--lamp); border-color: rgba(251, 191, 36, 0.5); background: var(--lamp-dim); }
+      .ico { width: 2.2em; height: 2.2em; display: block; margin: 0 auto 0.3em; }
+      .ico * { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      svg text { font-family: var(--mono); }
+
+      /* Tiles with an icon on top */
+      .tiles { display: grid; gap: 0.7em; margin-top: 0.6em; }
+      .tiles.t4 { grid-template-columns: repeat(4, 1fr); }
+      .tiles.t3 { grid-template-columns: repeat(3, 1fr); }
+      .tile {
+        background: var(--surface); border: 1px solid var(--border); border-radius: 0.9em;
+        padding: 1em 0.6em 0.9em; text-align: center; min-height: 6.5em;
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      }
+      .tile h3 { font-size: 0.72em; margin: 0.35em 0 0; }
+      .tile .stage { height: 3.4em; width: 100%; position: relative; display: grid; place-items: center; }
+      .tile.redline { border-color: rgba(252, 165, 165, 0.35); }
+
+      /* Progress ring */
+      .ring { width: 10em; height: 10em; }
+      .ring circle { fill: none; stroke-width: 9; }
+      .ring .bg { stroke: rgba(148, 163, 214, 0.14); }
+      .ring .fg { stroke: var(--lamp); stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transform: rotate(-90deg); transform-origin: 50% 50%; }
+      .reveal section.in .ring .fg { animation: ringto 1.6s cubic-bezier(0.3, 0.7, 0.2, 1) 0.4s both; }
+      @keyframes ringto { to { stroke-dashoffset: var(--off, 170); } }
+      .stamp {
+        position: absolute; font-family: var(--mono); font-weight: 600; font-size: 0.9em;
+        border: 3px solid var(--green); color: var(--green); border-radius: 0.3em; padding: 0.15em 0.5em;
+        transform: rotate(-12deg); opacity: 0; white-space: nowrap;
+      }
+      .stamp.red { border-color: var(--red); color: var(--red); }
+      .reveal section.in .stamp { animation: slam 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; animation-delay: var(--d, 2s); }
+      @keyframes slam { from { opacity: 0; transform: rotate(-12deg) scale(2.2); } to { opacity: 1; transform: rotate(-12deg) scale(1); } }
+
+      /* Target and arrow (cheating) */
+      .archery { width: 22em; height: 9em; }
+      .archery .tgt circle { fill: none; stroke: var(--muted); stroke-width: 3; }
+      .archery .tgt .bull { fill: var(--red); stroke: none; }
+      .archery .arrow { stroke: var(--lamp); stroke-width: 4; fill: none; }
+      .archery .head { fill: var(--lamp); }
+      .reveal section.in .archery .shot { animation: fly 0.7s cubic-bezier(0.4, 0, 0.9, 0.6) 0.6s both; }
+      @keyframes fly { from { transform: translateX(-260px); opacity: 0; } 20% { opacity: 1; } to { transform: none; opacity: 1; } }
+      .reveal section.in .archery .tgt { animation: cheat 1s cubic-bezier(0.3, 0.7, 0.2, 1) 2.2s both; }
+      @keyframes cheat { to { transform: translate(0, -46px); } }
+
+      /* Idle night bar (waiting) */
+      .idle { width: 100%; max-width: 30em; margin: 1em auto 0; }
+      .idle .bar { height: 1.4em; border-radius: 0.4em; border: 1px solid var(--border); position: relative; overflow: hidden; }
+      .idle .bar i {
+        position: absolute; inset: 0; width: 0;
+        background: repeating-linear-gradient(-45deg, rgba(148, 163, 214, 0.18) 0 8px, transparent 8px 16px);
+      }
+      .reveal section.in .idle .bar i { animation: grow 3s linear 2.6s both; }
+      @keyframes grow { to { width: 100%; } }
+      .idle .ends { display: flex; justify-content: space-between; margin-top: 0.3em; }
+      .zzz { position: absolute; right: 18%; top: -0.2em; font-family: var(--serif); color: var(--muted); }
+      .zzz span { position: absolute; opacity: 0; animation: zz 3s ease-in-out infinite; }
+      .zzz span:nth-child(2) { animation-delay: 1s; left: 0.6em; font-size: 1.2em; }
+      .zzz span:nth-child(3) { animation-delay: 2s; left: 1.3em; font-size: 1.4em; }
+      @keyframes zz { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 0.8; } 100% { opacity: 0; transform: translateY(-1.6em); } }
+
+      /* Blast radius */
+      .blast { width: 18em; height: 11em; display: grid; place-items: center; }
+      .blast .wave {
+        position: absolute; width: 4em; height: 4em; border-radius: 50%;
+        border: 2px solid var(--red); opacity: 0;
+      }
+      .reveal section.in .blast .wave { animation: wave 2.4s ease-out infinite; animation-delay: var(--d); }
+      @keyframes wave { from { transform: scale(0.6); opacity: 0.7; } to { transform: scale(3.6); opacity: 0; } }
+      .blast .laptop { width: 5.5em; color: var(--text); position: relative; z-index: 2; }
+      .blast .chip { position: absolute; z-index: 3; }
+
+      /* Connector rows (fix map) */
+      .wires { display: grid; gap: 0.6em; margin-top: 0.6em; }
+      .wire { display: grid; grid-template-columns: 8.5em 4em 11em 4.5em; justify-content: center; align-items: center; gap: 0.6em; }
+      .wire .line { height: 2px; background: linear-gradient(90deg, var(--red), var(--green)); transform-origin: left; transform: scaleX(0); position: relative; }
+      .wire .line::after { content: ""; position: absolute; right: -4px; top: -4px; border: 5px solid transparent; border-left-color: var(--green); }
+      .reveal section.in .wire .line { animation: draw 0.7s ease both; animation-delay: calc(var(--i) * 120ms + 600ms); }
+      @keyframes draw { to { transform: scaleX(1); } }
+      .wire .chip { justify-content: center; }
+      .wire .act-tag { font-family: var(--mono); font-size: 0.48em; color: var(--lamp); text-align: right; }
+
+      /* Two panels: fog vs flag */
+      .versus { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1em; align-items: center; margin-top: 0.4em; }
+      .versus .vs { font-family: var(--serif); color: var(--muted); font-size: 0.9em; }
+      .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 0.9em; padding: 0.9em; min-height: 9em; position: relative; overflow: hidden; }
+      .panel.lit { border-color: rgba(251, 191, 36, 0.55); background: var(--lamp-dim); }
+      .panel .say { font-family: var(--mono); font-size: 0.5em; color: var(--moon); margin-bottom: 0.6em; }
+      .fog { height: 5.5em; position: relative; }
+      .fog span { position: absolute; font-family: var(--serif); font-size: 1.6em; color: var(--muted); opacity: 0; animation: drift 4s ease-in-out infinite; }
+      .fog span:nth-child(1) { left: 15%; top: 20%; animation-delay: 0s; }
+      .fog span:nth-child(2) { left: 45%; top: 45%; animation-delay: 1.2s; font-size: 2.2em; }
+      .fog span:nth-child(3) { left: 72%; top: 10%; animation-delay: 2.4s; }
+      @keyframes drift { 0% { opacity: 0; transform: translateY(10px); } 40% { opacity: 0.8; } 100% { opacity: 0; transform: translateY(-14px); } }
+      .ticks { list-style: none; margin: 0 !important; padding: 0; display: grid; gap: 0.45em; }
+      .ticks li { display: flex; align-items: center; gap: 0.6em; font-size: 0.6em !important; margin: 0 !important; }
+      .ticks li i {
+        width: 1.2em; height: 1.2em; border-radius: 0.3em; border: 2px solid var(--muted); flex: none;
+        display: grid; place-items: center; font-style: normal; color: transparent; font-size: 0.85em;
+      }
+      .reveal section.in .ticks li i { animation: tick 0.35s ease both; animation-delay: calc(var(--t) * 0.7s + 1s); }
+      @keyframes tick { to { border-color: var(--green); background: rgba(110, 231, 183, 0.15); color: var(--green); } }
+
+      /* Toggle */
+      .toggle { width: 7em; height: 3.2em; border-radius: 3em; border: 2px solid var(--border); position: relative; margin: 0.4em auto 0.8em; background: rgba(252, 165, 165, 0.12); }
+      .toggle b { position: absolute; top: 0.3em; left: 0.3em; width: 2.4em; height: 2.4em; border-radius: 50%; background: var(--red); }
+      .toggle .y, .toggle .n { position: absolute; top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 0.6em; }
+      .toggle .n { right: 1em; color: var(--red); }
+      .toggle .y { left: 1em; color: var(--green); opacity: 0; }
+      .reveal section.in .toggle { animation: tbg 0.5s ease 1.4s both; }
+      .reveal section.in .toggle b { animation: tknob 0.5s cubic-bezier(0.3, 0.7, 0.2, 1.3) 1.4s both; }
+      .reveal section.in .toggle .y { animation: lineIn 0.3s ease 1.7s both; }
+      .reveal section.in .toggle .n { animation: tout 0.2s ease 1.4s both; }
+      @keyframes tbg { to { background: rgba(110, 231, 183, 0.14); border-color: rgba(110, 231, 183, 0.5); } }
+      @keyframes tknob { to { left: calc(100% - 2.7em); background: var(--green); } }
+      @keyframes tout { to { opacity: 0; } }
+      .chiprow { display: flex; flex-wrap: wrap; gap: 0.5em; justify-content: center; }
+
+      /* Worker and judge */
+      .duo { display: grid; grid-template-columns: 1fr 9em 1fr; align-items: center; gap: 0.5em; margin-top: 0.6em; }
+      .bot { text-align: center; }
+      .bot .face {
+        width: 4.4em; height: 4.4em; border-radius: 1.1em; margin: 0 auto 0.4em; display: grid; place-items: center;
+        border: 2px solid var(--border); background: var(--surface); position: relative;
+      }
+      .bot.judge .face { border-color: rgba(167, 139, 250, 0.6); }
+      .bot .face svg { width: 2.4em; height: 2.4em; }
+      .bot .face svg * { fill: none; stroke: var(--text); stroke-width: 2; stroke-linecap: round; }
+      .bot.worker .face { animation: work 1.2s ease-in-out infinite; }
+      @keyframes work { 50% { transform: translateY(-4px) rotate(-3deg); } }
+      .pingpong { height: 3em; position: relative; }
+      .pingpong::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px dashed var(--border); }
+      .pingpong i { position: absolute; top: calc(50% - 0.35em); width: 0.7em; height: 0.7em; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 10px var(--lamp); animation: pp 2s ease-in-out infinite; }
+      @keyframes pp { 0%, 100% { left: 0; } 50% { left: calc(100% - 0.7em); } }
+      .verdict { position: relative; height: 1.6em; margin-top: 0.3em; }
+      .verdict span { position: absolute; left: 50%; transform: translateX(-50%); opacity: 0; }
+      .reveal section.in .verdict span { animation: vshow 9s steps(1) infinite; }
+      .verdict span:nth-child(1) { animation-delay: 0s !important; }
+      .verdict span:nth-child(2) { animation-delay: 3s !important; }
+      .verdict span:nth-child(3) { animation-delay: 6s !important; }
+      @keyframes vshow { 0% { opacity: 1; } 33.3% { opacity: 0; } 100% { opacity: 0; } }
+
+      /* Padlock */
+      .lockwrap { display: flex; align-items: center; justify-content: center; gap: 2em; margin-top: 0.6em; }
+      .file {
+        width: 5.4em; height: 5.6em; border-radius: 0.5em; border: 2px solid var(--border); background: var(--surface);
+        position: relative; padding: 0.7em 0.6em; text-align: left;
+      }
+      .file .lines i { display: block; height: 0.35em; border-radius: 0.2em; background: rgba(148, 163, 214, 0.25); margin-bottom: 0.45em; }
+      .file .name { font-family: var(--mono); font-size: 0.42em; color: var(--muted); margin-bottom: 0.8em; }
+      .lock { position: absolute; right: -1.1em; bottom: -0.9em; width: 2.2em; height: 2.5em; }
+      .lock .shackle { fill: none; stroke: var(--lamp); stroke-width: 5; transform: translateY(-12px); }
+      .lock .body { fill: var(--lamp); }
+      .reveal section.in .lock .shackle { animation: lockdown 0.4s ease 1.4s both; }
+      @keyframes lockdown { to { transform: none; } }
+      .hand { font-size: 2em; position: relative; }
+      .reveal section.in .hand { animation: reach 2.6s ease-in-out 2s infinite; }
+      @keyframes reach { 0%, 100% { transform: translateX(0); } 40% { transform: translateX(1.2em); } 50% { transform: translateX(0.6em) rotate(-10deg); } }
+
+      /* Orbit diagrams */
+      .orbit { width: 15em; height: 15em; position: relative; margin: 0.2em auto 0; }
+      .orbit .track { position: absolute; inset: 12%; border-radius: 50%; border: 2px dashed rgba(148, 163, 214, 0.22); }
+      .orbit .spin { position: absolute; inset: 12%; animation: rot var(--per, 5s) linear infinite; }
+      .orbit .spin::before {
+        content: ""; position: absolute; left: 50%; top: -0.4em; width: 0.8em; height: 0.8em; margin-left: -0.4em;
+        border-radius: 50%; background: var(--lamp); box-shadow: 0 0 14px var(--lamp);
+      }
+      @keyframes rot { to { transform: rotate(360deg); } }
+      .orbit .node {
+        position: absolute; transform: translate(-50%, -50%); width: 6.4em; text-align: center;
+        background: var(--night-2); border: 1px solid var(--border); border-radius: 0.7em; padding: 0.45em 0.4em;
+        font-size: 0.5em; line-height: 1.3; z-index: 2;
+        animation: chase var(--per, 5s) ease-in-out infinite; animation-delay: var(--nd);
+      }
+      .orbit .node b { display: block; color: var(--lamp); font-family: var(--mono); font-size: 0.9em; }
+      .orbit .hub {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center;
+        font-family: var(--serif); color: var(--moon); font-size: 0.75em; width: 6em; z-index: 1;
+      }
+      .orbit.o8 { width: 14.5em; height: 14.5em; }
+      .orbit.o8 .node { width: 7em; }
+      .orbit.o8 .node { animation-name: chase8; }
+      @keyframes chase8 {
+        0%, 14%, 100% { border-color: var(--border); box-shadow: none; color: var(--text); }
+        4% { border-color: rgba(251, 191, 36, 0.9); box-shadow: 0 0 1.4em rgba(251, 191, 36, 0.3); color: var(--moon); }
+      }
+      .hub .chipcore {
+        width: 4.6em; height: 4.6em; margin: 0 auto; border-radius: 1em; display: grid; place-items: center;
+        border: 2px solid rgba(167, 139, 250, 0.6); background: rgba(79, 70, 229, 0.15); font-family: var(--mono); font-size: 0.7em;
+        animation: breathe2 2.4s ease-in-out infinite;
+      }
+      @keyframes breathe2 { 50% { box-shadow: 0 0 1.8em rgba(167, 139, 250, 0.35); } }
+
+      /* Clock / bell / turn icons */
+      .clockface { width: 3em; height: 3em; border-radius: 50%; border: 2px solid var(--text); position: relative; }
+      .clockface::before, .clockface::after { content: ""; position: absolute; left: 50%; bottom: 50%; width: 2px; background: var(--text); transform-origin: bottom; }
+      .clockface::before { height: 1.1em; margin-left: -1px; animation: rot 3s linear infinite; }
+      .clockface::after { height: 0.7em; margin-left: -1px; transform: rotate(90deg); }
+      .bell { font-size: 2.4em; animation: ring 2s ease-in-out infinite; transform-origin: top center; }
+      @keyframes ring { 0%, 60%, 100% { transform: rotate(0); } 10% { transform: rotate(16deg); } 20% { transform: rotate(-14deg); } 30% { transform: rotate(10deg); } 40% { transform: rotate(-6deg); } }
+      .turn { width: 3em; height: 3em; animation: rot 2.4s linear infinite; }
+      .turn * { fill: none; stroke: var(--lamp); stroke-width: 2.5; stroke-linecap: round; }
+
+      /* Harness part stages */
+      .stage-wide { height: 12em; position: relative; margin: 0.4em auto 0; max-width: 34em; }
+      .box3d { position: absolute; border: 2px solid var(--border); border-radius: 0.9em; background: rgba(12, 18, 38, 0.6); }
+      .node2 {
+        position: absolute; transform: translate(-50%, -50%); text-align: center; font-size: 0.5em;
+        background: var(--night-2); border: 1px solid var(--border); border-radius: 0.7em; padding: 0.5em 0.7em; white-space: nowrap; z-index: 2;
+      }
+      .node2.main { border-color: rgba(251, 191, 36, 0.6); background: var(--lamp-dim); font-size: 0.6em; }
+      .node2.good { border-color: rgba(110, 231, 183, 0.5); color: var(--green); }
+      .node2.bad { border-color: rgba(252, 165, 165, 0.5); color: var(--red); }
+      .packet { position: absolute; width: 0.6em; height: 0.6em; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 10px var(--lamp); z-index: 3; offset-rotate: 0deg; }
+      .reveal section.in .packet { animation: travel var(--pd, 2.4s) ease-in-out infinite; animation-delay: var(--d, 0s); }
+      @keyframes travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+      .wirepath { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; overflow: visible; }
+      .wirepath path { fill: none; stroke: rgba(148, 163, 214, 0.3); stroke-width: 2; stroke-dasharray: 6 6; }
+      .wirepath path.solid { stroke-dasharray: none; }
+      .contain { position: absolute; border-radius: 50%; border: 2px solid var(--red); opacity: 0; }
+      .reveal section.in .contain { animation: boom 2.2s ease-out infinite 1.2s; }
+      @keyframes boom { 0% { transform: scale(0.3); opacity: 0.9; } 70% { opacity: 0.25; } 100% { transform: scale(1); opacity: 0; } }
+      .ctxwin { position: absolute; border: 2px solid rgba(251, 191, 36, 0.5); border-radius: 0.7em; }
+      .msgbar { position: absolute; height: 0.8em; border-radius: 0.3em; background: rgba(148, 163, 214, 0.28); }
+      .reveal section.in .squash { animation: squash 6s ease-in-out infinite 1s; }
+      @keyframes squash { 0%, 30% { opacity: 1; transform: none; } 50%, 85% { opacity: 0; transform: translateY(1em) scaleY(0.3); } 100% { opacity: 1; transform: none; } }
+      .reveal section.in .summary { animation: summ 6s ease-in-out infinite 1s; }
+      @keyframes summ { 0%, 35% { opacity: 0; } 50%, 85% { opacity: 1; } 100% { opacity: 0; } }
+      .reveal section.in .slidein { animation: slidein 6s ease-in-out infinite 1s; }
+      @keyframes slidein { 0%, 40% { opacity: 0; transform: translateX(2em); } 55%, 85% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+      .checklist { position: absolute; font-family: var(--mono); font-size: 0.5em; line-height: 1.9; }
+      .checklist div i { font-style: normal; display: inline-block; width: 1.4em; color: var(--muted); }
+      .reveal section.in .checklist .c1 i { animation: chk 0.3s ease 0.8s both; }
+      .reveal section.in .checklist .c2 i { animation: chk 0.3s ease 1.6s both; }
+      .reveal section.in .checklist .c3 i { animation: chk 0.3s ease 5.2s both; }
+      @keyframes chk { to { color: var(--green); } }
+      .session { position: absolute; }
+      .reveal section.in .s1 { animation: die 1s ease 2.6s both; }
+      @keyframes die { to { opacity: 0.15; filter: grayscale(1); } }
+      .reveal section.in .s2 { animation: lineIn 0.8s ease 3.8s both; }
+      .s2 { opacity: 0; }
+      .gate { position: absolute; width: 0; border-left: 4px solid var(--lamp); }
+      .reveal section.in .bounce { animation: bounce 3s ease-in-out infinite 1s; }
+      @keyframes bounce { 0% { transform: translateX(0); } 45% { transform: translateX(var(--bx, 6em)); } 55% { transform: translateX(calc(var(--bx, 6em) - 0.8em)); } 100% { transform: translateX(0); } }
+      .reveal section.in .hold { animation: holdc 3s ease-in-out infinite 1s; }
+      @keyframes holdc { 0%, 40% { opacity: 0; } 50%, 80% { opacity: 1; } 100% { opacity: 0; } }
+      .trace { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: rgba(148, 163, 214, 0.25); }
+      .tdot { position: absolute; top: 50%; width: 1em; height: 1em; margin: -0.5em 0 0 -0.5em; border-radius: 50%; opacity: 0; }
+      .tdot.r { background: var(--red); box-shadow: 0 0 10px rgba(252, 165, 165, 0.6); }
+      .tdot.g { background: var(--green); box-shadow: 0 0 10px rgba(110, 231, 183, 0.6); }
+      .reveal section.in .tdot { animation: popin 0.4s ease both; animation-delay: var(--d); }
+      .reveal section.in .tlabel { animation: lineIn 0.4s ease both; animation-delay: var(--d); }
+      .tlabel { position: absolute; font-family: var(--mono); font-size: 0.42em; transform: translateX(-50%); opacity: 0; white-space: nowrap; }
+      .vbar { position: absolute; left: 0; height: 0.9em; border-radius: 0.5em; background: rgba(148, 163, 214, 0.15); overflow: hidden; }
+      .vbar i { display: block; height: 100%; width: 0; background: var(--green); }
+      .reveal section.in .vbar i { animation: growv 3s ease 1s both; }
+      @keyframes growv { 0% { width: 0; background: var(--red); } 60% { background: var(--red); } 100% { width: 100%; background: var(--green); } }
+
+      /* Skill anatomy */
+      .skillfile { max-width: 26em; margin: 0.4em auto 0; position: relative; }
+      .skillfile pre { margin: 0; }
+      .reveal section.in .skillfile .body { animation: unblur 1s ease 3s both; }
+      .skillfile .body { filter: blur(4px); opacity: 0.35; }
+      @keyframes unblur { to { filter: none; opacity: 1; } }
+      .reveal section.in .skillfile .desc { animation: hl 1.2s ease 1.2s both; }
+      @keyframes hl { to { background: rgba(251, 191, 36, 0.18); box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.18); } }
+      .callout2 { position: absolute; font-family: var(--mono); font-size: 0.45em; color: var(--lamp); white-space: nowrap; }
+
+      /* Amnesia agents */
+      .agents { display: flex; justify-content: center; gap: 2.4em; margin-top: 1.2em; }
+      .agent { text-align: center; position: relative; }
+      .agent .head { width: 3.4em; height: 3.4em; border-radius: 1em; border: 2px solid var(--border); background: var(--surface); margin: 0 auto; display: grid; place-items: center; font-family: var(--mono); font-size: 0.8em; }
+      .agent .mem { width: 4.4em; height: 0.6em; border-radius: 0.3em; border: 1px solid var(--border); margin: 0.5em auto 0; overflow: hidden; }
+      .agent .mem i { display: block; height: 100%; width: 100%; background: var(--lamp); }
+      .reveal section.in .agent .mem i { animation: amnesia 6s ease-in-out infinite 1s; }
+      @keyframes amnesia { 0%, 15% { width: 100%; } 30%, 45% { width: 0; } 65%, 100% { width: 100%; } }
+      .agent .card2 { position: absolute; left: 50%; top: -2.2em; transform: translateX(-50%); }
+      .reveal section.in .agent .card2 { animation: deliver 6s ease-in-out infinite 1s; }
+      .agent .card2 { opacity: 0; }
+      @keyframes deliver { 0%, 40% { opacity: 0; transform: translate(-50%, -1.5em); } 52% { opacity: 1; transform: translate(-50%, 0); } 62%, 100% { opacity: 0; transform: translate(-50%, 1.6em); } }
+      .sun { position: absolute; left: 50%; top: -0.6em; width: 2.2em; height: 2.2em; margin-left: -1.1em; border-radius: 50%; background: radial-gradient(circle, #fde68a, #f59e0b); opacity: 0; }
+      .reveal section.in .sun { animation: sunrise 6s ease-in-out infinite 1s; }
+      @keyframes sunrise { 0%, 10% { opacity: 0; transform: translateY(1em); } 22%, 35% { opacity: 0.9; transform: none; } 50%, 100% { opacity: 0; transform: translateY(-0.5em); } }
+
+      /* Ladder */
+      .ladder2 { display: flex; flex-direction: column-reverse; gap: 0.5em; max-width: 26em; margin: 0.6em auto 0; }
+      .rung { display: grid; grid-template-columns: 2em 1fr auto; align-items: center; gap: 0.6em; padding: 0.5em 0.8em; border-radius: 0.6em; border: 1px solid var(--border); background: var(--surface); font-size: 0.62em; }
+      .rung b { font-family: var(--serif); color: var(--lamp); font-size: 1.3em; }
+      .rung .val { font-family: var(--mono); font-size: 0.75em; color: var(--green); }
+      .rung.best { border-color: rgba(251, 191, 36, 0.55); background: var(--lamp-dim); }
+      .rung.ngmi2 { opacity: 0.6; }
+      .rung.ngmi2 span { text-decoration: line-through; text-decoration-color: transparent; text-decoration-thickness: 2px; }
+      .reveal section.in .rung.ngmi2 span { animation: strikemuted2 0.5s ease 2.2s both; }
+      @keyframes strikemuted2 { to { text-decoration-color: var(--red); } }
+
+      /* Mini charts for loop rules */
+      .mini { width: 100%; height: 3.4em; }
+      .mini path { fill: none; stroke: var(--lamp); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 300; stroke-dashoffset: 300; }
+      .reveal section.in .mini path { animation: drawp 2s ease 0.8s both; }
+      @keyframes drawp { to { stroke-dashoffset: 0; } }
+      .mini path.flat { stroke: var(--muted); }
+      .mini path.up { stroke: var(--green); animation-delay: 2.2s !important; }
+      .revert { position: relative; height: 3.4em; width: 100%; }
+      .revert .chip { position: absolute; left: 10%; top: 1em; }
+      .reveal section.in .revert .chip { animation: rv 3s ease-in-out infinite 1s; }
+      @keyframes rv { 0% { transform: none; opacity: 1; } 40% { transform: translateX(4.5em); } 60% { transform: translateX(4.5em); color: var(--red); } 100% { transform: none; opacity: 1; } }
+
+      /* Gauges */
+      .gauge { height: 0.6em; border-radius: 0.3em; background: rgba(148, 163, 214, 0.14); overflow: hidden; width: 80%; margin: 0.5em auto 0; }
+      .gauge i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--lamp), var(--red)); }
+      .reveal section.in .gauge i { animation: gfill 1.4s cubic-bezier(0.3, 0.7, 0.2, 1) both; animation-delay: calc(var(--i) * 120ms + 600ms); }
+      @keyframes gfill { to { width: var(--w); } }
+
+      /* VM grid */
+      .vms { display: grid; grid-template-columns: repeat(6, 2.6em); gap: 0.4em; justify-content: center; }
+      .vm { height: 2em; border-radius: 0.35em; border: 1px solid var(--border); background: var(--surface); position: relative; opacity: 0; }
+      .vm::after { content: ""; position: absolute; left: 0.35em; bottom: 0.35em; width: 0.5em; height: 0.12em; background: var(--green); animation: blink 1s steps(1) infinite; }
+      .reveal section.in .vm { animation: popin 0.4s ease both; animation-delay: calc(var(--v) * 90ms + 0.6s); }
+      .vm.play { border-color: rgba(251, 191, 36, 0.6); }
+      .vm.play::before { content: "▶"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--lamp); font-size: 0.7em; }
+
+      /* Flow arrow row */
+      .row3 { display: flex; align-items: center; justify-content: center; gap: 0.6em; margin-top: 0.8em; }
+      .arrowline { width: 1.8em; height: 2px; background: var(--border); position: relative; overflow: visible; }
+      .arrowline::after { content: ""; position: absolute; top: -0.3em; width: 0.6em; height: 0.6em; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 8px var(--lamp); animation: pp2 1.6s linear infinite; }
+      @keyframes pp2 { from { left: 0; } to { left: 100%; } }
+      .bigtile { text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 0.9em; padding: 0.7em 0.6em; min-width: 4.4em; max-width: 6.6em; }
+      .bigtile.lit { border-color: rgba(251, 191, 36, 0.55); background: var(--lamp-dim); }
+      .bigtile .em { font-size: 1.8em; line-height: 1.2; }
+      .bigtile .lbl { display: block; margin-top: 0.3em; }
+
+      /* Laptop vs cloud */
+      .battery { width: 3em; height: 1.3em; border: 2px solid var(--text); border-radius: 0.25em; position: relative; margin: 0 auto; }
+      .battery::after { content: ""; position: absolute; right: -0.4em; top: 0.3em; width: 0.25em; height: 0.5em; background: var(--text); }
+      .battery i { position: absolute; left: 2px; top: 2px; bottom: 2px; width: calc(100% - 4px); background: var(--green); border-radius: 0.1em; }
+      .reveal section.in .battery i { animation: drain 4s linear infinite 0.8s; }
+      @keyframes drain { 0% { width: calc(100% - 4px); background: var(--green); } 70% { background: var(--lamp); } 100% { width: 6%; background: var(--red); } }
+      .bump { display: inline-block; }
+      .reveal section.in .bump.l { animation: bumpl 1.6s ease-in-out infinite; }
+      .reveal section.in .bump.r { animation: bumpr 1.6s ease-in-out infinite; }
+      @keyframes bumpl { 50% { transform: translateX(0.5em); } }
+      @keyframes bumpr { 50% { transform: translateX(-0.5em); } }
+
+      @media (max-width: 639px) {
+        .tiles.t4, .tiles.t3, .versus, .duo, .wire { grid-template-columns: 1fr; }
+        .stage-wide { transform: scale(0.7); transform-origin: top center; }
+      }
+      /* SVG stages */
+      .hs { width: 100%; max-width: 27em; height: auto; display: block; margin: 0.2em auto 0; overflow: visible; }
+      .hs .bx { fill: rgba(12, 18, 38, 0.85); stroke: rgba(148, 163, 214, 0.35); stroke-width: 2; }
+      .hs .bx.main { fill: rgba(251, 191, 36, 0.12); stroke: rgba(251, 191, 36, 0.7); }
+      .hs .bx.good { stroke: rgba(110, 231, 183, 0.6); }
+      .hs .bx.sandbox { fill: rgba(79, 70, 229, 0.06); stroke: rgba(167, 139, 250, 0.5); stroke-dasharray: 10 8; }
+      .hs .bx.gatebox { stroke: rgba(251, 191, 36, 0.9); }
+      .hs text { fill: var(--text); font-size: 22px; font-family: var(--sans); text-anchor: middle; dominant-baseline: middle; }
+      .hs text.m { fill: var(--muted); font-size: 17px; font-family: var(--mono); }
+      .hs text.g { fill: var(--green); } .hs text.r { fill: var(--red); } .hs text.a { fill: var(--lamp); }
+      .hs .wp { fill: none; stroke: rgba(148, 163, 214, 0.35); stroke-width: 2; stroke-dasharray: 6 6; }
+      .hs .wp.solid { stroke-dasharray: none; }
+      .hs .pk { fill: var(--lamp); filter: drop-shadow(0 0 6px #fbbf24); }
+      .hs .pk.g { fill: var(--green); filter: drop-shadow(0 0 6px #6ee7b7); }
+      .hs .contain { fill: none; stroke: var(--red); stroke-width: 3; transform-box: fill-box; transform-origin: center; }
+      .hs .cb { fill: transparent; stroke: var(--muted); stroke-width: 2; }
+      .reveal section.in .hs .c1 { animation: cbon 0.3s ease 0.8s both; }
+      .reveal section.in .hs .c2 { animation: cbon 0.3s ease 1.6s both; }
+      .reveal section.in .hs .c3 { animation: cbon 0.3s ease 5.2s both; }
+      @keyframes cbon { to { fill: var(--green); stroke: var(--green); } }
+      .hs .s1x, .hs .tp, .hs .rej, .hs .okk { opacity: 0; }
+      .reveal section.in .hs .s1x { animation: lineIn 0.4s ease 2.6s both; }
+      .reveal section.in .hs .tp { animation: lineIn 0.5s ease both; animation-delay: var(--d); }
+      .hs .vfill { fill: var(--red); }
+      .reveal section.in .hs .vfill { animation: vfillw 3s ease 1s both; }
+      @keyframes vfillw { 0% { width: 0; fill: var(--red); } 60% { fill: var(--red); } 100% { width: 210px; fill: var(--green); } }
+      .reveal section.in .hs .rej { animation: lineIn 0.3s ease 1.4s both, fadeout 0.3s ease 3.6s forwards; }
+      .hs .okk { transform-box: fill-box; transform-origin: center; }
+      .reveal section.in .hs .okk { animation: popin 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.4) 4s both; }
+      @keyframes fadeout { to { opacity: 0; } }
+      .reveal section.in .tgt2 { animation: cheat2 1s ease 1.4s both; }
+      @keyframes cheat2 { to { transform: translateY(-26px); } }
+      .skillfile { max-width: 19em; margin: 0.4em 0 0 0; }
+      .skillfile .callout2 { left: calc(100% + 0.6em); }
+      .tile .stamp { font-size: 0.4em; }
     </style>
   </head>
   <body>
@@ -616,7 +1017,6 @@
         <section>
           <p class="eyebrow">A true story</p>
           <h2>At work, I asked Claude Code<br />to build something.</h2>
-          <p>Nothing exotic. It had a few phases, each one building on the last.</p>
           <div class="phases">
             <div class="phase"><b>Phase 1</b><span class="bar"></span><span class="st dim">todo</span></div>
             <div class="phase"><b>Phase 2</b><span class="bar"></span><span class="st dim">todo</span></div>
@@ -625,8 +1025,8 @@
           </div>
           <aside class="notes">
             <ul>
-              <li>Keep this vague on purpose. "At work, a multi-phase build." What it was doesn't matter. What happened does.</li>
-              <li>Say it like you're telling a friend, not presenting.</li>
+              <li>Nothing exotic. It had a few phases, each one building on the last.</li>
+              <li>Keep this vague on purpose. What it was doesn't matter. What happened does.</li>
             </ul>
           </aside>
         </section>
@@ -707,15 +1107,42 @@
         <!-- 08 Four failures -->
         <section data-fail-intro>
           <h2>Four ways an agent fails<br />when you look away.</h2>
-          <div class="grid-2">
-            <div class="card fail lit"><p class="num">01</p><h3>It stops early.</h3><p class="muted">Says "done" when it isn't. (My story.)</p></div>
-            <div class="card fail"><p class="num">02</p><h3>It cheats.</h3><p class="muted">Makes the check pass instead of the code.</p></div>
-            <div class="card fail"><p class="num">03</p><h3>It waits for you.</h3><p class="muted">Asks a question at 11pm. You see it at 8am.</p></div>
-            <div class="card fail"><p class="num">04</p><h3>It breaks things.</h3><p class="muted">One bad command on your real machine.</p></div>
+          <div class="tiles t4">
+            <div class="tile redline">
+              <div class="stage">
+                <svg class="ring" viewBox="0 0 100 100" style="width:3.2em;height:3.2em;--off:180"><circle class="bg" cx="50" cy="50" r="45"/><circle class="fg" cx="50" cy="50" r="45"/></svg>
+                <span class="stamp" style="font-size:0.38em;--d:1.6s">Done ✅</span>
+              </div>
+              <h3>It stops early.</h3>
+            </div>
+            <div class="tile redline">
+              <div class="stage">
+                <svg viewBox="0 0 120 80" style="width:4em;height:2.8em">
+                  <g class="tgt2"><circle cx="85" cy="48" r="26" fill="none" stroke="#7d87a8" stroke-width="3"/><circle cx="85" cy="48" r="14" fill="none" stroke="#7d87a8" stroke-width="3"/><circle cx="85" cy="48" r="5" fill="#fca5a5"/></g>
+                  <line x1="10" y1="22" x2="80" y2="22" stroke="#fbbf24" stroke-width="4"/><polygon points="80,15 92,22 80,29" fill="#fbbf24"/>
+                </svg>
+              </div>
+              <h3>It cheats.</h3>
+            </div>
+            <div class="tile redline">
+              <div class="stage"><span class="zzz" style="position:relative;right:auto;top:0;width:3em;height:2.6em;font-size:1.1em"><span>z</span><span>z</span><span>z</span></span></div>
+              <h3>It waits for you.</h3>
+            </div>
+            <div class="tile redline">
+              <div class="stage blast" style="width:100%;height:3.4em">
+                <span class="wave" style="--d:0s;width:1.4em;height:1.4em"></span><span class="wave" style="--d:0.8s;width:1.4em;height:1.4em"></span>
+                <svg class="ico" viewBox="0 0 24 24" style="color:var(--red);margin:0;position:relative;z-index:2"><path d="M12 2l2.4 6.6L21 9l-5 4.6L17.6 21 12 17.3 6.4 21 8 13.6 3 9l6.6-.4z"/></svg>
+              </div>
+              <h3>It breaks things.</h3>
+            </div>
           </div>
           <aside class="notes">
             <ul>
-              <li>Quick overview, then one slide each. Ask the room which one they've hit. Most will say one and two.</li>
+              <li>Stops early: says "done" when it isn't. That's my story.</li>
+              <li>Cheats: makes the check pass instead of the code.</li>
+              <li>Waits: asks a question at 11pm, you see it at 8am.</li>
+              <li>Breaks things: one bad command on your real machine.</li>
+              <li>Ask the room which one they've hit. Most will say one and two. Watch the tracker in the top right: these four stay red until we fix them.</li>
             </ul>
           </aside>
         </section>
@@ -724,24 +1151,17 @@
         <section>
           <p class="eyebrow">Failure 01</p>
           <h2>It stops early.</h2>
-          <div class="grid-2">
-            <div>
-              <ul>
-                <li>By default, <strong>the model decides when it's done</strong>.</li>
-                <li>Models are optimistic. "Probably done" feels like done.</li>
-                <li>Long, multi-phase work makes it worse: the plan slides out of view.</li>
-              </ul>
-            </div>
-            <div class="chat">
-              <div class="msg ai"><span class="who">claude</span>All tests pass ✅</div>
-              <div class="msg me"><span class="who">me</span>which tests did you run?</div>
-              <div class="msg ai"><span class="who">claude</span>I didn't run them, but the changes look correct.</div>
-            </div>
+          <div class="viz" style="width:10em;height:10em;display:grid;place-items:center">
+            <svg class="ring" viewBox="0 0 100 100" style="--off:170;position:absolute;inset:0"><circle class="bg" cx="50" cy="50" r="45"/><circle class="fg" cx="50" cy="50" r="45"/></svg>
+                        <span class="stamp" style="--d:2.2s">Done ✅</span>
           </div>
+          <p class="cap fadein" style="--d:3s">40% built. Who decided it was done? <strong>The model.</strong></p>
           <aside class="notes">
             <ul>
-              <li>Nobody wrote down what "done" means, so the model makes it up. That's the root cause.</li>
-              <li>The chat on the right is the generic version every developer has seen.</li>
+              <li>By default, the model decides when it's done. Nobody wrote down what "done" means, so it makes it up.</li>
+              <li>Models are optimistic. "Probably done" feels like done.</li>
+              <li>Long, multi-phase work makes it worse: the plan slides out of view.</li>
+              <li>Classic exchange: "All tests pass ✅" / "which tests did you run?" / "I didn't run them, but the changes look correct."</li>
             </ul>
           </aside>
         </section>
@@ -750,15 +1170,18 @@
         <section>
           <p class="eyebrow">Failure 02</p>
           <h2>It cheats.</h2>
-          <p>Not on purpose. A failing test is often easier to change than the code.</p>
-<pre><code><span class="dim">// before</span>
-expect(total(cart)).toBe(<span class="bad strike">1499</span>)
-<span class="dim">// after "fixing" it</span>
-expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// updated to match output</span></code></pre>
-          <p class="small muted">Also seen: skipping the test, mocking the thing under test, catching and swallowing the error.</p>
+          <div class="viz">
+            <svg class="archery" viewBox="0 0 600 240" style="width:22em;height:8.8em;display:block;margin:0 auto">
+              <g class="tgt"><circle cx="460" cy="150" r="62"/><circle cx="460" cy="150" r="40"/><circle cx="460" cy="150" r="20"/><circle class="bull" cx="460" cy="150" r="8"/></g>
+              <g class="shot"><line class="arrow" x1="160" y1="104" x2="440" y2="104"/><polygon class="head" points="440,94 462,104 440,114"/></g>
+            </svg>
+          </div>
+          <div class="chiprow"><span class="chip red pop" style="--d:3.4s">moved the target, called it a hit</span></div>
+          <p class="cap fadein" style="--d:3.8s"><code>expect(total).toBe(<span class="bad strike" style="--sd:4.2s">1499</span> 1349)</code></p>
           <aside class="notes">
             <ul>
-              <li>The agent is rewarded for green. If the test is in reach, the test is a target.</li>
+              <li>Not on purpose. A failing test is often easier to change than the code. The agent is rewarded for green, so the test becomes the target.</li>
+              <li>Also seen: skipping the test, mocking the thing under test, catching and swallowing the error.</li>
               <li>Lesson: whoever writes the code must not be the one grading it.</li>
             </ul>
           </aside>
@@ -769,14 +1192,16 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
           <p class="eyebrow">Failure 03</p>
           <h2>It waits for you.</h2>
           <div class="chat">
-            <div class="msg ai"><span class="who">claude · 11:42 pm</span>I'm about to commit these changes. Should I go ahead?</div>
-            <div class="msg me"><span class="who">me · 8:03 am</span>yes</div>
+            <div class="msg ai"><span class="who">claude · 11:42 pm</span>Should I go ahead and commit?</div>
           </div>
-          <p class="small muted" style="margin-top:0.8em">Eight hours of compute, zero minutes of work. The agent was polite. You were asleep.</p>
+          <div class="idle viz">
+            <div class="bar"><i></i><span class="zzz"><span>z</span><span>z</span><span>z</span></span></div>
+            <div class="ends"><span class="lbl">11:42 pm</span><span class="lbl">idle · 8 hours</span><span class="lbl">8:03 am · "yes"</span></div>
+          </div>
           <aside class="notes">
             <ul>
-              <li>Permission prompts are good when you're watching. They're a wall when you're not.</li>
-              <li>Fix later: answer the questions before you leave.</li>
+              <li>Eight hours of compute, zero minutes of work. The agent was polite. You were asleep.</li>
+              <li>Permission prompts are good when you're watching. They're a wall when you're not. Fix later: answer the questions before you leave.</li>
             </ul>
           </aside>
         </section>
@@ -785,16 +1210,17 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <section>
           <p class="eyebrow">Failure 04</p>
           <h2>It breaks things.</h2>
-          <div class="grid-3">
-            <div class="card"><h3>The wrong folder</h3><p class="muted">A cleanup command, one directory too high.</p></div>
-            <div class="card"><h3>The wrong branch</h3><p class="muted">A force push to main at 3am.</p></div>
-            <div class="card"><h3>The wrong hands</h3><p class="muted">A web page with hidden instructions, and your keys sitting right there.</p></div>
+          <div class="viz blast" style="width:24em;height:10em">
+            <span class="wave" style="--d:0s"></span><span class="wave" style="--d:0.8s"></span><span class="wave" style="--d:1.6s"></span>
+            <svg class="laptop ico" viewBox="0 0 24 24" style="width:4em;height:4em;margin:0"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>
+            <span class="chip red pop" style="left:0;top:0.6em;--d:1s">rm -rf ../</span>
+            <span class="chip red pop" style="right:0;top:2.4em;--d:1.6s">push --force main</span>
+            <span class="chip red pop" style="left:2em;bottom:0.4em;--d:2.2s">leaked API key</span>
           </div>
-          <p class="small muted" style="margin-top:0.8em">To run unattended, you turn permission prompts off. Then the machine is the only seatbelt.</p>
           <aside class="notes">
             <ul>
-              <li>Third card is prompt injection. An agent that reads the web can read instructions you didn't write.</li>
-              <li>The answer isn't "watch it". It's "give it a machine where mistakes don't matter".</li>
+              <li>The wrong folder: a cleanup command, one directory too high. The wrong branch: a force push to main at 3am. The wrong hands: a web page with hidden instructions, and your keys sitting right there.</li>
+              <li>To run unattended, you turn permission prompts off. Then the machine is the only seatbelt.</li>
             </ul>
           </aside>
         </section>
@@ -802,19 +1228,16 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <!-- 13 Fix map -->
         <section>
           <h2>Every failure has a fix.</h2>
-          <table class="fixmap">
-            <thead><tr><th>#</th><th>Failure</th><th>Fix</th><th>Tonight</th></tr></thead>
-            <tbody>
-              <tr><td>01</td><td>It stops early</td><td>A finish line a machine can check</td><td>Set Goal</td></tr>
-              <tr><td>02</td><td>It cheats</td><td>Lock the finish line, separate the grader</td><td>Set Goal</td></tr>
-              <tr><td>03</td><td>It waits for you</td><td>A loop, plus permissions given up front</td><td>Start Loop</td></tr>
-              <tr><td>04</td><td>It breaks things</td><td>A sandbox that isn't your laptop</td><td>Sleep</td></tr>
-            </tbody>
-          </table>
-          <p class="small muted">And the thing that holds all of it together has a name: the <strong>harness</strong>.</p>
+          <div class="wires">
+            <div class="wire"><span class="chip red">01 stops early</span><span class="line"></span><span class="chip green">a checkable finish line</span><span class="act-tag">SET GOAL</span></div>
+            <div class="wire"><span class="chip red">02 cheats</span><span class="line"></span><span class="chip green">lock it, separate grader</span><span class="act-tag">SET GOAL</span></div>
+            <div class="wire"><span class="chip red">03 waits</span><span class="line"></span><span class="chip green">a loop + permission</span><span class="act-tag">START LOOP</span></div>
+            <div class="wire"><span class="chip red">04 breaks things</span><span class="line"></span><span class="chip green">a sandbox in the cloud</span><span class="act-tag">SLEEP</span></div>
+          </div>
           <aside class="notes">
             <ul>
-              <li>This is the map for the rest of the talk. Come back to it if people get lost.</li>
+              <li>This is the map for the rest of the talk.</li>
+              <li>And the thing that holds all of it together has a name: the harness.</li>
             </ul>
           </aside>
         </section>
@@ -834,21 +1257,25 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <!-- 15 Prompt vs goal -->
         <section>
           <h2>A prompt is a request.<br /><span class="lamp">A goal is a finish line.</span></h2>
-          <div class="grid-2">
-            <div class="card">
-              <p class="tag">What I typed</p>
-              <h3>"Build it. All the phases."</h3>
-              <p class="muted">The agent decides when it's done. It decided early.</p>
+          <div class="versus">
+            <div class="panel">
+              <p class="say">"Build it. All the phases."</p>
+              <div class="fog"><span>?</span><span>?</span><span>?</span></div>
             </div>
-            <div class="card lit">
-              <p class="tag">What I should have typed</p>
-              <h3>"Done means every phase's tests pass, the app runs end to end, and you show me the output."</h3>
-              <p class="muted">Anyone can check it. Including another machine.</p>
+            <span class="vs">vs</span>
+            <div class="panel lit">
+              <p class="say">done means...</p>
+              <ul class="ticks">
+                <li style="--t:0"><i>✓</i>every phase's tests pass</li>
+                <li style="--t:1"><i>✓</i>the app runs end to end</li>
+                <li style="--t:2"><i>✓</i>you show me the output</li>
+              </ul>
             </div>
           </div>
           <aside class="notes">
             <ul>
-              <li>Callback to the story. Same task, one extra sentence.</li>
+              <li>Left is what I typed. The agent decides when it's done. It decided early.</li>
+              <li>Right is what I should have typed. Anyone can check it, including another machine.</li>
               <li>If you can't tell whether it's done, neither can the agent.</li>
             </ul>
           </aside>
@@ -857,11 +1284,15 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <!-- 16 Yes/no -->
         <section class="center statement">
           <h2>A good goal is a <span class="lamp">yes / no</span> question.</h2>
-          <p class="muted">tests green · bug no longer reproduces · all 5 PRs merged · pixel diff is zero</p>
+          <div class="viz"><div class="toggle"><b></b><span class="n">NO</span><span class="y">YES</span></div></div>
+          <div class="chiprow">
+            <span class="chip green pop" style="--d:2s">tests green</span>
+            <span class="chip green pop" style="--d:2.2s">bug no longer reproduces</span>
+            <span class="chip green pop" style="--d:2.4s">all 5 PRs merged</span>
+            <span class="chip green pop" style="--d:2.6s">pixel diff is zero</span>
+          </div>
           <aside class="notes">
-            <ul>
-              <li>pstack calls it a "checkable predicate". Every example here, a script can answer.</li>
-            </ul>
+            <ul><li>pstack calls it a "checkable predicate". Every example here, a script can answer.</li></ul>
           </aside>
         </section>
 
@@ -894,24 +1325,20 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <!-- 18 /goal -->
         <section data-fix="1">
           <h2>Every agent now has <code>/goal</code>.</h2>
-          <div class="grid-2">
-            <div class="card">
-              <p class="tag">Claude Code</p>
-<pre><code>/goal all tests in test/auth pass
-      and the lint step is clean</code></pre>
-              <p class="muted">Keeps taking turns until the condition holds. Works headless: <code>claude -p "/goal ..."</code></p>
-            </div>
-            <div class="card">
-              <p class="tag">Codex</p>
-<pre><code>/goal Reduce p95 latency below 120 ms
-      without regressing correctness tests</code></pre>
-              <p class="muted">Pause, resume, clear, with a budget. "The evidence decides."</p>
+          <div class="chiprow"><span class="chip amber">/goal all tests pass and lint is clean</span></div>
+          <div class="duo">
+            <div class="bot worker"><div class="face"><svg viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M9 12h.01M15 12h.01M12 3v4"/></svg></div><span class="lbl">does the work</span></div>
+            <div class="pingpong"><i></i></div>
+            <div class="bot judge"><div class="face"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8.5 12.5l2.3 2.3 4.7-5"/></svg></div><span class="lbl">checks the goal</span>
+              <div class="verdict"><span class="chip red">not yet</span><span class="chip red">not yet</span><span class="chip green">met ✓</span></div>
             </div>
           </div>
-          <p class="small muted">If I'd had this for my multi-phase build, "continue" would have typed itself.</p>
+          <p class="cap">Claude Code · Codex · headless with <code>claude -p</code></p>
           <aside class="notes">
             <ul>
-              <li>Two companies, same command. That's usually a sign the idea is right.</li>
+              <li>Claude Code: /goal keeps taking turns until the condition holds. A separate model checks it after every turn. Headless: claude -p "/goal ...".</li>
+              <li>Codex: /goal with pause, resume, clear, and a budget. "The evidence decides."</li>
+              <li>Two companies, same command. If I'd had this for my multi-phase build, "continue" would have typed itself. Watch the tracker: 01 just turned green.</li>
             </ul>
           </aside>
         </section>
@@ -932,17 +1359,19 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <section data-fix="2">
           <p class="eyebrow">Fixes failure 02</p>
           <h2>Lock the finish line.</h2>
-<pre><code><span class="dim">$ node check.mjs</span>
-<span class="bad">FAIL</span>
-- 0/22 tests passing
-
-<span class="dim">$ echo "// sneaky" >> tests/index.test.js && node check.mjs</span>
-<span class="bad">FAIL</span>
-- tests/index.test.js was changed. The finish line is not yours to move.</code></pre>
-          <p class="small muted">The tests and the checker are hashed. Editing the test to win counts as losing.</p>
+          <div class="lockwrap viz">
+            <span class="hand">✎</span>
+            <div class="file">
+              <div class="name">tests/ · check.mjs</div>
+              <div class="lines"><i style="width:90%"></i><i style="width:70%"></i><i style="width:85%"></i><i style="width:60%"></i><i style="width:75%"></i></div>
+              <svg class="lock" viewBox="0 0 40 46"><path class="shackle" d="M11 20v-7a9 9 0 0 1 18 0v7"/><rect class="body" x="5" y="20" width="30" height="24" rx="4"/></svg>
+            </div>
+          </div>
+          <div class="chiprow" style="margin-top:1.4em"><span class="chip red pop" style="--d:3s">FAIL · the finish line is not yours to move</span></div>
           <aside class="notes">
             <ul>
-              <li>This is from the demo repo we'll see at the end. Pause after the last line, it lands.</li>
+              <li>The tests and the checker are hashed in a LOCK file. If the agent edits the test to win, check.mjs fails with: "The finish line is not yours to move."</li>
+              <li>This is from the demo repo we'll see at the end. 02 turns green.</li>
             </ul>
           </aside>
         </section>
@@ -962,16 +1391,21 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <!-- 22 Ralph -->
         <section>
           <p class="eyebrow">My "continue", automated</p>
-<pre style="font-size:0.85em"><code>while :; do cat PROMPT.md | claude ; done</code></pre>
-          <ul>
-            <li>Geoffrey Huntley calls it the <strong>Ralph</strong> loop. Each pass is a fresh agent.</li>
-            <li>The plan lives in a file. Read the plan, do one thing, commit, exit, repeat.</li>
-            <li>A YC hackathon team ran it overnight and woke up to <em>6 shipped repos</em>.</li>
-          </ul>
+<pre style="font-size:0.6em"><code>while :; do cat PROMPT.md | claude ; done</code></pre>
+          <div class="orbit viz" style="--per:5s;width:11em;height:11em">
+            <div class="track"></div><div class="spin"></div>
+            <div class="hub">fresh agent<br />every pass</div>
+            <div class="node" style="left:50%;top:12%;--nd:0s"><b>1</b>read plan</div>
+            <div class="node" style="left:86%;top:38%;--nd:1s"><b>2</b>do one thing</div>
+            <div class="node" style="left:72%;top:81%;--nd:2s"><b>3</b>test</div>
+            <div class="node" style="left:28%;top:81%;--nd:3s"><b>4</b>commit</div>
+            <div class="node" style="left:14%;top:38%;--nd:4s"><b>5</b>exit</div>
+          </div>
           <aside class="notes">
             <ul>
+              <li>Geoffrey Huntley calls it the Ralph loop. Each pass is a fresh agent. The plan lives in a file: read it, do one thing, commit, exit, repeat.</li>
+              <li>A YC hackathon team ran it overnight and woke up to 6 shipped repos.</li>
               <li>One line of bash is the thing I was doing by hand all afternoon.</li>
-              <li>Huntley: watch the loop, and when it fails, fix the loop so it never fails that way again.</li>
             </ul>
           </aside>
         </section>
@@ -979,35 +1413,33 @@ expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// up
         <!-- 23 Three ways to wake -->
         <section>
           <h2>Three ways to wake the agent up.</h2>
-          <table>
-            <thead><tr><th>Wake on</th><th>How</th><th>Use it when</th></tr></thead>
-            <tbody>
-              <tr><td>The last turn finished</td><td><code>/goal</code></td><td>One task, keep going until done</td></tr>
-              <tr><td>A timer</td><td><code>/loop 30m check the deploy</code></td><td>Nothing to wait on, just re-check</td></tr>
-              <tr><td>An event</td><td>CI finished, PR merged, Slack message</td><td>You're waiting on something real</td></tr>
-            </tbody>
-          </table>
-          <p class="small muted">Rule of thumb: if there's an event, watch the event and keep a slow timer as backup.</p>
+          <div class="tiles t3">
+            <div class="tile"><div class="stage"><svg class="turn" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></div><h3>The turn ends</h3><span class="chip amber" style="margin-top:0.5em">/goal</span></div>
+            <div class="tile"><div class="stage"><div class="clockface"></div></div><h3>A timer</h3><span class="chip amber" style="margin-top:0.5em">/loop 30m</span></div>
+            <div class="tile"><div class="stage"><span class="bell">🔔</span></div><h3>An event</h3><span class="chip amber" style="margin-top:0.5em">CI · PR · Slack</span></div>
+          </div>
           <aside class="notes">
-            <ul><li>Events are the grown-up version: don't poll CI every minute, get woken when it finishes.</li></ul>
+            <ul>
+              <li>/goal: one task, keep going until done. /loop: nothing to wait on, just re-check. Events: you're waiting on something real.</li>
+              <li>Rule of thumb: if there's an event, watch the event and keep a slow timer as backup. Don't poll CI every minute, get woken when it finishes.</li>
+            </ul>
           </aside>
         </section>
 
         <!-- 24 One iteration -->
         <section>
           <h2>One iteration.</h2>
-          <div class="loop">
-            <div class="step"><b>1</b>Check the finish line</div>
-            <div class="step"><b>2</b>Make the smallest change that should help</div>
-            <div class="step"><b>3</b>Verify against the real thing</div>
-            <div class="step"><b>4</b>Better? <span class="ok">commit</span><br />Not? <span class="bad">discard</span></div>
-            <div class="step"><b>5</b>Write one log row</div>
+          <div class="orbit viz" style="--per:5s">
+            <div class="track"></div><div class="spin"></div>
+            <div class="hub">until<br /><span class="lamp">PASS</span></div>
+            <div class="node" style="left:50%;top:12%;--nd:0s"><b>1</b>check the finish line</div>
+            <div class="node" style="left:86%;top:38%;--nd:1s"><b>2</b>smallest change</div>
+            <div class="node" style="left:72%;top:81%;--nd:2s"><b>3</b>verify for real</div>
+            <div class="node" style="left:28%;top:81%;--nd:3s"><b>4</b><span class="ok">keep</span> or <span class="bad">discard</span></div>
+            <div class="node" style="left:14%;top:38%;--nd:4s"><b>5</b>log one row</div>
           </div>
-          <p class="loop-back">↻ back to 1, until the finish line says yes</p>
           <aside class="notes">
-            <ul>
-              <li>Step 4: the agent throws away work that didn't help. When did you last delete code that didn't help?</li>
-            </ul>
+            <ul><li>Step 4: the agent throws away work that didn't help. When did you last delete code that didn't help?</li></ul>
           </aside>
         </section>
 
@@ -1047,23 +1479,24 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
 
         <!-- 27 What is a harness -->
         <section>
-          <h2>What is an agent harness?</h2>
-          <p class="equation">Agent = Model + <span class="lamp">Harness</span></p>
-          <div class="grid-2">
-            <div class="card">
-              <p class="tag">The model</p>
-              <p>Reads the context and picks the next action. That's all it does.</p>
-            </div>
-            <div class="card lit">
-              <p class="tag">The harness</p>
-              <p>All the code that turns that choice into work. Claude Code, Codex, Cursor and Antigravity are all harnesses.</p>
-            </div>
+          <h2>Agent = Model + <span class="lamp">Harness</span></h2>
+          <div class="orbit o8 viz" style="--per:8s">
+            <div class="track"></div><div class="spin"></div>
+            <div class="hub"><div class="chipcore">model</div></div>
+            <div class="node" style="left:50%;top:12%;--nd:0s"><b>1</b>loop</div>
+            <div class="node" style="left:77%;top:23%;--nd:1s"><b>2</b>sandbox</div>
+            <div class="node" style="left:88%;top:50%;--nd:2s"><b>3</b>subagents</div>
+            <div class="node" style="left:77%;top:77%;--nd:3s"><b>4</b>context</div>
+            <div class="node" style="left:50%;top:88%;--nd:4s"><b>5</b>memory</div>
+            <div class="node" style="left:23%;top:77%;--nd:5s"><b>6</b>guardrails</div>
+            <div class="node" style="left:12%;top:50%;--nd:6s"><b>7</b>verification</div>
+            <div class="node" style="left:23%;top:23%;--nd:7s"><b>8</b>observability</div>
           </div>
-          <p class="small muted">My "done" problem was never a model problem. It was a harness problem.</p>
           <aside class="notes">
             <ul>
-              <li>Same model, different harness, very different agent.</li>
-              <li>Next: eight parts every harness shares. One slide each, with an example.</li>
+              <li>The model reads the context and picks the next action. That's all it does.</li>
+              <li>The harness is all the code that turns that choice into work. Claude Code, Codex, Cursor and Antigravity are all harnesses.</li>
+              <li>My "done" problem was never a model problem. It was a harness problem. Next: eight parts, one slide each.</li>
             </ul>
           </aside>
         </section>
@@ -1072,21 +1505,23 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 1 / 8</p>
           <h2>The loop</h2>
-          <div class="hp">
-            <ul>
-              <li>Sends the context to the model.</li>
-              <li>Runs whatever tools it asks for.</li>
-              <li>Feeds the results back in.</li>
-              <li><strong>Decides when the task is finished.</strong></li>
-            </ul>
-            <div class="card">
-              <p class="tag">Example</p>
-              <p>Claude Code reads a file, runs the tests, sees 3 failures, edits, runs again. Each round trip is one turn of the loop. <code>/goal</code> adds the rule for when to stop.</p>
-              <p class="story">In my story: I was the loop. Every "continue" was me doing this part by hand.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <rect class="bx main" x="120" y="130" width="200" height="90" rx="16"/><text x="220" y="175">model</text>
+            <rect class="bx" x="680" y="130" width="200" height="90" rx="16"/><text x="780" y="175">tools</text>
+            <path class="wp" id="l1a" d="M320 150 C 450 50, 550 50, 680 150"/>
+            <path class="wp" id="l1b" d="M680 200 C 550 300, 450 300, 320 200"/>
+            <text class="m" x="500" y="62">tool call</text><text class="m" x="500" y="300">result</text>
+            <circle class="pk" r="9"><animateMotion dur="2.4s" repeatCount="indefinite" path="M320 150 C 450 50, 550 50, 680 150"/></circle>
+            <circle class="pk g" r="9"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" path="M680 200 C 550 300, 450 300, 320 200"/></circle>
+            <rect class="bx gatebox" x="455" y="140" width="90" height="70" rx="12"/><text class="a" x="500" y="176">done?</text>
+          </svg>
+          <p class="cap">My story: <strong>I was this loop.</strong> Every "continue" was me.</p>
           <aside class="notes">
-            <ul><li>The last bullet is the one that failed me. The loop let the model decide when it was finished.</li></ul>
+            <ul>
+              <li>The loop sends the context to the model, runs whatever tools it asks for, feeds the results back in, and decides when the task is finished.</li>
+              <li>Example: Claude Code reads a file, runs the tests, sees 3 failures, edits, runs again. Each round trip is one turn. /goal adds the rule for when to stop.</li>
+              <li>The "done?" gate is the part that failed me: the loop let the model decide.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1094,20 +1529,20 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 2 / 8</p>
           <h2>Tools and sandbox</h2>
-          <div class="hp">
-            <ul>
-              <li>Gives the model a terminal, files, a browser and your apps.</li>
-              <li>Runs every task inside its own isolated computer.</li>
-              <li>Keeps the damage from a bad command inside the box.</li>
-            </ul>
-            <div class="card">
-              <p class="tag">Example</p>
-              <p>A Cursor cloud agent gets its own VM with a desktop and browser. A Claude Code cloud session gets a fresh container with only the repo it needs. Delete everything in there? Nothing you care about is gone.</p>
-              <p class="story">Fixes failure 04: it breaks things.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <rect class="bx sandbox" x="300" y="30" width="400" height="290" rx="24"/><text class="m" x="500" y="58">sandbox</text>
+            <rect class="bx main" x="420" y="90" width="160" height="64" rx="14"/><text x="500" y="122">agent</text>
+            <text class="r" x="500" y="232">rm -rf /</text>
+            <circle class="contain" cx="500" cy="232" r="150"/>
+            <rect class="bx good" x="770" y="130" width="190" height="80" rx="14"/><text class="g" x="865" y="170">laptop ✓</text>
+            <rect class="bx good" x="40" y="130" width="190" height="80" rx="14"/><text class="g" x="135" y="170">your keys ✓</text>
+          </svg>
+          <p class="cap">The blast stays in the box. <span class="ok">Fixes 04.</span></p>
           <aside class="notes">
-            <ul><li>Tools are what the agent can do. The sandbox is where it's allowed to do it. You need both.</li></ul>
+            <ul>
+              <li>Tools give the model a terminal, files, a browser and your apps. The sandbox runs every task inside its own isolated computer, so a bad command stays inside.</li>
+              <li>Example: a Cursor cloud agent gets its own VM. A Claude Code cloud session gets a fresh container with only the repo it needs. Delete everything in there? Nothing you care about is gone.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1115,20 +1550,27 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 3 / 8</p>
           <h2>Subagents</h2>
-          <div class="hp">
-            <ul>
-              <li>Take side tasks off the main agent and run them in parallel.</li>
-              <li>Start each one with a fresh context window.</li>
-              <li>Send back only a short summary, so the main context stays clean.</li>
-            </ul>
-            <div class="card">
-              <p class="tag">Example</p>
-              <p>pstack's <code>/how</code>: 2 to 4 cheap explorer agents read different corners of the codebase, then one strong model writes a single explanation. The main agent never sees the 40 files they read.</p>
-              <p class="story">For a multi-phase build: one subagent per phase, one more to review each phase.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <rect class="bx main" x="110" y="135" width="210" height="80" rx="16"/><text x="215" y="175">main agent</text>
+            <rect class="bx" x="640" y="20" width="250" height="70" rx="14"/><text x="765" y="55">helper · fresh context</text>
+            <rect class="bx" x="640" y="140" width="250" height="70" rx="14"/><text x="765" y="175">helper · fresh context</text>
+            <rect class="bx" x="640" y="260" width="250" height="70" rx="14"/><text x="765" y="295">helper · fresh context</text>
+            <path class="wp" d="M320 165 C 480 165, 480 55, 640 55"/><path class="wp" d="M320 175 L 640 175"/><path class="wp" d="M320 185 C 480 185, 480 295, 640 295"/>
+            <circle class="pk" r="8"><animateMotion dur="2s" repeatCount="indefinite" path="M320 165 C 480 165, 480 55, 640 55"/></circle>
+            <circle class="pk" r="8"><animateMotion dur="2s" begin="0.3s" repeatCount="indefinite" path="M320 175 L 640 175"/></circle>
+            <circle class="pk" r="8"><animateMotion dur="2s" begin="0.6s" repeatCount="indefinite" path="M320 185 C 480 185, 480 295, 640 295"/></circle>
+            <circle class="pk g" r="5"><animateMotion dur="2s" begin="1s" repeatCount="indefinite" path="M640 55 C 480 55, 480 165, 320 165"/></circle>
+            <circle class="pk g" r="5"><animateMotion dur="2s" begin="1.3s" repeatCount="indefinite" path="M640 175 L 320 175"/></circle>
+            <circle class="pk g" r="5"><animateMotion dur="2s" begin="1.6s" repeatCount="indefinite" path="M640 295 C 480 295, 480 185, 320 185"/></circle>
+            <text class="m a" x="480" y="335">big job out · short summary back</text>
+          </svg>
+          <p class="cap">Helpers in parallel. The main context stays clean.</p>
           <aside class="notes">
-            <ul><li>A subagent is a helper you send off with a clean head and a short brief, who comes back with a one-page answer.</li></ul>
+            <ul>
+              <li>Subagents take side tasks off the main agent and run them in parallel, each with a fresh context window, and send back only a short summary.</li>
+              <li>Example: pstack's /how sends 2 to 4 cheap explorers into different corners of the codebase, then one strong model writes a single explanation. The main agent never sees the 40 files they read.</li>
+              <li>For a multi-phase build: one subagent per phase, one more to review each phase.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1136,20 +1578,28 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 4 / 8</p>
           <h2>Context management</h2>
-          <div class="hp">
-            <ul>
-              <li>Decides what the model sees on every turn.</li>
-              <li>Loads skills and files only when the task needs them.</li>
-              <li>Summarizes old history before the context window fills up.</li>
-            </ul>
-            <div class="card">
-              <p class="tag">Example</p>
-              <p>A skill is just a folder with a SKILL.md. The harness shows the model a one-line description, and loads the full file only when the task calls for it. 50 skills cost almost nothing until one is used.</p>
-              <p class="story">Long multi-phase runs are exactly where the plan drops out of view. Keep it in a file, not in the chat.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <rect class="bx main" x="330" y="20" width="340" height="300" rx="18" style="fill:rgba(251,191,36,0.06)"/><text class="m a" x="500" y="45">what the model sees</text>
+            <rect class="bx good" x="360" y="62" width="280" height="36" rx="8"/><text class="g" x="500" y="81" style="font-size:17px">PLAN.md · pinned</text>
+            <g class="squash" style="transform-box:fill-box;transform-origin:center">
+              <rect x="360" y="110" width="280" height="22" rx="6" fill="rgba(148,163,214,0.28)"/>
+              <rect x="360" y="140" width="230" height="22" rx="6" fill="rgba(148,163,214,0.28)"/>
+              <rect x="360" y="170" width="260" height="22" rx="6" fill="rgba(148,163,214,0.28)"/>
+              <rect x="360" y="200" width="200" height="22" rx="6" fill="rgba(148,163,214,0.28)"/>
+            </g>
+            <g class="summary" style="opacity:0"><rect x="360" y="150" width="280" height="36" rx="8" fill="rgba(167,139,250,0.2)" stroke="rgba(167,139,250,0.6)"/><text x="500" y="169" style="font-size:17px">summary of old history</text></g>
+            <rect x="40" y="70" width="200" height="34" rx="8" class="bx"/><text class="m" x="140" y="88">skill: one line</text>
+            <rect x="40" y="115" width="200" height="34" rx="8" class="bx"/><text class="m" x="140" y="133">skill: one line</text>
+            <rect x="40" y="160" width="200" height="34" rx="8" class="bx"/><text class="m" x="140" y="178">skill: one line</text>
+            <g class="slidein" style="opacity:0"><rect x="360" y="250" width="280" height="50" rx="8" class="bx main"/><text x="500" y="276" style="font-size:18px">full SKILL.md, only now</text></g>
+          </svg>
+          <p class="cap">Load what's needed. Squash what's old. Pin the plan.</p>
           <aside class="notes">
-            <ul><li>The model only knows what's in front of it right now. Context management is choosing what's in front of it.</li></ul>
+            <ul>
+              <li>Context management decides what the model sees on every turn, loads skills and files only when the task needs them, and summarizes old history before the window fills.</li>
+              <li>Example: the harness shows the model a one-line description of each skill and loads the full file only when it's needed. 50 skills cost almost nothing until one is used.</li>
+              <li>Long multi-phase runs are exactly where the plan drops out of view. Keep it in a file, not in the chat.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1157,26 +1607,23 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 5 / 8</p>
           <h2>Memory</h2>
-          <div class="hp">
-            <ul>
-              <li>Stores progress notes, git history and skills on disk.</li>
-              <li>Lets a new session read what the last one did.</li>
-              <li>Picks the work up where it stopped.</li>
-            </ul>
-            <div class="card">
-              <p class="tag">Example</p>
-<pre><code><span class="dim">PLAN.md</span>
-- [x] phase 1 · tests pass · a1b2c3
-- [x] phase 2 · tests pass · d4e5f6
-- [ ] phase 3
-- [ ] phase 4</code></pre>
-              <p class="story">Kill the session at 2am, start a new one: it reads PLAN.md and git log, and carries on at phase 3.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <rect class="bx" x="60" y="40" width="300" height="260" rx="16"/><text class="m" x="210" y="70">PLAN.md</text>
+            <rect class="cb c1" x="95" y="105" width="24" height="24" rx="5"/><text x="230" y="118" style="text-anchor:start;font-size:20px" dx="-95">phase 1</text>
+            <rect class="cb c2" x="95" y="155" width="24" height="24" rx="5"/><text x="230" y="168" style="text-anchor:start;font-size:20px" dx="-95">phase 2</text>
+            <rect class="cb c3" x="95" y="205" width="24" height="24" rx="5"/><text x="230" y="218" style="text-anchor:start;font-size:20px" dx="-95">phase 3</text>
+            <rect class="cb" x="95" y="255" width="24" height="24" rx="5"/><text x="230" y="268" style="text-anchor:start;font-size:20px" dx="-95">phase 4</text>
+            <g class="s1"><rect class="bx main" x="560" y="60" width="280" height="80" rx="16"/><text x="700" y="100">session 1</text></g>
+            <text class="r s1x" x="700" y="165">✗ killed at 2am</text>
+            <g class="s2"><rect class="bx good" x="560" y="200" width="280" height="80" rx="16"/><text class="g" x="700" y="240">session 2 → phase 3</text>
+              <path class="wp solid" d="M560 240 C 460 240, 420 218, 365 218" style="stroke:rgba(110,231,183,0.6)"/></g>
+          </svg>
+          <p class="cap">The next session reads the file and carries on.</p>
           <aside class="notes">
             <ul>
-              <li>Lauren Tan: "your codebase is the ultimate form of memory."</li>
+              <li>Memory stores progress notes, git history and skills on disk, so a new session reads what the last one did and picks up where it stopped.</li>
               <li>The checklist is ticked by the check passing, not by the agent saying so.</li>
+              <li>Lauren Tan: "your codebase is the ultimate form of memory."</li>
             </ul>
           </aside>
         </section>
@@ -1185,20 +1632,23 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 6 / 8</p>
           <h2>Guardrails</h2>
-          <div class="hp">
-            <ul>
-              <li>Hold risky actions (emails, payments, deletes) for your approval.</li>
-              <li>Keep real credentials outside the sandbox.</li>
-              <li>Give a prompt injection no credentials to steal.</li>
-            </ul>
-            <div class="card">
-              <p class="tag">Example</p>
-              <p>Work on a branch, never main. Allow <code>git</code> and <code>npm test</code>, nothing else. The GitHub token lives in a proxy outside the box, so the agent can push a PR but can't read the key.</p>
-              <p class="story">Freedom inside the box, a locked door at the edge.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <rect class="bx sandbox" x="30" y="30" width="560" height="280" rx="22"/><text class="m" x="310" y="58">sandbox · free to work</text>
+            <rect class="bx main" x="70" y="140" width="150" height="64" rx="14"/><text x="145" y="172">agent</text>
+            <g class="bounce" style="--bx:230px"><rect class="bx" x="250" y="90" width="120" height="40" rx="10"/><text class="m" x="310" y="110">email</text>
+              <rect class="bx" x="250" y="152" width="120" height="40" rx="10"/><text class="m" x="310" y="172">payment</text>
+              <rect class="bx" x="250" y="214" width="120" height="40" rx="10"/><text class="m" x="310" y="234">delete</text></g>
+            <line x1="590" y1="60" x2="590" y2="290" stroke="#fbbf24" stroke-width="6"/>
+            <text class="a hold" x="590" y="330" style="opacity:0">✋ needs your approval</text>
+            <rect class="bx good" x="740" y="110" width="220" height="120" rx="16"/><text class="g" x="850" y="150">🔑 token</text><text class="m" x="850" y="190">outside the box</text>
+          </svg>
+          <p class="cap">Freedom inside the box. A locked door at the edge.</p>
           <aside class="notes">
-            <ul><li>Guardrails are what make "don't ask me" safe to say. You pre-approve the safe things and fence off the dangerous ones.</li></ul>
+            <ul>
+              <li>Guardrails hold risky actions like emails, payments and deletes for your approval, keep real credentials outside the sandbox, and give a prompt injection no credentials to steal.</li>
+              <li>Example: work on a branch, never main. Allow git and npm test, nothing else. The GitHub token lives in a proxy outside the box, so the agent can push a PR but can't read the key.</li>
+              <li>Guardrails are what make "don't ask me" safe to say.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1206,22 +1656,22 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 7 / 8</p>
           <h2>Verification</h2>
-          <div class="hp">
-            <ul>
-              <li>Stops a summary that only <em>sounds</em> finished.</li>
-              <li>Runs tests, browser checks or a separate grader first.</li>
-              <li>Lets the agent say done only after those checks pass.</li>
-            </ul>
-            <div class="card lit">
-              <p class="tag">Example</p>
-              <p>Not "I fixed it". Show me the failing test, then the passing test. Show me the before and after screenshot. pstack's author ranks a verification skill as the single best investment.</p>
-              <p class="story">Fixes failure 01. This is the part my story was missing.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <rect class="bx" x="40" y="130" width="220" height="80" rx="16"/><text x="150" y="170">"Done ✅"</text>
+            <path class="wp" d="M260 170 L 380 170"/>
+            <circle class="pk" r="8"><animateMotion dur="1.6s" repeatCount="indefinite" path="M260 170 L 380 170"/></circle>
+            <rect class="bx main" x="380" y="90" width="270" height="160" rx="18"/>
+            <text x="515" y="125" style="font-size:19px">tests</text><text x="515" y="160" style="font-size:19px">browser check</text><text x="515" y="195" style="font-size:19px">separate grader</text>
+            <rect x="410" y="220" width="210" height="12" rx="6" fill="rgba(148,163,214,0.15)"/><rect class="vfill" x="410" y="220" width="0" height="12" rx="6"/>
+            <text class="r rej" x="830" y="170" style="font-size:34px;font-weight:600;opacity:0">REJECTED</text>
+            <text class="g okk" x="830" y="170" style="font-size:40px;font-weight:600;opacity:0">PASS ✓</text>
+          </svg>
+          <p class="cap">"Done" is earned, not said. <span class="ok">Fixes 01.</span> The part my story was missing.</p>
           <aside class="notes">
             <ul>
-              <li>Lauren Tan: "The bottleneck with agents is verification."</li>
-              <li>If you only build one part of the harness yourself, build this one.</li>
+              <li>Verification stops a summary that only sounds finished. It runs tests, browser checks or a separate grader, and only then lets the agent say done.</li>
+              <li>Not "I fixed it". Show me the failing test, then the passing test. Show me the before and after screenshot.</li>
+              <li>Lauren Tan: "The bottleneck with agents is verification." pstack ranks a verification skill as the single best investment. If you only build one part of the harness, build this one.</li>
             </ul>
           </aside>
         </section>
@@ -1230,24 +1680,21 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section>
           <p class="hp-num">HARNESS 8 / 8</p>
           <h2>Observability</h2>
-          <div class="hp">
-            <ul>
-              <li>Traces every model call and tool call.</li>
-              <li>Spots the agent repeating the same failed edit.</li>
-              <li>Pushes it to try a different approach.</li>
-            </ul>
-            <div class="card">
-              <p class="tag">Example</p>
-<pre><code>03:12 same fix  18/22 <span class="bad">discard</span>
-03:14 same fix  18/22 <span class="bad">discard</span>
-03:16 same fix  18/22 <span class="bad">discard</span>
-03:18 <span class="lamp">pivot: new approach</span>
-03:19 new fix   22/22 <span class="ok">kept</span></code></pre>
-              <p class="story">Three identical misses is a signal. A plateau means pivot, not stop.</p>
-            </div>
-          </div>
+          <svg class="hs viz" viewBox="0 0 1000 340">
+            <line x1="40" y1="200" x2="960" y2="200" stroke="rgba(148,163,214,0.25)" stroke-width="3"/>
+            <g class="tp" style="--d:0.6s"><circle cx="160" cy="200" r="16" fill="#fca5a5"/><text class="m r" x="160" y="160">same fix</text></g>
+            <g class="tp" style="--d:1.2s"><circle cx="300" cy="200" r="16" fill="#fca5a5"/><text class="m r" x="300" y="160">same fix</text></g>
+            <g class="tp" style="--d:1.8s"><circle cx="440" cy="200" r="16" fill="#fca5a5"/><text class="m r" x="440" y="160">same fix</text></g>
+            <g class="tp" style="--d:2.6s"><path d="M460 180 C 520 80, 600 80, 640 170" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="8 6"/><text class="a" x="550" y="70">spotted: pivot</text></g>
+            <g class="tp" style="--d:3.2s"><circle cx="660" cy="200" r="16" fill="#fbbf24"/><text class="m a" x="660" y="250">new approach</text></g>
+            <g class="tp" style="--d:3.8s"><circle cx="840" cy="200" r="20" fill="#6ee7b7"/><text class="g" x="840" y="250">22/22 ✓</text></g>
+          </svg>
+          <p class="cap">Three identical misses is a signal. A plateau means pivot.</p>
           <aside class="notes">
-            <ul><li>Illustrative log. Without traces, you find out at 8am that it tried the same fix 200 times.</li></ul>
+            <ul>
+              <li>Observability traces every model call and tool call, spots the agent repeating the same failed edit, and pushes it to try a different approach.</li>
+              <li>Without traces, you find out at 8am that it tried the same fix 200 times.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1275,26 +1722,16 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
         <section data-stop="pstack">
           <p class="eyebrow">Someone already wrote the playbook</p>
           <h2>pstack</h2>
-          <div class="grid-2">
-            <div>
-              <ul>
-                <li>Lauren Tan (<strong>poteto</strong>), React Compiler core team, ex Meta and Netflix. Built it at Cursor.</li>
-                <li>Open sourced in May 2026 after Cursor's team used it <em>10,000 times in one week</em>.</li>
-              </ul>
-              <blockquote class="quote">"If you want to go fast, go deep first."<cite>Lauren Tan</cite></blockquote>
-            </div>
-            <div class="card">
-              <p class="tag">Free · MIT · any agent</p>
-<pre><code># Cursor
-/add-plugin pstack
-
-# Claude Code, Codex, others
-npx skills add backnotprop/pstack</code></pre>
-            </div>
+          <div class="row3" style="gap:1.4em">
+            <div class="bigtile"><div class="em" style="font-family:var(--serif);color:var(--lamp)">poteto</div><span class="lbl">Lauren Tan · React Compiler · built at Cursor</span></div>
+            <div class="bigtile lit"><div class="em" style="font-family:var(--serif);color:var(--lamp)" data-count="10,000">10,000</div><span class="lbl">uses in one week, Cursor team</span></div>
+            <div class="bigtile"><div class="em" style="font-family:var(--serif)">MIT</div><span class="lbl">free · any agent</span></div>
           </div>
+          <blockquote class="quote" style="text-align:center;border:none;margin-top:1em">"If you want to go fast, go deep first."</blockquote>
+          <div class="chiprow"><span class="chip">/add-plugin pstack</span><span class="chip">npx skills add backnotprop/pstack</span></div>
           <aside class="notes">
             <ul>
-              <li>She has since moved to SpaceXAI, but pstack was born at Cursor.</li>
+              <li>Lauren Tan (poteto): React Compiler core team, ex Meta and Netflix. Built pstack at Cursor, now at SpaceXAI. Open sourced in May 2026 after Cursor's team used it 10,000 times in one week.</li>
               <li>Her line on agents: "new hires in a constant state of amnesia and idiocy. Capable yet stupid, and very teachable." pstack is the teaching.</li>
             </ul>
           </aside>
@@ -1350,31 +1787,21 @@ show me the row counts before and after.</code></pre>
         <section>
           <p class="eyebrow">pstack · what is a skill?</p>
           <h2>A skill is written experience.</h2>
-          <div class="grid-2">
-            <div>
-              <ul>
-                <li>A folder with one <code>SKILL.md</code> file. Plain Markdown.</li>
-                <li>The <strong>description</strong> says when to use it. The body says how.</li>
-                <li>The agent sees only the one-line description until it needs the rest.</li>
-                <li>Same format in Claude Code, Cursor, Codex.</li>
-              </ul>
-            </div>
-<pre><code><span class="dim">---</span>
-<span class="lamp">name:</span> encode-lessons-in-structure
-<span class="lamp">description:</span> Apply when you catch
-  yourself writing the same instruction
-  a second time. Encode the rule as a
-  lint, check, or script instead of
-  more text.
+          <div class="skillfile viz">
+<pre><code><span class="dim">skills/encode-lessons/SKILL.md</span>
 <span class="dim">---</span>
-If the fix is structural, only use the
-structural fix. The instruction is the
-symptom.</code></pre>
+<span class="desc"><span class="lamp">description:</span> Apply when you write the same instruction twice.</span>
+<span class="dim">---</span>
+<span class="body">Encode the rule as a lint, check or script.</span>
+<span class="body">If the fix is structural, only use the structural fix.</span></code></pre>
+            <span class="callout2 fadein" style="right:-0.5em;top:2.6em;--d:1.6s">← always visible: WHEN</span>
+            <span class="callout2 fadein" style="right:-0.5em;bottom:0.8em;--d:3.4s">← loads only when needed: HOW</span>
           </div>
           <aside class="notes">
             <ul>
-              <li>This is a real pstack skill, nearly the whole file. 34 words. A skill doesn't have to be long to be useful.</li>
-              <li>Students: if you can write a README, you can write a skill.</li>
+              <li>A skill is a folder with one SKILL.md file. Plain Markdown. The description says when to use it, the body says how.</li>
+              <li>The agent sees only the one-line description until it needs the rest. Same format in Claude Code, Cursor, Codex.</li>
+              <li>This is a real pstack skill, about 34 words. If you can write a README, you can write a skill.</li>
             </ul>
           </aside>
         </section>
@@ -1383,16 +1810,16 @@ symptom.</code></pre>
         <section>
           <p class="eyebrow">pstack · why skills matter</p>
           <h2>Your agent forgets everything.<br /><span class="lamp">Every single morning.</span></h2>
-          <blockquote class="quote">"Agents are like new hires in a constant state of amnesia and idiocy. They're capable yet stupid, and very teachable."<cite>Lauren Tan</cite></blockquote>
-          <div class="grid-3" style="margin-top:0.9em">
-            <div class="card"><h3>Every run</h3><p class="muted">The lesson loads again tomorrow. You don't repeat yourself.</p></div>
-            <div class="card"><h3>Every agent</h3><p class="muted">Ten agents in parallel all know it. No one gets a worse brief.</p></div>
-            <div class="card lit"><h3>Every teammate</h3><p class="muted">Commit it to the repo. Your whole team's agents learn it too.</p></div>
+          <div class="agents viz">
+            <div class="agent"><span class="sun"></span><span class="chip amber card2">SKILL.md</span><div class="head">run</div><div class="mem"><i></i></div><span class="lbl">every run</span></div>
+            <div class="agent"><span class="chip amber card2">SKILL.md</span><div class="head">×10</div><div class="mem"><i></i></div><span class="lbl">every agent</span></div>
+            <div class="agent"><span class="chip amber card2">SKILL.md</span><div class="head">team</div><div class="mem"><i></i></div><span class="lbl">every teammate</span></div>
           </div>
           <aside class="notes">
             <ul>
-              <li>A chat correction dies with the chat. A skill lives in the repo.</li>
-              <li>This is why the 10,000 uses a week number matters: one person's lessons, reused by a whole team's agents.</li>
+              <li>Watch the memory bars: the sun comes up and they empty. A skill arrives and they refill.</li>
+              <li>Lauren Tan: "Agents are like new hires in a constant state of amnesia and idiocy. They're capable yet stupid, and very teachable."</li>
+              <li>A chat correction dies with the chat. A skill lives in the repo: every run, every parallel agent, every teammate's agent gets it.</li>
             </ul>
           </aside>
         </section>
@@ -1401,17 +1828,19 @@ symptom.</code></pre>
         <section>
           <p class="eyebrow">pstack · how skills get better</p>
           <h2>Every scar becomes a skill.</h2>
-          <div class="loop">
-            <div class="step"><b>1</b>The agent fails</div>
-            <div class="step"><b>2</b>You correct it once</div>
-            <div class="step"><b>3</b>Write it down: a skill, or better, a check</div>
-            <div class="step"><b>4</b>Next run, it doesn't happen</div>
-            <div class="step"><b>5</b>Models improve: <span class="lamp">delete</span> what they no longer need</div>
+          <div class="orbit viz" style="--per:5s;width:12em;height:12em">
+            <div class="track"></div><div class="spin"></div>
+            <div class="hub">fewer<br /><span class="lamp">mistakes</span></div>
+            <div class="node" style="left:50%;top:12%;--nd:0s"><b>1</b><span class="bad">agent fails</span></div>
+            <div class="node" style="left:86%;top:38%;--nd:1s"><b>2</b>correct it once</div>
+            <div class="node" style="left:72%;top:81%;--nd:2s"><b>3</b>write a skill or check</div>
+            <div class="node" style="left:28%;top:81%;--nd:3s"><b>4</b><span class="ok">never again</span></div>
+            <div class="node" style="left:14%;top:38%;--nd:4s"><b>5</b>model improves: <span class="lamp">delete</span></div>
           </div>
-          <blockquote class="quote">"I never set out to build pstack. I just started turning every recurring failure mode into a skill. The agents improved because their instructions carried the scars from previous runs."<cite>Lauren Tan</cite></blockquote>
           <aside class="notes">
             <ul>
-              <li>Step 5 is the surprising one. pstack's history has passes that cut 600 to 700 lines at a time because newer models stopped needing them.</li>
+              <li>Lauren Tan: "I never set out to build pstack. I just started turning every recurring failure mode into a skill. The agents improved because their instructions carried the scars from previous runs."</li>
+              <li>Step 5 surprises people: pstack's history has passes that cut 600 to 700 lines at a time because newer models stopped needing them.</li>
               <li>Her rule for when to add one: when the same failure shows up twice.</li>
             </ul>
           </aside>
@@ -1442,16 +1871,16 @@ symptom.</code></pre>
         <section>
           <p class="eyebrow">pstack · every correction becomes structure</p>
           <h2>Don't fix it twice.</h2>
-          <p>Every time you correct your agent, ask how to make that correction unnecessary. In order of value:</p>
-          <ol class="ladder">
-            <li><b>1</b>Remove the problem with better architecture or data structures</li>
-            <li><b>2</b>Turn it into a lint rule or a test, so CI catches it</li>
-            <li><b>3</b>Turn it into a skill or a rule</li>
-            <li class="ngmi"><b>4</b>Have humans review the code to catch it</li>
-          </ol>
+          <div class="ladder2">
+            <div class="rung ngmi2"><b>4</b><span>humans review it</span><span class="val bad">ngmi</span></div>
+            <div class="rung"><b>3</b><span>a skill or rule</span><span class="val">good</span></div>
+            <div class="rung"><b>2</b><span>a lint or test in CI</span><span class="val">better</span></div>
+            <div class="rung best"><b>1</b><span>architecture makes it impossible</span><span class="val">best</span></div>
+          </div>
           <aside class="notes">
             <ul>
-              <li>From Lauren's post in August. Number 4 she marks "ngmi". Not gonna make it.</li>
+              <li>Every time you correct your agent, ask how to make that correction unnecessary. Climb as high as you can.</li>
+              <li>From Lauren's post in August. Rung 4 she marks "ngmi": not gonna make it.</li>
               <li>Our LOCK file is rung 2: a check, not a request.</li>
             </ul>
           </aside>
@@ -1461,14 +1890,16 @@ symptom.</code></pre>
         <section>
           <p class="eyebrow">pstack · the autonomous run playbook</p>
           <h2>Three loop rules worth stealing.</h2>
-          <div class="grid-3">
-            <div class="card"><h3>"Might help" gets reverted.</h3><p class="muted">If it didn't move the check, it doesn't ride along.</p></div>
-            <div class="card"><h3>A plateau is not a stop.</h3><p class="muted">Stuck? Change approach. Don't quit, don't spin.</p></div>
-            <div class="card lit"><h3>Never relax the goal.</h3><p class="muted">Moving the finish line to declare victory is losing.</p></div>
+          <div class="tiles t3">
+            <div class="tile"><div class="stage revert"><span class="chip">+ might help</span></div><h3>"Might help" gets reverted.</h3></div>
+            <div class="tile"><div class="stage"><svg class="mini" viewBox="0 0 200 60"><path class="flat" d="M10 45 L 110 45"/><path class="up" d="M110 45 L 190 8"/></svg></div><h3>A plateau means pivot.</h3></div>
+            <div class="tile"><div class="stage"><svg class="ico" viewBox="0 0 24 24" style="color:var(--lamp);width:2.6em;height:2.6em"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/><rect x="13" y="14" width="7" height="6" rx="1"/><path d="M14.5 14v-1.5a2 2 0 0 1 4 0V14"/></svg></div><h3>Never relax the goal.</h3></div>
           </div>
-          <p class="small muted">Plus a decision log every iteration, so you audit decisions in the morning, not transcripts.</p>
           <aside class="notes">
-            <ul><li>Rule three is why we have the LOCK file.</li></ul>
+            <ul>
+              <li>If a change didn't move the check, it doesn't ride along. Stuck? Change approach: don't quit, don't spin. Moving the finish line to declare victory is losing.</li>
+              <li>Plus a decision log every iteration, so you audit decisions in the morning, not transcripts. Rule three is why we have the LOCK file.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1476,16 +1907,17 @@ symptom.</code></pre>
         <section>
           <p class="eyebrow">pstack · the honest part</p>
           <h2>What it costs.</h2>
-          <div class="grid-2">
-            <div class="card"><h3>Tokens</h3><p class="muted">Reviewer panels and verifier swarms add up. Slower, pricier, more correct.</p></div>
-            <div class="card"><h3>Ceremony</h3><p class="muted">Heavy for a two-line fix. Most changes need none of it.</p></div>
-            <div class="card"><h3>Prose only guides</h3><p class="muted">Only scripts enforce. So rules keep moving into code.</p></div>
-            <div class="card lit"><h3>One person's style</h3><p class="muted">Her models, her habits. Build your own on top.</p></div>
+          <div class="tiles t4">
+            <div class="tile"><div class="stage"><span class="em" style="font-size:1.8em">🪙</span></div><h3>Tokens</h3><div class="gauge" style="--w:88%"><i></i></div></div>
+            <div class="tile"><div class="stage"><span class="em" style="font-size:1.8em">🎭</span></div><h3>Ceremony</h3><div class="gauge" style="--w:62%"><i></i></div></div>
+            <div class="tile"><div class="stage"><span class="em" style="font-size:1.8em">📜</span></div><h3>Prose only guides</h3><span class="lbl" style="margin-top:0.4em">scripts enforce</span></div>
+            <div class="tile"><div class="stage"><span class="em" style="font-size:1.8em">🧑‍💻</span></div><h3>One person's style</h3><span class="lbl" style="margin-top:0.4em">build your own</span></div>
           </div>
           <aside class="notes">
             <ul>
-              <li>Her own words: "a low trust loop is just a waste of tokens." Earn the trust first.</li>
-              <li>Productivity numbers you'll see online are self-reported. Take the ideas, not the numbers.</li>
+              <li>Tokens: reviewer panels and verifier swarms add up. Slower, pricier, more correct. Ceremony: heavy for a two-line fix, most changes need none of it.</li>
+              <li>Prose only guides: only scripts enforce, so rules keep moving into code. One person's style: her models, her habits, build your own on top.</li>
+              <li>Her own words: "a low trust loop is just a waste of tokens." Productivity numbers online are self-reported. Take the ideas, not the numbers.</li>
             </ul>
           </aside>
         </section>
@@ -1505,14 +1937,18 @@ symptom.</code></pre>
         <!-- 44 Laptop -->
         <section data-fix="4">
           <h2>Your laptop is a bad place for a loop.</h2>
-          <div class="grid-2">
-            <div class="card"><h3>It sleeps.</h3><p class="muted">Lid closes, Wi-Fi drops, battery dies at 2am.</p></div>
-            <div class="card"><h3>It's crowded.</h3><p class="muted">Two agents fight each other (and you) for the same files.</p></div>
-            <div class="card"><h3>It's yours.</h3><p class="muted">Your keys, your cookies, your bank tab. One bad command reaches all of it.</p></div>
-            <div class="card lit"><h3>So move the loop.</h3><p class="muted">To a machine that isn't yours, with only the keys the task needs.</p></div>
+          <div class="row3">
+            <div class="bigtile"><div class="battery"><i></i></div><span class="lbl">it sleeps</span></div>
+            <div class="bigtile"><div class="em"><span class="bump l">●</span> <span class="bump r" style="color:var(--lamp)">●</span></div><span class="lbl">it's crowded</span></div>
+            <div class="bigtile"><div class="em">🔑</div><span class="lbl">it's yours</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile lit"><div class="em">☁️</div><span class="lbl">move the loop</span></div>
           </div>
           <aside class="notes">
-            <ul><li>This is harness part 2 and part 6, made physical.</li></ul>
+            <ul>
+              <li>It sleeps: lid closes, Wi-Fi drops, battery dies at 2am. It's crowded: two agents fight each other (and you) for the same files. It's yours: your keys, your cookies, your bank tab.</li>
+              <li>So move the loop to a machine that isn't yours, with only the keys the task needs. Harness parts 2 and 6, made physical. 04 turns green: all four fixed.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1520,22 +1956,23 @@ symptom.</code></pre>
         <section>
           <p class="eyebrow">Cursor</p>
           <h2>Cloud agents + Automations</h2>
-          <div class="grid-2">
-            <ul>
-              <li>Every agent gets its <strong>own VM</strong>: terminal, browser, desktop.</li>
-              <li>Start from the editor, your phone, Slack or GitHub.</li>
-              <li>Attaches <em>videos and screenshots</em> to the PR as proof.</li>
-              <li>Automations start them on a schedule or an event: a merged PR, a Slack message, an alert.</li>
-            </ul>
+          <div class="grid-2" style="align-items:center">
+            <div class="vms viz">
+              <i class="vm" style="--v:0"></i><i class="vm" style="--v:1"></i><i class="vm" style="--v:2"></i><i class="vm play" style="--v:3"></i><i class="vm" style="--v:4"></i><i class="vm" style="--v:5"></i>
+              <i class="vm" style="--v:6"></i><i class="vm" style="--v:7"></i><i class="vm" style="--v:8"></i><i class="vm" style="--v:9"></i><i class="vm play" style="--v:10"></i><i class="vm" style="--v:11"></i>
+              <i class="vm" style="--v:12"></i><i class="vm" style="--v:13"></i><i class="vm" style="--v:14"></i><i class="vm" style="--v:15"></i><i class="vm" style="--v:16"></i><i class="vm" style="--v:17"></i>
+            </div>
             <div class="center">
               <p class="big-stat" data-count="30%+">30%+</p>
-              <p class="muted small">of PRs merged at Cursor are made by agents running on their own in cloud sandboxes<br />(Cursor, Feb 2026)</p>
+              <span class="lbl">of merged PRs at Cursor</span>
             </div>
           </div>
+          <div class="chiprow" style="margin-top:0.8em"><span class="chip">a VM per agent</span><span class="chip amber">▶ video proof on the PR</span><span class="chip">starts on events</span></div>
           <aside class="notes">
             <ul>
-              <li>The video artifact is verification you can watch.</li>
-              <li>Automations: nobody types a prompt. The event is the prompt.</li>
+              <li>Every agent gets its own VM: terminal, browser, desktop. Start from the editor, your phone, Slack or GitHub. It attaches videos and screenshots to the PR as proof.</li>
+              <li>Automations start them on a schedule or an event: a merged PR, a Slack message, an alert. Nobody types a prompt; the event is the prompt.</li>
+              <li>30%+ of PRs merged at Cursor are made by agents running on their own in cloud sandboxes (Cursor, Feb 2026).</li>
             </ul>
           </aside>
         </section>
@@ -1544,51 +1981,45 @@ symptom.</code></pre>
         <section>
           <p class="eyebrow">Claude Code</p>
           <h2>Cloud sessions + scheduled tasks</h2>
-          <div class="grid-2">
-            <div class="card">
-              <h3>Cloud sessions</h3>
-              <ul>
-                <li>Start from claude.ai/code, the phone app, or <code>claude --cloud</code></li>
-                <li>Close the laptop. It keeps going and opens a PR.</li>
-                <li>Watches its own PR: fixes CI, answers review comments.</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Scheduled tasks</h3>
-              <ul>
-                <li>A saved prompt + repos + connectors</li>
-                <li>Fires on a schedule, an API call, or a GitHub event</li>
-                <li><em>"Every night at 2am: pull the top bug, attempt a fix, open a PR."</em></li>
-              </ul>
-            </div>
+          <div class="row3">
+            <div class="bigtile"><div class="em">📱</div><span class="lbl">phone · web · CLI</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile lit"><div class="em">☁️</div><span class="lbl">cloud session</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile"><div class="em">🔀</div><span class="lbl">PR · fixes its own CI</span></div>
+          </div>
+          <div class="row3">
+            <div class="bigtile"><div class="em">⏰</div><span class="lbl">every night 2am</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile lit"><div class="em">☁️</div><span class="lbl">scheduled task</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile"><div class="em">🐛→✅</div><span class="lbl">top bug fixed</span></div>
           </div>
           <aside class="notes">
-            <ul><li>The demo repo for this talk was built and dry-run in one of these cloud sessions.</li></ul>
+            <ul>
+              <li>Cloud sessions: start from claude.ai/code, the phone app, or claude --cloud. Close the laptop, it keeps going and opens a PR, then watches its own PR: fixes CI, answers review comments.</li>
+              <li>Scheduled tasks: a saved prompt + repos + connectors that fires on a schedule, an API call, or a GitHub event. "Every night at 2am: pull the top bug, attempt a fix, open a PR."</li>
+              <li>The demo repo for this talk was built and dry-run in one of these cloud sessions.</li>
+            </ul>
           </aside>
         </section>
 
         <!-- 47 Buzz -->
         <section>
-          <p class="eyebrow">Block · open source · beta · July 2026</p>
+          <p class="eyebrow">Block · open source · beta</p>
           <h2>Buzz: agents as teammates</h2>
-          <div class="grid-2">
-            <ul>
-              <li>Slack-like, but every agent has its <strong>own identity</strong>.</li>
-              <li>Bring any agent: Claude Code, Codex, goose.</li>
-              <li>Open source, self-host it.</li>
-            </ul>
-            <div class="card lit">
-              <p class="tag">How Block builds Buzz, in Buzz</p>
-              <ol>
-                <li>A human opens a channel and states the goal</li>
-                <li>Agents research, build and test in the thread</li>
-                <li>A <strong>different</strong> agent reviews the builder</li>
-                <li>Humans decide scope and what merges</li>
-              </ol>
-            </div>
+          <div class="chat" style="margin:0.4em auto 0">
+            <div class="msg me"><span class="who">human · #export-fix</span>Goal: the CSV export keeps every row.</div>
+            <div class="msg ai"><span class="who">builder agent</span>PR ready, tests pass.</div>
+            <div class="msg ai"><span class="who">reviewer agent</span>Found one edge case. Fixed.</div>
+            <div class="msg me"><span class="who">human</span>Merge it 👍</div>
           </div>
           <aside class="notes">
-            <ul><li>Same shape as this whole talk: goal, loop, separate critic, human signs off. Just with a team of agents.</li></ul>
+            <ul>
+              <li>Buzz: Slack-like, but every agent has its own identity. Bring any agent: Claude Code, Codex, goose. Open source, self-host it.</li>
+              <li>How Block builds Buzz, in Buzz: a human opens a channel and states the goal, agents research, build and test in the thread, a different agent reviews the builder, humans decide what merges.</li>
+              <li>Same shape as this whole talk: goal, loop, separate critic, human signs off. Just with a team of agents. The chat is illustrative.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1688,15 +2119,18 @@ df372ff Implement formatINR (2/22 -> 5/22)
         <!-- 53 Earn the sleep -->
         <section>
           <h2>Earn the sleep first.</h2>
-          <ul class="checks">
-            <li>You've done the task once by hand, or watched an agent do it.</li>
-            <li>The agent has the tools you'd use: tests, logs, screenshots.</li>
-            <li>Every step proves its work and can stop the line.</li>
-            <li>You've read a few runs and turned repeat failures into checks.</li>
+          <ul class="ticks" style="max-width:28em;margin:0.6em auto 0 !important">
+            <li style="--t:0;font-size:0.72em !important"><i>✓</i>done it once by hand</li>
+            <li style="--t:1;font-size:0.72em !important"><i>✓</i>the agent has your tools</li>
+            <li style="--t:2;font-size:0.72em !important"><i>✓</i>every step proves its work</li>
+            <li style="--t:3;font-size:0.72em !important"><i>✓</i>repeat failures became checks</li>
           </ul>
-          <blockquote class="quote">"It's not if it gets popped, it's when. And what is the blast radius?"<cite>Geoffrey Huntley, on running loops without a sandbox</cite></blockquote>
+          <blockquote class="quote fadein" style="--d:4s">"It's not if it gets popped, it's when. What is the blast radius?"<cite>Geoffrey Huntley</cite></blockquote>
           <aside class="notes">
-            <ul><li>Checklist from pstack's guide. Until all four hold, run the loop while you watch.</li></ul>
+            <ul>
+              <li>Checklist from pstack's guide: you've done the task once by hand or watched an agent do it; the agent has the tools you'd use (tests, logs, screenshots); every step proves its work and can stop the line; you've read a few runs and turned repeat failures into checks.</li>
+              <li>Until all four hold, run the loop while you watch. Huntley's line is about running loops without a sandbox.</li>
+            </ul>
           </aside>
         </section>
 
@@ -1716,15 +2150,18 @@ df372ff Implement formatINR (2/22 -> 5/22)
         <section>
           <p class="eyebrow">Homework for tonight</p>
           <h2>Try it before you sleep.</h2>
-          <ol>
-            <li>Pick one small thing in your project.</li>
-            <li>Write a goal that's a <em>yes / no question</em>.</li>
-            <li>Run <code>/goal</code> in Claude Code or Codex, or install pstack.</li>
-            <li>Go to sleep. Tell me what you woke up to.</li>
-          </ol>
-          <p class="small muted">The demo repo: github.com/msomu/msomu.com/tree/main/demos/overnight-loop</p>
+          <div class="row3">
+            <div class="bigtile"><div class="em">🎯</div><span class="lbl">pick one small thing</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile lit"><div class="em">✓ / ✗</div><span class="lbl">write a yes/no goal</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile"><div class="em">↻</div><span class="lbl">/goal or pstack</span></div>
+            <div class="arrowline"></div>
+            <div class="bigtile"><div class="em">🌙</div><span class="lbl">sleep · read receipts</span></div>
+          </div>
+          <p class="cap">github.com/msomu/msomu.com/tree/main/demos/overnight-loop</p>
           <aside class="notes">
-            <ul><li>Clone the repo, run ./ralph.sh or /goal, then ./morning.sh. Ask them to tag you with what they woke up to.</li></ul>
+            <ul><li>Pick one small thing in your project, write a goal that's a yes/no question, run /goal in Claude Code or Codex or install pstack, go to sleep. Clone the demo repo, run ./ralph.sh or /goal, then ./morning.sh. Tag me with what you woke up to.</li></ul>
           </aside>
         </section>
 
@@ -1785,12 +2222,12 @@ df372ff Implement formatINR (2/22 -> 5/22)
 
         // Mark what animates on each slide, in reading order
         const CONTAINERS =
-          ".grid-2,.grid-3,.grid-4,.loop,.flow,.stats,.phases,.hp,.fixed-wrap,ul,ol,table,thead,tbody";
-        const LEAVES = ".card,.msg,.phase,.step,.moon,.chat";
+          ".grid-2,.grid-3,.grid-4,.loop,.flow,.stats,.phases,.hp,.tiles,.wires,.ladder2,.row3,.versus,.duo,.chiprow,ul:not(.ticks),ol,table,thead,tbody";
+        const LEAVES = ".card,.msg,.phase,.step,.moon,.chat,.viz,.tile,.wire,.rung,.bigtile,.panel,.bot,.pingpong,.arrowline,.chip,.ticks";
         for (const slide of slides) {
           let i = 0;
           const mark = (el) => {
-            if (el.matches("aside, .notes, script, .fragment")) return;
+            if (el.matches("aside, .notes, script, .fragment, .pop, .fadein")) return;
             if (el.matches(".moon")) return;
             if (el.matches(".chat")) return;
             const isGenericDiv =
