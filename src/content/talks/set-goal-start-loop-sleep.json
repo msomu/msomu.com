@@ -1,6 +1,6 @@
 {
   "title": "Set Goal. Start Loop. Sleep.",
-  "description": "How people run AI agents with no human in the loop. Write a finish line a machine can check, put a loop around it, move the loop off your laptop with Cursor cloud agents, Claude Code cloud sessions or Buzz, and audit the decision log in the morning. With a live overnight receipt and pstack's loop rules.",
+  "description": "An agent at work kept saying \"done\" before it was. This talk is how to fix that: write a finish line a machine can check, put a loop around it, build the 8-part harness that lets you walk away, learn from pstack how skills turn every failure into a lesson the agent keeps, and move the loop to the cloud so you can sleep.",
   "pubDate": "2026-10-31",
   "venue": "Salem Devfest",
   "slideUrl": "/talks/set-goal-start-loop-sleep/index.html"

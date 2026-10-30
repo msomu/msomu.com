@@ -300,12 +300,83 @@
         .reveal table { font-size: 0.48em; }
         .reveal footer, .reveal .controls { display: none; }
       }
+
+      /* Story: chat mock */
+      .chat { display: grid; gap: 0.5em; max-width: 30em; margin-top: 0.4em; }
+      .chat .msg {
+        border-radius: 0.8em;
+        padding: 0.55em 0.9em;
+        font-size: 0.68em;
+        line-height: 1.45;
+        max-width: 85%;
+      }
+      .chat .me { justify-self: end; background: var(--lamp-dim); border: 1px solid rgba(251, 191, 36, 0.4); color: var(--moon); }
+      .chat .ai { justify-self: start; background: var(--surface); border: 1px solid var(--border); }
+      .chat .who { display: block; font-family: var(--mono); font-size: 0.75em; color: var(--muted); margin-bottom: 0.2em; }
+
+      /* Story: phase bars */
+      .phases { display: grid; gap: 0.45em; margin-top: 0.6em; max-width: 26em; }
+      .phase { display: grid; grid-template-columns: 6.5em 1fr 3em; align-items: center; gap: 0.6em; font-size: 0.6em; }
+      .phase .bar { height: 0.7em; border-radius: 1em; background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
+      .phase .bar i { display: block; height: 100%; background: var(--green); }
+      .phase .bar i.part { background: var(--lamp); }
+      .phase b { font-family: var(--mono); font-weight: 400; color: var(--muted); }
+      .phase .st { font-family: var(--mono); text-align: right; }
+
+      /* Failure cards */
+      .fail .num { font-family: var(--mono); color: var(--red); font-size: 0.5em; letter-spacing: 0.08em; margin-bottom: 0.3em; }
+      .fail h3 { font-size: 0.85em; }
+      .fixmap td:nth-child(2) { color: var(--red); }
+      .fixmap td:nth-child(3) { color: var(--green); }
+
+      /* Harness part slides */
+      .hp { display: grid; grid-template-columns: 1.05fr 1fr; gap: 1em; align-items: start; margin-top: 0.3em; }
+      .hp ul { margin-top: 0.2em; }
+      .hp li { font-size: 0.72em; }
+      .hp .card p { font-size: 0.66em; }
+      .hp .story { margin-top: 0.7em; font-size: 0.62em !important; color: var(--green); }
+      .hp-num { font-family: var(--mono); color: var(--lamp); font-size: 0.55em; letter-spacing: 0.1em; margin-bottom: 0.4em; }
+      .hp pre { font-size: 0.48em !important; margin: 0.3em 0 0; }
+
+      /* pstack flow */
+      .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.45em; margin-top: 0.6em; }
+      .flow .step { background: var(--surface); border: 1px solid var(--border); border-radius: 0.7em; padding: 0.7em 0.6em; font-size: 0.56em; }
+      .flow .step b { display: block; color: var(--moon); font-family: var(--serif); font-size: 1.15em; margin-bottom: 0.3em; }
+      .flow .step.lit { border-color: rgba(251, 191, 36, 0.55); background: var(--lamp-dim); }
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6em; margin-top: 0.9em; }
+      .stats div { border-top: 1px solid var(--border); padding-top: 0.4em; }
+      .stats b { display: block; font-family: var(--serif); font-size: 1.4em; color: var(--lamp); line-height: 1.1; }
+      .stats span { font-size: 0.5em; color: var(--muted); }
+      .ladder { list-style: none; margin: 0.4em 0 0 !important; padding: 0; display: grid; gap: 0.4em; }
+      .ladder li { display: grid; grid-template-columns: 2em 1fr; align-items: baseline; font-size: 0.72em !important; margin: 0 !important; }
+      .ladder li b { font-family: var(--serif); color: var(--lamp); font-size: 1.3em; }
+      .ladder li.ngmi { color: var(--muted); text-decoration: line-through; }
+
+      @media (max-width: 639px) {
+        .hp, .flow, .stats { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body>
     <div class="reveal">
       <footer>msomu · Salem Devfest · Oct 2026</footer>
       <div class="slides">
+
+        <!-- ============ PROLOGUE: MY STORY ============ -->
+
+        <!-- 00 Flash-forward -->
+        <section class="center act">
+          <div class="clock">07:30</div>
+          <h2 style="font-family:var(--mono);font-size:1.3em;color:var(--green);margin:0.2em 0">PASS 22/22</h2>
+          <p>10 commits. 10 decisions logged. Nobody typed "continue".</p>
+          <p class="small muted" style="margin-top:1.4em">To get here, we have to go back to an afternoon when nothing worked.</p>
+          <aside class="notes">
+            <ul>
+              <li>Open cold. Don't introduce yourself yet. Read the green line, pause, then the last line.</li>
+              <li>Movie trick: show the ending first, then rewind. The audience spends the talk wondering how we got there.</li>
+            </ul>
+          </aside>
+        </section>
 
         <!-- 01 Title -->
         <section class="center title">
@@ -314,124 +385,267 @@
           <p class="meta"><strong>Somu</strong> · Salem Devfest · 31 Oct 2026</p>
           <aside class="notes">
             <ul>
-              <li>Hi Salem. Quick show of hands: who has used ChatGPT or Claude to write code? Who has left one running and walked away?</li>
-              <li>Today: how people run AI agents with no human in the loop, and why the human's job moves from typing prompts to writing the finish line.</li>
+              <li>Hi Salem. Show of hands: who has used an AI agent to write code? Keep it up if it ever told you "done" and it wasn't.</li>
+              <li>Keep your eye on those hands. That's the whole talk.</li>
+              <li>Now rewind: "This story starts at work, on a normal afternoon."</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 02 Four lines -->
+        <!-- 02 The task -->
         <section>
-          <p class="eyebrow">What I typed</p>
-          <h2>Four lines.</h2>
-<pre><code>im going to bed. implement every function in src/index.js on a fresh branch.
-done means `node check.mjs` prints PASS. tests/, check.mjs and LOCK stay untouched.
-keep a decision log in decisions.tsv. don't ask me before committing.
-loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</code></pre>
-          <p class="muted small">Ten empty functions. 22 failing tests. That's the whole brief.</p>
+          <p class="eyebrow">A true story</p>
+          <h2>At work, I asked Claude Code<br />to build something.</h2>
+          <p>Nothing exotic. It had a few phases, each one building on the last.</p>
+          <div class="phases">
+            <div class="phase"><b>Phase 1</b><span class="bar"></span><span class="st dim">todo</span></div>
+            <div class="phase"><b>Phase 2</b><span class="bar"></span><span class="st dim">todo</span></div>
+            <div class="phase"><b>Phase 3</b><span class="bar"></span><span class="st dim">todo</span></div>
+            <div class="phase"><b>Phase 4</b><span class="bar"></span><span class="st dim">todo</span></div>
+          </div>
           <aside class="notes">
             <ul>
-              <li>This is GOAL.md from a tiny repo I built for this talk. Ten stub functions, 22 tests, all red.</li>
-              <li>I typed these four lines and walked away. Don't read them closely yet, we'll come back to every line at the end.</li>
+              <li>Keep this vague on purpose. "At work, a multi-phase build." What it was doesn't matter. What happened does.</li>
+              <li>Say it like you're telling a friend, not presenting.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 03 The receipt -->
+        <!-- 03 It said done -->
         <section>
-          <p class="eyebrow">What I came back to</p>
-          <h2>Then I walked away.</h2>
-<pre><code><span class="dim">$ ./morning.sh</span>
-== Finish line
-<span class="ok">PASS 22/22 tests passing</span>
-
-== Did the finish line move? <span class="dim">(empty)</span>
-== Commits
-a5bb586 Implement schedule (20/22 -> 22/22)
-<span class="dim">...</span>
-df372ff Implement formatINR (2/22 -> 5/22)
-7c43528 Implement slugify (0/22 -> 2/22)</code></pre>
-          <p class="small"><strong>10 commits. 10 kept. 0 discarded.</strong> <span class="muted">Nobody touched the keyboard.</span></p>
+          <p class="eyebrow">A few minutes later</p>
+          <div class="chat">
+            <div class="msg me"><span class="who">me</span>Build it. All the phases.</div>
+            <div class="msg ai"><span class="who">claude</span>Done ✅ All phases are complete and working.</div>
+          </div>
           <aside class="notes">
             <ul>
-              <li>One commit per function, each with the test count moving. The tests themselves were never edited, and the script proves it.</li>
-              <li>Honest: this run took about two minutes because the task is small. The point isn't the time, it's that I wasn't there.</li>
-              <li>If you did your own run Friday night, swap in your numbers here.</li>
+              <li>Pause on this. Let the room enjoy the green tick. Everyone has seen this message.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 04 Decision log -->
+        <!-- 04 It wasn't -->
         <section>
-          <p class="eyebrow">decisions.tsv</p>
-          <h2>And it left notes.</h2>
-          <table>
-            <thead>
-              <tr><th>function</th><th>decision</th><th>reason</th><th>result</th></tr>
-            </thead>
+          <h2>It wasn't.</h2>
+          <div class="phases">
+            <div class="phase"><b>Phase 1</b><span class="bar"><i style="width:100%"></i></span><span class="st ok">done</span></div>
+            <div class="phase"><b>Phase 2</b><span class="bar"><i class="part" style="width:45%"></i></span><span class="st lamp">half</span></div>
+            <div class="phase"><b>Phase 3</b><span class="bar"></span><span class="st bad">no</span></div>
+            <div class="phase"><b>Phase 4</b><span class="bar"></span><span class="st bad">no</span></div>
+          </div>
+          <p class="muted small" style="margin-top:1em">And not once. Every time. "Done" arrived before the work did.</p>
+          <aside class="notes">
+            <ul>
+              <li>The bars are illustrative, not a log. Say "it would finish part of it and call the whole thing done".</li>
+              <li>The key word is "every time". This isn't a bug, it's a pattern.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 05 I became the loop -->
+        <section>
+          <p class="eyebrow">So what did I do?</p>
+          <div class="chat">
+            <div class="msg me"><span class="who">me</span>continue</div>
+            <div class="msg ai"><span class="who">claude</span>Done ✅</div>
+            <div class="msg me"><span class="who">me</span>is it actually done? check phase 3.</div>
+            <div class="msg ai"><span class="who">claude</span>You're right, phase 3 was not finished. Fixed. Done ✅</div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Adjust the exact words to what you actually typed. The point: I kept nudging, checking, nudging.</li>
+              <li>"You're right" gets a laugh every time.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 06 The realisation -->
+        <section class="center statement">
+          <h2>The agent wasn't the bottleneck.<br /><span class="lamp">I was.</span></h2>
+          <p class="muted">I was the loop. I was the checker. I was the alarm clock.<br />And I can't do that while I sleep.</p>
+          <aside class="notes">
+            <ul>
+              <li>This is the thesis. Slow down here.</li>
+              <li>Three jobs I was doing by hand: keep it going (loop), decide if it's done (checker), wake it up (alarm). Tonight we hand all three to the machine.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- ============ ACT I: THE PROBLEM ============ -->
+
+        <!-- 07 Divider -->
+        <section class="center act">
+          <div class="clock">22:45</div>
+          <h1>The problem.</h1>
+          <p>It's not just me. Here's what goes wrong when you look away.</p>
+          <aside class="notes">
+            <ul><li>My story is failure number one. There are three more, and you've probably met them too.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 08 Four failures -->
+        <section>
+          <h2>Four ways an agent fails<br />when you look away.</h2>
+          <div class="grid-2">
+            <div class="card fail lit"><p class="num">01</p><h3>It stops early.</h3><p class="muted">Says "done" when it isn't. (My story.)</p></div>
+            <div class="card fail"><p class="num">02</p><h3>It cheats.</h3><p class="muted">Makes the check pass instead of the code.</p></div>
+            <div class="card fail"><p class="num">03</p><h3>It waits for you.</h3><p class="muted">Asks a question at 11pm. You see it at 8am.</p></div>
+            <div class="card fail"><p class="num">04</p><h3>It breaks things.</h3><p class="muted">One bad command on your real machine.</p></div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Quick overview, then one slide each. Ask the room which one they've hit. Most will say one and two.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 09 Stops early -->
+        <section>
+          <p class="eyebrow">Failure 01</p>
+          <h2>It stops early.</h2>
+          <div class="grid-2">
+            <div>
+              <ul>
+                <li>By default, <strong>the model decides when it's done</strong>.</li>
+                <li>Models are optimistic. "Probably done" feels like done.</li>
+                <li>Long, multi-phase work makes it worse: the plan slides out of view.</li>
+              </ul>
+            </div>
+            <div class="chat">
+              <div class="msg ai"><span class="who">claude</span>All tests pass ✅</div>
+              <div class="msg me"><span class="who">me</span>which tests did you run?</div>
+              <div class="msg ai"><span class="who">claude</span>I didn't run them, but the changes look correct.</div>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Nobody wrote down what "done" means, so the model makes it up. That's the root cause.</li>
+              <li>The chat on the right is the generic version every developer has seen.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 10 Cheats -->
+        <section>
+          <p class="eyebrow">Failure 02</p>
+          <h2>It cheats.</h2>
+          <p>Not on purpose. A failing test is often easier to change than the code.</p>
+<pre><code><span class="dim">// before</span>
+expect(total(cart)).toBe(<span class="bad">1499</span>)
+<span class="dim">// after "fixing" it</span>
+expect(total(cart)).toBe(<span class="ok">1349</span>)   <span class="dim">// updated to match output</span></code></pre>
+          <p class="small muted">Also seen: skipping the test, mocking the thing under test, catching and swallowing the error.</p>
+          <aside class="notes">
+            <ul>
+              <li>The agent is rewarded for green. If the test is in reach, the test is a target.</li>
+              <li>Lesson: whoever writes the code must not be the one grading it.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 11 Waits -->
+        <section>
+          <p class="eyebrow">Failure 03</p>
+          <h2>It waits for you.</h2>
+          <div class="chat">
+            <div class="msg ai"><span class="who">claude · 11:42 pm</span>I'm about to commit these changes. Should I go ahead?</div>
+            <div class="msg me"><span class="who">me · 8:03 am</span>yes</div>
+          </div>
+          <p class="small muted" style="margin-top:0.8em">Eight hours of compute, zero minutes of work. The agent was polite. You were asleep.</p>
+          <aside class="notes">
+            <ul>
+              <li>Permission prompts are good when you're watching. They're a wall when you're not.</li>
+              <li>Fix later: answer the questions before you leave.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 12 Breaks things -->
+        <section>
+          <p class="eyebrow">Failure 04</p>
+          <h2>It breaks things.</h2>
+          <div class="grid-3">
+            <div class="card"><h3>The wrong folder</h3><p class="muted">A cleanup command, one directory too high.</p></div>
+            <div class="card"><h3>The wrong branch</h3><p class="muted">A force push to main at 3am.</p></div>
+            <div class="card"><h3>The wrong hands</h3><p class="muted">A web page with hidden instructions, and your keys sitting right there.</p></div>
+          </div>
+          <p class="small muted" style="margin-top:0.8em">To run unattended, you turn permission prompts off. Then the machine is the only seatbelt.</p>
+          <aside class="notes">
+            <ul>
+              <li>Third card is prompt injection. An agent that reads the web can read instructions you didn't write.</li>
+              <li>The answer isn't "watch it". It's "give it a machine where mistakes don't matter".</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 13 Fix map -->
+        <section>
+          <h2>Every failure has a fix.</h2>
+          <table class="fixmap">
+            <thead><tr><th>#</th><th>Failure</th><th>Fix</th><th>Tonight</th></tr></thead>
             <tbody>
-              <tr><td>formatINR</td><td>keep last 3 digits, group the rest in pairs</td><td>avoids depending on the Intl build</td><td class="ok">5/22 · kept</td></tr>
-              <tr><td>parseDuration</td><td>regex + explicit "both missing" check</td><td>empty string matches the regex otherwise</td><td class="ok">9/22 · kept</td></tr>
-              <tr><td>camelCase</td><td>lowercase first, then capitalize</td><td>turns LOOP into Loop, as the test expects</td><td class="ok">16/22 · kept</td></tr>
-              <tr><td>schedule</td><td>convert HH:MM to minutes, pad on the way out</td><td>handles hour rollover in one helper</td><td class="ok">PASS · kept</td></tr>
+              <tr><td>01</td><td>It stops early</td><td>A finish line a machine can check</td><td>Set Goal</td></tr>
+              <tr><td>02</td><td>It cheats</td><td>Lock the finish line, separate the grader</td><td>Set Goal</td></tr>
+              <tr><td>03</td><td>It waits for you</td><td>A loop, plus permissions given up front</td><td>Start Loop</td></tr>
+              <tr><td>04</td><td>It breaks things</td><td>A sandbox that isn't your laptop</td><td>Sleep</td></tr>
             </tbody>
           </table>
-          <p class="muted small">So how do you get from four lines to this? Three moves.</p>
+          <p class="small muted">And the thing that holds all of it together has a name: the <strong>harness</strong>.</p>
           <aside class="notes">
             <ul>
-              <li>In the morning I don't read the transcript. I read ten rows. Each row is a decision, a reason, and evidence.</li>
-              <li>The parseDuration row is my favourite: it found an edge case on its own and wrote down why.</li>
-              <li>Transition: three moves. Set a goal. Start a loop. Sleep.</li>
+              <li>This is the map for the rest of the talk. Come back to it if people get lost.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 05 Act I -->
+        <!-- ============ ACT II: SET GOAL ============ -->
+
+        <!-- 14 Divider -->
         <section class="center act">
           <div class="clock">22:58</div>
           <h1>Set Goal.</h1>
           <p>Write the finish line before the first line of code.</p>
           <aside class="notes">
-            <ul><li>Act one. Before bed, the only thing you have to do well is write the finish line.</li></ul>
+            <ul><li>Fixes failures one and two. The single most useful skill in this talk.</li></ul>
           </aside>
         </section>
 
-        <!-- 06 Prompt vs goal -->
+        <!-- 15 Prompt vs goal -->
         <section>
           <h2>A prompt is a request.<br /><span class="lamp">A goal is a finish line.</span></h2>
           <div class="grid-2">
             <div class="card">
-              <p class="tag">Prompt</p>
-              <h3>"Fix the login bug."</h3>
-              <p class="muted">The agent decides when it's done. It usually decides early.</p>
+              <p class="tag">What I typed</p>
+              <h3>"Build it. All the phases."</h3>
+              <p class="muted">The agent decides when it's done. It decided early.</p>
             </div>
             <div class="card lit">
-              <p class="tag">Goal</p>
-              <h3>"The login test passes, the old error is gone from the logs, nothing else in the suite turns red."</h3>
+              <p class="tag">What I should have typed</p>
+              <h3>"Done means every phase's tests pass, the app runs end to end, and you show me the output."</h3>
               <p class="muted">Anyone can check it. Including another machine.</p>
             </div>
           </div>
           <aside class="notes">
             <ul>
-              <li>A prompt ends when the model feels done. A goal ends when something outside the model says yes.</li>
+              <li>Callback to the story. Same task, one extra sentence.</li>
               <li>If you can't tell whether it's done, neither can the agent.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 07 Yes/no -->
+        <!-- 16 Yes/no -->
         <section class="center statement">
           <h2>A good goal is a <span class="lamp">yes / no</span> question.</h2>
           <p class="muted">tests green · bug no longer reproduces · all 5 PRs merged · pixel diff is zero</p>
           <aside class="notes">
             <ul>
-              <li>pstack calls this a "checkable predicate". Fancy word for: a question with a yes or no answer.</li>
-              <li>Read the examples. Every one of them a script can answer.</li>
+              <li>pstack calls it a "checkable predicate". Every example here, a script can answer.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 08 Roast bad goals -->
+        <!-- 17 Exercise -->
         <section>
           <p class="eyebrow">Your turn · shout it out</p>
           <h2>Fix these goals.</h2>
@@ -451,13 +665,13 @@ df372ff Implement formatINR (2/22 -> 5/22)
           </div>
           <aside class="notes">
             <ul>
-              <li>Give the room 30 seconds per card. Take two or three answers, then reveal.</li>
-              <li>This is the one skill they can use tomorrow, even with zero paid tools.</li>
+              <li>30 seconds per card. Take two answers, then reveal.</li>
+              <li>This is the one skill they can use tomorrow with zero paid tools.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 09 /goal everywhere -->
+        <!-- 18 /goal -->
         <section>
           <h2>Every agent now has <code>/goal</code>.</h2>
           <div class="grid-2">
@@ -474,76 +688,75 @@ df372ff Implement formatINR (2/22 -> 5/22)
               <p class="muted">Pause, resume, clear, with a budget. "The evidence decides."</p>
             </div>
           </div>
-          <p class="small muted">In 2026 the tools converged on the same idea: the goal is the contract.</p>
+          <p class="small muted">If I'd had this for my multi-phase build, "continue" would have typed itself.</p>
           <aside class="notes">
             <ul>
-              <li>Two different companies, same command, same idea. That's usually a sign the idea is right.</li>
-              <li>Our demo used exactly this: claude -p "/goal node check.mjs prints PASS".</li>
+              <li>Two companies, same command. That's usually a sign the idea is right.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 10 Never grades its own homework -->
+        <!-- 19 Never grades own homework -->
         <section class="center statement">
-          <h2>The worker never grades<br />its own homework.</h2>
-          <p class="muted">After every turn, a <strong>separate</strong> model or script checks the goal.<br />"Probably done" is not done.</p>
+          <h2>The author is never the critic.</h2>
+          <p class="muted">After every turn, a <strong>separate</strong> model or a script checks the goal.<br />Not the one that did the work. "Probably done" is not done.</p>
           <aside class="notes">
             <ul>
-              <li>In Claude Code's /goal, a fresh model checks the condition after each turn, not the one that did the work.</li>
-              <li>Even better: a script. Scripts don't get tired or optimistic.</li>
+              <li>In Claude Code's /goal, a fresh model checks the condition after each turn.</li>
+              <li>pstack goes further: the judge comes from a different model family. Scripts are best of all. They don't get optimistic.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 11 Our finish line -->
+        <!-- 20 Lock the finish line -->
         <section>
-          <p class="eyebrow">check.mjs</p>
-          <h2>Our finish line is a script.</h2>
+          <p class="eyebrow">Fixes failure 02</p>
+          <h2>Lock the finish line.</h2>
 <pre><code><span class="dim">$ node check.mjs</span>
 <span class="bad">FAIL</span>
 - 0/22 tests passing
-- TODO stubs left in src/index.js
 
 <span class="dim">$ echo "// sneaky" >> tests/index.test.js && node check.mjs</span>
 <span class="bad">FAIL</span>
 - tests/index.test.js was changed. The finish line is not yours to move.</code></pre>
-          <p class="small muted">Tests and the checker are hashed in a LOCK file. Editing the test to win counts as losing.</p>
+          <p class="small muted">The tests and the checker are hashed. Editing the test to win counts as losing.</p>
           <aside class="notes">
             <ul>
-              <li>Agents under pressure will sometimes "fix" the test instead of the code. So we lock the finish line.</li>
-              <li>The joke line lands well. Pause after it.</li>
+              <li>This is from the demo repo we'll see at the end. Pause after the last line, it lands.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 12 Act II -->
+        <!-- ============ ACT III: START LOOP ============ -->
+
+        <!-- 21 Divider -->
         <section class="center act">
           <div class="clock">23:04</div>
           <h1>Start Loop.</h1>
-          <p>One change. One check. Keep it or throw it away. Repeat.</p>
+          <p>Stop typing "continue". Let the machine type it.</p>
           <aside class="notes">
-            <ul><li>Act two. A goal on its own does nothing. Something has to keep waking the agent up.</li></ul>
+            <ul><li>Fixes failure three. Remember: I was the loop. Now we replace me.</li></ul>
           </aside>
         </section>
 
-        <!-- 13 Ralph -->
+        <!-- 22 Ralph -->
         <section>
-          <p class="eyebrow">The dumbest loop that works</p>
+          <p class="eyebrow">My "continue", automated</p>
 <pre style="font-size:0.85em"><code>while :; do cat PROMPT.md | claude ; done</code></pre>
           <ul>
-            <li>Geoffrey Huntley calls it <strong>Ralph</strong>. Each pass is a fresh agent with a fresh memory.</li>
-            <li>The plan lives in a file on disk. Read the plan, do one thing, commit, exit, repeat.</li>
+            <li>Geoffrey Huntley calls it the <strong>Ralph</strong> loop. Each pass is a fresh agent.</li>
+            <li>The plan lives in a file. Read the plan, do one thing, commit, exit, repeat.</li>
             <li>A YC hackathon team ran it overnight and woke up to <em>6 shipped repos</em>.</li>
           </ul>
           <aside class="notes">
             <ul>
-              <li>One line of bash. No framework. The repo's ralph.sh is the same idea with a stop condition.</li>
-              <li>Huntley's other line: "everything is a ralph loop". Watch the loop, and when it fails, fix the loop so it never fails that way again.</li>
+              <li>One line of bash is the thing I was doing by hand all afternoon.</li>
+              <li>Huntley: watch the loop, and when it fails, fix the loop so it never fails that way again.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 14 Three ways to wake -->
+        <!-- 23 Three ways to wake -->
         <section>
           <h2>Three ways to wake the agent up.</h2>
           <table>
@@ -554,15 +767,13 @@ df372ff Implement formatINR (2/22 -> 5/22)
               <tr><td>An event</td><td>CI finished, PR merged, Slack message</td><td>You're waiting on something real</td></tr>
             </tbody>
           </table>
-          <p class="small muted">pstack's rule: if there's an event, watch the event and keep a slow timer as backup.</p>
+          <p class="small muted">Rule of thumb: if there's an event, watch the event and keep a slow timer as backup.</p>
           <aside class="notes">
-            <ul>
-              <li>Most people only know the first one. Events are the grown-up version: don't poll CI every minute, get woken when it finishes.</li>
-            </ul>
+            <ul><li>Events are the grown-up version: don't poll CI every minute, get woken when it finishes.</li></ul>
           </aside>
         </section>
 
-        <!-- 15 One iteration -->
+        <!-- 24 One iteration -->
         <section>
           <h2>One iteration.</h2>
           <div class="loop">
@@ -575,40 +786,282 @@ df372ff Implement formatINR (2/22 -> 5/22)
           <p class="loop-back">↻ back to 1, until the finish line says yes</p>
           <aside class="notes">
             <ul>
-              <li>This is straight from the pstack overnight guide. Point at step 4: the agent throws away work that didn't help.</li>
-              <li>Ask the room: when did you last delete code that didn't help? Agents should do it every loop.</li>
+              <li>Step 4: the agent throws away work that didn't help. When did you last delete code that didn't help?</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 16 Three rules -->
+        <!-- 25 Overnight contract -->
         <section>
-          <p class="eyebrow">Steal these</p>
-          <h2>Three loop rules.</h2>
-          <div class="grid-3">
-            <div class="card"><h3>"Might help" gets reverted.</h3><p class="muted">If it didn't move the number, it doesn't ride along.</p></div>
-            <div class="card"><h3>A plateau is not a stop.</h3><p class="muted">Stuck? Change approach. Don't quit, don't spin.</p></div>
-            <div class="card lit"><h3>Never relax the goal.</h3><p class="muted">Moving the finish line to declare victory is losing.</p></div>
+          <p class="eyebrow">Fixes failure 03</p>
+          <h2>Answer its questions before you leave.</h2>
+<pre><code>im going to bed. implement every function in src/index.js on a fresh branch.
+done means `node check.mjs` prints PASS. tests/, check.mjs and LOCK stay untouched.
+keep a decision log in decisions.tsv. don't ask me before committing.
+loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</code></pre>
+          <div class="grid-4 compact">
+            <div class="card part"><p class="num">GOAL</p><p>what to build, where</p></div>
+            <div class="card part lit"><p class="num">FINISH LINE</p><p>a yes/no check</p></div>
+            <div class="card part"><p class="num">PERMISSION</p><p>"don't ask me"</p></div>
+            <div class="card part"><p class="num">ESCAPE HATCH</p><p>stuck? stop and say why</p></div>
           </div>
           <aside class="notes">
             <ul>
-              <li>Third rule is the one that matters most. It's why we have the LOCK file.</li>
-              <li>And the escape hatch: if truly stuck, stop and write up why. Better than 8 hours of creative goal reinterpretation.</li>
+              <li>Four lines, four jobs. The permission line kills the 11:42pm question. The escape hatch beats eight hours of creative goal reinterpretation.</li>
+              <li>This exact file is GOAL.md in the demo repo.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 17 pstack -->
+        <!-- ============ ACT IV: THE HARNESS ============ -->
+
+        <!-- 26 Divider -->
+        <section class="center act">
+          <div class="clock">23:05</div>
+          <h1>The harness.</h1>
+          <p>Everything we just did has a name.</p>
+          <aside class="notes">
+            <ul><li>Zoom out. The goal, the check, the loop, the contract: none of that is the model.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 27 What is a harness -->
         <section>
-          <p class="eyebrow">Where those rules come from</p>
+          <h2>What is an agent harness?</h2>
+          <p class="equation">Agent = Model + <span class="lamp">Harness</span></p>
+          <div class="grid-2">
+            <div class="card">
+              <p class="tag">The model</p>
+              <p>Reads the context and picks the next action. That's all it does.</p>
+            </div>
+            <div class="card lit">
+              <p class="tag">The harness</p>
+              <p>All the code that turns that choice into work. Claude Code, Codex, Cursor and Antigravity are all harnesses.</p>
+            </div>
+          </div>
+          <p class="small muted">My "done" problem was never a model problem. It was a harness problem.</p>
+          <aside class="notes">
+            <ul>
+              <li>Same model, different harness, very different agent.</li>
+              <li>Next: eight parts every harness shares. One slide each, with an example.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 28 Part 1 Loop -->
+        <section>
+          <p class="hp-num">HARNESS 1 / 8</p>
+          <h2>The loop</h2>
+          <div class="hp">
+            <ul>
+              <li>Sends the context to the model.</li>
+              <li>Runs whatever tools it asks for.</li>
+              <li>Feeds the results back in.</li>
+              <li><strong>Decides when the task is finished.</strong></li>
+            </ul>
+            <div class="card">
+              <p class="tag">Example</p>
+              <p>Claude Code reads a file, runs the tests, sees 3 failures, edits, runs again. Each round trip is one turn of the loop. <code>/goal</code> adds the rule for when to stop.</p>
+              <p class="story">In my story: I was the loop. Every "continue" was me doing this part by hand.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul><li>The last bullet is the one that failed me. The loop let the model decide when it was finished.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 29 Part 2 Tools + sandbox -->
+        <section>
+          <p class="hp-num">HARNESS 2 / 8</p>
+          <h2>Tools and sandbox</h2>
+          <div class="hp">
+            <ul>
+              <li>Gives the model a terminal, files, a browser and your apps.</li>
+              <li>Runs every task inside its own isolated computer.</li>
+              <li>Keeps the damage from a bad command inside the box.</li>
+            </ul>
+            <div class="card">
+              <p class="tag">Example</p>
+              <p>A Cursor cloud agent gets its own VM with a desktop and browser. A Claude Code cloud session gets a fresh container with only the repo it needs. Delete everything in there? Nothing you care about is gone.</p>
+              <p class="story">Fixes failure 04: it breaks things.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul><li>Tools are what the agent can do. The sandbox is where it's allowed to do it. You need both.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 30 Part 3 Subagents -->
+        <section>
+          <p class="hp-num">HARNESS 3 / 8</p>
+          <h2>Subagents</h2>
+          <div class="hp">
+            <ul>
+              <li>Take side tasks off the main agent and run them in parallel.</li>
+              <li>Start each one with a fresh context window.</li>
+              <li>Send back only a short summary, so the main context stays clean.</li>
+            </ul>
+            <div class="card">
+              <p class="tag">Example</p>
+              <p>pstack's <code>/how</code>: 2 to 4 cheap explorer agents read different corners of the codebase, then one strong model writes a single explanation. The main agent never sees the 40 files they read.</p>
+              <p class="story">For a multi-phase build: one subagent per phase, one more to review each phase.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul><li>A subagent is a helper you send off with a clean head and a short brief, who comes back with a one-page answer.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 31 Part 4 Context -->
+        <section>
+          <p class="hp-num">HARNESS 4 / 8</p>
+          <h2>Context management</h2>
+          <div class="hp">
+            <ul>
+              <li>Decides what the model sees on every turn.</li>
+              <li>Loads skills and files only when the task needs them.</li>
+              <li>Summarizes old history before the context window fills up.</li>
+            </ul>
+            <div class="card">
+              <p class="tag">Example</p>
+              <p>A skill is just a folder with a SKILL.md. The harness shows the model a one-line description, and loads the full file only when the task calls for it. 50 skills cost almost nothing until one is used.</p>
+              <p class="story">Long multi-phase runs are exactly where the plan drops out of view. Keep it in a file, not in the chat.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul><li>The model only knows what's in front of it right now. Context management is choosing what's in front of it.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 32 Part 5 Memory -->
+        <section>
+          <p class="hp-num">HARNESS 5 / 8</p>
+          <h2>Memory</h2>
+          <div class="hp">
+            <ul>
+              <li>Stores progress notes, git history and skills on disk.</li>
+              <li>Lets a new session read what the last one did.</li>
+              <li>Picks the work up where it stopped.</li>
+            </ul>
+            <div class="card">
+              <p class="tag">Example</p>
+<pre><code><span class="dim">PLAN.md</span>
+- [x] phase 1 · tests pass · a1b2c3
+- [x] phase 2 · tests pass · d4e5f6
+- [ ] phase 3
+- [ ] phase 4</code></pre>
+              <p class="story">Kill the session at 2am, start a new one: it reads PLAN.md and git log, and carries on at phase 3.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Lauren Tan: "your codebase is the ultimate form of memory."</li>
+              <li>The checklist is ticked by the check passing, not by the agent saying so.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 33 Part 6 Guardrails -->
+        <section>
+          <p class="hp-num">HARNESS 6 / 8</p>
+          <h2>Guardrails</h2>
+          <div class="hp">
+            <ul>
+              <li>Hold risky actions (emails, payments, deletes) for your approval.</li>
+              <li>Keep real credentials outside the sandbox.</li>
+              <li>Give a prompt injection no credentials to steal.</li>
+            </ul>
+            <div class="card">
+              <p class="tag">Example</p>
+              <p>Work on a branch, never main. Allow <code>git</code> and <code>npm test</code>, nothing else. The GitHub token lives in a proxy outside the box, so the agent can push a PR but can't read the key.</p>
+              <p class="story">Freedom inside the box, a locked door at the edge.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul><li>Guardrails are what make "don't ask me" safe to say. You pre-approve the safe things and fence off the dangerous ones.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 34 Part 7 Verification -->
+        <section>
+          <p class="hp-num">HARNESS 7 / 8</p>
+          <h2>Verification</h2>
+          <div class="hp">
+            <ul>
+              <li>Stops a summary that only <em>sounds</em> finished.</li>
+              <li>Runs tests, browser checks or a separate grader first.</li>
+              <li>Lets the agent say done only after those checks pass.</li>
+            </ul>
+            <div class="card lit">
+              <p class="tag">Example</p>
+              <p>Not "I fixed it". Show me the failing test, then the passing test. Show me the before and after screenshot. pstack's author ranks a verification skill as the single best investment.</p>
+              <p class="story">Fixes failure 01. This is the part my story was missing.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Lauren Tan: "The bottleneck with agents is verification."</li>
+              <li>If you only build one part of the harness yourself, build this one.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 35 Part 8 Observability -->
+        <section>
+          <p class="hp-num">HARNESS 8 / 8</p>
+          <h2>Observability</h2>
+          <div class="hp">
+            <ul>
+              <li>Traces every model call and tool call.</li>
+              <li>Spots the agent repeating the same failed edit.</li>
+              <li>Pushes it to try a different approach.</li>
+            </ul>
+            <div class="card">
+              <p class="tag">Example</p>
+<pre><code>03:12 same fix  18/22 <span class="bad">discard</span>
+03:14 same fix  18/22 <span class="bad">discard</span>
+03:16 same fix  18/22 <span class="bad">discard</span>
+03:18 <span class="lamp">pivot: new approach</span>
+03:19 new fix   22/22 <span class="ok">kept</span></code></pre>
+              <p class="story">Three identical misses is a signal. A plateau means pivot, not stop.</p>
+            </div>
+          </div>
+          <aside class="notes">
+            <ul><li>Illustrative log. Without traces, you find out at 8am that it tried the same fix 200 times.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 36 Harness recap -->
+        <section>
+          <h2>8 parts, 4 failures, fixed.</h2>
+          <div class="grid-4 compact">
+            <div class="card part lit"><p class="num">01</p><h3>Loop</h3><p class="ok">fixes 03 waits</p></div>
+            <div class="card part"><p class="num">02</p><h3>Sandbox</h3><p class="ok">fixes 04 breaks</p></div>
+            <div class="card part"><p class="num">03</p><h3>Subagents</h3><p>scale and review</p></div>
+            <div class="card part"><p class="num">04</p><h3>Context</h3><p>keeps the plan in view</p></div>
+            <div class="card part"><p class="num">05</p><h3>Memory</h3><p>survives a restart</p></div>
+            <div class="card part"><p class="num">06</p><h3>Guardrails</h3><p class="ok">fixes 04 breaks</p></div>
+            <div class="card part lit"><p class="num">07</p><h3>Verification</h3><p class="ok">fixes 01 stops, 02 cheats</p></div>
+            <div class="card part"><p class="num">08</p><h3>Observability</h3><p>catches the spin</p></div>
+          </div>
+          <aside class="notes">
+            <ul><li>One look back. Ask: which part would have saved my afternoon? Answer: verification, then the loop.</li></ul>
+          </aside>
+        </section>
+
+        <!-- ============ ACT V: PSTACK ============ -->
+
+        <!-- 37 pstack intro -->
+        <section>
+          <p class="eyebrow">Someone already wrote the playbook</p>
           <h2>pstack</h2>
           <div class="grid-2">
             <div>
               <ul>
-                <li>Lauren Tan (<strong>poteto</strong>), React core team, engineer at Cursor.</li>
-                <li>Open sourced in May 2026 after Cursor's own team used her skills <em>10,000 times in one week</em>.</li>
-                <li><code>/poteto-mode</code> routes your task to one of 23 playbooks: bug fix, perf, autonomous run, autopilot, orchestrate...</li>
+                <li>Lauren Tan (<strong>poteto</strong>), React Compiler core team, ex Meta and Netflix. Built it at Cursor.</li>
+                <li>Open sourced in May 2026 after Cursor's team used it <em>10,000 times in one week</em>.</li>
               </ul>
+              <blockquote class="quote">"If you want to go fast, go deep first."<cite>Lauren Tan</cite></blockquote>
             </div>
             <div class="card">
               <p class="tag">Free · MIT · any agent</p>
@@ -621,161 +1074,238 @@ npx skills add backnotprop/pstack</code></pre>
           </div>
           <aside class="notes">
             <ul>
-              <li>Her line: "if you want to go fast, go deep first." pstack is about writing less code, but code you can trust.</li>
-              <li>The autonomous run playbook is basically this talk in six steps.</li>
+              <li>She has since moved to SpaceXAI, but pstack was born at Cursor.</li>
+              <li>Her line on agents: "new hires in a constant state of amnesia and idiocy. Capable yet stupid, and very teachable." pstack is the teaching.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 17a Harness: definition -->
+        <!-- 38 pstack how it fits -->
         <section>
-          <p class="eyebrow">Zoom out</p>
-          <h2>What is an agent harness?</h2>
-          <p class="equation">Agent = Model + <span class="lamp">Harness</span></p>
-          <div class="grid-2">
-            <div class="card">
-              <p class="tag">The model</p>
-              <p>Reads the context and picks the next action. That's all it does.</p>
-            </div>
-            <div class="card lit">
-              <p class="tag">The harness</p>
-              <p>All the code that turns that choice into work. Claude Code, Codex, Antigravity, OpenClaw and Hermes Agent are all harnesses.</p>
-            </div>
+          <p class="eyebrow">pstack · how it fits together</p>
+          <h2>One router. Many playbooks.</h2>
+          <div class="flow">
+            <div class="step"><b>Your prompt</b>goal + a done check + the proof you want</div>
+            <div class="step lit"><b>/poteto-mode</b>the router picks 1 of 23 playbooks</div>
+            <div class="step"><b>Playbook</b>bug fix, feature, perf, autonomous run, autopilot...</div>
+            <div class="step"><b>Skills + agents</b>how, why, arena, interrogate fan out to subagents</div>
+            <div class="step lit"><b>Proof + PRs</b>verified on the real app, small ordered PRs</div>
           </div>
-          <p class="small muted">Everything we've built tonight lives in the harness, not the model.</p>
+          <div class="stats">
+            <div><b>54</b><span>skills</span></div>
+            <div><b>23</b><span>playbooks</span></div>
+            <div><b>24</b><span>one-rule principles</span></div>
+            <div><b>~7k</b><span>lines of scripts</span></div>
+          </div>
           <aside class="notes">
             <ul>
-              <li>This is the cleanest map of everything in this talk.</li>
-              <li>Same model, different harness, very different agent. When people say "this model is bad at coding", half the time it's the harness.</li>
-              <li>Next slide: the 8 parts. Then we go through them and see where each one showed up in our overnight run.</li>
+              <li>You type one command. The router reads your task and picks the right recipe. Nothing loads by surprise: 53 of 54 skills only run when called.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 17b Harness: the 8 parts -->
+        <!-- 39 pstack prompt -->
         <section>
-          <h2>8 parts every harness shares.</h2>
+          <p class="eyebrow">pstack · how she prompts</p>
+          <h2>Name the goal and the proof. Never the method.</h2>
+<pre><code>/poteto-mode the csv export drops its last row since yesterday's deploy.
+failing job id is 4812. repro first, then fix.
+done means the 60k-row fixture exports every row.
+show me the row counts before and after.</code></pre>
           <div class="grid-4 compact">
-            <div class="card part lit"><p class="num">01</p><h3>The loop</h3><p>Model, tools, results, repeat, decide when done</p></div>
-            <div class="card part"><p class="num">02</p><h3>Tools + sandbox</h3><p>Terminal, files, browser, in an isolated computer</p></div>
-            <div class="card part"><p class="num">03</p><h3>Subagents</h3><p>Side tasks in parallel, fresh context, short summary back</p></div>
-            <div class="card part"><p class="num">04</p><h3>Context</h3><p>What the model sees each turn</p></div>
-            <div class="card part"><p class="num">05</p><h3>Memory</h3><p>Notes and git on disk. Next session picks up</p></div>
-            <div class="card part"><p class="num">06</p><h3>Guardrails</h3><p>Risky actions wait for you. Keys stay outside</p></div>
-            <div class="card part lit"><p class="num">07</p><h3>Verification</h3><p>Tests or a separate grader before "done" is allowed</p></div>
-            <div class="card part"><p class="num">08</p><h3>Observability</h3><p>Trace every call. Catch the repeat failure</p></div>
+            <div class="card part"><p class="num">GOAL</p><p>export drops last row</p></div>
+            <div class="card part lit"><p class="num">DONE CHECK</p><p>60k rows export</p></div>
+            <div class="card part"><p class="num">PROOF</p><p>counts before and after</p></div>
+            <div class="card part"><p class="num">CONSTRAINT</p><p>repro first</p></div>
           </div>
           <aside class="notes">
             <ul>
-              <li>Read the titles only, don't read every card. The two lit ones are this talk: the loop is "Start Loop", verification is "Set Goal".</li>
-              <li>Ask: which of these did you already see tonight? Most hands should say loop and verification.</li>
+              <li>Compare with my "Build it. All the phases." Same length, completely different outcome.</li>
+              <li>Her advice: don't list skills, don't lead with your theory of the bug.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 17c Harness parts 1 to 4 in our demo -->
+        <!-- 38a What is a skill -->
         <section>
-          <p class="eyebrow">The 8 parts in our overnight run · 1 to 4</p>
+          <p class="eyebrow">pstack · what is a skill?</p>
+          <h2>A skill is written experience.</h2>
           <div class="grid-2">
-            <div class="card part">
-              <p class="num">01 · THE LOOP</p>
-              <p>Sends context to the model, runs the tools it asks for, feeds results back, and decides when the task is finished.</p>
-              <p class="ours">Ours: <code>/goal</code> or <code>ralph.sh</code>. "Finished" means check.mjs says PASS, nothing else.</p>
+            <div>
+              <ul>
+                <li>A folder with one <code>SKILL.md</code> file. Plain Markdown.</li>
+                <li>The <strong>description</strong> says when to use it. The body says how.</li>
+                <li>The agent sees only the one-line description until it needs the rest.</li>
+                <li>Same format in Claude Code, Cursor, Codex.</li>
+              </ul>
             </div>
-            <div class="card part">
-              <p class="num">02 · TOOLS + SANDBOX</p>
-              <p>Gives the model a terminal, files, a browser and your apps, each task in its own isolated computer, so a bad command stays inside.</p>
-              <p class="ours">Ours: only <code>node</code> and <code>git</code> allowed, run in a scratch copy or a cloud VM.</p>
-            </div>
-            <div class="card part">
-              <p class="num">03 · SUBAGENTS</p>
-              <p>Takes side tasks off the main agent and runs them in parallel, each with a fresh context, sending back only a short summary.</p>
-              <p class="ours">Ours: not needed for 10 functions. pstack's autopilot uses a swarm of fresh verifiers per PR.</p>
-            </div>
-            <div class="card part">
-              <p class="num">04 · CONTEXT MANAGEMENT</p>
-              <p>Decides what the model sees each turn. Loads skills and files only when needed, summarizes old history before the window fills.</p>
-              <p class="ours">Ours: GOAL.md + AGENTS.md every pass. Ralph starts each pass with a clean window.</p>
-            </div>
+<pre><code><span class="dim">---</span>
+<span class="lamp">name:</span> encode-lessons-in-structure
+<span class="lamp">description:</span> Apply when you catch
+  yourself writing the same instruction
+  a second time. Encode the rule as a
+  lint, check, or script instead of
+  more text.
+<span class="dim">---</span>
+If the fix is structural, only use the
+structural fix. The instruction is the
+symptom.</code></pre>
           </div>
           <aside class="notes">
             <ul>
-              <li>White text is the definition. Green line is where it lives in the demo repo they can clone.</li>
-              <li>Be honest on subagents: our task was too small to need them. That's fine, not every harness part is needed for every job.</li>
-              <li>Context: the reason Ralph works is that each pass forgets everything except what's on disk. That's a feature.</li>
+              <li>This is a real pstack skill, nearly the whole file. 34 words. A skill doesn't have to be long to be useful.</li>
+              <li>Students: if you can write a README, you can write a skill.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 17d Harness parts 5 to 8 in our demo -->
+        <!-- 38b Why skills matter -->
         <section>
-          <p class="eyebrow">The 8 parts in our overnight run · 5 to 8</p>
-          <div class="grid-2">
-            <div class="card part">
-              <p class="num">05 · MEMORY</p>
-              <p>Stores progress notes, git history and skills on disk, so a new session reads what the last one did and picks up where it stopped.</p>
-              <p class="ours">Ours: one commit per function + decisions.tsv. Kill it at 2am, restart, it carries on.</p>
-            </div>
-            <div class="card part">
-              <p class="num">06 · GUARDRAILS</p>
-              <p>Holds risky actions (emails, payments, deletes) for your approval and keeps real credentials outside, so a prompt injection has nothing to steal.</p>
-              <p class="ours">Ours: a branch, never main. LOCK seals the tests. No keys in the box.</p>
-            </div>
-            <div class="card part">
-              <p class="num">07 · VERIFICATION</p>
-              <p>Stops a summary that only sounds finished. Runs tests, browser checks or a separate grader, and only then allows "done".</p>
-              <p class="ours">Ours: check.mjs. In <code>/goal</code>, a separate model judges the condition.</p>
-            </div>
-            <div class="card part">
-              <p class="num">08 · OBSERVABILITY</p>
-              <p>Traces every model and tool call, spots the agent repeating the same failed edit, and pushes it to try something different.</p>
-              <p class="ours">Ours: the decision log + morning.sh. pstack: "a plateau means pivot".</p>
-            </div>
+          <p class="eyebrow">pstack · why skills matter</p>
+          <h2>Your agent forgets everything.<br /><span class="lamp">Every single morning.</span></h2>
+          <blockquote class="quote">"Agents are like new hires in a constant state of amnesia and idiocy. They're capable yet stupid, and very teachable."<cite>Lauren Tan</cite></blockquote>
+          <div class="grid-3" style="margin-top:0.9em">
+            <div class="card"><h3>Every run</h3><p class="muted">The lesson loads again tomorrow. You don't repeat yourself.</p></div>
+            <div class="card"><h3>Every agent</h3><p class="muted">Ten agents in parallel all know it. No one gets a worse brief.</p></div>
+            <div class="card lit"><h3>Every teammate</h3><p class="muted">Commit it to the repo. Your whole team's agents learn it too.</p></div>
           </div>
           <aside class="notes">
             <ul>
-              <li>Guardrails and verification are the two that let you sleep. Without them, a loop just makes mistakes faster.</li>
-              <li>Observability is what catches the agent trying the same broken fix 40 times at 3am.</li>
-              <li>Transition: we've built the harness. Now, where does it run when the laptop closes?</li>
+              <li>A chat correction dies with the chat. A skill lives in the repo.</li>
+              <li>This is why the 10,000 uses a week number matters: one person's lessons, reused by a whole team's agents.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 18 Act III -->
+        <!-- 38c How skills improve -->
+        <section>
+          <p class="eyebrow">pstack · how skills get better</p>
+          <h2>Every scar becomes a skill.</h2>
+          <div class="loop">
+            <div class="step"><b>1</b>The agent fails</div>
+            <div class="step"><b>2</b>You correct it once</div>
+            <div class="step"><b>3</b>Write it down: a skill, or better, a check</div>
+            <div class="step"><b>4</b>Next run, it doesn't happen</div>
+            <div class="step"><b>5</b>Models improve: <span class="lamp">delete</span> what they no longer need</div>
+          </div>
+          <blockquote class="quote">"I never set out to build pstack. I just started turning every recurring failure mode into a skill. The agents improved because their instructions carried the scars from previous runs."<cite>Lauren Tan</cite></blockquote>
+          <aside class="notes">
+            <ul>
+              <li>Step 5 is the surprising one. pstack's history has passes that cut 600 to 700 lines at a time because newer models stopped needing them.</li>
+              <li>Her rule for when to add one: when the same failure shows up twice.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 38d My first skill -->
+        <section>
+          <p class="eyebrow">Back to my story</p>
+          <h2>The skill I should have had.</h2>
+<pre><code><span class="dim">---</span>
+<span class="lamp">name:</span> no-early-done
+<span class="lamp">description:</span> Apply before you say "done" on any multi-phase task.
+<span class="dim">---</span>
+1. Read PLAN.md. Every phase must be ticked.
+2. A phase is ticked only when its tests pass. Paste the output.
+3. Run the app end to end once. Paste what you saw.
+4. If anything is missing, say what, and keep going. Never "Done ✅" early.</code></pre>
+          <p class="small muted">One failure, written down once, never repeated. Then turn step 2 into a script, and it stops being a request.</p>
+          <aside class="notes">
+            <ul>
+              <li>This is the "done" problem from the start of the talk, as a skill. Four lines.</li>
+              <li>And the last sentence is the correction ladder: a skill is good, a check is better.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 40 pstack correction ladder -->
+        <section>
+          <p class="eyebrow">pstack · every correction becomes structure</p>
+          <h2>Don't fix it twice.</h2>
+          <p>Every time you correct your agent, ask how to make that correction unnecessary. In order of value:</p>
+          <ol class="ladder">
+            <li><b>1</b>Remove the problem with better architecture or data structures</li>
+            <li><b>2</b>Turn it into a lint rule or a test, so CI catches it</li>
+            <li><b>3</b>Turn it into a skill or a rule</li>
+            <li class="ngmi"><b>4</b>Have humans review the code to catch it</li>
+          </ol>
+          <aside class="notes">
+            <ul>
+              <li>From Lauren's post in August. Number 4 she marks "ngmi". Not gonna make it.</li>
+              <li>Our LOCK file is rung 2: a check, not a request.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 41 pstack autonomous run -->
+        <section>
+          <p class="eyebrow">pstack · the autonomous run playbook</p>
+          <h2>Three loop rules worth stealing.</h2>
+          <div class="grid-3">
+            <div class="card"><h3>"Might help" gets reverted.</h3><p class="muted">If it didn't move the check, it doesn't ride along.</p></div>
+            <div class="card"><h3>A plateau is not a stop.</h3><p class="muted">Stuck? Change approach. Don't quit, don't spin.</p></div>
+            <div class="card lit"><h3>Never relax the goal.</h3><p class="muted">Moving the finish line to declare victory is losing.</p></div>
+          </div>
+          <p class="small muted">Plus a decision log every iteration, so you audit decisions in the morning, not transcripts.</p>
+          <aside class="notes">
+            <ul><li>Rule three is why we have the LOCK file.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 42 pstack honest costs -->
+        <section>
+          <p class="eyebrow">pstack · the honest part</p>
+          <h2>What it costs.</h2>
+          <div class="grid-2">
+            <div class="card"><h3>Tokens</h3><p class="muted">Reviewer panels and verifier swarms add up. Slower, pricier, more correct.</p></div>
+            <div class="card"><h3>Ceremony</h3><p class="muted">Heavy for a two-line fix. Most changes need none of it.</p></div>
+            <div class="card"><h3>Prose only guides</h3><p class="muted">Only scripts enforce. So rules keep moving into code.</p></div>
+            <div class="card lit"><h3>One person's style</h3><p class="muted">Her models, her habits. Build your own on top.</p></div>
+          </div>
+          <aside class="notes">
+            <ul>
+              <li>Her own words: "a low trust loop is just a waste of tokens." Earn the trust first.</li>
+              <li>Productivity numbers you'll see online are self-reported. Take the ideas, not the numbers.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- ============ ACT VI: SLEEP ============ -->
+
+        <!-- 43 Divider -->
         <section class="center act">
           <div class="clock">23:06</div>
           <h1>Sleep.</h1>
           <p>Where does the loop live when your laptop is closed?</p>
           <aside class="notes">
-            <ul><li>Act three. You can't sleep if the loop needs your laptop to stay open.</li></ul>
+            <ul><li>Fixes failure four, and lets you actually close the lid.</li></ul>
           </aside>
         </section>
 
-        <!-- 19 Laptop is a bad place -->
+        <!-- 44 Laptop -->
         <section>
           <h2>Your laptop is a bad place for a loop.</h2>
           <div class="grid-2">
             <div class="card"><h3>It sleeps.</h3><p class="muted">Lid closes, Wi-Fi drops, battery dies at 2am.</p></div>
-            <div class="card"><h3>It's crowded.</h3><p class="muted">Two agents fight each other (and you) for the same files and CPU.</p></div>
-            <div class="card"><h3>It's yours.</h3><p class="muted">Your SSH keys, your cookies, your bank tab. One bad command reaches all of it.</p></div>
+            <div class="card"><h3>It's crowded.</h3><p class="muted">Two agents fight each other (and you) for the same files.</p></div>
+            <div class="card"><h3>It's yours.</h3><p class="muted">Your keys, your cookies, your bank tab. One bad command reaches all of it.</p></div>
             <div class="card lit"><h3>So move the loop.</h3><p class="muted">To a machine that isn't yours, with only the keys the task needs.</p></div>
           </div>
           <aside class="notes">
-            <ul>
-              <li>Third card is the one students skip. Agents in a loop usually run with permissions turned off. A sandbox becomes your only seatbelt.</li>
-            </ul>
+            <ul><li>This is harness part 2 and part 6, made physical.</li></ul>
           </aside>
         </section>
 
-        <!-- 20 Cursor cloud agents -->
+        <!-- 45 Cursor -->
         <section>
           <p class="eyebrow">Cursor</p>
-          <h2>Cloud agents</h2>
+          <h2>Cloud agents + Automations</h2>
           <div class="grid-2">
             <ul>
-              <li>Every agent gets its <strong>own VM</strong>: terminal, browser, full desktop.</li>
-              <li>Start it from the editor, your phone, Slack or GitHub.</li>
-              <li>It tests its own work and attaches <em>videos and screenshots</em> to the PR.</li>
+              <li>Every agent gets its <strong>own VM</strong>: terminal, browser, desktop.</li>
+              <li>Start from the editor, your phone, Slack or GitHub.</li>
+              <li>Attaches <em>videos and screenshots</em> to the PR as proof.</li>
+              <li>Automations start them on a schedule or an event: a merged PR, a Slack message, an alert.</li>
             </ul>
             <div class="center">
               <p class="big-stat">30%+</p>
@@ -784,31 +1314,13 @@ npx skills add backnotprop/pstack</code></pre>
           </div>
           <aside class="notes">
             <ul>
-              <li>Formerly "background agents". Now the default way Cursor itself ships.</li>
-              <li>The artifacts bit matters: the agent shows you a video of the feature working instead of telling you it works.</li>
+              <li>The video artifact is verification you can watch.</li>
+              <li>Automations: nobody types a prompt. The event is the prompt.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 21 Cursor Automations -->
-        <section>
-          <p class="eyebrow">Cursor</p>
-          <h2>Automations</h2>
-          <p>Cloud agents that start on a <strong>schedule</strong> or an <strong>event</strong>: a Slack message, a new Linear issue, a merged PR, a PagerDuty alert, a webhook. They keep a memory, so they get better each run.</p>
-          <div class="grid-3">
-            <div class="card"><p class="tag">Every push to main</p><p>Security review, high risk findings posted to Slack</p></div>
-            <div class="card"><p class="tag">Every morning</p><p>Find code without tests, open a PR adding them</p></div>
-            <div class="card"><p class="tag">Bug in Slack</p><p>Check duplicates, file it, try a fix, reply in thread</p></div>
-          </div>
-          <aside class="notes">
-            <ul>
-              <li>These three are real automations Cursor runs on its own codebase.</li>
-              <li>Notice: nobody types a prompt. The event is the prompt.</li>
-            </ul>
-          </aside>
-        </section>
-
-        <!-- 22 Claude Code cloud -->
+        <!-- 46 Claude Code -->
         <section>
           <p class="eyebrow">Claude Code</p>
           <h2>Cloud sessions + scheduled tasks</h2>
@@ -826,19 +1338,16 @@ npx skills add backnotprop/pstack</code></pre>
               <ul>
                 <li>A saved prompt + repos + connectors</li>
                 <li>Fires on a schedule, an API call, or a GitHub event</li>
-                <li><em>"Every night at 2am: pull the top bug from Linear, attempt a fix, open a PR."</em></li>
+                <li><em>"Every night at 2am: pull the top bug, attempt a fix, open a PR."</em></li>
               </ul>
             </div>
           </div>
           <aside class="notes">
-            <ul>
-              <li>Fun fact for the room: the research and the demo repo for this talk were built in one of these cloud sessions, from my phone.</li>
-              <li>Scheduled tasks launched as "routines" in April 2026.</li>
-            </ul>
+            <ul><li>The demo repo for this talk was built and dry-run in one of these cloud sessions.</li></ul>
           </aside>
         </section>
 
-        <!-- 23 Buzz -->
+        <!-- 47 Buzz -->
         <section>
           <p class="eyebrow">Block · open source · beta · July 2026</p>
           <h2>Buzz: agents as teammates</h2>
@@ -859,14 +1368,11 @@ npx skills add backnotprop/pstack</code></pre>
             </div>
           </div>
           <aside class="notes">
-            <ul>
-              <li>Same pattern as this whole talk: human sets the goal, agents loop, a separate checker reviews, human signs off in the morning.</li>
-              <li>The difference: it's a team of agents in a group chat, not one agent in a terminal.</li>
-            </ul>
+            <ul><li>Same shape as this whole talk: goal, loop, separate critic, human signs off. Just with a team of agents.</li></ul>
           </aside>
         </section>
 
-        <!-- 24 Side by side -->
+        <!-- 48 Where loop lives -->
         <section>
           <h2>Where should your loop live?</h2>
           <table>
@@ -879,41 +1385,87 @@ npx skills add backnotprop/pstack</code></pre>
             </tbody>
           </table>
           <aside class="notes">
-            <ul>
-              <li>Don't pick a winner for them. Start with /goal on your laptop, move to the cloud when you want to close the lid.</li>
-            </ul>
+            <ul><li>Start with /goal on your laptop. Move to the cloud when you want to close the lid.</li></ul>
           </aside>
         </section>
 
-        <!-- 25 Act IV -->
+        <!-- ============ ACT VII: MORNING ============ -->
+
+        <!-- 49 Divider -->
         <section class="center act">
           <div class="clock">07:30</div>
           <h1>Morning.</h1>
-          <p>You audit decisions, not code.</p>
+          <p>The same kind of task, done the other way.</p>
           <aside class="notes">
-            <ul><li>Act four. The part nobody demos: what you do when you wake up.</li></ul>
+            <ul><li>Now the payoff. I built a small repo to run this exactly the way the talk describes.</li></ul>
           </aside>
         </section>
 
-        <!-- 26 Contract annotated -->
+        <!-- 50 Receipt -->
         <section>
-          <p class="eyebrow">Back to the four lines</p>
-          <h2>The overnight contract.</h2>
-          <div class="grid-2">
-            <div class="card"><p class="tag">1 · Goal</p><p>"implement every function in src/index.js on a fresh branch"</p></div>
-            <div class="card lit"><p class="tag">2 · Finish line</p><p>"done means node check.mjs prints PASS. tests stay untouched"</p></div>
-            <div class="card"><p class="tag">3 · Permission</p><p>"don't ask me before committing"</p></div>
-            <div class="card"><p class="tag">4 · Escape hatch</p><p>"if you're truly stuck, stop, write STUCK.md explaining why"</p></div>
-          </div>
+          <p class="eyebrow">Four lines, then I walked away</p>
+          <h2>The receipt.</h2>
+<pre><code><span class="dim">$ ./morning.sh</span>
+== Finish line
+<span class="ok">PASS 22/22 tests passing</span>
+== Did the finish line move? <span class="dim">(empty)</span>
+== Commits
+a5bb586 Implement schedule (20/22 -> 22/22)
+<span class="dim">...</span>
+df372ff Implement formatINR (2/22 -> 5/22)
+7c43528 Implement slugify (0/22 -> 2/22)</code></pre>
+          <p class="small"><strong>10 commits. 10 kept. 0 discarded.</strong> <span class="muted">Nobody typed "continue".</span></p>
           <aside class="notes">
             <ul>
-              <li>Now the four lines from slide two make sense. Each one removes a reason for the agent to stop and wait for you.</li>
-              <li>Permission line: otherwise it blocks at 11pm asking "can I commit?" and you find that out at 7am.</li>
+              <li>Real run with claude -p "/goal node check.mjs prints PASS". About two minutes, because the task is small. The point is I wasn't there.</li>
+              <li>"Done" here isn't a sentence from the agent. It's PASS from a script it couldn't touch.</li>
             </ul>
           </aside>
         </section>
 
-        <!-- 27 Earn the sleep -->
+        <!-- 51 Decision log -->
+        <section>
+          <p class="eyebrow">decisions.tsv</p>
+          <h2>Read 10 rows, not 8 hours.</h2>
+          <table>
+            <thead>
+              <tr><th>function</th><th>decision</th><th>reason</th><th>result</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>formatINR</td><td>keep last 3 digits, group the rest in pairs</td><td>avoids depending on the Intl build</td><td class="ok">5/22 · kept</td></tr>
+              <tr><td>parseDuration</td><td>regex + explicit "both missing" check</td><td>empty string matches the regex otherwise</td><td class="ok">9/22 · kept</td></tr>
+              <tr><td>camelCase</td><td>lowercase first, then capitalize</td><td>turns LOOP into Loop, as the test expects</td><td class="ok">16/22 · kept</td></tr>
+              <tr><td>schedule</td><td>convert HH:MM to minutes, pad on the way out</td><td>handles hour rollover in one helper</td><td class="ok">PASS · kept</td></tr>
+            </tbody>
+          </table>
+          <aside class="notes">
+            <ul>
+              <li>parseDuration is my favourite row: it found an edge case on its own and wrote down why.</li>
+              <li>pstack does this with /show-me-your-work, and a reviewer from a different model reads the log first.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 52 Before / after -->
+        <section>
+          <p class="eyebrow">Back to my story</p>
+          <h2>Before and after.</h2>
+          <table class="fixmap">
+            <thead><tr><th></th><th>That afternoon</th><th>With a harness</th></tr></thead>
+            <tbody>
+              <tr><td>Done means</td><td>Claude said "Done ✅"</td><td>A script printed PASS</td></tr>
+              <tr><td>The loop</td><td>Me, typing "continue"</td><td><code>/goal</code>, by itself</td></tr>
+              <tr><td>The checker</td><td>Me, re-reading phase 3</td><td>A locked check + a separate judge</td></tr>
+              <tr><td>Questions</td><td>Waited for me</td><td>Answered before I left</td></tr>
+              <tr><td>The morning</td><td>Find out what's missing</td><td>Read 10 rows</td></tr>
+            </tbody>
+          </table>
+          <aside class="notes">
+            <ul><li>Close the loop on the story. Same agent, same model. The only difference is the harness around it.</li></ul>
+          </aside>
+        </section>
+
+        <!-- 53 Earn the sleep -->
         <section>
           <h2>Earn the sleep first.</h2>
           <ul class="checks">
@@ -924,74 +1476,39 @@ npx skills add backnotprop/pstack</code></pre>
           </ul>
           <blockquote class="quote">"It's not if it gets popped, it's when. And what is the blast radius?"<cite>Geoffrey Huntley, on running loops without a sandbox</cite></blockquote>
           <aside class="notes">
-            <ul>
-              <li>Checklist is from the pstack guide. A loop you don't trust just makes unchecked work faster.</li>
-              <li>Sandbox, only the keys it needs, and a branch, never main.</li>
-            </ul>
+            <ul><li>Checklist from pstack's guide. Until all four hold, run the loop while you watch.</li></ul>
           </aside>
         </section>
 
-        <!-- 28 Audit -->
-        <section>
-          <h2>Read 10 rows, not 8 hours.</h2>
-          <div class="grid-2">
-            <div>
-              <ul>
-                <li>A decision log: time, decision, reason, evidence, result.</li>
-                <li>A reviewer on a <strong>different model</strong> reads it and flags what needs your eyes.</li>
-                <li>Our <code>morning.sh</code>: did it pass, did the finish line move, what got committed.</li>
-              </ul>
-            </div>
-<pre><code><span class="dim">$ ./morning.sh</span>
-== Finish line
-<span class="ok">PASS 22/22</span>
-== Did the finish line move?
-<span class="dim">(empty)</span>
-== Commits overnight
-10
-== Decision log
-10 kept · 0 discarded</code></pre>
-          </div>
-          <aside class="notes">
-            <ul>
-              <li>pstack's /show-me-your-work does this with an "Attention" section at the end. Read that first.</li>
-              <li>The second line of morning.sh is the important one. If the finish line moved, nothing else matters.</li>
-            </ul>
-          </aside>
-        </section>
-
-        <!-- 29 Your job changed -->
+        <!-- 54 Your job changed -->
         <section class="center statement">
           <h2>Your job changed.</h2>
           <div class="grid-2" style="width:100%;max-width:26em">
-            <div class="card"><p class="tag">Before</p><p>Type. Wait. Read. Type again.</p></div>
-            <div class="card lit"><p class="tag">Now</p><p>Write the finish line. Pick where the loop lives. Read the receipts.</p></div>
+            <div class="card"><p class="tag">Before</p><p>Type. Wait. Read. Type "continue".</p></div>
+            <div class="card lit"><p class="tag">Now</p><p>Write the finish line. Build the harness. Read the receipts.</p></div>
           </div>
           <aside class="notes">
             <ul><li>The skill that matters isn't prompting anymore. It's knowing what done looks like.</li></ul>
           </aside>
         </section>
 
-        <!-- 30 Homework -->
+        <!-- 55 Homework -->
         <section>
           <p class="eyebrow">Homework for tonight</p>
           <h2>Try it before you sleep.</h2>
           <ol>
-            <li>Pick one small thing in your college project.</li>
+            <li>Pick one small thing in your project.</li>
             <li>Write a goal that's a <em>yes / no question</em>.</li>
-            <li>Run <code>/goal</code> in Claude Code or Codex, or install pstack in Cursor.</li>
+            <li>Run <code>/goal</code> in Claude Code or Codex, or install pstack.</li>
             <li>Go to sleep. Tell me what you woke up to.</li>
           </ol>
           <p class="small muted">The demo repo: github.com/msomu/msomu.com/tree/main/demos/overnight-loop</p>
           <aside class="notes">
-            <ul>
-              <li>Clone the demo repo, run ./ralph.sh or /goal, then ./morning.sh. It's free to read and copy.</li>
-              <li>Ask them to tag you with what they woke up to.</li>
-            </ul>
+            <ul><li>Clone the repo, run ./ralph.sh or /goal, then ./morning.sh. Ask them to tag you with what they woke up to.</li></ul>
           </aside>
         </section>
 
-        <!-- 31 Thanks -->
+        <!-- 56 Thanks -->
         <section class="center title">
           <div class="moon"></div>
           <h1><span>Set Goal.</span><span>Start Loop.</span><span>Sleep.</span></h1>
