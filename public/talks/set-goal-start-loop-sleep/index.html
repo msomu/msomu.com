@@ -1044,6 +1044,19 @@
       .trifecta .core { position: absolute; left: 7.8em; top: 4.6em; transform: translate(-50%, -50%) scale(0); font-size: 1em; z-index: 3; }
       .reveal section.in .trifecta .core { animation: corepop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.4) 2.6s both, alarm 1.4s ease-in-out 3.2s infinite; }
       @keyframes corepop { to { transform: translate(-50%, -50%) scale(1); } }
+
+      /* Overlays scale with the screen like the slides do (16:9 stage) */
+      .nightline, .quest, .reveal footer { zoom: var(--z, 1); }
+
+      /* Still mode: every animation jumps straight to its final frame */
+      .still .reveal *, .still .reveal *::before, .still .reveal *::after {
+        animation-duration: 0.001s !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition: none !important;
+      }
+      .still .verdict span:nth-child(3) { opacity: 1 !important; }
+      .still .zzz span { opacity: 0.7 !important; }
     </style>
   </head>
   <body>
@@ -2351,11 +2364,11 @@ df372ff Implement formatINR (2/22 -> 5/22)
         controls: true,
         progress: false,
         center: true,
-        width: phone ? 390 : 1200,
-        height: phone ? 844 : 700,
-        margin: phone ? 0.06 : 0.05,
-        minScale: 0.4,
-        maxScale: 1.4,
+        width: phone ? 390 : 1280,
+        height: phone ? 844 : 720,
+        margin: phone ? 0.06 : 0.04,
+        minScale: 0.2,
+        maxScale: 4,
         plugins: [RevealNotes],
       });
 
@@ -2590,7 +2603,15 @@ df372ff Implement formatINR (2/22 -> 5/22)
 
         Reveal.on("ready", (e) => play(e.currentSlide || Reveal.getCurrentSlide()));
         Reveal.on("slidechanged", (e) => play(e.currentSlide));
-        window.addEventListener("resize", updateThreads);
+        const fitOverlays = () => {
+          const z = Math.min(innerWidth / 1280, innerHeight / 720);
+          document.documentElement.style.setProperty("--z", Math.max(0.6, Math.min(z, 4)).toFixed(3));
+        };
+        fitOverlays();
+        window.addEventListener("resize", () => {
+          fitOverlays();
+          updateThreads();
+        });
       })();
     </script>
   </body>
