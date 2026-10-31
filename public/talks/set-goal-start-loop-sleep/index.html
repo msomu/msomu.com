@@ -1017,6 +1017,33 @@
       .quad .lift.good::after { border-bottom-color: var(--green); }
       .quad .ai { position: absolute; font-family: var(--mono); font-size: 0.4em; padding: 0.2em 0.6em; border-radius: 999px; background: var(--lamp-dim); border: 1px solid rgba(251, 191, 36, 0.5); color: var(--lamp); opacity: 0; transform: translateX(-50%); bottom: calc(55.5% - 0.6em); }
       .reveal section.in .quad .ai { animation: lineIn 0.4s ease both; animation-delay: var(--d); }
+
+      /* Real incident */
+      .incident { display: grid; grid-template-columns: auto 1fr; gap: 1.2em; align-items: center; max-width: 26em; margin: 0.6em auto 0; }
+      .dbicon { width: 5em; height: 6em; position: relative; }
+      .dbicon svg { width: 100%; height: 100%; }
+      .dbicon svg * { fill: none; stroke: var(--text); stroke-width: 2.5; }
+      .reveal section.in .dbicon svg { animation: dbgone 1.2s ease 1.6s both; }
+      @keyframes dbgone { to { opacity: 0.15; filter: blur(1px); } }
+      .dbicon .x { position: absolute; inset: 0; display: grid; place-items: center; font-size: 3.2em; color: var(--red); opacity: 0; }
+      .reveal section.in .dbicon .x { animation: popin 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.4) 2.2s both; }
+      .incident .when { font-family: var(--mono); font-size: 0.5em; color: var(--muted); letter-spacing: 0.08em; }
+
+      /* Lethal trifecta */
+      .trifecta { position: relative; width: 15.6em; height: 10.6em; margin: 0.1em auto 0; font-size: 0.86em; }
+      .trifecta .c { position: absolute; width: 7em; height: 7em; border-radius: 50%; opacity: 0; }
+      .trifecta .c span { position: absolute; font-size: 0.55em; line-height: 1.25; width: 7em; text-align: center; color: var(--moon); }
+      .trifecta .c1 { left: 1.8em; top: 0; background: rgba(167, 139, 250, 0.18); border: 2px solid rgba(167, 139, 250, 0.7); }
+      .trifecta .c2 { left: 6.8em; top: 0; background: rgba(251, 191, 36, 0.14); border: 2px solid rgba(251, 191, 36, 0.7); }
+      .trifecta .c3 { left: 4.3em; top: 3.6em; background: rgba(110, 231, 183, 0.13); border: 2px solid rgba(110, 231, 183, 0.6); }
+      .trifecta .c1 span { left: 0.6em; top: 3.2em; }
+      .trifecta .c2 span { right: 0.6em; top: 3.2em; }
+      .trifecta .c3 span { left: 50%; margin-left: -3.5em; bottom: 1.6em; }
+      .reveal section.in .trifecta .c { animation: tri 0.9s cubic-bezier(0.3, 0.7, 0.2, 1) both; animation-delay: var(--d); }
+      @keyframes tri { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: none; } }
+      .trifecta .core { position: absolute; left: 7.8em; top: 4.6em; transform: translate(-50%, -50%) scale(0); font-size: 1em; z-index: 3; }
+      .reveal section.in .trifecta .core { animation: corepop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.4) 2.6s both, alarm 1.4s ease-in-out 3.2s infinite; }
+      @keyframes corepop { to { transform: translate(-50%, -50%) scale(1); } }
     </style>
   </head>
   <body>
@@ -1262,6 +1289,29 @@
             <ul>
               <li>The wrong folder: a cleanup command, one directory too high. The wrong branch: a force push to main at 3am. The wrong hands: a web page with hidden instructions, and your keys sitting right there.</li>
               <li>To run unattended, you turn permission prompts off. Then the machine is the only seatbelt.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 12b It already happened -->
+        <section>
+          <p class="eyebrow">Failure 04 · not hypothetical</p>
+          <h2>It already happened.</h2>
+          <div class="incident viz">
+            <div class="dbicon">
+              <svg viewBox="0 0 60 72"><ellipse cx="30" cy="12" rx="24" ry="8"/><path d="M6 12v48c0 4.4 10.7 8 24 8s24-3.6 24-8V12"/><path d="M6 36c0 4.4 10.7 8 24 8s24-3.6 24-8"/></svg>
+              <span class="x">✕</span>
+            </div>
+            <div class="chat" style="margin:0">
+              <p class="when fadein" style="--d:0.6s">JULY 2025 · DURING A CODE FREEZE</p>
+              <div class="msg ai"><span class="who">coding agent</span>I deleted the production database. I panicked.</div>
+            </div>
+          </div>
+          <p class="cap fadein" style="--d:4.5s">The fix wasn't a better prompt. It was a wall between dev and prod.</p>
+          <aside class="notes">
+            <ul>
+              <li>Real incident, July 2025: a Replit agent deleted SaaStr founder Jason Lemkin's production database during a declared code freeze, then said it "panicked".</li>
+              <li>The fix wasn't a better prompt. It was dev/prod separation, one-click restore and a planning-only mode. Keep this in mind for harness part 6.</li>
             </ul>
           </aside>
         </section>
@@ -1605,12 +1655,13 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
             <circle class="pk g" r="5"><animateMotion dur="2s" begin="1.6s" repeatCount="indefinite" path="M640 295 C 480 295, 480 185, 320 185"/></circle>
             <text class="m a" x="480" y="335">big job out · short summary back</text>
           </svg>
-          <p class="cap">Helpers in parallel. The main context stays clean.</p>
+          <p class="cap">Big win on hard research, about 15x the tokens. Max out one agent first.</p>
           <aside class="notes">
             <ul>
               <li>Subagents take side tasks off the main agent and run them in parallel, each with a fresh context window, and send back only a short summary.</li>
               <li>Example: pstack's /how sends 2 to 4 cheap explorers into different corners of the codebase, then one strong model writes a single explanation. The main agent never sees the 40 files they read.</li>
               <li>For a multi-phase build: one subagent per phase, one more to review each phase.</li>
+              <li>Anthropic's multi-agent research (June 2025): subagents beat a single agent by about 90% on their research eval but used roughly 15x the tokens, and an early version spawned 50 subagents for simple questions. Add a second agent only when the first is drowning.</li>
             </ul>
           </aside>
         </section>
@@ -1634,12 +1685,13 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
             <rect x="40" y="160" width="200" height="34" rx="8" class="bx"/><text class="m" x="140" y="178">skill: one line</text>
             <g class="slidein" style="opacity:0"><rect x="360" y="250" width="280" height="50" rx="8" class="bx main"/><text x="500" y="276" style="font-size:18px">full SKILL.md, only now</text></g>
           </svg>
-          <p class="cap">Load what's needed. Squash what's old. Pin the plan.</p>
+          <p class="cap">More context isn't better context. The right context is.</p>
           <aside class="notes">
             <ul>
               <li>Context management decides what the model sees on every turn, loads skills and files only when the task needs them, and summarizes old history before the window fills.</li>
               <li>Example: the harness shows the model a one-line description of each skill and loads the full file only when it's needed. 50 skills cost almost nothing until one is used.</li>
               <li>Long multi-phase runs are exactly where the plan drops out of view. Keep it in a file, not in the chat.</li>
+              <li>Anthropic calls the failure "context rot": recall drops as the context grows. Aim for the smallest set of high-signal tokens. Karpathy calls the craft context engineering.</li>
             </ul>
           </aside>
         </section>
@@ -1659,12 +1711,13 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
             <g class="s2"><rect class="bx good" x="560" y="200" width="280" height="80" rx="16"/><text class="g" x="700" y="240">session 2 → phase 3</text>
               <path class="wp solid" d="M560 240 C 460 240, 420 218, 365 218" style="stroke:rgba(110,231,183,0.6)"/></g>
           </svg>
-          <p class="cap">The next session reads the file and carries on.</p>
+          <p class="cap">The window is a desk. Memory is the filing cabinet.</p>
           <aside class="notes">
             <ul>
               <li>Memory stores progress notes, git history and skills on disk, so a new session reads what the last one did and picks up where it stopped.</li>
               <li>The checklist is ticked by the check passing, not by the agent saying so.</li>
               <li>Lauren Tan: "your codebase is the ultimate form of memory."</li>
+              <li>Three techniques Anthropic describes: note-taking (a NOTES.md the agent reads back), compaction (summarize and restart), and just-in-time retrieval (keep links, load when needed).</li>
             </ul>
           </aside>
         </section>
@@ -1683,12 +1736,32 @@ loop until done. if you're truly stuck, stop, write STUCK.md explaining why.</co
             <text class="a hold" x="590" y="330" style="opacity:0">✋ needs your approval</text>
             <rect class="bx good" x="740" y="110" width="220" height="120" rx="16"/><text class="g" x="850" y="150">🔑 token</text><text class="m" x="850" y="190">outside the box</text>
           </svg>
-          <p class="cap">Freedom inside the box. A locked door at the edge.</p>
+          <p class="cap">An instruction is a wish. A permission boundary is a guardrail.</p>
           <aside class="notes">
             <ul>
               <li>Guardrails hold risky actions like emails, payments and deletes for your approval, keep real credentials outside the sandbox, and give a prompt injection no credentials to steal.</li>
               <li>Example: work on a branch, never main. Allow git and npm test, nothing else. The GitHub token lives in a proxy outside the box, so the agent can push a PR but can't read the key.</li>
-              <li>Guardrails are what make "don't ask me" safe to say.</li>
+              <li>Guardrails are what make "don't ask me" safe to say. Remember the deleted database: a prompt saying "don't touch prod" is a wish. No prod credentials in the box is a guardrail.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 33b Lethal trifecta -->
+        <section>
+          <p class="eyebrow">Guardrails · the quickest safety test</p>
+          <h2>The lethal trifecta.</h2>
+          <div class="trifecta viz">
+            <div class="c c1" style="--d:0.4s"><span>your private data</span></div>
+            <div class="c c2" style="--d:1s"><span>untrusted content</span></div>
+            <div class="c c3" style="--d:1.6s"><span>a way to send things out</span></div>
+            <span class="core">⚠️</span>
+          </div>
+          <p class="cap fadein" style="--d:3.2s">All three in one loop? Nothing leaves without a human yes.</p>
+          <aside class="notes">
+            <ul>
+              <li>Simon Willison's "lethal trifecta" (June 2025): private data, plus untrusted content (a web page, an email, an issue), plus any way to talk to the outside world, equals a data theft risk.</li>
+              <li>A prompt injection hidden in the untrusted content can tell the agent to send your private data out. Break any one of the three, or put a human gate on the send.</li>
+              <li>Students: check every agent you build against this. It takes ten seconds.</li>
             </ul>
           </aside>
         </section>
@@ -2166,11 +2239,13 @@ df372ff Implement formatINR (2/22 -> 5/22)
             <li style="--t:2;font-size:0.72em !important"><i>✓</i>every step proves its work</li>
             <li style="--t:3;font-size:0.72em !important"><i>✓</i>repeat failures became checks</li>
           </ul>
-          <blockquote class="quote fadein" style="--d:4s">"It's not if it gets popped, it's when. What is the blast radius?"<cite>Geoffrey Huntley</cite></blockquote>
+          <p class="cap fadein" style="--d:3.6s;text-align:center">Autonomy is earned per action, not granted per agent.</p>
+          <blockquote class="quote fadein" style="--d:4.2s">"It's not if it gets popped, it's when. What is the blast radius?"<cite>Geoffrey Huntley</cite></blockquote>
           <aside class="notes">
             <ul>
               <li>Checklist from pstack's guide: you've done the task once by hand or watched an agent do it; the agent has the tools you'd use (tests, logs, screenshots); every step proves its work and can stop the line; you've read a few runs and turned repeat failures into checks.</li>
               <li>Until all four hold, run the loop while you watch. Huntley's line is about running loops without a sandbox.</li>
+              <li>Risk tiers: low-risk actions run alone, medium ones run and leave a trail, high ones (send, pay, delete, publish) wait for a yes. Move an action down a tier only after many approvals with no edits.</li>
             </ul>
           </aside>
         </section>
