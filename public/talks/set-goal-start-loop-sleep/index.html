@@ -1065,12 +1065,37 @@
       .speaker .who span { display: block; font-size: 0.5em; color: var(--muted); margin-top: 0.15em; }
       .speaker .who .role { color: var(--text); font-size: 0.55em; }
       .title.intro .moon { width: 2.4em; height: 2.4em; margin-bottom: 0.6em; }
+      .title.intro h1 { font-size: 2.05em; margin-bottom: 0.2em; }
+      .title.intro .speaker { margin-top: 0.7em; }
       /* Join us */
       .joinrow { display: flex; gap: 1.6em; justify-content: center; margin-top: 0.4em; }
       .joinrow .qrbox { text-align: center; }
       .joinrow .qrcard { width: 5.6em; margin: 0 auto; }
       .joinrow .qrbox b { display: block; font-family: var(--mono); font-size: 0.55em; color: var(--lamp); margin-top: 0.5em; }
       .joinrow .qrbox span { display: block; font-size: 0.48em; color: var(--muted); }
+
+      /* ===== Spacing pass: comfortable line-height everywhere ===== */
+      .reveal { line-height: 1.4; }
+      .reveal h1 { line-height: 1.1; }
+      .reveal h2 { line-height: 1.22; }
+      .reveal h3 { line-height: 1.28; }
+      .reveal table th, .reveal table td { line-height: 1.4; }
+      .reveal .chip { line-height: 1.35; white-space: normal; }
+      .reveal .lbl, .reveal .cap, .reveal .tag, .reveal .num { line-height: 1.4; }
+      .flow .step, .loop .step, .orbit .node, .node2, .tile h3, .bigtile .lbl, .ticks li, .rung { line-height: 1.35; }
+      .orbit .hub { line-height: 1.25; font-size: 0.62em; width: 5em; }
+      .reveal blockquote.quote { line-height: 1.4; margin-bottom: 0.6em; }
+      .reveal .big-stat { margin-bottom: 0.25em; }
+      .joinrow .qrbox b { margin-bottom: 0.25em; }
+      .joinrow .qrbox span { line-height: 1.4; }
+      /* Speaker block */
+      .speaker { gap: 1em; }
+      .speaker .who { display: flex; flex-direction: column; gap: 0.35em; }
+      .speaker .who b { line-height: 1.15; }
+      .speaker .who span { margin-top: 0; line-height: 1.35; }
+
+      /* Slide padding counts inside the 1280 canvas, so nothing spills off the right edge */
+      .reveal .slides > section { box-sizing: border-box; }
     </style>
   </head>
   <body>
