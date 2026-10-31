@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import { isPresenter, liveTalks } from "./talks.ts";
+import { liveTalks } from "./talks.ts";
 
 type Role = "deck" | "remote";
 
@@ -11,15 +11,14 @@ interface Attachment {
 interface Incoming {
 	t?: unknown;
 	role?: unknown;
-	key?: unknown;
 	h?: unknown;
 	total?: unknown;
 }
 
 /**
- * One room per talk. The presenter's laptop ("deck") reports the current
- * slide; the presenter's phone ("remote") follows it and can ask the deck to
- * move. Every socket must say hello with the presenter key first.
+ * One room per pairing code (see src/worker.ts). The presenter's laptop
+ * ("deck") reports the current slide; the phone that scanned its QR
+ * ("remote") follows it and can ask the deck to move.
  */
 export class LiveRoom extends DurableObject {
 	async fetch(request: Request): Promise<Response> {
@@ -53,7 +52,7 @@ export class LiveRoom extends DurableObject {
 		if (msg.t === "hello") {
 			const role =
 				msg.role === "deck" || msg.role === "remote" ? msg.role : null;
-			if (!role || !(await isPresenter(talk, msg.key))) {
+			if (!role) {
 				ws.send(JSON.stringify({ t: "denied" }));
 				ws.close(1008, "denied");
 				return;
