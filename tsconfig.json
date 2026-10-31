@@ -14,5 +14,5 @@
 			"@data/*": ["./src/data/*"]
 		}
 	},
-	"exclude": ["dist", "tests", "demos"]
+	"exclude": ["dist", "tests"]
 }
