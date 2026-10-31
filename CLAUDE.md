@@ -94,7 +94,7 @@ Custom programmatic sitemaps in `src/pages/`:
 - **Utilities** (`src/utils/index.ts`): `clsx()` for conditional class merging, `getCategoryColor()` and `getBackgroundColorClass()` for dynamic badge/CTA colors
 
 ### Live talk remote
-`src/worker.ts` is the Worker entry (`main` in `wrangler.jsonc`): it serves `/api/live/{slug}/ws` (a `LiveRoom` Durable Object, `src/live/room.ts`) and `/api/live/{slug}/notes`, and hands everything else to the Astro handler. A presenter opens the deck with `#key=...` and the phone at `/talks/{slug}/remote`; the phone shows that talk's notes and stays in sync with the deck. Speaker notes for live talks live in `src/live/notes/{slug}.json` (not in the public deck) and are served only to the presenter key, whose SHA-256 is in `src/live/talks.ts`.
+`src/worker.ts` is the Worker entry (`main` in `wrangler.jsonc`): it serves `/api/live/{slug}/ws?room={code}` (a `LiveRoom` Durable Object per pairing code, `src/live/room.ts`) and `/api/live/{slug}/notes`, and hands everything else to the Astro handler. On the deck, Q makes a random pairing code and shows a QR to `/talks/{slug}/remote#room={code}`; the phone that scans it shows that talk's notes (`src/live/notes/{slug}.json`) and stays in sync with that laptop only.
 
 ## Environment Variables
 Optional analytics (add to `.env`):

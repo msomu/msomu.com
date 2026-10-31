@@ -1118,23 +1118,6 @@
       .pair h3 { font-family: var(--serif); color: var(--moon); font-size: 28px; margin: 0 0 16px; }
       .pair p { color: var(--muted); font-size: 15px; margin: 14px 0 0; }
     </style>
-    <script>
-      // Presenter key: read it before Reveal's hash routing rewrites the URL.
-      (() => {
-        const STORE = "msomu-presenter-key";
-        const params = new URLSearchParams(location.hash.slice(1));
-        const query = new URLSearchParams(location.search);
-        if (!params.get("key") && query.get("key")) params.set("key", query.get("key"));
-        if (!params.has("key") && !params.has("logout")) return;
-        try {
-          if (params.has("logout")) localStorage.removeItem(STORE);
-          if (params.get("key")) localStorage.setItem(STORE, params.get("key"));
-        } catch (e) {
-          window.__presenterKey = params.get("key");
-        }
-        history.replaceState(null, "", location.pathname);
-      })();
-    </script>
   </head>
   <body>
     <div class="reveal">
@@ -2328,8 +2311,8 @@ df372ff Implement formatINR (2/22 -> 5/22)
       })();
     </script>
   
-    <!-- Presenter link: with the presenter key (#key=... once, then remembered on this device),
-         the deck fetches its speaker notes and reports slides to the phone remote. -->
+    <!-- Phone remote: press Q to pair. The laptop makes a random pairing code and shows it as a QR;
+         the phone that scans it shows the speaker notes in sync and can move these slides. -->
     <div class="live-toast" id="liveToast"></div>
     <style>
       .live-toast {
@@ -2343,12 +2326,7 @@ df372ff Implement formatINR (2/22 -> 5/22)
     <script>
       (() => {
         const SLUG = "set-goal-start-loop-sleep";
-        const STORE = "msomu-presenter-key";
-        let key = window.__presenterKey || null;
-        try {
-          key = localStorage.getItem(STORE) || key;
-        } catch (e) {}
-        if (!key) return; // audience view: plain deck, no notes, no sync
+        const STORE = "msomu-remote-room";
 
         const toastEl = document.getElementById("liveToast");
         let toastT;
@@ -2359,8 +2337,8 @@ df372ff Implement formatINR (2/22 -> 5/22)
           toastT = setTimeout(() => toastEl.classList.remove("show"), 2500);
         };
 
-        // Speaker notes come from the server, only for the presenter
-        fetch(`/api/live/${SLUG}/notes`, { headers: { "x-presenter-key": key } })
+        // Speaker notes for Reveal's speaker view (S)
+        fetch(`/api/live/${SLUG}/notes`)
           .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
           .then((notes) => {
             Reveal.getSlides().forEach((s, i) => {
@@ -2371,19 +2349,54 @@ df372ff Implement formatINR (2/22 -> 5/22)
               s.appendChild(a);
             });
           })
-          .catch((status) => {
-            if (status === 401) {
-              try { localStorage.removeItem(STORE); } catch (e) {}
-              toast("Presenter key rejected");
-            }
-          });
+          .catch(() => {});
 
-        // Pair phone: press Q to show a QR that opens the remote already unlocked
+        // Pairing code: made on first Q, kept for this tab so a refresh stays paired
+        const newCode = () => {
+          const b = new Uint8Array(12);
+          crypto.getRandomValues(b);
+          return [...b].map((x) => x.toString(36).padStart(2, "0")).join("").slice(0, 20);
+        };
+        let code = null;
+        try { code = sessionStorage.getItem(STORE); } catch (e) {}
+
+        // Live room: report slides, accept moves from the phone
+        let ws = null;
+        let retry = 1000;
+        let remotes = 0;
+        const send = (o) => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); };
+        const report = () => send({ t: "slide", h: Reveal.getIndices().h || 0, total: Reveal.getTotalSlides() });
+        const connect = () => {
+          if (ws && ws.readyState <= 1) return;
+          const proto = location.protocol === "https:" ? "wss" : "ws";
+          ws = new WebSocket(`${proto}://${location.host}/api/live/${SLUG}/ws?room=${code}`);
+          ws.onopen = () => {
+            retry = 1000;
+            send({ t: "hello", role: "deck" });
+            report();
+          };
+          ws.onmessage = (e) => {
+            let m;
+            try { m = JSON.parse(e.data); } catch (err) { return; }
+            if (m.t === "go" && Number.isInteger(m.h) && m.h !== Reveal.getIndices().h) Reveal.slide(m.h);
+            if (m.t === "peers") {
+              if (m.remotes > remotes) { toast("📱 phone connected"); report(); togglePair(false); }
+              else if (m.remotes < remotes) toast("📱 phone disconnected");
+              remotes = m.remotes;
+            }
+          };
+          ws.onclose = () => {
+            setTimeout(connect, retry);
+            retry = Math.min(retry * 2, 15000);
+          };
+        };
+        Reveal.on("slidechanged", report);
+
+        // Pair phone: Q shows the QR
         const pairEl = document.createElement("div");
         pairEl.className = "pair";
-        pairEl.innerHTML = '<div class="box"><h3>Scan with your phone</h3><div class="qr"></div><p>Opens your speaker remote, already unlocked · press Q or click to close</p></div>';
+        pairEl.innerHTML = '<div class="box"><h3>Scan with your phone</h3><div class="qr"></div><p>Opens your speaker remote for this laptop · press Q or click to close</p></div>';
         document.body.appendChild(pairEl);
-        const remoteUrl = `${location.origin}/talks/${SLUG}/remote#key=${encodeURIComponent(key)}`;
         let qrLib = null;
         const loadQr = () =>
           qrLib ||
@@ -2396,15 +2409,23 @@ df372ff Implement formatINR (2/22 -> 5/22)
           }));
         const togglePair = async (show) => {
           const on = show === undefined ? !pairEl.classList.contains("show") : show;
-          if (on && !pairEl.querySelector(".qr svg")) {
-            try {
-              const make = await loadQr();
-              const q = make(0, "M");
-              q.addData(remoteUrl);
-              q.make();
-              pairEl.querySelector(".qr").innerHTML = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
-            } catch (e) {
-              pairEl.querySelector(".qr").textContent = "QR unavailable offline. Open /remote and paste the key.";
+          if (on) {
+            if (!code) {
+              code = newCode();
+              try { sessionStorage.setItem(STORE, code); } catch (e) {}
+            }
+            connect();
+            if (!pairEl.querySelector(".qr svg")) {
+              const url = `${location.origin}/talks/${SLUG}/remote#room=${code}`;
+              try {
+                const make = await loadQr();
+                const q = make(0, "M");
+                q.addData(url);
+                q.make();
+                pairEl.querySelector(".qr").innerHTML = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+              } catch (e) {
+                pairEl.querySelector(".qr").textContent = "Couldn't draw the QR. Check the internet connection.";
+              }
             }
           }
           pairEl.classList.toggle("show", on);
@@ -2412,39 +2433,8 @@ df372ff Implement formatINR (2/22 -> 5/22)
         pairEl.addEventListener("click", () => togglePair(false));
         Reveal.addKeyBinding({ keyCode: 81, key: "Q", description: "Pair phone remote" }, () => togglePair());
 
-        // Live room: report slides, accept moves from the phone
-        let ws = null;
-        let retry = 1000;
-        let remotes = 0;
-        const send = (o) => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); };
-        const report = () => send({ t: "slide", h: Reveal.getIndices().h || 0, total: Reveal.getTotalSlides() });
-        const connect = () => {
-          const proto = location.protocol === "https:" ? "wss" : "ws";
-          ws = new WebSocket(`${proto}://${location.host}/api/live/${SLUG}/ws`);
-          ws.onopen = () => {
-            retry = 1000;
-            send({ t: "hello", role: "deck", key });
-            report();
-          };
-          ws.onmessage = (e) => {
-            let m;
-            try { m = JSON.parse(e.data); } catch (err) { return; }
-            if (m.t === "go" && Number.isInteger(m.h) && m.h !== Reveal.getIndices().h) Reveal.slide(m.h);
-            if (m.t === "peers") {
-              if (m.remotes > remotes) { toast("📱 phone connected"); report(); togglePair(false); }
-              else if (m.remotes < remotes) toast("📱 phone disconnected");
-              remotes = m.remotes;
-            }
-            if (m.t === "denied") { try { localStorage.removeItem(STORE); } catch (err) {} toast("Presenter key rejected"); }
-          };
-          ws.onclose = (e) => {
-            if (e.code === 1008) return;
-            setTimeout(connect, retry);
-            retry = Math.min(retry * 2, 15000);
-          };
-        };
-        Reveal.on("slidechanged", report);
-        connect();
+        // Already paired in this tab (e.g. after a refresh): reconnect quietly
+        if (code) connect();
       })();
     </script>
 </body>

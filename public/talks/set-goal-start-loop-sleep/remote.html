@@ -69,13 +69,10 @@
   </head>
   <body>
     <div class="app">
-      <form class="gate" id="gate" hidden>
+      <div class="gate" id="gate" hidden>
         <h1>Speaker remote</h1>
-        <p>Enter the presenter key to see the notes and drive the slides.</p>
-        <input id="keyInput" type="password" autocomplete="current-password" placeholder="Presenter key" />
-        <button class="go" type="submit">Unlock</button>
-        <p class="err" id="gateErr"></p>
-      </form>
+        <p>On the laptop showing the slides, press <b>Q</b>, then scan the QR with this phone's camera.</p>
+      </div>
 
       <div id="main" hidden style="display: contents">
         <div class="bar">
@@ -86,26 +83,25 @@
         <div class="notes" id="notes"></div>
         <div class="next" id="next"></div>
         <div class="btns"><button id="prev">◀ Prev</button><button class="go" id="nextBtn">Next ▶</button></div>
-        <div class="small"><button id="resetTimer">Reset timer</button><button id="logout">Forget key</button></div>
+        <div class="small"><button id="resetTimer">Reset timer</button><button id="unpair">Unpair</button></div>
       </div>
     </div>
 
     <script>
       (() => {
         const SLUG = "set-goal-start-loop-sleep";
-        const STORE = "msomu-presenter-key";
+        const STORE = "msomu-remote-room";
+        const CODE = /^[a-z0-9]{12,40}$/;
         const $ = (id) => document.getElementById(id);
         const params = new URLSearchParams(location.hash.slice(1));
         const query = new URLSearchParams(location.search);
-        if (!params.get("key") && query.get("key")) params.set("key", query.get("key"));
-        let key = null;
+        let room = params.get("room") || query.get("room");
         try {
-          if (params.get("key")) localStorage.setItem(STORE, params.get("key"));
-          key = localStorage.getItem(STORE);
-        } catch (e) {
-          key = params.get("key");
-        }
-        if (params.has("key")) history.replaceState(null, "", location.pathname);
+          if (room && CODE.test(room)) localStorage.setItem(STORE, room);
+          room = localStorage.getItem(STORE);
+        } catch (e) {}
+        if (!room || !CODE.test(room)) room = null;
+        if (location.hash || location.search) history.replaceState(null, "", location.pathname);
 
         let notes = [];
         let current = 0;
@@ -160,15 +156,15 @@
         $("prev").onclick = () => step(-1);
         $("nextBtn").onclick = () => step(1);
         $("resetTimer").onclick = () => { t0 = Date.now(); tick(); };
-        $("logout").onclick = () => {
+        $("unpair").onclick = () => {
           try { localStorage.removeItem(STORE); } catch (e) {}
           location.reload();
         };
 
         const connect = () => {
           const proto = location.protocol === "https:" ? "wss" : "ws";
-          ws = new WebSocket(`${proto}://${location.host}/api/live/${SLUG}/ws`);
-          ws.onopen = () => { retry = 1000; send({ t: "hello", role: "remote", key }); };
+          ws = new WebSocket(`${proto}://${location.host}/api/live/${SLUG}/ws?room=${room}`);
+          ws.onopen = () => { retry = 1000; send({ t: "hello", role: "remote" }); };
           ws.onmessage = (e) => {
             let m;
             try { m = JSON.parse(e.data); } catch (err) { return; }
@@ -183,7 +179,6 @@
           };
           ws.onclose = (e) => {
             decks = 0;
-            if (e.code === 1008) { status("bad", "Key rejected"); return; }
             status("bad", "Reconnecting…");
             setTimeout(connect, retry);
             retry = Math.min(retry * 2, 15000);
@@ -191,15 +186,17 @@
         };
 
         const start = async () => {
-          const r = await fetch(`/api/live/${SLUG}/notes`, { headers: { "x-presenter-key": key } }).catch(() => null);
-          if (!r || !r.ok) {
-            try { localStorage.removeItem(STORE); } catch (e) {}
+          if (!room) {
             $("gate").hidden = false;
-            $("gateErr").textContent = r && r.status === 401 ? "That key didn't work." : r ? "" : "Can't reach msomu.com. Check the connection.";
+            return;
+          }
+          const r = await fetch(`/api/live/${SLUG}/notes`).catch(() => null);
+          if (!r || !r.ok) {
+            $("gate").hidden = false;
+            $("gate").querySelector("p").textContent = "Can't reach msomu.com. Check the connection and reload.";
             return;
           }
           notes = await r.json();
-          $("gate").hidden = true;
           $("main").hidden = false;
           render(0);
           status("", "Connecting…");
@@ -207,16 +204,7 @@
           wake();
         };
 
-        $("gate").onsubmit = (e) => {
-          e.preventDefault();
-          key = $("keyInput").value.trim();
-          if (!key) return;
-          try { localStorage.setItem(STORE, key); } catch (err) {}
-          start();
-        };
-
-        if (key) start();
-        else $("gate").hidden = false;
+        start();
       })();
     </script>
   </body>
