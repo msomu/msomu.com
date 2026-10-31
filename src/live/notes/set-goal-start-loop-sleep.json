@@ -1,0 +1,258 @@
+[
+	{
+		"title": "PASS 22/22",
+		"notes": "<ul><li>Open cold. Don't introduce yourself yet. Read the green line, pause, then the last line.</li><li>Movie trick: show the ending first, then rewind. The audience spends the talk wondering how we got there.</li></ul>"
+	},
+	{
+		"title": "Set Goal. Start Loop. Sleep.",
+		"notes": "<ul><li>Hi Salem, I'm Somasundaram Mahesh, Somu for short. Founding AI engineer, and I co-founded United by AI. Show of hands: who has used an AI agent to write code? Keep it up if it ever told you \"done\" and it wasn't.</li><li>Keep your eye on those hands. That's the whole talk.</li><li>Now rewind: \"This story starts at work, on a normal afternoon.\"</li></ul>"
+	},
+	{
+		"title": "At work, I asked Claude Code to build something.",
+		"notes": "<ul><li>Nothing exotic. It had a few phases, each one building on the last.</li><li>Keep this vague on purpose. What it was doesn't matter. What happened does.</li></ul>"
+	},
+	{
+		"title": "A few minutes later",
+		"notes": "<ul><li>Pause on this. Let the room enjoy the green tick. Everyone has seen this message.</li></ul>"
+	},
+	{
+		"title": "It wasn't.",
+		"notes": "<ul><li>The bars are illustrative, not a log. Say \"it would finish part of it and call the whole thing done\".</li><li>The key word is \"every time\". This isn't a bug, it's a pattern.</li></ul>"
+	},
+	{
+		"title": "So what did I do?",
+		"notes": "<ul><li>Adjust the exact words to what you actually typed. The point: I kept nudging, checking, nudging.</li><li>\"You're right\" gets a laugh every time.</li></ul>"
+	},
+	{
+		"title": "The agent wasn't the bottleneck. I was.",
+		"notes": "<ul><li>This is the thesis. Slow down here.</li><li>Three jobs I was doing by hand: keep it going (loop), decide if it's done (checker), wake it up (alarm). Tonight we hand all three to the machine.</li></ul>"
+	},
+	{
+		"title": "22:45 · The problem.",
+		"notes": "<ul><li>My story is failure number one. There are three more, and you've probably met them too.</li></ul>"
+	},
+	{
+		"title": "Four ways an agent fails when you look away.",
+		"notes": "<ul><li>Stops early: says \"done\" when it isn't. That's my story.</li><li>Cheats: makes the check pass instead of the code.</li><li>Waits: asks a question at 11pm, you see it at 8am.</li><li>Breaks things: one bad command on your real machine.</li><li>Ask the room which one they've hit. Most will say one and two. Watch the tracker in the top right: these four stay red until we fix them.</li></ul>"
+	},
+	{
+		"title": "It stops early.",
+		"notes": "<ul><li>By default, the model decides when it's done. Nobody wrote down what \"done\" means, so it makes it up.</li><li>Models are optimistic. \"Probably done\" feels like done.</li><li>Long, multi-phase work makes it worse: the plan slides out of view.</li><li>Classic exchange: \"All tests pass ✅\" / \"which tests did you run?\" / \"I didn't run them, but the changes look correct.\"</li></ul>"
+	},
+	{
+		"title": "It cheats.",
+		"notes": "<ul><li>Not on purpose. A failing test is often easier to change than the code. The agent is rewarded for green, so the test becomes the target.</li><li>Also seen: skipping the test, mocking the thing under test, catching and swallowing the error.</li><li>Lesson: whoever writes the code must not be the one grading it.</li></ul>"
+	},
+	{
+		"title": "It waits for you.",
+		"notes": "<ul><li>Eight hours of compute, zero minutes of work. The agent was polite. You were asleep.</li><li>Permission prompts are good when you're watching. They're a wall when you're not. Fix later: answer the questions before you leave.</li></ul>"
+	},
+	{
+		"title": "It breaks things.",
+		"notes": "<ul><li>The wrong folder: a cleanup command, one directory too high. The wrong branch: a force push to main at 3am. The wrong hands: a web page with hidden instructions, and your keys sitting right there.</li><li>To run unattended, you turn permission prompts off. Then the machine is the only seatbelt.</li></ul>"
+	},
+	{
+		"title": "It already happened.",
+		"notes": "<ul><li>Real incident, July 2025: a Replit agent deleted SaaStr founder Jason Lemkin's production database during a declared code freeze, then said it \"panicked\".</li><li>The fix wasn't a better prompt. It was dev/prod separation, one-click restore and a planning-only mode. Keep this in mind for harness part 6.</li></ul>"
+	},
+	{
+		"title": "Every failure has a fix.",
+		"notes": "<ul><li>This is the map for the rest of the talk.</li><li>And the thing that holds all of it together has a name: the harness.</li></ul>"
+	},
+	{
+		"title": "22:58 · Set Goal.",
+		"notes": "<ul><li>Fixes failures one and two. The single most useful skill in this talk.</li></ul>"
+	},
+	{
+		"title": "A prompt is a request. A goal is a finish line.",
+		"notes": "<ul><li>Left is what I typed. The agent decides when it's done. It decided early.</li><li>Right is what I should have typed. Anyone can check it, including another machine.</li><li>If you can't tell whether it's done, neither can the agent.</li></ul>"
+	},
+	{
+		"title": "A good goal is a yes / no question.",
+		"notes": "<ul><li>pstack calls it a \"checkable predicate\". Every example here, a script can answer.</li></ul>"
+	},
+	{
+		"title": "Fix these goals.",
+		"notes": "<ul><li>30 seconds per card. Take two answers, then reveal.</li><li>This is the one skill they can use tomorrow with zero paid tools.</li></ul>"
+	},
+	{
+		"title": "Every agent now has /goal.",
+		"notes": "<ul><li>Claude Code: /goal keeps taking turns until the condition holds. A separate model checks it after every turn. Headless: claude -p \"/goal ...\".</li><li>Codex: /goal with pause, resume, clear, and a budget. \"The evidence decides.\"</li><li>Two companies, same command. If I'd had this for my multi-phase build, \"continue\" would have typed itself. Watch the tracker: 01 just turned green.</li></ul>"
+	},
+	{
+		"title": "The author is never the critic.",
+		"notes": "<ul><li>In Claude Code's /goal, a fresh model checks the condition after each turn.</li><li>pstack goes further: the judge comes from a different model family. Scripts are best of all. They don't get optimistic.</li></ul>"
+	},
+	{
+		"title": "Lock the finish line.",
+		"notes": "<ul><li>The tests and the checker are hashed in a LOCK file. If the agent edits the test to win, check.mjs fails with: \"The finish line is not yours to move.\"</li><li>This is from the demo repo we'll see at the end. 02 turns green.</li></ul>"
+	},
+	{
+		"title": "23:04 · Start Loop.",
+		"notes": "<ul><li>Fixes failure three. Remember: I was the loop. Now we replace me.</li></ul>"
+	},
+	{
+		"title": "My \"continue\", automated",
+		"notes": "<ul><li>Geoffrey Huntley calls it the Ralph loop. Each pass is a fresh agent. The plan lives in a file: read it, do one thing, commit, exit, repeat.</li><li>A YC hackathon team ran it overnight and woke up to 6 shipped repos.</li><li>One line of bash is the thing I was doing by hand all afternoon.</li></ul>"
+	},
+	{
+		"title": "Three ways to wake the agent up.",
+		"notes": "<ul><li>/goal: one task, keep going until done. /loop: nothing to wait on, just re-check. Events: you're waiting on something real.</li><li>Rule of thumb: if there's an event, watch the event and keep a slow timer as backup. Don't poll CI every minute, get woken when it finishes.</li></ul>"
+	},
+	{
+		"title": "One iteration.",
+		"notes": "<ul><li>Step 4: the agent throws away work that didn't help. When did you last delete code that didn't help?</li></ul>"
+	},
+	{
+		"title": "Answer its questions before you leave.",
+		"notes": "<ul><li>Four lines, four jobs. The permission line kills the 11:42pm question. The escape hatch beats eight hours of creative goal reinterpretation.</li><li>This exact file is GOAL.md in the demo repo.</li></ul>"
+	},
+	{
+		"title": "23:05 · The harness.",
+		"notes": "<ul><li>Zoom out. The goal, the check, the loop, the contract: none of that is the model.</li></ul>"
+	},
+	{
+		"title": "Agent = Model + Harness",
+		"notes": "<ul><li>The model reads the context and picks the next action. That's all it does.</li><li>The harness is all the code that turns that choice into work. Claude Code, Codex, Cursor and Antigravity are all harnesses.</li><li>My \"done\" problem was never a model problem. It was a harness problem. Next: eight parts, one slide each.</li></ul>"
+	},
+	{
+		"title": "The loop",
+		"notes": "<ul><li>The loop sends the context to the model, runs whatever tools it asks for, feeds the results back in, and decides when the task is finished.</li><li>Example: Claude Code reads a file, runs the tests, sees 3 failures, edits, runs again. Each round trip is one turn. /goal adds the rule for when to stop.</li><li>The \"done?\" gate is the part that failed me: the loop let the model decide.</li></ul>"
+	},
+	{
+		"title": "Tools and sandbox",
+		"notes": "<ul><li>Tools give the model a terminal, files, a browser and your apps. The sandbox runs every task inside its own isolated computer, so a bad command stays inside.</li><li>Example: a Cursor cloud agent gets its own VM. A Claude Code cloud session gets a fresh container with only the repo it needs. Delete everything in there? Nothing you care about is gone.</li></ul>"
+	},
+	{
+		"title": "Subagents",
+		"notes": "<ul><li>Subagents take side tasks off the main agent and run them in parallel, each with a fresh context window, and send back only a short summary.</li><li>Example: pstack's /how sends 2 to 4 cheap explorers into different corners of the codebase, then one strong model writes a single explanation. The main agent never sees the 40 files they read.</li><li>For a multi-phase build: one subagent per phase, one more to review each phase.</li><li>Anthropic's multi-agent research (June 2025): subagents beat a single agent by about 90% on their research eval but used roughly 15x the tokens, and an early version spawned 50 subagents for simple questions. Add a second agent only when the first is drowning.</li></ul>"
+	},
+	{
+		"title": "Context management",
+		"notes": "<ul><li>Context management decides what the model sees on every turn, loads skills and files only when the task needs them, and summarizes old history before the window fills.</li><li>Example: the harness shows the model a one-line description of each skill and loads the full file only when it's needed. 50 skills cost almost nothing until one is used.</li><li>Long multi-phase runs are exactly where the plan drops out of view. Keep it in a file, not in the chat.</li><li>Anthropic calls the failure \"context rot\": recall drops as the context grows. Aim for the smallest set of high-signal tokens. Karpathy calls the craft context engineering.</li></ul>"
+	},
+	{
+		"title": "Memory",
+		"notes": "<ul><li>Memory stores progress notes, git history and skills on disk, so a new session reads what the last one did and picks up where it stopped.</li><li>The checklist is ticked by the check passing, not by the agent saying so.</li><li>Lauren Tan: \"your codebase is the ultimate form of memory.\"</li><li>Three techniques Anthropic describes: note-taking (a NOTES.md the agent reads back), compaction (summarize and restart), and just-in-time retrieval (keep links, load when needed).</li></ul>"
+	},
+	{
+		"title": "Guardrails",
+		"notes": "<ul><li>Guardrails hold risky actions like emails, payments and deletes for your approval, keep real credentials outside the sandbox, and give a prompt injection no credentials to steal.</li><li>Example: work on a branch, never main. Allow git and npm test, nothing else. The GitHub token lives in a proxy outside the box, so the agent can push a PR but can't read the key.</li><li>Guardrails are what make \"don't ask me\" safe to say. Remember the deleted database: a prompt saying \"don't touch prod\" is a wish. No prod credentials in the box is a guardrail.</li></ul>"
+	},
+	{
+		"title": "The lethal trifecta.",
+		"notes": "<ul><li>Simon Willison's \"lethal trifecta\" (June 2025): private data, plus untrusted content (a web page, an email, an issue), plus any way to talk to the outside world, equals a data theft risk.</li><li>A prompt injection hidden in the untrusted content can tell the agent to send your private data out. Break any one of the three, or put a human gate on the send.</li><li>Students: check every agent you build against this. It takes ten seconds.</li></ul>"
+	},
+	{
+		"title": "Verification",
+		"notes": "<ul><li>Verification stops a summary that only sounds finished. It runs tests, browser checks or a separate grader, and only then lets the agent say done.</li><li>Not \"I fixed it\". Show me the failing test, then the passing test. Show me the before and after screenshot.</li><li>Lauren Tan: \"The bottleneck with agents is verification.\" pstack ranks a verification skill as the single best investment. If you only build one part of the harness, build this one.</li></ul>"
+	},
+	{
+		"title": "Observability",
+		"notes": "<ul><li>Observability traces every model call and tool call, spots the agent repeating the same failed edit, and pushes it to try a different approach.</li><li>Without traces, you find out at 8am that it tried the same fix 200 times.</li></ul>"
+	},
+	{
+		"title": "8 parts, 4 failures, fixed.",
+		"notes": "<ul><li>One look back. Ask: which part would have saved my afternoon? Answer: verification, then the loop.</li></ul>"
+	},
+	{
+		"title": "pstack",
+		"notes": "<ul><li>Lauren Tan (poteto): React Compiler core team, ex Meta and Netflix. Built pstack at Cursor, now at SpaceXAI. Open sourced in May 2026 after Cursor's team used it 10,000 times in one week.</li><li>Her line on agents: \"new hires in a constant state of amnesia and idiocy. Capable yet stupid, and very teachable.\" pstack is the teaching.</li></ul>"
+	},
+	{
+		"title": "One router. Many playbooks.",
+		"notes": "<ul><li>You type one command. The router reads your task and picks the right recipe. Nothing loads by surprise: 53 of 54 skills only run when called.</li></ul>"
+	},
+	{
+		"title": "Name the goal and the proof. Never the method.",
+		"notes": "<ul><li>Compare with my \"Build it. All the phases.\" Same length, completely different outcome.</li><li>Her advice: don't list skills, don't lead with your theory of the bug.</li></ul>"
+	},
+	{
+		"title": "A skill is written experience.",
+		"notes": "<ul><li>A skill is a folder with one SKILL.md file. Plain Markdown. The description says when to use it, the body says how.</li><li>The agent sees only the one-line description until it needs the rest. Same format in Claude Code, Cursor, Codex.</li><li>This is a real pstack skill, about 34 words. If you can write a README, you can write a skill.</li></ul>"
+	},
+	{
+		"title": "Your agent forgets everything. Every single morning.",
+		"notes": "<ul><li>Watch the memory bars: the sun comes up and they empty. A skill arrives and they refill.</li><li>Lauren Tan: \"Agents are like new hires in a constant state of amnesia and idiocy. They're capable yet stupid, and very teachable.\"</li><li>A chat correction dies with the chat. A skill lives in the repo: every run, every parallel agent, every teammate's agent gets it.</li></ul>"
+	},
+	{
+		"title": "Every scar becomes a skill.",
+		"notes": "<ul><li>Lauren Tan: \"I never set out to build pstack. I just started turning every recurring failure mode into a skill. The agents improved because their instructions carried the scars from previous runs.\"</li><li>Step 5 surprises people: pstack's history has passes that cut 600 to 700 lines at a time because newer models stopped needing them.</li><li>Her rule for when to add one: when the same failure shows up twice.</li></ul>"
+	},
+	{
+		"title": "The skill I should have had.",
+		"notes": "<ul><li>This is the \"done\" problem from the start of the talk, as a skill. Four lines.</li><li>And the last sentence is the correction ladder: a skill is good, a check is better.</li></ul>"
+	},
+	{
+		"title": "Don't fix it twice.",
+		"notes": "<ul><li>Every time you correct your agent, ask how to make that correction unnecessary. Climb as high as you can.</li><li>From Lauren's post in August. Rung 4 she marks \"ngmi\": not gonna make it.</li><li>Our LOCK file is rung 2: a check, not a request.</li></ul>"
+	},
+	{
+		"title": "Three loop rules worth stealing.",
+		"notes": "<ul><li>If a change didn't move the check, it doesn't ride along. Stuck? Change approach: don't quit, don't spin. Moving the finish line to declare victory is losing.</li><li>Plus a decision log every iteration, so you audit decisions in the morning, not transcripts. Rule three is why we have the LOCK file.</li></ul>"
+	},
+	{
+		"title": "What it costs.",
+		"notes": "<ul><li>Tokens: reviewer panels and verifier swarms add up. Slower, pricier, more correct. Ceremony: heavy for a two-line fix, most changes need none of it.</li><li>Prose only guides: only scripts enforce, so rules keep moving into code. One person's style: her models, her habits, build your own on top.</li><li>Her own words: \"a low trust loop is just a waste of tokens.\" Productivity numbers online are self-reported. Take the ideas, not the numbers.</li></ul>"
+	},
+	{
+		"title": "23:06 · Sleep.",
+		"notes": "<ul><li>Fixes failure four, and lets you actually close the lid.</li></ul>"
+	},
+	{
+		"title": "Your laptop is a bad place for a loop.",
+		"notes": "<ul><li>It sleeps: lid closes, Wi-Fi drops, battery dies at 2am. It's crowded: two agents fight each other (and you) for the same files. It's yours: your keys, your cookies, your bank tab.</li><li>So move the loop to a machine that isn't yours, with only the keys the task needs. Harness parts 2 and 6, made physical. 04 turns green: all four fixed.</li></ul>"
+	},
+	{
+		"title": "Cloud agents + Automations",
+		"notes": "<ul><li>Every agent gets its own VM: terminal, browser, desktop. Start from the editor, your phone, Slack or GitHub. It attaches videos and screenshots to the PR as proof.</li><li>Automations start them on a schedule or an event: a merged PR, a Slack message, an alert. Nobody types a prompt; the event is the prompt.</li><li>30%+ of PRs merged at Cursor are made by agents running on their own in cloud sandboxes (Cursor, Feb 2026).</li></ul>"
+	},
+	{
+		"title": "Cloud sessions + scheduled tasks",
+		"notes": "<ul><li>Cloud sessions: start from claude.ai/code, the phone app, or claude --cloud. Close the laptop, it keeps going and opens a PR, then watches its own PR: fixes CI, answers review comments.</li><li>Scheduled tasks: a saved prompt + repos + connectors that fires on a schedule, an API call, or a GitHub event. \"Every night at 2am: pull the top bug, attempt a fix, open a PR.\"</li><li>The demo repo for this talk was built and dry-run in one of these cloud sessions.</li></ul>"
+	},
+	{
+		"title": "Buzz: agents as teammates",
+		"notes": "<ul><li>Buzz: Slack-like, but every agent has its own identity. Bring any agent: Claude Code, Codex, goose. Open source, self-host it.</li><li>How Block builds Buzz, in Buzz: a human opens a channel and states the goal, agents research, build and test in the thread, a different agent reviews the builder, humans decide what merges.</li><li>Same shape as this whole talk: goal, loop, separate critic, human signs off. Just with a team of agents. The chat is illustrative.</li></ul>"
+	},
+	{
+		"title": "Where should your loop live?",
+		"notes": "<ul><li>Start with /goal on your laptop. Move to the cloud when you want to close the lid.</li></ul>"
+	},
+	{
+		"title": "07:30 · Morning.",
+		"notes": "<ul><li>Now the payoff. I built a small repo to run this exactly the way the talk describes.</li></ul>"
+	},
+	{
+		"title": "The receipt.",
+		"notes": "<ul><li>Real run with claude -p \"/goal node check.mjs prints PASS\". About two minutes, because the task is small. The point is I wasn't there.</li><li>\"Done\" here isn't a sentence from the agent. It's PASS from a script it couldn't touch.</li></ul>"
+	},
+	{
+		"title": "Read 10 rows, not 8 hours.",
+		"notes": "<ul><li>parseDuration is my favourite row: it found an edge case on its own and wrote down why.</li><li>pstack does this with /show-me-your-work, and a reviewer from a different model reads the log first.</li></ul>"
+	},
+	{
+		"title": "Before and after.",
+		"notes": "<ul><li>Close the loop on the story. Same agent, same model. The only difference is the harness around it.</li></ul>"
+	},
+	{
+		"title": "Earn the sleep first.",
+		"notes": "<ul><li>Checklist from pstack's guide: you've done the task once by hand or watched an agent do it; the agent has the tools you'd use (tests, logs, screenshots); every step proves its work and can stop the line; you've read a few runs and turned repeat failures into checks.</li><li>Until all four hold, run the loop while you watch. The quote is Geoffrey Huntley's, about running loops without a sandbox.</li><li>Risk tiers: low-risk actions run alone, medium ones run and leave a trail, high ones (send, pay, delete, publish) wait for a yes. Move an action down a tier only after many approvals with no edits.</li></ul>"
+	},
+	{
+		"title": "AI doesn't add judgment. It multiplies it.",
+		"notes": "<ul><li>Read the bottom row first: without AI, weak judgment is dead weight, good judgment is steady hands.</li><li>Now add AI to both. Weak judgment becomes a slop cannon: more output, same bad calls, faster. Good judgment becomes a turbo brain.</li><li>Tie back: my afternoon was AI without the judgment written down. Everything tonight, the yes/no goal, the locked check, the harness, is how you put your judgment into the loop so it multiplies the right thing.</li><li>Framework from danhock.com (shared by Justin Elze, TrustedSec).</li></ul>"
+	},
+	{
+		"title": "Your job changed.",
+		"notes": "<ul><li>The skill that matters isn't prompting anymore. It's knowing what done looks like.</li></ul>"
+	},
+	{
+		"title": "Try it before you sleep.",
+		"notes": "<ul><li>Pick one small thing in your project, write a goal that's a yes/no question, run /goal in Claude Code or Codex or install pstack, go to sleep. Scan the QR: github.com/msomu/overnight-loop. Clone it, run ./ralph.sh or /goal, then ./morning.sh. Tag me on X (@msomuin) or LinkedIn with what you woke up to.</li></ul>"
+	},
+	{
+		"title": "Keep the loop going. Join us.",
+		"notes": "<ul><li>Thank you. Hold this slide during questions.</li><li>Say it: \"Phones out. Left QR is my WhatsApp channel, that's where the next demo and the repo updates go first. Right one is X, @msomuin. Tell me what you woke up to after tonight's homework.\"</li><li>Slides are at msomu.com/talks, the demo repo is on the chip at the bottom.</li></ul>"
+	}
+]
