@@ -1108,12 +1108,23 @@
       .closing .wa .walabel svg { width: 1.3em; height: 1.3em; fill: #25D366; }
       .closing .wa .wasub { font-size: 0.5em; color: var(--muted); margin-top: 0.25em; line-height: 1.4; }
       @media (max-width: 639px) { .closing { grid-template-columns: 1fr; } }
+
+      /* Pair phone: QR overlay on the presenter's laptop (press Q) */
+      .pair { position: fixed; inset: 0; z-index: 60; display: none; align-items: center; justify-content: center; background: rgba(6, 9, 20, 0.92); }
+      .pair.show { display: flex; }
+      .pair .box { text-align: center; font-family: var(--sans); color: var(--text); }
+      .pair .qr { background: var(--moon); border-radius: 18px; padding: 18px; display: inline-block; }
+      .pair .qr img, .pair .qr svg { display: block; width: min(52vh, 420px); height: auto; image-rendering: pixelated; }
+      .pair h3 { font-family: var(--serif); color: var(--moon); font-size: 28px; margin: 0 0 16px; }
+      .pair p { color: var(--muted); font-size: 15px; margin: 14px 0 0; }
     </style>
     <script>
       // Presenter key: read it before Reveal's hash routing rewrites the URL.
       (() => {
         const STORE = "msomu-presenter-key";
         const params = new URLSearchParams(location.hash.slice(1));
+        const query = new URLSearchParams(location.search);
+        if (!params.get("key") && query.get("key")) params.set("key", query.get("key"));
         if (!params.has("key") && !params.has("logout")) return;
         try {
           if (params.has("logout")) localStorage.removeItem(STORE);
@@ -1121,7 +1132,7 @@
         } catch (e) {
           window.__presenterKey = params.get("key");
         }
-        history.replaceState(null, "", location.pathname + location.search);
+        history.replaceState(null, "", location.pathname);
       })();
     </script>
   </head>
@@ -2367,6 +2378,40 @@ df372ff Implement formatINR (2/22 -> 5/22)
             }
           });
 
+        // Pair phone: press Q to show a QR that opens the remote already unlocked
+        const pairEl = document.createElement("div");
+        pairEl.className = "pair";
+        pairEl.innerHTML = '<div class="box"><h3>Scan with your phone</h3><div class="qr"></div><p>Opens your speaker remote, already unlocked · press Q or click to close</p></div>';
+        document.body.appendChild(pairEl);
+        const remoteUrl = `${location.origin}/talks/${SLUG}/remote#key=${encodeURIComponent(key)}`;
+        let qrLib = null;
+        const loadQr = () =>
+          qrLib ||
+          (qrLib = new Promise((res, rej) => {
+            const sc = document.createElement("script");
+            sc.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+            sc.onload = () => res(window.qrcode);
+            sc.onerror = rej;
+            document.head.appendChild(sc);
+          }));
+        const togglePair = async (show) => {
+          const on = show === undefined ? !pairEl.classList.contains("show") : show;
+          if (on && !pairEl.querySelector(".qr svg")) {
+            try {
+              const make = await loadQr();
+              const q = make(0, "M");
+              q.addData(remoteUrl);
+              q.make();
+              pairEl.querySelector(".qr").innerHTML = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+            } catch (e) {
+              pairEl.querySelector(".qr").textContent = "QR unavailable offline. Open /remote and paste the key.";
+            }
+          }
+          pairEl.classList.toggle("show", on);
+        };
+        pairEl.addEventListener("click", () => togglePair(false));
+        Reveal.addKeyBinding({ keyCode: 81, key: "Q", description: "Pair phone remote" }, () => togglePair());
+
         // Live room: report slides, accept moves from the phone
         let ws = null;
         let retry = 1000;
@@ -2386,7 +2431,7 @@ df372ff Implement formatINR (2/22 -> 5/22)
             try { m = JSON.parse(e.data); } catch (err) { return; }
             if (m.t === "go" && Number.isInteger(m.h) && m.h !== Reveal.getIndices().h) Reveal.slide(m.h);
             if (m.t === "peers") {
-              if (m.remotes > remotes) { toast("📱 phone connected"); report(); }
+              if (m.remotes > remotes) { toast("📱 phone connected"); report(); togglePair(false); }
               else if (m.remotes < remotes) toast("📱 phone disconnected");
               remotes = m.remotes;
             }
