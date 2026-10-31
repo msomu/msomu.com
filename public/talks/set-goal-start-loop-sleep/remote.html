@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#060914" />
+    <title>Speaker remote · Set Goal. Start Loop. Sleep.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
+    />
+    <style>
+      :root {
+        --night: #060914;
+        --surface: rgba(148, 163, 214, 0.08);
+        --border: rgba(148, 163, 214, 0.2);
+        --moon: #f4ecd6;
+        --text: #d7dcef;
+        --muted: #7d87a8;
+        --lamp: #fbbf24;
+        --lamp-dim: rgba(251, 191, 36, 0.14);
+        --green: #6ee7b7;
+        --red: #fca5a5;
+        --serif: "Fraunces", Georgia, serif;
+        --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--night); color: var(--text); font-family: var(--sans); }
+      .app {
+        display: flex; flex-direction: column; gap: 14px; min-height: 100vh; min-height: 100dvh;
+        padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+        max-width: 720px; margin: 0 auto;
+      }
+      .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+      .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--muted); margin-right: 6px; vertical-align: 1px; }
+      .dot.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
+      .dot.bad { background: var(--red); }
+      .timer { color: var(--lamp); font-size: 15px; }
+      .count { font-family: var(--mono); font-size: 13px; color: var(--lamp); letter-spacing: 0.08em; }
+      h1 { font-family: var(--serif); font-size: 26px; line-height: 1.22; color: var(--moon); margin: 4px 0 0; font-weight: 600; }
+      .notes {
+        flex: 1; overflow-y: auto; font-size: 19px; line-height: 1.55; background: var(--surface);
+        border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px;
+      }
+      .notes ul { margin: 0; padding-left: 1.1em; }
+      .notes li + li { margin-top: 0.7em; }
+      .muted { color: var(--muted); }
+      .next { font-size: 14px; color: var(--muted); }
+      .next b { color: var(--text); font-weight: 500; }
+      .btns { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; }
+      button, input {
+        font: inherit; font-size: 18px; padding: 16px 12px; border-radius: 14px; border: 1px solid var(--border);
+        background: var(--surface); color: var(--moon);
+      }
+      button { touch-action: manipulation; cursor: pointer; }
+      button.go { background: var(--lamp-dim); border-color: rgba(251, 191, 36, 0.6); color: var(--lamp); font-weight: 600; }
+      button:active { transform: scale(0.98); }
+      .small { display: flex; gap: 8px; justify-content: center; }
+      .small button { font-size: 13px; padding: 8px 12px; border-radius: 999px; color: var(--muted); }
+      .gate { display: flex; flex-direction: column; gap: 12px; margin: auto 0; }
+      .gate p { margin: 0; color: var(--muted); line-height: 1.5; }
+      .gate .err { color: var(--red); min-height: 1.4em; }
+      [hidden] { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <form class="gate" id="gate" hidden>
+        <h1>Speaker remote</h1>
+        <p>Enter the presenter key to see the notes and drive the slides.</p>
+        <input id="keyInput" type="password" autocomplete="current-password" placeholder="Presenter key" />
+        <button class="go" type="submit">Unlock</button>
+        <p class="err" id="gateErr"></p>
+      </form>
+
+      <div id="main" hidden style="display: contents">
+        <div class="bar">
+          <span><span class="dot" id="dot"></span><span id="status">Connecting…</span></span>
+          <span class="timer" id="timer">00:00</span>
+        </div>
+        <div><div class="count" id="count"></div><h1 id="title"></h1></div>
+        <div class="notes" id="notes"></div>
+        <div class="next" id="next"></div>
+        <div class="btns"><button id="prev">◀ Prev</button><button class="go" id="nextBtn">Next ▶</button></div>
+        <div class="small"><button id="resetTimer">Reset timer</button><button id="logout">Forget key</button></div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const SLUG = "set-goal-start-loop-sleep";
+        const STORE = "msomu-presenter-key";
+        const $ = (id) => document.getElementById(id);
+        const params = new URLSearchParams(location.hash.slice(1));
+        let key = null;
+        try {
+          if (params.get("key")) localStorage.setItem(STORE, params.get("key"));
+          key = localStorage.getItem(STORE);
+        } catch (e) {
+          key = params.get("key");
+        }
+        if (params.has("key")) history.replaceState(null, "", location.pathname);
+
+        let notes = [];
+        let current = 0;
+        let decks = 0;
+        let ws = null;
+        let retry = 1000;
+
+        const render = (i) => {
+          if (!notes.length) return;
+          current = Math.max(0, Math.min(notes.length - 1, i));
+          $("count").textContent = `SLIDE ${current + 1} / ${notes.length}`;
+          $("title").textContent = notes[current].title;
+          $("notes").innerHTML = notes[current].notes || '<p class="muted">No notes for this slide.</p>';
+          $("notes").scrollTop = 0;
+          const n = notes[current + 1];
+          $("next").innerHTML = n ? "Next: <b></b>" : "Last slide";
+          if (n) $("next").querySelector("b").textContent = n.title;
+        };
+        const status = (state, text) => {
+          $("dot").className = "dot" + (state === "on" ? " on" : state === "bad" ? " bad" : "");
+          $("status").textContent = text;
+        };
+
+        let t0 = null;
+        const tick = () => {
+          if (t0 === null) return;
+          const s = Math.floor((Date.now() - t0) / 1000);
+          $("timer").textContent = `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+        };
+        setInterval(tick, 1000);
+        const startTimer = () => { if (t0 === null) { t0 = Date.now(); tick(); } };
+
+        let lock = null;
+        const wake = async () => {
+          try {
+            if (navigator.wakeLock && !lock) {
+              lock = await navigator.wakeLock.request("screen");
+              lock.addEventListener("release", () => (lock = null));
+            }
+          } catch (e) {}
+        };
+        document.addEventListener("visibilitychange", () => document.visibilityState === "visible" && wake());
+
+        const send = (o) => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); };
+        const step = (d) => {
+          startTimer();
+          wake();
+          const target = Math.max(0, Math.min(notes.length - 1, current + d));
+          if (decks > 0) send({ t: "go", h: target });
+          else render(target);
+        };
+        $("prev").onclick = () => step(-1);
+        $("nextBtn").onclick = () => step(1);
+        $("resetTimer").onclick = () => { t0 = Date.now(); tick(); };
+        $("logout").onclick = () => {
+          try { localStorage.removeItem(STORE); } catch (e) {}
+          location.reload();
+        };
+
+        const connect = () => {
+          const proto = location.protocol === "https:" ? "wss" : "ws";
+          ws = new WebSocket(`${proto}://${location.host}/api/live/${SLUG}/ws`);
+          ws.onopen = () => { retry = 1000; send({ t: "hello", role: "remote", key }); };
+          ws.onmessage = (e) => {
+            let m;
+            try { m = JSON.parse(e.data); } catch (err) { return; }
+            if ((m.t === "state" || m.t === "slide") && Number.isInteger(m.h)) {
+              if (m.t === "slide") startTimer();
+              render(m.h);
+            }
+            if (m.t === "peers") {
+              decks = m.decks;
+              status(decks ? "on" : "", decks ? "Live · following the laptop" : "Waiting for the laptop…");
+            }
+          };
+          ws.onclose = (e) => {
+            decks = 0;
+            if (e.code === 1008) { status("bad", "Key rejected"); return; }
+            status("bad", "Reconnecting…");
+            setTimeout(connect, retry);
+            retry = Math.min(retry * 2, 15000);
+          };
+        };
+
+        const start = async () => {
+          const r = await fetch(`/api/live/${SLUG}/notes`, { headers: { "x-presenter-key": key } }).catch(() => null);
+          if (!r || !r.ok) {
+            try { localStorage.removeItem(STORE); } catch (e) {}
+            $("gate").hidden = false;
+            $("gateErr").textContent = r && r.status === 401 ? "That key didn't work." : r ? "" : "Can't reach msomu.com. Check the connection.";
+            return;
+          }
+          notes = await r.json();
+          $("gate").hidden = true;
+          $("main").hidden = false;
+          render(0);
+          status("", "Connecting…");
+          connect();
+          wake();
+        };
+
+        $("gate").onsubmit = (e) => {
+          e.preventDefault();
+          key = $("keyInput").value.trim();
+          if (!key) return;
+          try { localStorage.setItem(STORE, key); } catch (err) {}
+          start();
+        };
+
+        if (key) start();
+        else $("gate").hidden = false;
+      })();
+    </script>
+  </body>
+</html>

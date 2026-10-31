@@ -93,6 +93,9 @@ Custom programmatic sitemaps in `src/pages/`:
 - **Theme**: Dark mode optimized with orange accent colors (#F97316)
 - **Utilities** (`src/utils/index.ts`): `clsx()` for conditional class merging, `getCategoryColor()` and `getBackgroundColorClass()` for dynamic badge/CTA colors
 
+### Live talk remote
+`src/worker.ts` is the Worker entry (`main` in `wrangler.jsonc`): it serves `/api/live/{slug}/ws` (a `LiveRoom` Durable Object, `src/live/room.ts`) and `/api/live/{slug}/notes`, and hands everything else to the Astro handler. A presenter opens the deck with `#key=...` and the phone at `/talks/{slug}/remote`; the phone shows that talk's notes and stays in sync with the deck. Speaker notes for live talks live in `src/live/notes/{slug}.json` (not in the public deck) and are served only to the presenter key, whose SHA-256 is in `src/live/talks.ts`.
+
 ## Environment Variables
 Optional analytics (add to `.env`):
 ```
