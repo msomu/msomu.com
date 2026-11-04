@@ -6,12 +6,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
 require_cmd curl
-export PATH="$HOME/.bun/bin:$PATH"
 require_cmd bun
 
-existing_pid="$(read_pid || true)"
-if pid_alive "$existing_pid" && server_responds; then
-	echo "dev server already running (pid $existing_pid) at $BASE_URL"
+if astro_dev_status | grep -qF "running at $BASE_URL"; then
+	echo "dev server already running at $BASE_URL"
 	exit 0
 fi
 

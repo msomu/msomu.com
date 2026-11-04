@@ -6,11 +6,11 @@ The `/connect` page lists public profiles (X, Instagram, YouTube, GitHub, Linked
 
 - `connect.profiles` — six `connectLinks` rows from `src/data/index.ts`
 - `connect.aria` — accessible Connect buttons per platform
-- `connect.markdown` — same content available via `Accept: text/markdown` on `/connect`
+- `connect.markdown` — `Accept: text/markdown` on `/connect` returns the six profile URLs plus citation prose and a Contact link, with no buttons
 
 ## How to get to it (user POV)
 
-Navigate to `/connect` directly or follow inbound links from resources/about copy. Tap **Connect** on a row to open the external profile in a new tab.
+Navigate to `/connect` directly, or follow the footer link or the link in the resources copy. Tap **Connect** on a row to open the external profile in a new tab.
 
 ## Driving it with curl
 
@@ -20,6 +20,8 @@ Navigate to `/connect` directly or follow inbound links from resources/about cop
    - **Expect:** match.
 3. `grep 'github.com/msomu' evidence/connect.html && grep 'whatsapp.com/channel' evidence/connect.html`
    - **Expect:** both match.
+4. `curl -fsS -D evidence/connect-md.headers -H 'Accept: text/markdown' -o evidence/connect.md http://127.0.0.1:4321/connect`
+   - **Expect:** HTTP 200, `Content-Type` contains `text/markdown`, body starts with `# Connect`.
 
 Or run: `.cursor/skills/verify-msomu/scripts/drive.sh connect`
 

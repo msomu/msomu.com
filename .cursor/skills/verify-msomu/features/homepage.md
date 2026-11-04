@@ -31,4 +31,4 @@ Or run: `.cursor/skills/verify-msomu/scripts/drive.sh homepage`
 
 - Hero copy can change; prefer `id="recent-writings"` and nav `href` paths over exact headline text when updating assertions.
 - Only one dev server can own port 4321; a stale foreign process blocks `launch.sh`.
-- SSR output includes analytics only when `UMAMI_*` / `CLARITY_*` env vars are set — absence is normal locally.
+- Analytics scripts render only in production builds (`import.meta.env.PROD` in `src/components/seo/base-head.astro`), so their absence on the dev server is normal.
