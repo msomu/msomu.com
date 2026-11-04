@@ -13,7 +13,7 @@ Baseline preconditions for every drive:
 - **Selectors:** prefer stable routes (`/writings`, `/connect`), element ids (`#recent-writings`), and `aria-label` attributes over visible copy that may change.
 - **Proof:** drive prints `evidence: <dir>`; directory contains response bodies, headers, and `manifest.json`.
 - **Skip reporting:** if the server cannot start, record the exact launch command and stderr from `.verify-state/dev-server.log` in the PR — do not claim a drive you did not run.
-- **Parallelism:** only one Astro dev server per port 4321; stop with `scripts/cleanup.sh` before switching branches that require a rebuild.
+- **Parallelism:** only one Astro dev server per port 4321; stop with `scripts/cleanup.sh` before switching branches that require a rebuild. Give each checkout its own `node_modules`: two dev servers sharing one overwrite `node_modules/.vite`, and later requests return HTTP 500.
 
 ## Feature index
 
@@ -24,3 +24,4 @@ Baseline preconditions for every drive:
 | `connect` | [connect.md](./connect.md) | Public profiles with Connect buttons and outbound URLs |
 | `talks` | [talks.md](./talks.md) | Talks listing plus static Reveal.js decks |
 | `agent-markdown` | [agent-markdown.md](./agent-markdown.md) | `Accept: text/markdown`, `/llms.txt`, agent-friendly 404 bodies |
+| `uses` | [uses.md](./uses.md) | Hardware and software inventory, grouped by section, with a markdown summary |

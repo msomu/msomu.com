@@ -16,11 +16,11 @@ Click **writings** in the header or **View all posts** on the homepage. Open any
 ## Driving it with curl
 
 1. `curl -fsS -o evidence/writings.html http://127.0.0.1:4321/writings`
-   - **Expect:** HTTP 200, page title area contains `writings`.
-2. Extract first post slug: a `href="/<slug>"` that is not a reserved nav path (`writings`, `talks`, `projects`, `uses`, `connect`, `about`, `contact`, `privacy`, `resources`).
+   - **Expect:** HTTP 200, page contains `writings`. The `<title>` is the site title, `somu nexus`.
+2. Extract first post slug: a `href="/<slug>"` that is not a reserved nav path (`writings`, `talks`, `projects`, `uses`, `connect`, `about`, `contact`, `privacy`, `resources`, `think-in-code`).
    - **Expect:** at least one flat post link.
 3. `curl -fsS -o evidence/writing-detail.html http://127.0.0.1:4321/<slug>`
-   - **Expect:** HTTP 200, slug appears in HTML.
+   - **Expect:** HTTP 200, body contains `id="blog-content"`.
 4. `curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-redirs 0 http://127.0.0.1:4321/writings/<slug>`
    - **Expect:** `308` and redirect URL ending in `/<slug>`.
 
@@ -28,7 +28,7 @@ Or run: `.cursor/skills/verify-msomu/scripts/drive.sh writings`
 
 ## Gotchas
 
-- Slugs come from filenames under `src/content/writing/`; adding/removing posts changes which slug step 2 picks.
+- Slugs come from filenames under `src/content/writing/`; adding/removing posts changes which slug step 2 picks. Apostrophes are dropped: `somu's-hardware.mdx` serves `/somus-hardware`.
 - Missing slugs 404 at `/{slug}` (not `/writings/{slug}`) with agent-friendly markdown when `Accept: text/markdown` is set (see `agent-markdown` feature).
 - Dates sort server-side; the first link is newest, not alphabetical.
 - Do not treat a 308 follow as a 200 on the old path. Drive with `--max-redirs 0`.

@@ -7,7 +7,7 @@ source "$SCRIPT_DIR/common.sh"
 
 usage() {
 	echo "usage: $0 <feature-id> [output-dir]" >&2
-	echo "feature ids: homepage | writings | connect | talks | agent-markdown" >&2
+	echo "feature ids: homepage | writings | connect | talks | agent-markdown | uses" >&2
 	exit 1
 }
 
@@ -27,16 +27,17 @@ drive_homepage() {
 	grep -q 'building ai agents' "$OUT_DIR/homepage.html"
 	grep -q 'id="recent-writings"' "$OUT_DIR/homepage.html"
 	grep -q 'href="/writings"' "$OUT_DIR/homepage.html"
+	grep -q 'id="social-links"' "$OUT_DIR/homepage.html"
 	echo "homepage: ok"
 }
 
 drive_writings() {
 	curl -fsS -D "$OUT_DIR/writings.headers" -o "$OUT_DIR/writings.html" "$BASE_URL/writings"
 	grep -qi 'writings' "$OUT_DIR/writings.html"
-	slug="$(grep -oE 'href="/[a-z0-9-]+"' "$OUT_DIR/writings.html" | sed 's/href="\///;s/"//' | grep -vE '^(writings|talks|projects|uses|connect|about|contact|privacy|resources)$' | head -1)"
+	slug="$(grep -oE 'href="/[a-z0-9-]+"' "$OUT_DIR/writings.html" | sed 's/href="\///;s/"//' | grep -vE '^(writings|talks|projects|uses|connect|about|contact|privacy|resources|think-in-code)$' | head -1)"
 	[[ -n "$slug" ]] || { echo "writings: no post slug found" >&2; exit 1; }
 	curl -fsS -D "$OUT_DIR/writing-detail.headers" -o "$OUT_DIR/writing-detail.html" "$BASE_URL/$slug"
-	grep -qi "$slug" "$OUT_DIR/writing-detail.html"
+	grep -q 'id="blog-content"' "$OUT_DIR/writing-detail.html"
 	redirect="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-redirs 0 "$BASE_URL/writings/$slug")"
 	printf '%s\n' "$redirect" >"$OUT_DIR/legacy-redirect.txt"
 	[[ "$redirect" == "308 $BASE_URL/$slug" || "$redirect" == "308 /$slug" ]] || {
@@ -48,17 +49,23 @@ drive_writings() {
 
 drive_connect() {
 	curl -fsS -D "$OUT_DIR/connect.headers" -o "$OUT_DIR/connect.html" "$BASE_URL/connect"
+	grep -qE '<h1[^>]*>[[:space:]]*Connect' "$OUT_DIR/connect.html"
 	grep -q 'aria-label="Connect on @x"' "$OUT_DIR/connect.html"
 	grep -q 'github.com/msomu' "$OUT_DIR/connect.html"
 	grep -q 'whatsapp.com/channel' "$OUT_DIR/connect.html"
+	curl -fsS -D "$OUT_DIR/connect-md.headers" -o "$OUT_DIR/connect.md" -H 'Accept: text/markdown' "$BASE_URL/connect"
+	grep -qi 'content-type: text/markdown' "$OUT_DIR/connect-md.headers"
+	grep -q '^# Connect' "$OUT_DIR/connect.md"
 	echo "connect: ok"
 }
 
 drive_talks() {
-	for path in /talks /talks/receipt /talks/stop-building-ai-demos /talks/i-gave-ai-a-computer-and-walked-away; do
+	curl -fsS -D "$OUT_DIR/talks.headers" -o "$OUT_DIR/talks.html" "$BASE_URL/talks"
+	grep -qi 'talks' "$OUT_DIR/talks.html"
+	for path in /talks/receipt /talks/stop-building-ai-demos /talks/five-eras-of-ai-assisted-android /talks/i-gave-ai-a-computer-and-walked-away /talks/set-goal-start-loop-sleep; do
 		safe="$(echo "$path" | tr '/.' '_')"
 		curl -fsS -D "$OUT_DIR/${safe}.headers" -o "$OUT_DIR/${safe}.html" "$BASE_URL$path"
-		grep -qi 'talks\|reveal' "$OUT_DIR/${safe}.html"
+		grep -qi 'reveal' "$OUT_DIR/${safe}.html"
 	done
 	curl -fsS -D "$OUT_DIR/_talks_the-receipt-loop.headers" -o "$OUT_DIR/_talks_the-receipt-loop.html" "$BASE_URL/talks/the-receipt-loop"
 	grep -q 'The Receipt Loop' "$OUT_DIR/_talks_the-receipt-loop.html"
@@ -94,16 +101,47 @@ drive_talks() {
 	curl -fsS -D "$OUT_DIR/_talks_phone-mcp-workshop.headers" -o "$OUT_DIR/_talks_phone-mcp-workshop.html" "$BASE_URL/talks/phone-mcp-workshop"
 	grep -q 'Your phone, driven by any AI' "$OUT_DIR/_talks_phone-mcp-workshop.html"
 	grep -q 'api.agi.tech/v1/mcp' "$OUT_DIR/_talks_phone-mcp-workshop.html"
+	remote_slug=set-goal-start-loop-sleep
+	curl -fsSL -o "$OUT_DIR/remote.html" "$BASE_URL/talks/$remote_slug/remote"
+	grep -q 'msomu-remote-room' "$OUT_DIR/remote.html"
+	curl -fsS -D "$OUT_DIR/remote-notes.headers" -o "$OUT_DIR/remote-notes.json" "$BASE_URL/api/live/$remote_slug/notes"
+	grep -qi 'content-type: application/json' "$OUT_DIR/remote-notes.headers"
+	[[ "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/api/live/$remote_slug/ws")" == 400 ]]
+	[[ "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/api/live/$remote_slug/ws?room=abcdefghijkl")" == 426 ]]
+	[[ "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/api/live/unknown-talk/notes")" == 404 ]]
 	echo "talks: ok"
 }
 
 drive_agent_markdown() {
 	curl -fsS -D "$OUT_DIR/homepage-md.headers" -o "$OUT_DIR/homepage.md" -H 'Accept: text/markdown' "$BASE_URL/"
 	grep -qi 'Somasundaram\|somu\|msomu' "$OUT_DIR/homepage.md"
+	grep -qi 'content-type: text/markdown' "$OUT_DIR/homepage-md.headers"
 	grep -qi 'vary: accept' "$OUT_DIR/homepage-md.headers"
+	if grep -q '<html' "$OUT_DIR/homepage.md"; then
+		echo "agent-markdown: markdown response contains an html element" >&2
+		exit 1
+	fi
 	curl -fsS -D "$OUT_DIR/llms.headers" -o "$OUT_DIR/llms.txt" "$BASE_URL/llms.txt"
 	grep -q 'When to use this site' "$OUT_DIR/llms.txt"
+	missing_status="$(curl -sS -o "$OUT_DIR/not-found.md" -w '%{http_code}' -H 'Accept: text/markdown' "$BASE_URL/some-path-that-does-not-exist")"
+	[[ "$missing_status" == 404 ]]
+	grep -q '^# Not found' "$OUT_DIR/not-found.md"
+	grep -q 'llms.txt' "$OUT_DIR/not-found.md"
+	grep -q 'sitemap' "$OUT_DIR/not-found.md"
 	echo "agent-markdown: ok"
+}
+
+drive_uses() {
+	curl -fsS -D "$OUT_DIR/uses.headers" -o "$OUT_DIR/uses.html" "$BASE_URL/uses"
+	grep -q 'Tools I use' "$OUT_DIR/uses.html"
+	for section in Devices Development Productivity Vehicles; do
+		grep -q ">$section<" "$OUT_DIR/uses.html"
+	done
+	grep -q 'text-orange-500' "$OUT_DIR/uses.html"
+	curl -fsS -D "$OUT_DIR/uses-md.headers" -o "$OUT_DIR/uses.md" "$BASE_URL/uses.md"
+	grep -qi 'content-type: text/markdown' "$OUT_DIR/uses-md.headers"
+	grep -q '^# Tools I use' "$OUT_DIR/uses.md"
+	echo "uses: ok"
 }
 
 case "$FEATURE" in
@@ -112,6 +150,7 @@ writings) drive_writings ;;
 connect) drive_connect ;;
 talks) drive_talks ;;
 agent-markdown) drive_agent_markdown ;;
+uses) drive_uses ;;
 *) usage ;;
 esac
 

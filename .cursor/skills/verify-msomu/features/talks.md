@@ -12,24 +12,32 @@ The `/talks` index lists presentations from the `talks` content collection. Slid
 - `talks.deck.the-receipt-loop` — `/talks/the-receipt-loop` (Reveal.js HTML, same shell as the walked-away deck)
 - `talks.deck.one-job-per-bot` — `/talks/one-job-per-bot` (Reveal.js HTML, same shell)
 - `talks.deck.phone-mcp-workshop` — `/talks/phone-mcp-workshop` (standalone interactive deck)
+- `talks.deck.set-goal-start-loop-sleep` — `/talks/set-goal-start-loop-sleep` (Reveal.js HTML)
+- `talks.remote` — `/talks/set-goal-start-loop-sleep/remote` phone remote with speaker notes, served by `src/worker.ts` and `src/live/room.ts` through `/api/live/{slug}/notes` and `/api/live/{slug}/ws?room={code}`
 
 ## How to get to it (user POV)
 
-Click **talks** in the header. Open a talk card’s slide link to view the Reveal.js deck in the browser.
+Click **talks** in the header. Open a talk card’s slide link to view the Reveal.js deck in the browser. On the set-goal deck, press Q to show a pairing QR, then scan it with a phone to open the remote.
 
 ## Driving it with curl
 
 1. `curl -fsS -o evidence/talks.html http://127.0.0.1:4321/talks`
    - **Expect:** HTTP 200, talks listing markup.
-2. For each Reveal.js deck path `/talks/receipt`, `/talks/stop-building-ai-demos`, `/talks/five-eras-of-ai-assisted-android`, `/talks/i-gave-ai-a-computer-and-walked-away`:
+2. For each Reveal.js deck path `/talks/receipt`, `/talks/stop-building-ai-demos`, `/talks/five-eras-of-ai-assisted-android`, `/talks/i-gave-ai-a-computer-and-walked-away`, `/talks/set-goal-start-loop-sleep`:
    - `curl -fsS -o evidence/<slug>.html http://127.0.0.1:4321<path>`
    - **Expect:** HTTP 200, body mentions `reveal` (Reveal.js shell).
 3. For `/talks/the-receipt-loop`:
-   - **Expect:** HTTP 200. The deck body contains `The Receipt Loop`, `A claim becomes a receipt`, `Their results, not our rate`, `From This Room to the`, `Pi, at pi.dev`, `It waits for my tap`, `You are an issue triage automation for Linear.`, `Daily Sync`, `Naman <> Somu 1-on-1`, `somu-agi`, and `reveal`. It does not reference `frame_1.png`.
+   - **Expect:** HTTP 200. The deck body contains `The Receipt Loop`, `A claim becomes a receipt`, `Their results, not our rate`, `From This Room to the`, `Pi, at pi.dev`, `It waits for my tap`, `You are an issue triage automation for Linear.`, `Daily Sync`, `Naman &lt;&gt; Somu 1-on-1`, `somu-agi`, and `reveal`. It does not reference `frame_1.png`.
 4. For `/talks/one-job-per-bot`:
    - **Expect:** HTTP 200. The deck body contains `One Job Per Bot`, `Grok Bots`, `Edit Video`, `Generate Video`, `Which model for which job`, `No single model does the whole job`, `docs.x.ai/grok-bot`, `help.descript.com`, `Veo 3.1`, and `reveal`. It contains no `img` element.
 5. For `/talks/phone-mcp-workshop`:
    - **Expect:** HTTP 200. The deck body contains `Your phone, driven by any AI` and `api.agi.tech/v1/mcp`.
+6. For the phone remote on `set-goal-start-loop-sleep`:
+   - `curl -fsSL http://127.0.0.1:4321/talks/set-goal-start-loop-sleep/remote` — **Expect:** HTTP 200, body contains `msomu-remote-room`.
+   - `GET /api/live/set-goal-start-loop-sleep/notes` — **Expect:** HTTP 200, JSON.
+   - `GET /api/live/set-goal-start-loop-sleep/ws` — **Expect:** HTTP 400 (no room code).
+   - `GET /api/live/set-goal-start-loop-sleep/ws?room=abcdefghijkl` — **Expect:** HTTP 426 (no WebSocket upgrade).
+   - `GET /api/live/unknown-talk/notes` — **Expect:** HTTP 404.
 
 Or run: `.cursor/skills/verify-msomu/scripts/drive.sh talks`
 

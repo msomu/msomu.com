@@ -11,6 +11,8 @@ BASE_URL="${BASE_URL:-http://127.0.0.1:4321}"
 DEV_HOST="${DEV_HOST:-127.0.0.1}"
 DEV_PORT="${DEV_PORT:-4321}"
 
+export PATH="$HOME/.bun/bin:$PATH"
+
 mkdir -p "$STATE_DIR" "$EVIDENCE_DIR"
 
 require_cmd() {
@@ -24,10 +26,8 @@ server_responds() {
 	curl -fsS -o /dev/null -w "%{http_code}" "$BASE_URL/" 2>/dev/null | grep -q '^200$'
 }
 
-read_pid() {
-	if [[ -f "$PID_FILE" ]]; then
-		cat "$PID_FILE"
-	fi
+astro_dev_status() {
+	(cd "$REPO_ROOT" && bun x astro dev status 2>&1)
 }
 
 pid_alive() {

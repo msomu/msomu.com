@@ -3,7 +3,7 @@ name: verify-msomu
 description: >-
   Drive msomu.com (somu nexus) — the Astro SSR personal site at https://www.msomu.com —
   through its primary web UI and HTTP agent surfaces. Use when verifying homepage, writings,
-  connect, talks, or markdown/llms.txt negotiation after changes to pages, content, or routing.
+  connect, talks, uses, or markdown/llms.txt negotiation after changes to pages, content, or routing.
 ---
 
 # verify-msomu
@@ -26,7 +26,7 @@ Start (or reuse) the dev server and wait until `GET /` returns HTTP 200:
 
 Optional env overrides: `BASE_URL` (default `http://127.0.0.1:4321`), `DEV_HOST`, `DEV_PORT`.
 
-State: PID at `.cursor/skills/verify-msomu/.verify-state/dev-server.pid`, logs at `.verify-state/dev-server.log`.
+State: launcher PID at `.cursor/skills/verify-msomu/.verify-state/dev-server.pid`, logs at `.verify-state/dev-server.log`. The launcher exits once Astro starts its background server, so that PID file marks a skill-started server; it does not name the server process. `bun x astro dev status` reports the running server.
 
 If port 4321 is occupied by a process this skill did not start, launch exits with an error — stop that process or pick another `DEV_PORT`.
 
@@ -48,7 +48,7 @@ Pick a feature id from `.cursor/skills/verify-msomu/features/` and drive it with
 .cursor/skills/verify-msomu/scripts/drive.sh <feature-id>
 ```
 
-Feature ids: `homepage`, `writings`, `connect`, `talks`, `agent-markdown`.
+Feature ids: `homepage`, `writings`, `connect`, `talks`, `agent-markdown`, `uses`.
 
 Each feature file documents user entry points, sub-feature ids, exact curl steps, and gotchas. Prefer route paths, element ids, and `aria-label` selectors over brittle copy matches.
 
@@ -67,13 +67,13 @@ For UI walkthroughs, also save screenshots or recordings under `/opt/cursor/arti
 
 ## Cleanup
 
-Stop only the dev server this skill started (by saved PID — never `pkill` by name):
+Stop the dev server this skill started, using `astro dev stop` for this checkout (never `pkill` by name):
 
 ```bash
 .cursor/skills/verify-msomu/scripts/cleanup.sh
 ```
 
-Cleanup removes `.verify-state/dev-server.pid` but **does not** delete `evidence/`. After cleanup, confirm evidence still exists:
+Cleanup exits non-zero if Astro still reports a running server. It removes `.verify-state/dev-server.pid` but **does not** delete `evidence/`. After cleanup, confirm evidence still exists:
 
 ```bash
 ls .cursor/skills/verify-msomu/evidence/
@@ -87,7 +87,7 @@ ls .cursor/skills/verify-msomu/evidence/
 | `scripts/doctor.sh` | Preflight toolchain + homepage health |
 | `scripts/drive.sh` | Drive one feature id via curl |
 | `scripts/capture-evidence.sh` | Alias for `drive.sh` (evidence step) |
-| `scripts/cleanup.sh` | Stop tracked dev server only |
+| `scripts/cleanup.sh` | Stop this checkout's dev server if this skill started it |
 
 **Harness:** shell + `curl` (same HTTP assertions as `tests/http.test.ts` with `BASE_URL` set). Unit tests without a server: `bun run test`. Live HTTP suite: `BASE_URL=http://127.0.0.1:4321 bun run test:http`.
 
