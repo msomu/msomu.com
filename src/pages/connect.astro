@@ -9,6 +9,7 @@ import {
 	VCARD_PATH,
 	WHATSAPP_NUMBER,
 	formatPhone,
+	products,
 	trackRecord,
 	whatsappUrl,
 } from "@data/connect";
@@ -192,5 +193,39 @@ function splitHighlight(text: string, highlight: string) {
 				})
 			}
 		</ol>
+	</section>
+
+	<section class='flex flex-col gap-2.5' aria-labelledby='more-heading'>
+		<h2 id='more-heading' class='pb-0.5 text-[13px] leading-5 text-[#8F8A7E]'>
+			# More
+		</h2>
+		{
+			products.map((product) => (
+				<a
+					href={product.url}
+					target='_blank'
+					rel='noopener noreferrer'
+					class='group flex items-center gap-3.5 rounded-md border border-[#2A2822] bg-[#16150F] px-[18px] py-3.5 transition-colors hover:border-[#F97316]/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+					<span class='flex min-w-0 flex-1 flex-col gap-1.5'>
+						<span class='flex flex-col gap-0.5'>
+							<span class='text-base font-semibold leading-5 text-[#EDE8DC]'>
+								{product.name}
+							</span>
+							<span class='text-xs leading-4 text-[#F97316]'>
+								{product.domain}
+							</span>
+						</span>
+						<span class='text-xs leading-[18px] text-[#8F8A7E]'>
+							{product.note}
+						</span>
+					</span>
+					<span
+						class='w-5 shrink-0 text-right text-base font-bold leading-5 text-[#8F8A7E] group-hover:text-[#F97316]'
+						aria-hidden='true'>
+						↗
+					</span>
+				</a>
+			))
+		}
 	</section>
 </TerminalPage>

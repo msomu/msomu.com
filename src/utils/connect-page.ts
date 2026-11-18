@@ -6,6 +6,7 @@ import {
 	VCARD_PATH,
 	WHATSAPP_NUMBER,
 	formatPhone,
+	products,
 	trackRecord,
 	whatsappUrl,
 } from "../data/connect.ts";
@@ -41,6 +42,10 @@ export function connectPageMarkdown(): string {
 	);
 	for (const item of trackRecord) {
 		lines.push(`- ${item.text}`);
+	}
+	lines.push("", "## More", "");
+	for (const product of products) {
+		lines.push(`- ${product.name} (${product.url}): ${product.note}`);
 	}
 	lines.push(
 		"",

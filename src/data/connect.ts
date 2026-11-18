@@ -43,10 +43,36 @@ export const trackRecord: TrackRecordItem[] = [
 		highlight: "millions",
 	},
 	{ text: "Founding engineer at AGI Inc.", highlight: "AGI Inc." },
-	{ text: "Took products 0 to 1, like ToonGen", highlight: "0 to 1" },
+	{
+		text: "Took products 0 to 1 with AI agents in the loop",
+		highlight: "0 to 1",
+	},
 	{
 		text: "Co-founder, United by AI community. 8 talks on AI agents",
 		highlight: "United by AI",
+	},
+];
+
+export interface Product {
+	name: string;
+	domain: string;
+	url: string;
+	note: string;
+}
+
+/** Products shown in the "More" section on /connect. */
+export const products: Product[] = [
+	{
+		name: "ToonGen",
+		domain: "toongen.app",
+		url: "https://toongen.app",
+		note: "Turns a child's photo into a printed storybook",
+	},
+	{
+		name: "The Roaming King",
+		domain: "theroamingking.com",
+		url: "https://theroamingking.com",
+		note: "Board-game rentals, shipped with agents in an hour",
 	},
 ];
 

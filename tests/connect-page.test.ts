@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { trackRecord, vcard } from "../src/data/connect.ts";
+import { products, trackRecord, vcard } from "../src/data/connect.ts";
 import { connectLinks } from "../src/data/index.ts";
 import {
 	connectPageMarkdown,
@@ -20,6 +20,10 @@ describe("connect page", () => {
 		assert.match(body, /\/follow\.md/);
 		for (const item of trackRecord) {
 			assert.match(body, new RegExp(escapeRegex(item.text)));
+		}
+		assert.match(body, /## More/);
+		for (const product of products) {
+			assert.match(body, new RegExp(escapeRegex(product.url)));
 		}
 	});
 
