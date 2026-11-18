@@ -2,7 +2,7 @@
 
 Two terminal-style pages (JetBrains Mono, near-black, orange accent) built from `src/data/connect.ts`:
 
-- `/connect` is the 1:1 networking card for investors and founders: "Founder & Product Builder" pitch, WhatsApp (hidden while `WHATSAPP_NUMBER` is null), Save contact (`/connect/somu.vcf`), Email (hi@msomu.com), LinkedIn, X, and a numbered track record.
+- `/connect` is the 1:1 networking card for investors and founders: "Founder & Product Builder" pitch, WhatsApp (from `WHATSAPP_NUMBER`; the card hides if it is null), Save contact (`/connect/somu.vcf`), Email (hi@msomu.com), LinkedIn, X, and a numbered track record.
 - `/connect/qr` is a full-screen QR (noindex) that points to `https://www.msomu.com/connect`.
 - `/follow` is for talk audiences: slides (`/talks`), YouTube, WhatsApp channel, writings + RSS, and X / LinkedIn / Instagram / GitHub.
 
@@ -25,4 +25,4 @@ Or run: `.cursor/skills/verify-msomu/scripts/drive.sh connect`
 ## Gotchas
 
 - The QR path in `src/data/connect.ts` is precomputed. If the connect URL changes, regenerate it.
-- Set `WHATSAPP_NUMBER` (digits only, with country code) to show the WhatsApp hero card and add the phone to the vCard.
+- `WHATSAPP_NUMBER` is digits only with country code. Setting it to null hides the WhatsApp card and drops the phone from the vCard.

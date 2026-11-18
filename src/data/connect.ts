@@ -10,7 +10,7 @@ import {
  * (e.g. "971501234567"). While this is null, /connect hides the WhatsApp
  * card and the vCard leaves out the phone number.
  */
-export const WHATSAPP_NUMBER: string | null = null;
+export const WHATSAPP_NUMBER: string | null = "918248400132";
 
 export const CONTACT_EMAIL = "hi@msomu.com";
 export const CONNECT_URL = `${SITE_URL}/connect`;
@@ -26,7 +26,10 @@ export function whatsappUrl(number: string): string {
 	return `https://wa.me/${number}?text=${text}`;
 }
 
+/** Readable phone number, e.g. "+91 82484 00132" for Indian mobiles. */
 export function formatPhone(number: string): string {
+	const india = /^91(\d{5})(\d{5})$/.exec(number);
+	if (india) return `+91 ${india[1]} ${india[2]}`;
 	return `+${number}`;
 }
 
@@ -144,7 +147,7 @@ export function vcard(): string {
 		`EMAIL;TYPE=INTERNET:${CONTACT_EMAIL}`,
 	];
 	if (WHATSAPP_NUMBER) {
-		lines.push(`TEL;TYPE=CELL:${formatPhone(WHATSAPP_NUMBER)}`);
+		lines.push(`TEL;TYPE=CELL:+${WHATSAPP_NUMBER}`);
 	}
 	lines.push(
 		`URL:${CONNECT_URL}`,
