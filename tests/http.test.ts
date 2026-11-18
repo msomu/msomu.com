@@ -327,9 +327,9 @@ describe("public agent endpoints", () => {
 		}
 	});
 
-	it("lists social profiles and WhatsApp on /connect", async (t) => {
+	it("lists social profiles and WhatsApp channel on /follow", async (t) => {
 		if (!requireBase(t)) return;
-		const page = await request("/connect");
+		const page = await request("/follow");
 		assert.equal(page.status, 200);
 		assert.match(page.body, /x\.com\/msomuin/);
 		assert.match(page.body, /instagram\.com\/msomu/);
@@ -337,9 +337,27 @@ describe("public agent endpoints", () => {
 		assert.match(page.body, /github\.com\/msomu/);
 		assert.match(page.body, /linkedin\.com\/in\/msomu/);
 		assert.match(page.body, /whatsapp\.com\/channel\/0029VaGe5nY9sBIAggXBtg2E/);
-		assert.match(page.body, /href=['"]\/connect['"]/i);
-		assert.match(page.body, /aria-label=['"]Connect on @x['"]/);
-		assert.doesNotMatch(page.body, /copy-btn/);
+		assert.match(page.body, /href=['"]\/talks['"]/);
+		assert.match(page.body, /href=['"]\/connect['"]/);
+	});
+
+	it("serves the founder card on /connect with a vCard and QR screen", async (t) => {
+		if (!requireBase(t)) return;
+		const page = await request("/connect");
+		assert.equal(page.status, 200);
+		assert.match(page.body, /Founder &amp; Product Builder/);
+		assert.match(page.body, /mailto:hi@msomu\.com/);
+		assert.match(page.body, /href=['"]\/connect\/somu\.vcf['"]/);
+		assert.match(page.body, /Track record/);
+
+		const card = await request("/connect/somu.vcf");
+		assert.equal(card.status, 200);
+		assert.match(card.contentType, /text\/vcard/);
+		assert.match(card.body, /BEGIN:VCARD/);
+
+		const qr = await request("/connect/qr");
+		assert.equal(qr.status, 200);
+		assert.match(qr.body, /Point your camera here/);
 	});
 
 	it("keeps /resources as photos only", async (t) => {

@@ -1,30 +1,28 @@
-# Connect
+# Connect and Follow
 
-The `/connect` page lists public profiles (X, Instagram, YouTube, GitHub, LinkedIn, WhatsApp channel) with platform icons, outbound URLs, and **Connect** buttons using `aria-label="Connect on <label>"`.
+Two terminal-style pages (JetBrains Mono, near-black, orange accent) built from `src/data/connect.ts`:
+
+- `/connect` is the 1:1 networking card for investors and founders: "Founder & Product Builder" pitch, WhatsApp (from `WHATSAPP_NUMBER`; the card hides if it is null), Save contact (`/connect/somu.vcf`), Email (hi@msomu.com), LinkedIn, X, and a numbered track record.
+- `/connect/qr` is a full-screen QR (noindex) that points to `https://www.msomu.com/connect`.
+- `/follow` is for talk audiences: slides (`/talks`), YouTube, WhatsApp channel, writings + RSS, and X / LinkedIn / Instagram / GitHub.
 
 ## Sub-features
 
-- `connect.profiles` — six `connectLinks` rows from `src/data/index.ts`
-- `connect.aria` — accessible Connect buttons per platform
-- `connect.markdown` — same content available via `Accept: text/markdown` on `/connect`
-
-## How to get to it (user POV)
-
-Navigate to `/connect` directly or follow inbound links from resources/about copy. Tap **Connect** on a row to open the external profile in a new tab.
+- `connect.card` - founder pitch, contact rows and track record on `/connect`
+- `connect.vcard` - `/connect/somu.vcf` returns `text/vcard`
+- `connect.qr` - `/connect/qr` renders the QR and "Point your camera here"
+- `follow.profiles` - every `connectLinks` URL from `src/data/index.ts` appears on `/follow`
+- `connect.markdown` - `/connect.md` and `/follow.md` via `Accept: text/markdown`
 
 ## Driving it with curl
 
-1. `curl -fsS -o evidence/connect.html http://127.0.0.1:4321/connect`
-   - **Expect:** HTTP 200, H1 `Connect`.
-2. `grep 'aria-label="Connect on @x"' evidence/connect.html`
-   - **Expect:** match.
-3. `grep 'github.com/msomu' evidence/connect.html && grep 'whatsapp.com/channel' evidence/connect.html`
-   - **Expect:** both match.
+1. `curl -fsS http://127.0.0.1:4321/connect | grep 'Founder &amp; Product Builder'`
+2. `curl -fsS http://127.0.0.1:4321/connect/somu.vcf | grep BEGIN:VCARD`
+3. `curl -fsS http://127.0.0.1:4321/follow | grep -e github.com/msomu -e whatsapp.com/channel`
 
 Or run: `.cursor/skills/verify-msomu/scripts/drive.sh connect`
 
 ## Gotchas
 
-- URLs are centralized in `src/data/index.ts`; page HTML mirrors `connectLinks`.
-- External links use `target="_blank"` — curl only checks href presence, not navigation.
-- WhatsApp is channel-only on this page (not a direct chat deep link).
+- The QR path in `src/data/connect.ts` is precomputed. If the connect URL changes, regenerate it.
+- `WHATSAPP_NUMBER` is digits only with country code. Setting it to null hides the WhatsApp card and drops the phone from the vCard.

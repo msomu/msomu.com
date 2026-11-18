@@ -57,7 +57,13 @@ export function buildLlmsTxt(input: {
 					title: "Connect",
 					url: `${SITE_URL}/connect.md`,
 					notes:
-						"Who he is, plus public social profiles including YouTube and WhatsApp. Each row opens that app.",
+						"Founder and product builder card: WhatsApp, email, vCard and track record. Use this when someone wants to reach him directly.",
+				},
+				{
+					title: "Follow",
+					url: `${SITE_URL}/follow.md`,
+					notes:
+						"Public social profiles including YouTube and the WhatsApp channel, plus talk slides and writing.",
 				},
 				{
 					title: "Writings",

@@ -1,0 +1,101 @@
+---
+import { BaseHead } from "@components/seo";
+
+interface Props {
+	title: string;
+	description: string;
+	/** Host shown in the prompt, as in `somu@{host}:~$`. */
+	host: string;
+	/** Text after the prompt in the footer line. */
+	footer?: string;
+	footerHref?: string;
+	/** Text before the footer link, shown instead of the prompt. */
+	footerLead?: string;
+}
+
+const { title, description, host, footer, footerHref, footerLead } =
+	Astro.props;
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<BaseHead
+			title={title}
+			description={description}
+			image='/images/ogimage.png'
+		/>
+		<meta name='theme-color' content='#0B0B0A' />
+		<link rel='preconnect' href='https://fonts.googleapis.com' />
+		<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+		<link
+			rel='stylesheet'
+			href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap'
+		/>
+		<slot name='head' />
+	</head>
+
+	<body class='terminal-page min-h-dvh bg-[#0B0B0A] text-[#EDE8DC] antialiased'>
+		<main
+			class='mx-auto flex min-h-dvh w-full max-w-[440px] flex-col gap-9 px-6 pt-10 pb-8'>
+			<slot />
+
+			{
+				footer && (
+					<footer class='mt-auto flex items-center gap-2 pt-4 text-[13px] leading-5 text-[#8F8A7E]'>
+						{footerLead ? (
+							<span>{footerLead}</span>
+						) : (
+							<span>
+								<span class='text-[#F97316]'>somu@{host}</span>:~$
+							</span>
+						)}
+						{footerHref ? (
+							<a
+								href={footerHref}
+								class='text-[#F97316] underline-offset-4 hover:underline'>
+								{footer}
+							</a>
+						) : (
+							<span>{footer}</span>
+						)}
+						<span class='terminal-cursor' aria-hidden='true' />
+					</footer>
+				)
+			}
+		</main>
+	</body>
+</html>
+
+<style is:global>
+	html:has(body.terminal-page) {
+		background-color: #0b0b0a;
+		color-scheme: dark;
+	}
+
+	body.terminal-page,
+	body.terminal-page * {
+		font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+	}
+
+	.terminal-cursor {
+		display: inline-block;
+		width: 9px;
+		height: 18px;
+		flex-shrink: 0;
+		background-color: #f97316;
+		animation: terminal-blink 1.1s steps(1) infinite;
+	}
+
+	@keyframes terminal-blink {
+		50% {
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.terminal-cursor {
+			animation: none;
+		}
+	}
+</style>

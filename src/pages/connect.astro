@@ -1,51 +1,231 @@
 ---
-import { Header } from "@components/misc";
-import ConnectLinks from "@components/misc/connect-links.astro";
-import { BaseHead } from "@components/seo";
-import { PERSON_DESCRIPTION, PERSON_NAME } from "@data/index";
-import RootLayout from "@layouts/root-layout.astro";
+import TerminalIcon from "@components/terminal/terminal-icon.astro";
+import TerminalPage from "@components/terminal/terminal-page.astro";
+import {
+	CONTACT_EMAIL,
+	FOUNDER_PITCH,
+	FOUNDER_ROLE,
+	FOUNDER_STATUS,
+	VCARD_PATH,
+	WHATSAPP_NUMBER,
+	formatPhone,
+	products,
+	trackRecord,
+	whatsappUrl,
+} from "@data/connect";
+import { PERSON_NAME } from "@data/index";
 
-const pageTitle = "Connect - Somasundaram Mahesh";
-const pageDescription = `${PERSON_NAME} (msomu). ${PERSON_DESCRIPTION}`;
+const [firstName, ...rest] = PERSON_NAME.split(" ");
+const lastName = rest.join(" ");
+
+const rows = [
+	{
+		id: "contact" as const,
+		label: "Save contact",
+		note: "Add me to your phone (.vcf)",
+		href: VCARD_PATH,
+		trailing: "↓",
+		download: "somasundaram-mahesh.vcf",
+	},
+	{
+		id: "email" as const,
+		label: "Email",
+		note: CONTACT_EMAIL,
+		href: `mailto:${CONTACT_EMAIL}`,
+		trailing: "↗",
+	},
+];
+
+const chips = [
+	{
+		id: "linkedin" as const,
+		label: "LinkedIn",
+		href: "https://www.linkedin.com/in/msomu/",
+	},
+	{ id: "x" as const, label: "@msomuin", href: "https://x.com/msomuin" },
+];
+
+function splitHighlight(text: string, highlight: string) {
+	const index = text.indexOf(highlight);
+	if (index === -1) return { before: text, bold: "", after: "" };
+	return {
+		before: text.slice(0, index),
+		bold: highlight,
+		after: text.slice(index + highlight.length),
+	};
+}
 ---
 
-<!doctype html>
-<html lang='en'>
-	<head>
-		<BaseHead
-			title={pageTitle}
-			description={pageDescription}
-			image='/images/ogimage.png'
-		/>
-	</head>
-
-	<RootLayout>
-		<div class='flex flex-col w-full gap-12 max-w-4xl'>
-			<Header />
-
-			<div class='flex flex-col gap-4'>
-				<h1 class='text-5xl sm:text-6xl font-medium tracking-tight'>
-					Connect
-				</h1>
-				<p class='text-lg text-gray-600 dark:text-gray-400'>
-					{PERSON_NAME} (msomu). {PERSON_DESCRIPTION}
-				</p>
-			</div>
-
-			<section class='flex flex-col gap-6'>
-				<div class='flex items-center gap-3'>
-					<span class='text-3xl'>🌐</span>
-					<h2 class='text-3xl font-medium tracking-tight'>
-						Profiles
-					</h2>
-				</div>
-
-				<p class='text-base text-gray-600 dark:text-gray-400'>
-					public profiles. tap connect to open that app.
-				</p>
-
-				<ConnectLinks />
-			</section>
+<TerminalPage
+	title={`${PERSON_NAME}, ${FOUNDER_ROLE}`}
+	description={`${PERSON_NAME} (msomu), ${FOUNDER_ROLE}. ${FOUNDER_PITCH} ${FOUNDER_STATUS}.`}
+	host='dubai'
+	footer='msomu.com'
+	footerHref='/'>
+	<header class='flex flex-col gap-[18px]'>
+		<p class='text-[13px] leading-5 text-[#8F8A7E]'>
+			<span class='text-[#F97316]'>somu@dubai</span>:~$ whoami
+		</p>
+		<h1
+			class='text-[40px] font-extrabold leading-[44px] tracking-[-0.03em] text-[#EDE8DC]'>
+			{firstName}<br />{lastName}
+		</h1>
+		<div class='text-[13px] leading-[22px] text-[#B8B2A4]'>
+			<p class='font-semibold text-[#EDE8DC]'>{FOUNDER_ROLE}</p>
+			<p>{FOUNDER_PITCH}</p>
+			<p class='flex items-center gap-2'>
+				<span
+					class='inline-block size-2.5 rounded-full bg-[#F97316]'
+					aria-hidden='true'></span>
+				{FOUNDER_STATUS}
+			</p>
 		</div>
-	</RootLayout>
-</html>
+	</header>
+
+	<section class='flex flex-col gap-2.5' aria-labelledby='channels-heading'>
+		<h2 id='channels-heading' class='pb-1 text-[13px] leading-5 text-[#8F8A7E]'>
+			# Pick a channel
+		</h2>
+
+		{
+			WHATSAPP_NUMBER && (
+				<a
+					href={whatsappUrl(WHATSAPP_NUMBER)}
+					target='_blank'
+					rel='noopener noreferrer'
+					class='group flex flex-col gap-3.5 rounded-md bg-[#F97316] px-[18px] py-4 text-[#0B0B0A] transition-colors hover:bg-[#FB8A3C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+					<span class='flex items-center justify-between'>
+						<span class='flex size-[38px] items-center justify-center rounded-full bg-[#0B0B0A] text-[#F97316]'>
+							<TerminalIcon id='whatsapp' size={20} />
+						</span>
+						<span class='rounded-full border-[1.5px] border-[#0B0B0A] px-2.5 py-[5px] text-[11px] font-bold leading-3'>
+							Fastest reply
+						</span>
+					</span>
+					<span class='flex items-end justify-between gap-3'>
+						<span class='flex flex-col gap-0.5'>
+							<span class='text-lg font-bold leading-6 tracking-[-0.01em]'>
+								WhatsApp me
+							</span>
+							<span class='text-[13px] leading-[18px] text-[#3A1A04]'>
+								{formatPhone(WHATSAPP_NUMBER)}
+							</span>
+						</span>
+						<span
+							class='text-xl font-bold leading-6 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5'
+							aria-hidden='true'>
+							↗
+						</span>
+					</span>
+				</a>
+			)
+		}
+
+		{
+			rows.map((row) => (
+				<a
+					href={row.href}
+					download={row.download}
+					class='group flex items-center gap-3.5 rounded-md border border-[#2A2822] bg-[#16150F] px-[18px] py-4 transition-colors hover:border-[#F97316]/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+					<span class='flex size-9 shrink-0 items-center justify-center rounded-md bg-[#221A10] text-[#F97316]'>
+						<TerminalIcon id={row.id} />
+					</span>
+					<span class='flex min-w-0 flex-1 flex-col gap-0.5'>
+						<span class='text-base font-semibold leading-5 text-[#EDE8DC]'>
+							{row.label}
+						</span>
+						<span class='truncate text-xs leading-4 text-[#8F8A7E]'>
+							{row.note}
+						</span>
+					</span>
+					<span
+						class='w-5 shrink-0 text-right text-base font-bold leading-5 text-[#8F8A7E] group-hover:text-[#F97316]'
+						aria-hidden='true'>
+						{row.trailing}
+					</span>
+				</a>
+			))
+		}
+
+		<div class='flex gap-2.5'>
+			{
+				chips.map((chip) => (
+					<a
+						href={chip.href}
+						target='_blank'
+						rel='noopener noreferrer'
+						class='group flex flex-1 items-center justify-between rounded-md border border-dashed border-[#3A372F] px-4 py-3.5 transition-colors hover:border-[#F97316]/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+						<span class='flex items-center gap-2.5 text-sm font-semibold leading-[18px] text-[#EDE8DC]'>
+							<TerminalIcon id={chip.id} size={chip.id === "x" ? 16 : 18} />
+							{chip.label}
+						</span>
+						<span
+							class='text-sm leading-[18px] text-[#8F8A7E] group-hover:text-[#F97316]'
+							aria-hidden='true'>
+							↗
+						</span>
+					</a>
+				))
+			}
+		</div>
+	</section>
+
+	<section class='flex flex-col gap-3' aria-labelledby='record-heading'>
+		<h2 id='record-heading' class='text-[13px] leading-5 text-[#8F8A7E]'>
+			# Track record
+		</h2>
+		<ol class='flex flex-col border-t border-[#2A2822]'>
+			{
+				trackRecord.map((item, index) => {
+					const parts = splitHighlight(item.text, item.highlight);
+					return (
+						<li class='flex gap-3.5 border-b border-[#2A2822] py-3'>
+							<span class='w-[22px] shrink-0 text-[13px] leading-5 text-[#F97316]'>
+								{String(index + 1).padStart(2, "0")}
+							</span>
+							<span class='flex-1 text-sm leading-5 text-[#EDE8DC]'>
+								{parts.before}
+								<strong class='font-bold'>{parts.bold}</strong>
+								{parts.after}
+							</span>
+						</li>
+					);
+				})
+			}
+		</ol>
+	</section>
+
+	<section class='flex flex-col gap-2.5' aria-labelledby='more-heading'>
+		<h2 id='more-heading' class='pb-0.5 text-[13px] leading-5 text-[#8F8A7E]'>
+			# More
+		</h2>
+		{
+			products.map((product) => (
+				<a
+					href={product.url}
+					target='_blank'
+					rel='noopener noreferrer'
+					class='group flex items-center gap-3.5 rounded-md border border-[#2A2822] bg-[#16150F] px-[18px] py-3.5 transition-colors hover:border-[#F97316]/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+					<span class='flex min-w-0 flex-1 flex-col gap-1.5'>
+						<span class='flex flex-col gap-0.5'>
+							<span class='text-base font-semibold leading-5 text-[#EDE8DC]'>
+								{product.name}
+							</span>
+							<span class='text-xs leading-4 text-[#F97316]'>
+								{product.domain}
+							</span>
+						</span>
+						<span class='text-xs leading-[18px] text-[#8F8A7E]'>
+							{product.note}
+						</span>
+					</span>
+					<span
+						class='w-5 shrink-0 text-right text-base font-bold leading-5 text-[#8F8A7E] group-hover:text-[#F97316]'
+						aria-hidden='true'>
+						↗
+					</span>
+				</a>
+			))
+		}
+	</section>
+</TerminalPage>

@@ -1,0 +1,106 @@
+---
+import TerminalIcon from "@components/terminal/terminal-icon.astro";
+import TerminalPage from "@components/terminal/terminal-page.astro";
+import { followChannels, followSocials } from "@data/connect";
+import { PERSON_NAME } from "@data/index";
+
+const isExternal = (url: string) => url.startsWith("http");
+const linkAttrs = (url: string) =>
+	isExternal(url) ? { target: "_blank", rel: "noopener noreferrer" } : {};
+---
+
+<TerminalPage
+	title={`Follow ${PERSON_NAME}`}
+	description={`Slides, videos, writing and social profiles from ${PERSON_NAME} (msomu), for people who caught one of his talks.`}
+	host='stage'
+	footerLead='Want to chat?'
+	footer='msomu.com/connect'
+	footerHref='/connect'>
+	<header class='flex flex-col gap-3.5'>
+		<p class='text-[13px] leading-5 text-[#8F8A7E]'>
+			<span class='text-[#F97316]'>somu@stage</span>:~$ follow
+		</p>
+		<h1
+			class='text-[34px] font-extrabold leading-[38px] tracking-[-0.03em] text-[#EDE8DC]'>
+			Thanks for<br />listening.
+		</h1>
+		<p class='text-sm leading-[22px] text-[#B8B2A4]'>
+			I'm Somu. I build AI agents and talk about shipping them. Here's where I
+			post.
+		</p>
+	</header>
+
+	<section class='flex flex-col gap-2.5' aria-labelledby='talk-heading'>
+		<h2 id='talk-heading' class='pb-1 text-[13px] leading-5 text-[#8F8A7E]'>
+			# From today's talk
+		</h2>
+		<a
+			href='/talks'
+			class='group flex items-center gap-3.5 rounded-md bg-[#F97316] px-[18px] py-4 text-[#0B0B0A] transition-colors hover:bg-[#FB8A3C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+			<span
+				class='flex size-[38px] shrink-0 items-center justify-center rounded-full bg-[#0B0B0A] text-[#F97316]'>
+				<TerminalIcon id='slides' />
+			</span>
+			<span class='flex flex-1 flex-col gap-0.5'>
+				<span class='text-lg font-bold leading-6 tracking-[-0.01em]'>
+					Grab the slides
+				</span>
+				<span class='text-[13px] leading-[18px] text-[#3A1A04]'>
+					msomu.com/talks
+				</span>
+			</span>
+			<span
+				class='text-xl font-bold leading-6 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5'
+				aria-hidden='true'>
+				↗
+			</span>
+		</a>
+	</section>
+
+	<section class='flex flex-col gap-2.5' aria-labelledby='follow-heading'>
+		<h2 id='follow-heading' class='pb-1 text-[13px] leading-5 text-[#8F8A7E]'>
+			# Keep up
+		</h2>
+		{
+			followChannels.map((channel) => (
+				<a
+					href={channel.url}
+					{...linkAttrs(channel.url)}
+					class='group flex items-center gap-3.5 rounded-md border border-[#2A2822] bg-[#16150F] px-[18px] py-3.5 transition-colors hover:border-[#F97316]/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+					<span class='flex size-9 shrink-0 items-center justify-center rounded-md bg-[#221A10] text-[#F97316]'>
+						<TerminalIcon id={channel.id} />
+					</span>
+					<span class='flex min-w-0 flex-1 flex-col gap-0.5'>
+						<span class='text-base font-semibold leading-5 text-[#EDE8DC]'>
+							{channel.label}
+						</span>
+						<span class='text-xs leading-4 text-[#8F8A7E]'>
+							{channel.note}
+						</span>
+					</span>
+					<span
+						class='w-5 shrink-0 text-right text-base font-bold leading-5 text-[#8F8A7E] group-hover:text-[#F97316]'
+						aria-hidden='true'>
+						↗
+					</span>
+				</a>
+			))
+		}
+		<ul class='flex gap-2.5'>
+			{
+				followSocials.map((social) => (
+					<li class='flex-1'>
+						<a
+							href={social.url}
+							target='_blank'
+							rel='noopener noreferrer'
+							aria-label={`${social.label} profile`}
+							class='flex h-[52px] items-center justify-center rounded-md border border-dashed border-[#3A372F] text-[#EDE8DC] transition-colors hover:border-[#F97316]/60 hover:text-[#F97316] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]'>
+							<TerminalIcon id={social.id} size={social.id === "x" ? 18 : 20} />
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</TerminalPage>
