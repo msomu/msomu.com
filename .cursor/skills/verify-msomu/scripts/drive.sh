@@ -33,7 +33,7 @@ drive_homepage() {
 drive_writings() {
 	curl -fsS -D "$OUT_DIR/writings.headers" -o "$OUT_DIR/writings.html" "$BASE_URL/writings"
 	grep -qi 'writings' "$OUT_DIR/writings.html"
-	slug="$(grep -oE 'href="/[a-z0-9-]+"' "$OUT_DIR/writings.html" | sed 's/href="\///;s/"//' | grep -vE '^(writings|talks|projects|uses|connect|about|contact|privacy|resources)$' | head -1)"
+	slug="$(grep -oE 'href="/[a-z0-9-]+"' "$OUT_DIR/writings.html" | sed 's/href="\///;s/"//' | grep -vE '^(writings|talks|projects|uses|connect|follow|about|contact|privacy|resources)$' | head -1)"
 	[[ -n "$slug" ]] || { echo "writings: no post slug found" >&2; exit 1; }
 	curl -fsS -D "$OUT_DIR/writing-detail.headers" -o "$OUT_DIR/writing-detail.html" "$BASE_URL/$slug"
 	grep -qi "$slug" "$OUT_DIR/writing-detail.html"
@@ -48,9 +48,13 @@ drive_writings() {
 
 drive_connect() {
 	curl -fsS -D "$OUT_DIR/connect.headers" -o "$OUT_DIR/connect.html" "$BASE_URL/connect"
-	grep -q 'aria-label="Connect on @x"' "$OUT_DIR/connect.html"
-	grep -q 'github.com/msomu' "$OUT_DIR/connect.html"
-	grep -q 'whatsapp.com/channel' "$OUT_DIR/connect.html"
+	grep -q 'Founder &amp; Product Builder' "$OUT_DIR/connect.html"
+	grep -q 'href="/connect/somu.vcf"' "$OUT_DIR/connect.html"
+	curl -fsS -o "$OUT_DIR/connect.vcf" "$BASE_URL/connect/somu.vcf"
+	grep -q 'BEGIN:VCARD' "$OUT_DIR/connect.vcf"
+	curl -fsS -o "$OUT_DIR/follow.html" "$BASE_URL/follow"
+	grep -q 'github.com/msomu' "$OUT_DIR/follow.html"
+	grep -q 'whatsapp.com/channel' "$OUT_DIR/follow.html"
 	echo "connect: ok"
 }
 

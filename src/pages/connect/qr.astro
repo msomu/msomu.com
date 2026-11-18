@@ -1,0 +1,66 @@
+---
+import TerminalPage from "@components/terminal/terminal-page.astro";
+import {
+	CONNECT_QR_PATH,
+	CONNECT_QR_SIZE,
+	WHATSAPP_NUMBER,
+} from "@data/connect";
+import { PERSON_NAME } from "@data/index";
+
+const channels = [WHATSAPP_NUMBER ? "WhatsApp" : null, "Email", "vCard"]
+	.filter(Boolean)
+	.join(" · ");
+const corner = "absolute size-9 border-[#F97316]";
+---
+
+<TerminalPage
+	title={`Scan to connect with ${PERSON_NAME}`}
+	description={`Scan the code to open ${PERSON_NAME}'s contact card at msomu.com/connect.`}
+	host='dubai'>
+	<meta slot='head' name='robots' content='noindex' />
+	<header class='flex flex-col gap-3'>
+		<p class='text-[13px] leading-5 text-[#8F8A7E]'>
+			<span class='text-[#F97316]'>somu@dubai</span>:~$ ./say-hi --qr
+		</p>
+		<h1
+			class='text-[28px] font-extrabold leading-8 tracking-[-0.03em] text-[#EDE8DC]'>
+			{PERSON_NAME}
+		</h1>
+	</header>
+
+	<section class='flex flex-1 flex-col items-center justify-center gap-5'>
+		<div class='relative flex size-[320px] max-w-full items-center justify-center'>
+			<span class={`${corner} top-0 left-0 border-t-[3px] border-l-[3px]`}></span>
+			<span class={`${corner} top-0 right-0 border-t-[3px] border-r-[3px]`}></span>
+			<span class={`${corner} bottom-0 left-0 border-b-[3px] border-l-[3px]`}></span>
+			<span class={`${corner} right-0 bottom-0 border-r-[3px] border-b-[3px]`}></span>
+			<div class='rounded bg-[#EDE8DC] p-[18px]'>
+				<svg
+					width='236'
+					height='236'
+					viewBox={`0 0 ${CONNECT_QR_SIZE} ${CONNECT_QR_SIZE}`}
+					shape-rendering='crispEdges'
+					role='img'
+					aria-label='QR code for msomu.com/connect'>
+					<path fill='#0B0B0A' d={CONNECT_QR_PATH}></path>
+				</svg>
+			</div>
+		</div>
+		<div class='flex flex-col items-center gap-1.5 text-center'>
+			<p class='text-base font-bold leading-[22px] text-[#EDE8DC]'>
+				Point your camera here
+			</p>
+			<a href='/connect' class='text-[13px] leading-5 text-[#8F8A7E]'>
+				msomu.com/<span class='text-[#F97316]'>connect</span>
+			</a>
+		</div>
+	</section>
+
+	<footer class='flex items-center justify-between text-[13px] leading-4 text-[#8F8A7E]'>
+		<span>{channels}</span>
+		<span class='flex items-center gap-2 text-[#F97316]'>
+			<span class='inline-block size-2.5 rounded-full bg-[#F97316]' aria-hidden='true'></span>
+			Live
+		</span>
+	</footer>
+</TerminalPage>

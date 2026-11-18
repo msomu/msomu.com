@@ -53,6 +53,8 @@ Content is sorted by `pubDate` (newest first) on listing pages.
 - `/writings/{id}` — 308 redirect to `/{id}` (legacy links)
 - `/think-in-code` — DSA content listing and detail pages
 - `/uses` — Tools/hardware page
+- `/connect` — Founder / investor contact card (WhatsApp, vCard at `/connect/somu.vcf`, email, track record); `/connect/qr` is a full-screen QR to it. Data in `src/data/connect.ts`
+- `/follow` — Talk-audience page: slides, YouTube, WhatsApp channel, writings, socials
 - `/talks` — Talks listing (prerendered) and reveal decks under `/talks/{slug}/` (static assets)
 - `/projects` — Projects listing and detail pages
 - `/projects/toongen/*` — Standalone project landing pages (privacy policy, terms of service)
